@@ -1,0 +1,2 @@
+Clears all pop-ups on screen created from 
+the fatality pop-up event.

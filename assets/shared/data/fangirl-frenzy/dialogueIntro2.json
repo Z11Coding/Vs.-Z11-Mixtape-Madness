@@ -1,0 +1,104 @@
+{
+	"boxSkin": "dialogue/boxes/ds_dialogue_box",
+	"dialogue": [
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "There you are, BF",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/bfBeep",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "beep",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/Z11Talk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": true,
+			"text": "Where the heck did you",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "osky-dialogue",
+			"dialogueSound": "voice/dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "pissed",
+			"skipDis": false,
+			"text": "Who are you?",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/Z11Talk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "Hmm..?",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/Z11Talk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "Oh. That's where we are.",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "osky-dialogue",
+			"dialogueSound": "voice/dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "pissed",
+			"skipDis": false,
+			"text": "???",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "osky-dialogue",
+			"dialogueSound": "dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "pissed",
+			"skipDis": false,
+			"text": "Wait...",
+			"disableFadeBG": false,
+			"shake": false
+		}
+	],
+	"clickSound": "dialogueClose",
+	"handSkin": "Empty",
+	"outlineSize": 1.5,
+	"handEnable": true,
+	"dropTextColor": "#757575",
+	"outlineColor": "#000000",
+	"dropTextEnable": false,
+	"font": "comboFont.ttf",
+	"color": "#000000",
+	"size": 50,
+	"outlineEnable": false
+}

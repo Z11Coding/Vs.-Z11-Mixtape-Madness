@@ -1,0 +1,115 @@
+{
+	"boxSkin": "dialogue/boxes/ds_dialogue_box",
+	"dialogue": [
+		{
+			"speed": 0.05,
+			"portrait": "gf",
+			"dialogueSound": "voice/gf",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "Hi everyone!",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/bfBeep",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "Beep.",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/Z11Talk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "Hi GF!",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "osky-dialogue",
+			"dialogueSound": "dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "pissed",
+			"skipDis": false,
+			"text": "...",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "osky-dialogue",
+			"dialogueSound": "voice/dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "That's fine.",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "osky-dialogue",
+			"dialogueSound": "voice/dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "I'll just win your heart ny beating you in a song",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/Z11Talk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "Fine. Then i'll back BF.",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/ZenettaTalk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "Well if you're helping him, then i'll help her.",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "gf",
+			"dialogueSound": "voice/gf",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "This'll be fun.",
+			"disableFadeBG": false,
+			"shake": false
+		}
+	],
+	"clickSound": "dialogueClose",
+	"handSkin": "Empty",
+	"outlineSize": 1.5,
+	"handEnable": true,
+	"dropTextColor": "#757575",
+	"outlineColor": "#000000",
+	"dropTextEnable": false,
+	"font": "comboFont.ttf",
+	"color": "#000000",
+	"size": 50,
+	"outlineEnable": false
+}

@@ -1,0 +1,12 @@
+{
+	"note": "Extra lanes aren't added to \"strumLineNotes\" so you'll need to for loop them separately",
+	"info": [
+		{
+			"comment": "Z11's Strumline",
+			"tag": "Z11",
+			"attachmentVar": "gfNote",
+			"noteTypes": [],
+			"inFront": false
+		}
+	]
+}

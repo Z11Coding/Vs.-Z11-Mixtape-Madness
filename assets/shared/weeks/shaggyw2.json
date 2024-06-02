@@ -1,0 +1,50 @@
+{
+	"songs": [
+		[
+			"Back In Action",
+			"shaggy",
+			[
+				255,
+				255,
+				255
+			]
+		],
+		[
+			"Retribution",
+			"shaggy",
+			[
+				255,
+				255,
+				255
+			]
+		],
+		[
+			"Redemption",
+			"shagmad",
+			[
+				255,
+				255,
+				255
+			]
+		]
+	],
+	"hiddenUntilUnlocked": false,
+	"hideFreeplay": false,
+	"weekBackground": "halloween",
+	"difficulties": "Cannon, 4K",
+	"weekCharacters": [
+		"shaggy",
+		"bf",
+		"gf"
+	],
+	"storyName": "He's back with an electric twist!",
+	"weekName": "shaggyw2",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"hideStoryMode": false,
+	"weekBefore": "shaggyw1",
+	"startUnlocked": true
+}

@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"offsets": [
+				-5,
+				340
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "gin idle dance"
+		},
+		{
+			"offsets": [
+				-100,
+				299
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "gin NOTE DOWN0"
+		},
+		{
+			"offsets": [
+				-149,
+				347
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [],
+			"name": "gin NOTE UP0"
+		},
+		{
+			"offsets": [
+				-208,
+				313
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singRIGHT",
+			"loop": false,
+			"name": "gin NOTE LEFT0"
+		},
+		{
+			"offsets": [
+				-28,
+				334
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singLEFT",
+			"loop": false,
+			"name": "gin NOTE RIGHT0"
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/gin-op",
+	"position": [
+		240,
+		220
+	],
+	"healthicon": "gin",
+	"flip_x": false,
+	"healthbar_colors": [
+		252,
+		100,
+		76
+	],
+	"camera_position": [
+		40,
+		-270
+	],
+	"sing_duration": 4,
+	"scale": 1
+}

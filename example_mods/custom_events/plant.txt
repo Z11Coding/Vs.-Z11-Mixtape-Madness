@@ -1,0 +1,5 @@
+Plant
+
+value 1 - 'top' for top plant, 'bottom' for bottom plant
+
+sprites change on their own

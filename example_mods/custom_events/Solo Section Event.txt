@@ -1,0 +1,6 @@
+Value 1: How many sections will last during 
+the Solo Event.
+
+Value 2: How many points will reward if the  
+player pass the Solo Event.
+(Default: 10000 points)

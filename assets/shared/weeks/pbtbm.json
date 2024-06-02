@@ -1,0 +1,21 @@
+{
+	"songs": [
+		["Possessed By The Blood Moon", "bf", [255, 0, 0]]
+	],
+
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"weekBackground": "",
+
+	"storyName": "",
+	"weekBefore": "tutorial",
+	"weekName": "Possessed By The Blood Moon",
+	"startUnlocked": true,
+	"category": "bonus",
+	"hideStoryMode": false,
+	"hideFreeplay": false,
+	"difficulties": "FNF, NITG, POSSESSED"
+}

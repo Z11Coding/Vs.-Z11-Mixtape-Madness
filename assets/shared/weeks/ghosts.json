@@ -1,0 +1,41 @@
+{
+	"songs": [
+		[
+			"Holy Fucking Shit",
+			"ghost",
+			[
+				146,
+				113,
+				253
+			]
+		],
+		[
+			"Ghost Remix",
+			"ghost",
+			[
+				146,
+				113,
+				253
+			]
+		]
+	],
+	"hiddenUntilUnlocked": false,
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"difficulties": "Normal",
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"storyName": "",
+	"weekName": "Holy Fucking Shit",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"hideStoryMode": true,
+	"weekBefore": "tutorial",
+	"startUnlocked": true
+}

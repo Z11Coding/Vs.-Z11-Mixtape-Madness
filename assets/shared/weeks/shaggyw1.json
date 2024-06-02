@@ -1,0 +1,50 @@
+{
+	"storyName": "The Newest Shaggy On The Block",
+	"difficulties": "Cannon, 4K",
+	"hideFreeplay": false,
+	"weekBackground": "halloween",
+	"weekBefore": "tutorial",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"startUnlocked": true,
+	"hideStoryMode": false,
+	"songs": [
+		[
+			"Resurgence",
+			"shaggy",
+			[
+				255,
+				255,
+				255
+			]
+		],
+		[
+			"Radiance",
+			"shaggy",
+			[
+				255,
+				255,
+				255
+			]
+		],
+		[
+			"Restabilize",
+			"dad",
+			[
+				146,
+				113,
+				253
+			]
+		]
+	],
+	"weekCharacters": [
+		"shaggy",
+		"bf",
+		"gf"
+	],
+	"hiddenUntilUnlocked": false,
+	"weekName": "Custom Week"
+}

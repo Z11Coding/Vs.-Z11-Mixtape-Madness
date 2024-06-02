@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "idle",
+			"loop": false,
+			"name": "Tese_idle"
+		},
+		{
+			"offsets": [
+				-13,
+				3
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singLEFT",
+			"loop": false,
+			"name": "Tese_left"
+		},
+		{
+			"offsets": [
+				60,
+				-130
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singDOWN",
+			"loop": false,
+			"name": "Tese_down"
+		},
+		{
+			"offsets": [
+				67,
+				10
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singUP",
+			"loop": false,
+			"name": "Tese_up"
+		},
+		{
+			"offsets": [
+				16,
+				-9
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "singRIGHT",
+			"loop": false,
+			"name": "Tese_right"
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/tese_assest",
+	"position": [
+		70,
+		170
+	],
+	"healthicon": "newtes",
+	"flip_x": false,
+	"healthbar_colors": [
+		235,
+		199,
+		151
+	],
+	"camera_position": [
+		0,
+		0
+	],
+	"sing_duration": 6.1,
+	"scale": 1
+}

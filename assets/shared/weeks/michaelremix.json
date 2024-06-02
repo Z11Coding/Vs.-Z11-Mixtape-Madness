@@ -1,0 +1,32 @@
+{
+	"storyName": "Michael",
+	"difficulties": "Hard, Dave",
+	"hideFreeplay": false,
+	"weekBackground": "stage",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"weekBefore": "tutorial",
+	"startUnlocked": true,
+	"weekCharacters": [
+		"",
+		"bf",
+		"gf"
+	],
+	"songs": [
+		[
+			"rawr",
+			"michael",
+			[
+				140,
+				120,
+				80
+			]
+		]
+	],
+	"hideStoryMode": false,
+	"weekName": "catthemichaelremixed",
+	"hiddenUntilUnlocked": false
+}

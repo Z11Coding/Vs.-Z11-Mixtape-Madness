@@ -1,0 +1,32 @@
+{
+	"storyName": "",
+	"difficulties": "Hard, Nightmare, Unreal, Mega Mix, Mega Nightmare, Mega Unreal",
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"weekBefore": "resist",
+	"startUnlocked": true,
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"songs": [
+		[
+			"Resistalovania",
+			"z12",
+			[
+				255,
+				253,
+				255
+			]
+		]
+	],
+	"hideStoryMode": true,
+	"weekName": "Megalosistance",
+	"hiddenUntilUnlocked": false
+}
