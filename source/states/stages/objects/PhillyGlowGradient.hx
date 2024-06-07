@@ -10,7 +10,7 @@ class PhillyGlowGradient extends FlxSprite
 		super(x, y);
 		originalY = y;
 
-		loadGraphic(Paths.image('Gradient'));
+		loadGraphic(Paths.image('effects/Gradient'));
 		antialiasing = ClientPrefs.data.globalAntialiasing;
 		scrollFactor.set(0, 0.75);
 		setGraphicSize(2000, originalHeight);

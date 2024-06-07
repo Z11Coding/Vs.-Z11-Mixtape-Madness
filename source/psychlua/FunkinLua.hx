@@ -38,12 +38,12 @@ import psychlua.HScript;
 import psychlua.DebugLuaText;
 import psychlua.ModchartSprite;
 
-import modchart.SubModifier;
-
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepadInputID;
 
 import haxe.Json;
+
+import modchart.SubModifier;
 
 class FunkinLua {
 	public var lua:State = null;
@@ -73,8 +73,10 @@ class FunkinLua {
 		game.luaArray.push(this);
 
 		var myFolder:Array<String> = this.scriptName.split('/');
+		#if MODS_ALLOWED
 		if(myFolder[0] + '/' == Paths.mods() && (Mods.currentModDirectory == myFolder[1] || Mods.getGlobalMods().contains(myFolder[1]))) //is inside mods folder
 			this.modFolder = myFolder[1];
+		#end
 
 		// Lua shit
 		set('Function_StopLua', LuaUtils.Function_StopLua);
@@ -141,17 +143,19 @@ class FunkinLua {
 		// Gameplay settings
 		set('healthGainMult', game.healthGain);
 		set('healthLossMult', game.healthLoss);
+
 		#if FLX_PITCH
 		set('playbackRate', game.playbackRate);
 		#else
 		set('playbackRate', 1);
 		#end
+
 		set('guitarHeroSustains', game.guitarHeroSustains);
 		set('instakillOnMiss', game.instakillOnMiss);
 		set('botPlay', game.cpuControlled);
 		set('practice', game.practiceMode);
 
-		for (i in 0...4) {
+		for (i in 0...Note.ammo[PlayState.mania]) {
 			set('defaultPlayerStrumX' + i, 0);
 			set('defaultPlayerStrumY' + i, 0);
 			set('defaultOpponentStrumX' + i, 0);
@@ -200,6 +204,17 @@ class FunkinLua {
 			if(func != null)
 				Lua_helper.add_callback(lua, name, func);
 		}
+
+		//Fun cursor things for lua
+		Lua_helper.add_callback(lua, "getCursorMode", function()
+		{
+			return Cursor.cursorMode;
+		});
+		
+		Lua_helper.add_callback(lua, "setCursorMode", function(mode:String)
+		{
+			Cursor.cursorMode = LuaUtils.interpCurseMode(mode);
+		});
 
 		// mod manager
 		Lua_helper.add_callback(lua, "setPercent", function(modName:String, val:Float, player:Int = -1)
@@ -473,6 +488,26 @@ class FunkinLua {
 			}
 			luaTrace('removeLuaScript: Script $luaFile isn\'t running!', false, false, FlxColor.RED);
 			return false;
+		});
+		Lua_helper.add_callback(lua, "removeHScript", function(luaFile:String, ?ignoreAlreadyRunning:Bool = false) {
+			#if HSCRIPT_ALLOWED
+			var foundScript:String = findScript(luaFile, '.hx');
+			if(foundScript != null)
+			{
+				if(!ignoreAlreadyRunning)
+					for (script in game.hscriptArray)	
+						if(script.origin == foundScript)
+						{
+							trace('Closing script ' + (script.origin != null ? script.origin : luaFile));
+							script.destroy();
+							return true;
+						}
+			}
+			luaTrace('removeHScript: Script $luaFile isn\'t running!', false, false, FlxColor.RED);
+			return false;
+			#else
+			luaTrace("removeHScript: HScript is not supported on this platform!", false, false, FlxColor.RED);
+			#end
 		});
 
 		Lua_helper.add_callback(lua, "loadSong", function(?name:String = null, ?difficultyNum:Int = -1) {
@@ -1504,6 +1539,7 @@ class FunkinLua {
 		#end
 
 		// mod settings
+		#if MODS_ALLOWED
 		addLocalCallback("getModSetting", function(saveTag:String, ?modName:String = null) {
 			if(modName == null)
 			{
@@ -1516,6 +1552,7 @@ class FunkinLua {
 			}
 			return LuaUtils.getModSetting(saveTag, modName);
 		});
+		#end
 		//
 
 		Lua_helper.add_callback(lua, "debugPrint", function(text:Dynamic = '', color:String = 'WHITE') PlayState.instance.addTextToDebug(text, CoolUtil.colorFromString(color)));
@@ -1677,7 +1714,7 @@ class FunkinLua {
 			return false;
 		}
 		return (result == 'true');
-	}	
+	}
 
 	function findScript(scriptFile:String, ext:String = '.lua')
 	{

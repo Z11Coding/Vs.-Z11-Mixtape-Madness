@@ -29,7 +29,6 @@ import psychlua.FunkinLua;
 
 import cutscenes.CutsceneHandler;
 import cutscenes.DialogueBoxPsych;
-import cutscenes.DialogueBoxDS;
 
 import states.StoryMenuState;
 import states.FreeplayState;
@@ -315,6 +314,7 @@ class PlayState extends MusicBeatState
 	public var practiceMode:Bool = false;
 	public var chartModifier:String = 'Normal';
 	public var convertMania:Int = ClientPrefs.getGameplaySetting('convertMania', 3);
+	public var opponentmode:Bool = ClientPrefs.getGameplaySetting('opponentplay', false);
 
 	function set_cpuControlled(value){
 		cpuControlled = value;
@@ -525,6 +525,8 @@ class PlayState extends MusicBeatState
 
 	override public function create()
 	{
+		MemoryUtil.clearMajor();
+		opponentmode = ClientPrefs.getGameplaySetting('opponentplay', false);
 
 		if (SONG.song == 'Fangirl Frenzy')
 		{
@@ -760,10 +762,13 @@ class PlayState extends MusicBeatState
 		{
 			case 'stage': new states.stages.StageWeek1(); //Week 1
 			case 'spooky': new states.stages.Spooky(); //Week 2
-			case 'mansion': new states.stages.Mansion();
-			case 'sky': new states.stages.Sky();
-			case 'portal': new states.stages.Portal();
-			case 'lavapit': new states.stages.Lavapit();
+			case 'philly': new states.stages.Philly(); //Week 3
+			case 'limo': new states.stages.Limo(); //Week 4
+			case 'mall': new states.stages.Mall(); //Week 5 - Cocoa, Eggnog
+			case 'mallEvil': new states.stages.MallEvil(); //Week 5 - Winter Horrorland
+			case 'school': new states.stages.School(); //Week 6 - Senpai, Roses
+			case 'schoolEvil': new states.stages.SchoolEvil(); //Week 6 - Thorns
+			case 'tank': new states.stages.Tank(); //Week 7 - Ugh, Guns, Stress
 		}
 
 		whiteBG = new FlxSprite(-480, -480).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.WHITE);
@@ -1838,25 +1843,25 @@ class PlayState extends MusicBeatState
 	}
 
 	//Same as above, but continues the cutscene timer instead of starting the song
-	public var dsDialogue:DialogueBoxDS;
-	public function startCutDialogue(dialogueFile:DialogueFileDS, ?song:String = null):Void
+	public var cutDialogue:DialogueBoxPsych;
+	public function startCutDialogue(dialogueFile:DialogueFile, ?song:String = null):Void
 	{
 		// TO DO: Make this more flexible, maybe?
-		if(dsDialogue != null) return;
+		if(cutDialogue != null) return;
 
 		if(dialogueFile.dialogue.length > 0) {
 			seenCutscene = true;
 			//inCutscene = true;
-			dsDialogue = new DialogueBoxDS(dialogueFile, song);
-			dsDialogue.scrollFactor.set();
-			dsDialogue.finishThing = function() {
-				dsDialogue = null;
+			cutDialogue = new DialogueBoxPsych(dialogueFile, song);
+			cutDialogue.scrollFactor.set();
+			cutDialogue.finishThing = function() {
+				cutDialogue = null;
 				cutsceneHandler.pauseCutscene = false;
 			}
-			dsDialogue.nextDialogueThing = startNextDialogue;
-			dsDialogue.skipDialogueThing = skipDialogue;
-			dsDialogue.cameras = [camOther];
-			add(dsDialogue);
+			cutDialogue.nextDialogueThing = startNextDialogue;
+			cutDialogue.skipDialogueThing = skipDialogue;
+			cutDialogue.cameras = [camOther];
+			add(cutDialogue);
 		} else {
 			FlxG.log.warn('Your dialogue file is badly formatted!');
 			cutsceneHandler.pauseCutscene = false;
@@ -3537,6 +3542,13 @@ class PlayState extends MusicBeatState
 
 	override public function onFocus():Void
 	{
+		if (!paused && lostFocus)
+		{
+			if(FlxG.sound.music != null) {
+				resyncVocals();
+			}
+			lostFocus = false;
+		}
 		if (gf != null)
 		{
 			resetRPC(Conductor.songPosition > 0.0);
@@ -3544,9 +3556,15 @@ class PlayState extends MusicBeatState
 
 		super.onFocus();
 	}
-	
+	var lostFocus = false;
 	override public function onFocusLost():Void
 	{
+		if(FlxG.sound.music != null) {
+			FlxG.sound.music.pause();
+			vocals.pause();	
+			opponentVocals.pause();
+		}
+		lostFocus = true;
 		if (gf != null)
 		{
 			#if DISCORD_ALLOWED
@@ -3683,7 +3701,7 @@ class PlayState extends MusicBeatState
 			FlxG.sound.playMusic(Paths.music("The Shift"), 1, true);
 			boyfriend.playAnim("idle", true);
 			cutsceneHandler.pauseCutscene = true;
-			startCutDialogue(DialogueBoxDS.parseDialogue(Paths.json(songName + '/dialogueIntro1')));
+			startCutDialogue(DialogueBoxPsych.parseDialogue(Paths.json(songName + '/dialogueIntro1')));
 		});
 
 		cutsceneHandler.timer(7, function()
@@ -3696,7 +3714,7 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.sound.music.fadeOut(1, 1);
 			cutsceneHandler.pauseCutscene = true;
-			startCutDialogue(DialogueBoxDS.parseDialogue(Paths.json(songName + '/dialogueIntro2')));
+			startCutDialogue(DialogueBoxPsych.parseDialogue(Paths.json(songName + '/dialogueIntro2')));
 		});
 
 		cutsceneHandler.timer(9, function()
@@ -3709,7 +3727,7 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.sound.music.fadeOut(1, 1);
 			cutsceneHandler.pauseCutscene = true;
-			startCutDialogue(DialogueBoxDS.parseDialogue(Paths.json(songName + '/dialogueIntro3')));
+			startCutDialogue(DialogueBoxPsych.parseDialogue(Paths.json(songName + '/dialogueIntro3')));
 		});
 
 		cutsceneHandler.timer(11, function()
@@ -3724,7 +3742,7 @@ class PlayState extends MusicBeatState
 		{
 			FlxG.sound.music.fadeOut(1, 1);
 			cutsceneHandler.pauseCutscene = true;
-			startCutDialogue(DialogueBoxDS.parseDialogue(Paths.json(songName + '/dialogueIntro4')));
+			startCutDialogue(DialogueBoxPsych.parseDialogue(Paths.json(songName + '/dialogueIntro4')));
 		});
 
 		cutsceneHandler.timer(12.5, function()

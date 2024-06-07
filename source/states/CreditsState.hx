@@ -20,6 +20,7 @@ class CreditsState extends MusicBeatState
 
 	override function create()
 	{
+		//Cursor.cursorMode = Cross;
 		#if DISCORD_ALLOWED
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);

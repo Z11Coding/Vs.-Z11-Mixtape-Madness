@@ -512,4 +512,22 @@ class LuaUtils
 		}
 		return PlayState.instance.camGame;
 	}
+
+	public static function interpCurseMode(mode:String):backend.Cursor.CursorMode {
+		switch(mode.toLowerCase()) {
+			case 'default': return Default;
+			case 'cross': return Cross;
+			case 'eraser': return Eraser;
+			case 'grabbing': return Grabbing;
+			case 'hourglass': return Hourglass;
+			case 'pointer': return Pointer;
+			case 'text': return Text;
+			case 'zoomin': return ZoomIn;
+			case 'zoomout': return ZoomOut;
+			case 'crosshair': return Crosshair;
+			case 'cell': return Cell;
+			case 'scroll': return Scroll;
+		}
+		return Default;
+	}
 }

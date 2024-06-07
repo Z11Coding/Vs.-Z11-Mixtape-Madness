@@ -1,202 +1,213 @@
 {
 	"animations": [
 		{
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "idle",
+			"fps": 24,
+			"name": "idle",
+			"indices": []
+		},
+		{
+			"loop": false,
 			"offsets": [
 				40,
 				58
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "singUPmiss",
-			"indices": [],
-			"name": "upMISS"
+			"fps": 24,
+			"name": "upMISS",
+			"indices": []
 		},
 		{
-			"loop": false,
 			"offsets": [
 				62,
 				-5
 			],
-			"anim": "firstDeath",
+			"loop": false,
 			"fps": 24,
-			"name": "firstDeath",
-			"indices": []
+			"anim": "firstDeath",
+			"indices": [],
+			"name": "firstDeath"
 		},
 		{
-			"loop": false,
 			"offsets": [
 				28,
 				-5
 			],
-			"anim": "deathLoop",
+			"loop": false,
 			"fps": 24,
-			"name": "deathLoop",
-			"indices": []
+			"anim": "deathLoop",
+			"indices": [],
+			"name": "deathLoop"
 		},
 		{
-			"loop": true,
 			"offsets": [
 				27,
 				-4
 			],
-			"anim": "deathConfirm",
+			"loop": true,
 			"fps": 24,
-			"name": "deathConfirm",
+			"anim": "deathConfirm",
+			"indices": [],
+			"name": "deathConfirm"
+		},
+		{
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "danceLeft",
+			"fps": 24,
+			"name": "gfDanceLeft",
 			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				0,
 				0
 			],
-			"loop": false,
-			"fps": 24,
-			"anim": "danceLeft",
-			"indices": [],
-			"name": "gfDanceLeft"
-		},
-		{
-			"offsets": [
-				0,
-				0
-			],
-			"loop": false,
-			"fps": 24,
 			"anim": "danceRight",
-			"indices": [],
-			"name": "gfDanceRight"
+			"fps": 24,
+			"name": "gfDanceRight",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				-59,
 				-40
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "singRIGHTmiss",
-			"indices": [],
-			"name": "rightMISS"
+			"fps": 24,
+			"name": "rightMISS",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				41,
 				-15
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "singDOWNmiss",
-			"indices": [],
-			"name": "downMISS"
+			"fps": 24,
+			"name": "downMISS",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				22,
 				28
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "singUP",
-			"indices": [],
-			"name": "GFup"
+			"fps": 24,
+			"name": "GFup",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				33,
 				-27
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "singDOWN",
-			"indices": [],
-			"name": "GFdown"
+			"fps": 24,
+			"name": "GFdown",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				81,
 				-22
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "singLEFT",
-			"indices": [],
-			"name": "GFleft"
+			"fps": 24,
+			"name": "GFleft",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				-62,
 				-37
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "singRIGHT",
-			"indices": [],
-			"name": "GFright"
+			"fps": 24,
+			"name": "GFright",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				83,
 				-10
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "singLEFTmiss",
-			"indices": [],
-			"name": "left MISS"
+			"fps": 24,
+			"name": "left MISS",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				60,
 				-42
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "gf pre attack",
-			"indices": [],
-			"name": "gf pre attack"
+			"fps": 24,
+			"name": "gf pre attack",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				388,
 				-50
 			],
-			"loop": false,
-			"fps": 24,
 			"anim": "gf attack",
-			"indices": [],
-			"name": "gf attack"
+			"fps": 24,
+			"name": "gf attack",
+			"indices": []
 		},
 		{
-			"loop": false,
 			"offsets": [
 				112,
 				-29
 			],
-			"anim": "gf dodge",
+			"loop": false,
 			"fps": 24,
-			"name": "gf dodge",
-			"indices": []
+			"anim": "gf dodge",
+			"indices": [],
+			"name": "gf dodge"
 		},
 		{
-			"loop": false,
 			"offsets": [
 				48,
 				-29
 			],
-			"anim": "gf hit",
+			"loop": false,
 			"fps": 24,
-			"name": "gf hit",
-			"indices": []
+			"anim": "gf hit",
+			"indices": [],
+			"name": "gf hit"
 		},
 		{
-			"loop": false,
 			"offsets": [
 				10,
 				-7
 			],
-			"anim": "hey",
+			"loop": false,
 			"fps": 24,
-			"name": "hey",
-			"indices": []
+			"anim": "hey",
+			"indices": [],
+			"name": "hey"
 		}
 	],
 	"vocals_file": "gf",
@@ -206,7 +217,7 @@
 		140,
 		240
 	],
-	"healthicon": "gfv2",
+	"healthicon": "gf",
 	"flip_x": true,
 	"healthbar_colors": [
 		235,

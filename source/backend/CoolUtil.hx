@@ -389,4 +389,52 @@ class CoolUtil
 				text.borderStyle = NONE;
 		}
 	}
+
+	public static function easeInOutCirc(x:Float):Float
+	{
+		if (x <= 0.0) return 0.0;
+		if (x >= 1.0) return 1.0;
+		var result:Float = (x < 0.5) ? (1 - Math.sqrt(1 - 4 * x * x)) / 2 : (Math.sqrt(1 - 4 * (1 - x) * (1 - x)) + 1) / 2;
+		return (result == Math.NaN) ? 1.0 : result;
+	}
+
+	public static function easeInBack(x:Float, ?c:Float = 1.70158):Float
+	{
+		if (x <= 0.0) return 0.0;
+		if (x >= 1.0) return 1.0;
+		return (1 + c) * x * x * x - c * x * x;
+	}
+
+	public static function easeOutBack(x:Float, ?c:Float = 1.70158):Float
+	{
+		if (x <= 0.0) return 0.0;
+		if (x >= 1.0) return 1.0;
+		return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2);
+	}
+
+	/**
+	 * Perform linear interpolation between the base and the target, based on the current framerate.
+	 * @param base The starting value, when `progress <= 0`.
+	 * @param target The ending value, when `progress >= 1`.
+	 * @param ratio Value used to interpolate between `base` and `target`.
+	 *
+	 * @return The interpolated value.
+	 */
+	@:deprecated('Use smoothLerp instead')
+	public static function coolLerp(base:Float, target:Float, ratio:Float):Float
+	{
+		return base + cameraLerp(ratio) * (target - base);
+	}
+
+	/**
+	 * Perform linear interpolation based on the current framerate.
+	 * @param lerp Value used to interpolate between `base` and `target`.
+	 *
+	 * @return The interpolated value.
+	 */
+	@:deprecated('Use smoothLerp instead')
+	public static function cameraLerp(lerp:Float):Float
+	{
+		return lerp * (FlxG.elapsed / (1 / 60));
+	}
 }

@@ -59,7 +59,8 @@ import shaders.ColorSwap;
 
 import math.Vector3;
 
-import backend.MemoryUtil;
+import backend.util.MemoryUtil;
+import backend.Cursor;
 
 //Flixel
 import flixel.sound.FlxSound;

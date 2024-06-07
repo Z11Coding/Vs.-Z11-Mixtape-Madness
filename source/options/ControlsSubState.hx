@@ -250,7 +250,10 @@ class ControlsSubState extends MusicBeatSubstate
 		[false],
 		[false, 'DEBUG'],
 		[false, 'Key 1', 'debug_1', 'Debug Key #1'],
-		[false, 'Key 2', 'debug_2', 'Debug Key #2']
+		[false, 'Key 2', 'debug_2', 'Debug Key #2'],
+		[false],
+		[false, 'Extras'],
+		[false, 'Key 1', 'fullscreen', 'Fullscreen']
 	];
 	var curOptions:Array<Int>;
 	var curOptionsValid:Array<Int>;
@@ -263,8 +266,8 @@ class ControlsSubState extends MusicBeatSubstate
 	var grpBinds:FlxTypedGroup<Alphabet>;
 	var selectSpr:AttachedSprite;
 
-	var gamepadColor:FlxColor = 0xfffd7194;
-	var keyboardColor:FlxColor = 0xff7192fd;
+	var gamepadColor:FlxColor = 0xff7543ff;
+	var keyboardColor:FlxColor = 0xffff9924;
 	var onKeyboardMode:Bool = true;
 	
 	var controllerSpr:FlxSprite;

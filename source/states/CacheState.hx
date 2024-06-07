@@ -24,6 +24,7 @@ import openfl.display.BitmapData;
 import backend.GPUBitmap;
 import backend.ImageCache;
 import options.CacheSettings;
+import backend.util.WindowUtil;
 #if windows
 import backend.Discord.DiscordClient;
 #end
@@ -95,14 +96,20 @@ class CacheState extends MusicBeatState
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
+		WindowUtil.initWindowEvents();
+		WindowUtil.disableCrashHandler();
+		FlxSprite.defaultAntialiasing = true;
+
 		#if LUA_ALLOWED
 		Mods.pushGlobalMods();
 		#end
 		Mods.loadTopMod();
 
-		FlxG.fixedTimestep = false;
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.keys.preventDefaultKeys = [TAB, ALT];
+		FlxG.sound.volumeUpKeys = [];
+		FlxG.sound.volumeDownKeys = [];
+		FlxG.sound.muteKeys = [];
 
 		FlxG.save.bind('Mixtape' #if (flixel < "5.0.0"), 'Z11Gaming' #end);
 		ClientPrefs.loadPrefs();
@@ -110,6 +117,8 @@ class CacheState extends MusicBeatState
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
 
 		Highscore.load();
+
+		//Cursor.cursorMode = Cross;
 
 		if (FlxG.save.data.updated)
 		{
@@ -178,11 +187,8 @@ class CacheState extends MusicBeatState
 		}
 		else
 		{
-
 			newDest = new What();
-
 			//FlxG.sound.play(Paths.music('celebration'));
-
 			for (folder in Mods.getModDirectories())
 			{
 				if(!Mods.ignoreModFolders.contains(folder))
@@ -542,54 +548,7 @@ class CacheState extends MusicBeatState
 					}
 				}
 			} //this took me waaay too long to just delete
-
-			/*images = images.concat(Assets.list(IMAGE));
-			sounds = sounds.concat(Assets.list(SOUND));
-			music = music.concat(Assets.list(MUSIC));
-
-			if (FileSystem.exists("modsList.txt"))
-			{
-				for (folder in Paths.getModDirectories())
-				{
-					if(!Paths.ignoreModFolders.contains(folder))
-					{
-						modImages = modImages.concat(Assets.list(IMAGE));
-						modSounds = modSounds.concat(Assets.list(SOUND));
-						modMusic = modMusic.concat(Assets.list(MUSIC));
-					}
-				}
-			}
-			for (i in images)
-			{
-				totalthing.push(i);
-			}
-			for (i in sounds)
-			{
-				totalthing.push(i);
-			}
-			for (i in music)
-			{
-				totalthing.push(i);
-			}
-			for (i in modImages)
-			{
-				totalthing.push(i);
-			}
-			for (i in modSounds)
-			{
-				totalthing.push(i);
-			}
-			for (i in modMusic)
-			{
-				totalthing.push(i);
-			}*/
-
-			
 			#end
-
-			/*sys.thread.Thread.create(() -> {
-				cache();
-			});*/ //this is probably important
 
 			loadTotal = totalthing.length;
 
@@ -607,7 +566,6 @@ class CacheState extends MusicBeatState
 			add(loadingWhat);
 
 			if(!cacheStart){
-				
 				#if web
 				new FlxTimer().start(3, function(tmr:FlxTimer)
 				{
@@ -625,7 +583,7 @@ class CacheState extends MusicBeatState
 			}
 
 			if(ClientPrefs.data.graphicsPreload2){
-				GPUBitmap.disposeAll();
+				GPUBitmap.disposeAll(); //cuz we moved to a pack without the undertale or origins and i didnt wanna complain about it cuz i know they were causing issues so i was being
 				ImageCache.cache.clear();
 			}
 			else{

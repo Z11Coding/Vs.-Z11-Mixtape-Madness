@@ -312,12 +312,12 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 					daKeyTxt.x = babyArrow.x+(babyArrow.width / 2);
 					daKeyTxt.x -= daKeyTxt.width / 2;
 					add(daKeyTxt);
-					daKeyTxt.cameras = [PlayState.instance.camHUD];
+					daKeyTxt.cameras = cameras;
 					var textY:Float = (j == 0 ? babyArrow.y - 32 : ((babyArrow.y - 32) + babyArrow.height) - daKeyTxt.height);
-					daKeyTxt.y = textY;
+					daKeyTxt.y = textY + 32;
 
 					if (PlayState.mania > 1) {
-						FlxTween.tween(daKeyTxt, {y: textY + 32}, twnDuration / PlayState.instance.playbackRate, {ease: FlxEase.bounceIn, startDelay: twnStart});
+						FlxTween.tween(daKeyTxt, {y: textY}, twnDuration / PlayState.instance.playbackRate, {ease: FlxEase.bounceIn, startDelay: twnStart});
 						FlxTween.tween(daKeyTxt, {alpha: 1}, twnDuration / PlayState.instance.playbackRate, {ease: FlxEase.circIn, startDelay: twnStart});
 					} else {
 						daKeyTxt.y += 16;

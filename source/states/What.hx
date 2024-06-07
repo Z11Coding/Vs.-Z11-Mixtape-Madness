@@ -26,7 +26,7 @@ class What extends MusicBeatState
     override public function create()
     {
         FlxG.sound.volume = 0.5;
-        whatGrad = new FlxSprite().loadGraphic(Paths.image('Gradient'));
+        whatGrad = new FlxSprite().loadGraphic(Paths.image('effects/GradientSplash'));
         whatGrad.screenCenter();
         whatGrad.color = FlxColor.PURPLE;
         whatGrad.alpha = 0;

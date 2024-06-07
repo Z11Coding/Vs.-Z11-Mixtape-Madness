@@ -23,25 +23,83 @@ class OtherSettingsSubState extends BaseOptionsMenu
 			'bool'
 		);
 		addOption(option);
-		option.onChange = onChangeSound;
 
 		var option:Option = new Option(
-			'Volume Sound', 
+			'Raise Volume Sound', 
 			"The sound that plays when you change the volume.", 
-			'volSound', 
+			'volup', 
 			'string', 
 			[
 			"beep",
+			"bfBeep",
 			"cancelMenu",
+			"clickText",
+			"confirmMenu",
 			"dialogue",
 			"dialogueClose",
 			"GF_4",
 			"hitsound",
 			"Metronome_Tick",
-			"scrollMenu"]
+			"pixelText",
+			"scrollMenu",
+			"snd_hurt1",
+			"txtSans",
+			"Volup"]
 		);
 		addOption(option);
-		option.onChange = onChangeSound;
+		option.onChange = onChangeSoundUp;
+		option.displayFormat = '< %v >';
+
+		var option:Option = new Option(
+			'Lower Volume Sound', 
+			"The sound that plays when you change the volume.", 
+			'Voldown', 
+			'string', 
+			[
+			"beep",
+			"bfBeep",
+			"cancelMenu",
+			"clickText",
+			"confirmMenu",
+			"dialogue",
+			"dialogueClose",
+			"GF_4",
+			"hitsound",
+			"Metronome_Tick",
+			"pixelText",
+			"scrollMenu",
+			"snd_hurt1",
+			"txtSans",
+			"Voldown"]
+		);
+		addOption(option);
+		option.onChange = onChangeSoundDown;
+		option.displayFormat = '< %v >';
+
+		var option:Option = new Option(
+			'Max Volume Sound', 
+			"The sound that plays when you change the volume.", 
+			'volmax', 
+			'string', 
+			[
+			"beep",
+			"bfBeep",
+			"cancelMenu",
+			"clickText",
+			"confirmMenu",
+			"dialogue",
+			"dialogueClose",
+			"GF_4",
+			"hitsound",
+			"Metronome_Tick",
+			"pixelText",
+			"scrollMenu",
+			"snd_hurt1",
+			"txtSans",
+			"VolMAX"]
+		);
+		addOption(option);
+		option.onChange = onChangeSoundMax;
 		option.displayFormat = '< %v >';
 
 		var option:Option = new Option('Pause Screen Song:',
@@ -120,9 +178,19 @@ class OtherSettingsSubState extends BaseOptionsMenu
 		ClientPrefs.data.pauseBPM = curBPMList[indeed];
 	}
 
-	function onChangeSound()
+	function onChangeSoundDown()
 	{
-		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound(ClientPrefs.data.volSound), FlxG.sound.volume);
+		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound(ClientPrefs.data.volDown), FlxG.sound.volume);
+	}
+
+	function onChangeSoundUp()
+	{
+		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound(ClientPrefs.data.volUp), FlxG.sound.volume);
+	}
+
+	function onChangeSoundMax()
+	{
+		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound(ClientPrefs.data.volMax), FlxG.sound.volume);
 	}
 
 	override function destroy()

@@ -120,7 +120,9 @@ import states.TitleState;
 		'aiDifficulty' => 2,
 	];
 	public var inputSystem:String = 'Native';
-	public var volSound:String = 'beep';
+	public var volUp:String = 'Volup';
+	public var volDown:String = 'Voldown';
+	public var volMax:String = 'VolMAX';
 
 	public var comboOffset:Array<Int> = [0, 0, 0, 0, 0];
 	public var ratingOffset:Int = 0;
@@ -357,7 +359,9 @@ class ClientPrefs {
 		'volume_down'	=> [NUMPADMINUS, MINUS],
 		
 		'debug_1'		=> [SEVEN, NONE],
-		'debug_2'		=> [EIGHT, NONE]
+		'debug_2'		=> [EIGHT, NONE],
+
+		'fullscreen'	=> [F11, NONE]
 	];
 
 	public static var gamepadBinds:Map<String, Array<FlxGamepadInputID>> = [

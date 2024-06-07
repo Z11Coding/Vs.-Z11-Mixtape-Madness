@@ -14,7 +14,7 @@ function onCreatePost()
     addLuaText('pain')
     setProperty("pain.alpha", 0)
 
-    makeAnimatedLuaSprite("notestoremember", "NOTE_assets", 0, 0)
+    makeAnimatedLuaSprite("notestoremember", "BeatBattle/NOTE_assets", 0, 0)
     screenCenter("notestoremember", 'xy')
     addAnimationByPrefix("notestoremember", "left", "purple0", 24, true)
     addAnimationByPrefix("notestoremember", "down", "blue0", 24, true)
@@ -81,27 +81,6 @@ function onBeatHit()
         setProperty('camGame.zoom', getProperty("camGame.zoom") + 0.5)
         setProperty('camHUD.zoom', getProperty("camHUD.zoom") + 0.1)
     end
-    for i = 0, getProperty('notes.length') -1 do
-        if getPropertyFromGroup('notes', i, 'noteType') == 'ArrowMech' then
-            setProperty("warn.visible", true)
-            if not mustHitSection then
-                showArrow = true
-            end
-            if difficultyName == 'Unreasonable' then
-                for a = 0, 3 do
-                    setPropertyFromGroup('strumLineNotes', a, 'alpha', 0)
-                end
-            end
-        else
-            setProperty("warn.visible", false)
-            if difficultyName == 'Unreasonable' then
-                for a = 0, 3 do
-                    setPropertyFromGroup('strumLineNotes', a, 'alpha', 1)
-                end
-            end
-            showArrow = false
-        end
-    end
     if curBeat == 254 and (difficultyName == 'Semi-Impossible' or difficultyName == 'Impossible') then
         noteTweenY("suffering", 4, 70, 2, "elasticInOut")
     end
@@ -126,16 +105,34 @@ function onUpdatePost()
     end
 end
 local direcList = {'left', 'down', 'up', 'right'}
-function opponentNoteHit(id, direc, type, sus)
+function opponentNoteHit(id, direc, nType, sus)
     if getProperty('health') > 0.1 then
         setProperty('health', getProperty('health') - daDrain)
     end
-    for i = 0, getProperty('notes.length') -1 do
-        if getPropertyFromGroup('notes', i, 'noteType') == 'ArrowMech' then
-            playAnim('notestoremember', direcList[direc+1], true)
-            if showArrow then
-                setProperty("notestoremember.alpha", 1)
+    if nType == 'ArrowMech' then
+        setProperty("notestoremember.alpha", 1)
+        playAnim('notestoremember', direcList[direc+1], true)
+        setProperty("warn.visible", true)
+        if difficultyName == 'Unreasonable' then
+            for a = 0, 3 do
+                setPropertyFromGroup('strumLineNotes', a, 'alpha', 0)
             end
         end
+    else
+        setProperty("warn.visible", false)
+        if difficultyName == 'Unreasonable' then
+            for a = 0, 3 do
+                setPropertyFromGroup('strumLineNotes', a, 'alpha', 1)
+            end
+        end
+        showArrow = false
+    end
+end
+
+function goodNoteHit(index, noteDir, noteType, isSustainNote)
+    if noteType == 'ArrowMech' then
+        setProperty("warn.visible", true)
+    else
+        setProperty("warn.visible", false)
     end
 end

@@ -3,15 +3,19 @@
 	"difficulties": "Normal, Reasonable, Unreasonable, Semi-Impossible, Impossible",
 	"hideFreeplay": false,
 	"weekBackground": "",
-	"weekBefore": "tutorial",
 	"freeplayColor": [
 		146,
 		113,
 		253
 	],
-	"startUnlocked": true,
+	"weekBefore": "tutorial",
 	"category": "main",
-	"hideStoryMode": true,
+	"startUnlocked": true,
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
 	"songs": [
 		[
 			"Beat Battle",
@@ -23,11 +27,7 @@
 			]
 		]
 	],
-	"weekCharacters": [
-		"",
-		"",
-		""
-	],
-	"hiddenUntilUnlocked": false,
-	"weekName": ""
+	"hideStoryMode": true,
+	"weekName": "",
+	"hiddenUntilUnlocked": false
 }

@@ -165,13 +165,7 @@ class MainMenuState extends MusicBeatState
 			menuItem.scrollFactor.set(0, scr);
 			menuItem.antialiasing = ClientPrefs.data.globalAntialiasing;
 			// menuItem.setGraphicSize(Std.int(menuItem.width * 0.58));
-			FlxTween.tween(menuItem, {y: 30 + (i * 120)}, 1 + (i * 0.25), {
-				ease: FlxEase.expoInOut,
-				onComplete: function(flxTween:FlxTween)
-				{
-					changeItem();
-				}
-			});
+			FlxTween.tween(menuItem, {y: 30 + (i * 120)}, 1 + (i * 0.25), {ease: FlxEase.expoInOut});
 			menuItem.updateHitbox();
 			menuItem.scrollFactor.set(0, scr);
 		}

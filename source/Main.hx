@@ -15,6 +15,7 @@ import states.CacheState;
 import backend.AudioSwitchFix;
 import backend.FunkinRatioScaleMode;
 import backend.MemoryCounter;
+import haxe.ui.Toolkit;
 
 #if linux
 import lime.graphics.Image;
@@ -121,6 +122,11 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
+		//initHaxeUI();
+		Toolkit.init();
+		Toolkit.theme = 'gradient'; // don't be cringe
+		backend.Cursor.registerHaxeUICursors();
+
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 
@@ -137,6 +143,7 @@ class Main extends Sprite
 
 		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
+
 		ClientPrefs.loadDefaultKeys();
 		try{
 			addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
@@ -267,6 +274,24 @@ class Main extends Sprite
 		   if (FlxG.game != null)
 		   resetSpriteCache(FlxG.game);
 	   });
+
+		#if android
+			FlxG.android.preventDefaultKeys = [flixel.input.android.FlxAndroidKey.BACK];
+		#end
+	}
+
+	function initHaxeUI():Void
+	{
+		// Calling this before any HaxeUI components get used is important:
+		// - It initializes the theme styles.
+		// - It scans the class path and registers any HaxeUI components.
+		Toolkit.init();
+		Toolkit.theme = 'gradient'; // don't be cringe
+		// Toolkit.theme = 'light'; // embrace cringe
+		Toolkit.autoScale = false;
+		// Don't focus on UI elements when they first appear.
+		haxe.ui.focus.FocusManager.instance.autoFocus = false;
+		haxe.ui.tooltips.ToolTipManager.defaultDelay = 200;
 	}
 
 	static function resetSpriteCache(sprite:Sprite):Void {
