@@ -27,7 +27,7 @@ class OtherSettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option(
 			'Raise Volume Sound', 
 			"The sound that plays when you change the volume.", 
-			'volup', 
+			'volUp', 
 			'string', 
 			[
 			"beep",
@@ -53,7 +53,7 @@ class OtherSettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option(
 			'Lower Volume Sound', 
 			"The sound that plays when you change the volume.", 
-			'Voldown', 
+			'volDown', 
 			'string', 
 			[
 			"beep",
@@ -79,7 +79,7 @@ class OtherSettingsSubState extends BaseOptionsMenu
 		var option:Option = new Option(
 			'Max Volume Sound', 
 			"The sound that plays when you change the volume.", 
-			'volmax', 
+			'volMax', 
 			'string', 
 			[
 			"beep",

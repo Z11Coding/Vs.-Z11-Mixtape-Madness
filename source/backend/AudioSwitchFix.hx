@@ -50,6 +50,8 @@ class AudioSwitchFix {
 				}
 
 				Main.audioDisconnected = false;
+
+				MusicBeatState.cueReset = true;
 			}
 		#end
 	}

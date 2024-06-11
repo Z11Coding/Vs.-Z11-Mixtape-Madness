@@ -23,6 +23,7 @@ class MusicBeatState extends FlxUIState
 
 	var _psychCameraInitialized:Bool = false;
 
+	public static var cueReset:Bool = false;
 	override function create() {
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		#if MODS_ALLOWED Mods.updatedOnState = false; #end
@@ -51,6 +52,11 @@ class MusicBeatState extends FlxUIState
 	public static var timePassedOnState:Float = 0;
 	override function update(elapsed:Float)
 	{
+		if (cueReset)
+		{
+			cueReset = false;
+			FlxG.resetState();
+		}
 		//everyStep();
 		var oldStep:Int = curStep;
 		timePassedOnState += elapsed;

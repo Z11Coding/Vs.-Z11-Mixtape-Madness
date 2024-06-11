@@ -314,17 +314,17 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 					add(daKeyTxt);
 					daKeyTxt.cameras = cameras;
 					var textY:Float = (j == 0 ? babyArrow.y - 32 : ((babyArrow.y - 32) + babyArrow.height) - daKeyTxt.height);
-					daKeyTxt.y = textY + 32;
+					daKeyTxt.y = textY;
 
 					if (PlayState.mania > 1) {
-						FlxTween.tween(daKeyTxt, {y: textY}, twnDuration / PlayState.instance.playbackRate, {ease: FlxEase.bounceIn, startDelay: twnStart});
+						FlxTween.tween(daKeyTxt, {y: textY - 200}, twnDuration / PlayState.instance.playbackRate, {ease: FlxEase.bounceIn, startDelay: twnStart});
 						FlxTween.tween(daKeyTxt, {alpha: 1}, twnDuration / PlayState.instance.playbackRate, {ease: FlxEase.circIn, startDelay: twnStart});
 					} else {
 						daKeyTxt.y += 16;
 						daKeyTxt.alpha = 1;
 					}
 					new FlxTimer().start(Conductor.crochet * 0.001 * 12 * PlayState.instance.playbackRate, function(_) {
-						FlxTween.tween(daKeyTxt, {y: daKeyTxt.y + 32}, twnDuration / PlayState.instance.playbackRate, {ease: FlxEase.bounceOut, startDelay: twnStart, onComplete:
+						FlxTween.tween(daKeyTxt, {y: daKeyTxt.y - 1000}, twnDuration / PlayState.instance.playbackRate, {ease: FlxEase.bounceOut, startDelay: twnStart, onComplete:
 						function(t) {
 							remove(daKeyTxt);
 						}});

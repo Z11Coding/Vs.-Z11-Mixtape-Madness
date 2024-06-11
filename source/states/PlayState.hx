@@ -3542,7 +3542,7 @@ class PlayState extends MusicBeatState
 
 	override public function onFocus():Void
 	{
-		if (!paused && lostFocus)
+		if (!startingSong && startedCountdown && !endingSong && !paused && lostFocus)
 		{
 			if(FlxG.sound.music != null) {
 				resyncVocals();

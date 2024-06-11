@@ -26,7 +26,8 @@ function onCreatePost()
 
     if difficultyName == 'Impossible' then
         for i = 0, 3 do
-            noteTweenX("suffering "..i, i, -400, 1, "elasticInOut")
+            --noteTweenX("suffering "..i, i, -400, 1, "elasticInOut")
+            setValue('transformX', -1000, 1)
         end
     end
     if difficultyName == 'Normal' then
@@ -51,8 +52,9 @@ function onSongStart()
     if difficultyName == 'Impossible' or difficultyName == 'Semi-Impossible' then
         doTweenAlpha("pain", "pain", 1, 2, "sineOut")
         doTweenY("paina", "pain", getProperty("botplayTxt.y"), 2, "sineOut")
+        queueEase(1, 16, 'transformY', -400, "elasticInOut", 0)
         for i = 4, 7 do
-            noteTweenY("suffering "..i, i, -400, 2, "elasticInOut")
+            --noteTweenY("suffering "..i, i, -400, 2, "elasticInOut")
         end
         runTimer("kys", 4, 1)
     end
