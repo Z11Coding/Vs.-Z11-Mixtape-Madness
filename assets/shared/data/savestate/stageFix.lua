@@ -1,3 +1,3 @@
 function onCreatePost()
-    setProperty('dad.y', getProperty('dad.y') - 80)
+    setProperty('dad.y', getProperty('dad.y') - 60)
 end
