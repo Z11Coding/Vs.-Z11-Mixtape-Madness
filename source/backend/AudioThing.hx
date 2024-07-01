@@ -125,7 +125,7 @@ class AudioThing extends FlxBasic
 		#if desktop
 		return AL.getSourcei(audioSource, AL.PAUSED);
 		#else
-		return (elseSound.time > 0 && !elseSound.playing)
+		return (elseSound.time > 0 && !elseSound.playing);
 		#end
 	}
 

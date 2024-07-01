@@ -1,0 +1,80 @@
+{
+	"animations": [
+		{
+			"loop": false,
+			"offsets": [
+				9,
+				-4
+			],
+			"anim": "singLEFT",
+			"fps": 24,
+			"name": "Finn Left",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				6,
+				-5
+			],
+			"anim": "singDOWN",
+			"fps": 24,
+			"name": "Finn Down",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-5,
+				3
+			],
+			"anim": "singUP",
+			"fps": 24,
+			"name": "Finn Up",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-6,
+				-9
+			],
+			"anim": "singRIGHT",
+			"fps": 24,
+			"name": "Finn Right",
+			"indices": []
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"indices": [],
+			"fps": 24,
+			"anim": "idle",
+			"loop": false,
+			"name": "Finn Idle"
+		}
+	],
+	"vocals_file": "",
+	"no_antialiasing": false,
+	"image": "characters/COME_ALONG_Finn",
+	"position": [
+		0,
+		50
+	],
+	"healthicon": "finn",
+	"flip_x": false,
+	"healthbar_colors": [
+		168,
+		160,
+		179
+	],
+	"camera_position": [
+		0,
+		100
+	],
+	"sing_duration": 6.1,
+	"scale": 1,
+	"_editor_isPlayer": false
+}

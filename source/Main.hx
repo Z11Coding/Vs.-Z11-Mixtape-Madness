@@ -31,6 +31,10 @@ import sys.io.File;
 import sys.io.Process;
 #end
 
+//Gamejolt
+import gamejolt.GameJolt;
+import gamejolt.GameJolt.GJToastManager;
+
 class Main extends Sprite
 {
 	var game = {
@@ -100,6 +104,9 @@ class Main extends Sprite
 		}
 	}
 
+	//Gamejolt
+	public static var gjToastManager:GJToastManager;
+
 	// taken from forever engine, cuz optimization very pog.
 	// thank you shubs :)
 	public static function dumpCache()
@@ -124,7 +131,7 @@ class Main extends Sprite
 	{
 		//initHaxeUI();
 		Toolkit.init();
-		Toolkit.theme = 'gradient'; // don't be cringe
+		//Toolkit.theme = 'dark'; // don't be cringe
 		backend.Cursor.registerHaxeUICursors();
 
 		var stageWidth:Int = Lib.current.stage.stageWidth;
@@ -143,7 +150,6 @@ class Main extends Sprite
 
 		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
-
 		ClientPrefs.loadDefaultKeys();
 		try{
 			addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate, game.skipSplash, game.startFullscreen));
@@ -278,6 +284,9 @@ class Main extends Sprite
 		#if android
 			FlxG.android.preventDefaultKeys = [flixel.input.android.FlxAndroidKey.BACK];
 		#end
+
+		gjToastManager = new GJToastManager();
+		addChild(gjToastManager);
 	}
 
 	function initHaxeUI():Void

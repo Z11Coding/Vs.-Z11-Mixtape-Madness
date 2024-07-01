@@ -1,6 +1,6 @@
+package modchart;
 // @author Nebula_Zorua
 
-package modchart;
 import flixel.tweens.FlxEase.EaseFunction;
 import modchart.Modifier.RenderInfo;
 import flixel.math.FlxPoint;
@@ -54,7 +54,8 @@ class ModManager {
 			PathModifier,
 			AccelModifier,
 			PerspectiveModifier,
-			ZoomModifier
+			ZoomModifier,
+			ReceptorScrollModifier
 		];
 		for (mod in quickRegs)
 			quickRegister(Type.createInstance(mod, [this]));
@@ -372,42 +373,32 @@ class ModManager {
 								for (input_mod in node.in_mods)
 									input_values.push(getValue(input_mod, player));
 
-								var output:Dynamic = node.nodeFunc(input_values, player);
+								var output_values:Array<Float> = node.nodeFunc(input_values, player);
 
 								
 								if (node.out_mods.length > 0)
 								{ // if theres outputs
-									if (output is Array)
-									{
-										var output_values:Array<Float> = cast output;
-										if (output_values.length < node.out_mods.length)
-										{
-											for (i in node.out_mods.length...output_values.length)
-												output_values.push(0); // TODO: check the out_mod to see if i should add in 0 or mod.getValue(player) depending on if its in in_mods
-										}
-										for (idx in 0...node.out_mods.length)
-										{
-											var output_value:Float = output_values[idx];
-											var output_mod_name:String = node.out_mods[idx];
-											var output_mod:Modifier = get(output_mod_name);
-											if (output_mod == null){
-                                                trace(output_mod_name + " is not a valid output, look into fixing pl0x");
-                                                continue;
-                                            }
-											var current_value:Float = output_mod.getValue(player);
-											// if the output is also an input then set it directly, otherwise add it
-											if (node.in_mods.contains(output_mod_name))
-												output_mod.setCurrentValue(output_value, player);
-											else
-												output_mod.setCurrentValue(current_value + output_value, player);
-										}
-									}
-									else
-									{
-										trace("Broken Node!!! Expected an Array of outputs, but did not get that!!!!");
-										garbage.push(node); // broken node!!
-										continue;
-									}
+                                    if (output_values.length < node.out_mods.length)
+                                    {
+                                        for (i in node.out_mods.length...output_values.length)
+                                            output_values.push(0); // TODO: check the out_mod to see if i should add in 0 or mod.getValue(player) depending on if its in in_mods
+                                    }
+                                    for (idx in 0...node.out_mods.length)
+                                    {
+                                        var output_value:Float = output_values[idx];
+                                        var output_mod_name:String = node.out_mods[idx];
+                                        var output_mod:Modifier = get(output_mod_name);
+                                        if (output_mod == null){
+                                            trace(output_mod_name + " is not a valid output, look into fixing pl0x");
+                                            continue;
+                                        }
+                                        var current_value:Float = output_mod.getValue(player);
+                                        // if the output is also an input then set it directly, otherwise add it
+                                        if (node.in_mods.contains(output_mod_name))
+                                            output_mod.setCurrentValue(output_value, player);
+                                        else
+                                            output_mod.setCurrentValue(current_value + output_value, player);
+                                    }
 								}
 							}
 						}
@@ -461,7 +452,7 @@ class ModManager {
 		return x;
 	}
 
-	public function updateObject(beat:Float, obj:FlxSprite, player:Int){
+	public function updateObject(beat:Float, obj:NoteObject, player:Int){
 		if (obj.active)
 		for (name in getActiveMods(player))
 		{
@@ -471,17 +462,17 @@ class ModManager {
 			var mod:Modifier = notemodRegister.get(name);
 			if (mod==null) continue;
 			
-			if(obj is Note){
+			if(obj.objType == NOTE){
 				if (mod.ignoreUpdateNote()) continue;
 				mod.updateNote(beat, cast obj, player);
 			}
-			else if(obj is StrumNote){
+			else if(obj.objType == STRUM){
 				if (mod.ignoreUpdateReceptor()) continue;
 				mod.updateReceptor(beat, cast obj, player);
 			}
 		}
 		
-		if (obj is Note){
+		if (obj.objType == NOTE){
 			obj.updateHitbox();
 
 			var cum:Note = cast obj;
@@ -502,7 +493,7 @@ class ModManager {
 		return (0.45 * (diff) * songSpeed);
 	}
 
-	public function getPos(diff:Float, tDiff:Float, beat:Float, data:Int, player:Int, obj:FlxSprite, field:NoteField, ?exclusions:Array<String>, ?pos:Vector3):Vector3
+	public function getPos(diff:Float, tDiff:Float, beat:Float, data:Int, player:Int, obj:NoteObject, field:NoteField, ?exclusions:Array<String>, ?pos:Vector3):Vector3
 	{
 		if (!obj.alive) 
 			return pos;
@@ -552,7 +543,7 @@ class ModManager {
 		return zoom;
 	}
 
-	public function modifyVertex(beat:Float, vert:Vector3, idx:Int, obj:FlxSprite, pos:Vector3, player:Int, data:Int, field:NoteField, ?exclusions:Array<String>):Vector3
+	public function modifyVertex(beat:Float, vert:Vector3, idx:Int, obj:NoteObject, pos:Vector3, player:Int, data:Int, field:NoteField, ?exclusions:Array<String>):Vector3
 	{
 		if (!obj.active) 
 			return vert;
@@ -575,7 +566,7 @@ class ModManager {
 		return vert;
 	}
 
-	public function getExtraInfo(diff:Float, tDiff:Float, beat:Float, ?info:RenderInfo, obj:FlxSprite, player:Int, data:Int, ?exclusions:Array<String>):RenderInfo
+	public function getExtraInfo(diff:Float, tDiff:Float, beat:Float, ?info:RenderInfo, obj:NoteObject, player:Int, data:Int, ?exclusions:Array<String>):RenderInfo
 	{
 		if (!obj.active)
 			return info;
@@ -618,9 +609,8 @@ class ModManager {
 
 		var easeFunc:EaseFunction = FlxEase.linear;
 
-		if (style == null){
-		
-		}else if (style is String){
+
+		if (style is String){
 			// most common use of the style var is to just use an existing FlxEase
 			easeFunc = CoolUtil.getEaseFromString(style);
 
@@ -628,7 +618,8 @@ class ModManager {
 			// probably gonna be useful SOMEWHERE
 			// maybe custom eases?
 			easeFunc = style;
-		}
+        }
+        
 
 		if (player == -1)
 			for (pN => mods in activeMods)

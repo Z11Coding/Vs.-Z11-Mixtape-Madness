@@ -10,6 +10,7 @@ class ShadersHandler
 	public static var fuckingTriangle:ShaderFilter = new ShaderFilter(new shaders.Shaders.FuckingTriangle());
 	public static var visualizer:ShaderFilter = new ShaderFilter(new shaders.VisualizerShader());
 	public static var heatwaveShader:ShaderFilter = new ShaderFilter(new shaders.HeatwaveShader().shader);
+	public static var rainShader:ShaderFilter = new ShaderFilter(new RainShader());
 
 	public static function setChrome(chromeOffset:Float):Void
 	{
@@ -36,5 +37,20 @@ class ShadersHandler
 	public static function updateHeat(curDate:Float):Void
 	{
 		heatwaveShader.shader.data.iTime.value = [curDate];
+	}
+
+	public static function updateRain(curDate:Float):Void
+	{
+		rainShader.shader.data.iTime.value = [curDate];
+	}
+
+	public static function setRainIntensity(curNum:Float):Void
+	{
+		rainShader.shader.data.iIntensity.value = [curNum];
+	}
+
+	public static function setRainScale(curNum:Float):Void
+	{
+		rainShader.shader.data.iTimescale.value = [curNum];
 	}
 }

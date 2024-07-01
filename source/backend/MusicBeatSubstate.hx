@@ -104,7 +104,7 @@ class MusicBeatSubstate extends FlxSubState
 		if (curStep % 4 == 0)
 			beatHit();
 	}
-	
+
 	var zoomies:Float = 1.025;
 	public function beatHit():Void
 	{

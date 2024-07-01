@@ -23,7 +23,6 @@ class MusicBeatState extends FlxUIState
 
 	var _psychCameraInitialized:Bool = false;
 
-	public static var cueReset:Bool = false;
 	override function create() {
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		#if MODS_ALLOWED Mods.updatedOnState = false; #end
@@ -49,14 +48,18 @@ class MusicBeatState extends FlxUIState
 		return camera;
 	}
 
+	var zoomies:Float = 1.025;
 	public static var timePassedOnState:Float = 0;
 	override function update(elapsed:Float)
 	{
-		if (cueReset)
+		if (Main.audioDisconnected && getState() == PlayState.instance)
 		{
-			cueReset = false;
+			//Save your progress and THEN reset it (I knew there was a common use for this)
+			//Doesn't save your exact spot, nor does it save anything but the place of your song, but i can work on that later
+			PlayState.instance.triggerEvent('Save Song Posititon', null, null);
 			FlxG.resetState();
 		}
+		else if (Main.audioDisconnected) FlxG.resetState();
 		//everyStep();
 		var oldStep:Int = curStep;
 		timePassedOnState += elapsed;
@@ -183,7 +186,7 @@ class MusicBeatState extends FlxUIState
 			beatHit();
 	}
 
-	var zoomies:Float = 1.025;
+	public static var cueReset:Bool = false;
 	public var stages:Array<BaseStage> = [];
 	public function beatHit():Void
 	{

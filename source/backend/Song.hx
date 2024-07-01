@@ -39,6 +39,8 @@ typedef SwagSong =
 
 	@:optional var mania:Int;
 	@:optional var startMania:Int;
+
+	@:optional var extraTracks:Array<String>;
 }
 
 class Song

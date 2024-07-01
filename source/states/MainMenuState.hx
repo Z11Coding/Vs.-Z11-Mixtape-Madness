@@ -60,9 +60,9 @@ class MainMenuState extends MusicBeatState
 
 	var camFollow:FlxObject;
 
-	var checker:FlxBackdrop = new FlxBackdrop(Paths.image('mainmenu/Main_Checker'), XY, Std.int(0.2), Std.int(0.2));
+	var checker:FlxBackdrop;
 
-	var gradientBar:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, 300, 0x83B700FF);
+	var gradientBar:FlxSprite;
 
 	var bg:FlxSprite;
 
@@ -82,6 +82,8 @@ class MainMenuState extends MusicBeatState
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
 		#end
+
+		checker = new FlxBackdrop(Paths.image('mainmenu/Main_Checker'), XY, Std.int(0.2), Std.int(0.2));
 
 		debugKeys = ClientPrefs.keyBinds.get('debug_1').copy();
 
@@ -127,7 +129,7 @@ class MainMenuState extends MusicBeatState
 
 		if (!ClientPrefs.data.lowQuality)
 		{
-			gradientBar = FlxGradient.createGradientFlxSprite(Math.round(FlxG.width), 512, [0x00ff0000, 0x55AE59E4, 0xAA19ECFF], 1, 90, true);
+			gradientBar = FlxGradient.createGradientFlxSprite(Math.round(FlxG.width), 512, [0x00ff0000, 0x55AE59E4, 0xAAFFA319], 1, 90, true);
 			gradientBar.y = FlxG.height - gradientBar.height;
 			add(gradientBar);
 			gradientBar.scrollFactor.set(0, 0);

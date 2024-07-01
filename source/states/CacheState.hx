@@ -54,13 +54,13 @@ class CacheState extends MusicBeatState
 	var boolshit = true;
 	var daMods:Array<String> = [];
 	var pathList:Array<String> = 
-	["", "characters", "dialogue", "pauseAlt", "pixelUI", "weeb", "characters", 
-	"achievements", "credits", "icons", "loading", "mainmenu",
-	"menubackgrounds", "menucharacters", "menudifficulties",
-	"storymenu", "week2/images", "week3/images/philly",
-	"week4/images/limo", "week4/images/gore", "week5/images/christmas",
-	"week6/images/weeb", "week6/images/weeb/pixelUI", "week7/images",
-	"week7/images/cutscenes", "week7/images/cutscenes/stressPico", "pixelUI/noteskins"]; //keep it here just in case
+	[
+		"", "characters", "dialogue", "pauseAlt", "pixelUI", "weeb", 
+		"achievements", "credits", "icons", "loading", "mainmenu", "menubackgrounds", 
+		"menucharacters", "menudifficulties", "storymenu", "pixelUI/noteskins", "cursor", 
+		"editors", "effects", "globalIcons", "HUD", "mechanics", "noteColorMenu", "noteskins", 
+		"pause", "soundtray", "stages"
+	]; //keep it here just in case
 	
 	var shitz:FlxText;
 	var totalthing = [];
@@ -85,6 +85,9 @@ class CacheState extends MusicBeatState
     var loadTotal:Int = 0;
 	var loadingWhat:FlxText;
 	var loadingBar:FlxBar;
+	var loadingBox:FlxSprite;
+	var loadingWhatMini:FlxText;
+	var loadingBoxMini:FlxSprite;
 	
 
 	public static var newDest:FlxState;
@@ -122,6 +125,7 @@ class CacheState extends MusicBeatState
 
 		if (FlxG.save.data.updated)
 		{
+			#if sys
 			var countFiles:String->Void = null;
 			countFiles = function(path) {
 				for (f in FileSystem.readDirectory(path)) {
@@ -184,6 +188,7 @@ class CacheState extends MusicBeatState
 				#end
 				System.exit(0);
 			});
+			#end
 		}
 		else
 		{
@@ -197,8 +202,7 @@ class CacheState extends MusicBeatState
 				}
 			}
 			
-			if(FlxG.save.data.musicPreload2 != null && ClientPrefs.data.musicPreload2 == false 
-				&& FlxG.save.data.songsPreload2 != null && ClientPrefs.data.songsPreload2 == false 
+			if(FlxG.save.data.musicPreload2 != null && ClientPrefs.data.musicPreload2 == false
 				&& FlxG.save.data.graphicsPreload2 != null && ClientPrefs.data.graphicsPreload2 == false) {
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
@@ -211,340 +215,606 @@ class CacheState extends MusicBeatState
 			add(menuBG);
 
 			#if cpp
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/characters")))
+			if (ClientPrefs.data.graphicsPreload2)
 			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('characters/$i');
-				totalthing.push(i);
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push(i);
+					totalthing.push(i);
+				}
+				
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/characters")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('characters/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/dialogue")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('dialogue/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/pauseAlt")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('pauseAlt/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/pixelUI")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('pixelUI/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/weeb")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('weeb/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/achievements")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('achievements/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/credits")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('credits/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/icons")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('icons/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/loading")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('loading/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/mainmenu")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('mainmenu/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/menubackgrounds")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('menubackgrounds/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/menucharacters")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('menucharacters/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/menudifficulties")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('menudifficulties/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/storymenu")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('storymenu/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/cursor")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('cursor/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/editors")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('editors/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/effects")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('effects/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/globalIcons")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('globalIcons/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/HUD/base")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('HUD/base/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/HUD/beat")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('HUD/beat/$i');
+					totalthing.push(i);
+				}
+				
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/HUD/beat-alt")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('HUD/beat-alt/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/HUD/bedrock")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('HUD/bedrock/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/HUD/mixtape")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('HUD/mixtape/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/HUD/psych")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('HUD/psych/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/HUD/numbers/base")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('HUD/numbers/base/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/HUD/numbers/mixtape")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('HUD/numbers/mixtape/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/HUD/numbers/psych")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('HUD/numbers/psych/$i');
+					totalthing.push(i);
+				}
+				
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/mechanics")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('mechanics/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/noteColorMenu")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('noteColorMenu/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/noteskins")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('noteskins/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/pause")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('pause/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/soundtray")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('soundtray/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/BeatBattle")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('BeatBattle/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/CAWM")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('CAWM/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/stages/christmas")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('stages/christmas/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/stages/shag")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('stages/shag/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/stages/grounds")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('stages/grounds/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/stages/limo")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('stages/limo/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/stages/mansion")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('stages/mansion/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/stages/philly")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('stages/philly/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/stages/stage")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('stages/stage/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/stages/weeb")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('stages/weeb/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/stages/weeb/pixelUI")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('stages/weeb/pixelUI/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/stages/limo/gore")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('stages/limo/gore/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/stages/grounds/cutscenes")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					images.push('stages/grounds/cutscenes/$i');
+					totalthing.push(i);
+				}
 			}
 
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images")))
+			if (ClientPrefs.data.musicPreload2)
 			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push(i);
-				totalthing.push(i);
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/songs")))
+				{
+					if (!i.endsWith(".ogg"))
+						continue;
+					music.push(i);
+					totalthing.push(i);
+					trace(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/music")))
+				{
+					if (!i.endsWith(".ogg"))
+						continue;
+					music.push(i);
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/sounds")))
+				{
+					if (!i.endsWith(".ogg"))
+						continue;
+					music.push(i);
+					totalthing.push(i);
+				}
 			}
 
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/dialogue")))
+			if (ClientPrefs.data.graphicsPreload2)
 			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('dialogue/$i');
-				totalthing.push(i);
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					modImages.push(i);
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/characters")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					modImages.push('characters/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/dialogue")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					modImages.push('dialogue/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/icons")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					modImages.push('icons/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/menubackgrounds")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					modImages.push('menubackgrounds/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/menucharacters")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					modImages.push('menucharacters/$i');
+					totalthing.push(i);
+				}
+
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/storymenu")))
+				{
+					if (!i.endsWith(".png"))
+						continue;
+					modImages.push('storymenu/$i');
+					totalthing.push(i);
+				}
 			}
 
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/pauseAlt")))
+			if (ClientPrefs.data.musicPreload2)
 			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('pauseAlt/$i');
-				totalthing.push(i);
-			}
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/music")))
+				{
+					if (!i.endsWith(".ogg"))
+						continue;
+					modMusic.push('music/$i');
+					totalthing.push(i);
+				}
 
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/pixelUI")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('pixelUI/$i');
-				totalthing.push(i);
-			}
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/sounds")))
+				{
+					if (!i.endsWith(".ogg"))
+						continue;
+					modMusic.push(i);
+					totalthing.push(i);
+				}
 
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/weeb")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('weeb/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/achievements")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('achievements/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/credits")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('credits/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/icons")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('icons/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/loading")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('loading/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/mainmenu")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('mainmenu/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/menubackgrounds")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('menubackgrounds/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/menucharacters")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('menucharacters/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/menudifficulties")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('menudifficulties/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/images/storymenu")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				images.push('storymenu/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/songs")))
-			{
-				if (!i.endsWith(".ogg"))
-					continue;
-				music.push(i);
-				totalthing.push(i);
-				trace(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/music")))
-			{
-				if (!i.endsWith(".ogg"))
-					continue;
-				music.push(i);
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("assets/shared/sounds")))
-			{
-				if (!i.endsWith(".ogg"))
-					continue;
-				music.push(i);
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				modImages.push(i);
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/characters")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				modImages.push('characters/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/dialogue")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				modImages.push('dialogue/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/icons")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				modImages.push('icons/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/menubackgrounds")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				modImages.push('menubackgrounds/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/menucharacters")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				modImages.push('menucharacters/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/images/storymenu")))
-			{
-				if (!i.endsWith(".png"))
-					continue;
-				modImages.push('storymenu/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/music")))
-			{
-				if (!i.endsWith(".ogg"))
-					continue;
-				modMusic.push('music/$i');
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/sounds")))
-			{
-				if (!i.endsWith(".ogg"))
-					continue;
-				modMusic.push(i);
-				totalthing.push(i);
-			}
-
-			for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/songs")))
-			{
-				if (!i.endsWith(".ogg"))
-					continue;
-				modMusic.push(i);
-				totalthing.push(i);
+				for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/songs")))
+				{
+					if (!i.endsWith(".ogg"))
+						continue;
+					modMusic.push(i);
+					totalthing.push(i);
+				}
 			}
 			
 			for (ii in daMods)
 			{
-				if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images")) != null)
+				if (ClientPrefs.data.graphicsPreload2)
 				{
-					for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images")))
+					if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images")) != null)
 					{
-						if (!i.endsWith(".png"))
-							continue;
-						modImages.push(i);
-						totalthing.push(i);
+						for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images")))
+						{
+							if (!i.endsWith(".png"))
+								continue;
+							modImages.push(i);
+							totalthing.push(i);
+						}
+					}
+
+					if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/characters")) != null)
+					{
+						for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/characters")))
+						{
+							if (!i.endsWith(".png"))
+								continue;
+							modImages.push('characters/$i');
+							totalthing.push(i);
+						}
+					}
+
+					if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/dialogue")) != null)
+					{
+						for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/dialogue")))
+						{
+							if (!i.endsWith(".png"))
+								continue;
+							modImages.push('dialogue/$i');
+							totalthing.push(i);
+						}
+					}
+
+					if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/icons")) != null)
+					{
+						for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/icons")))
+						{
+							if (!i.endsWith(".png"))
+								continue;
+							modImages.push('icons/$i');
+							totalthing.push(i);
+						}
+					}
+
+					if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/menubackgrounds")) != null)
+					{
+						for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/menubackgrounds")))
+						{
+							if (!i.endsWith(".png"))
+								continue;
+							modImages.push('menubackgrounds/$i');
+							totalthing.push(i);
+						}
+					}
+
+					if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/menucharacters")) != null)
+					{
+						for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/menucharacters")))
+						{
+							if (!i.endsWith(".png"))
+								continue;
+							modImages.push('menucharacters/$i');
+							totalthing.push(i);
+						}
+					}
+
+					if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/storymenu")) != null)
+					{
+						for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/storymenu")))
+						{
+							if (!i.endsWith(".png"))
+								continue;
+							modImages.push('storymenu/$i');
+							totalthing.push(i);
+						}
 					}
 				}
 
-				if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/characters")) != null)
+				if (ClientPrefs.data.musicPreload2)
 				{
-					for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/characters")))
+					if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "music")) != null)
 					{
-						if (!i.endsWith(".png"))
-							continue;
-						modImages.push('characters/$i');
-						totalthing.push(i);
+						for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "music")))
+						{
+							if (!i.endsWith(".ogg"))
+								continue;
+							modMusic.push(i);
+							totalthing.push(i);
+						}
 					}
-				}
 
-				if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/dialogue")) != null)
-				{
-					for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/dialogue")))
+					if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "sounds")) != null)
 					{
-						if (!i.endsWith(".png"))
-							continue;
-						modImages.push('dialogue/$i');
-						totalthing.push(i);
+						for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "sounds")))
+						{
+							if (!i.endsWith(".ogg"))
+								continue;
+							modMusic.push(i);
+							totalthing.push(i);
+						}
 					}
-				}
 
-				if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/icons")) != null)
-				{
-					for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/icons")))
+					if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "songs")) != null)
 					{
-						if (!i.endsWith(".png"))
-							continue;
-						modImages.push('icons/$i');
-						totalthing.push(i);
-					}
-				}
-
-				if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/menubackgrounds")) != null)
-				{
-					for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/menubackgrounds")))
-					{
-						if (!i.endsWith(".png"))
-							continue;
-						modImages.push('menubackgrounds/$i');
-						totalthing.push(i);
-					}
-				}
-
-				if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/menucharacters")) != null)
-				{
-					for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/menucharacters")))
-					{
-						if (!i.endsWith(".png"))
-							continue;
-						modImages.push('menucharacters/$i');
-						totalthing.push(i);
-					}
-				}
-
-				if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/storymenu")) != null)
-				{
-					for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "images/storymenu")))
-					{
-						if (!i.endsWith(".png"))
-							continue;
-						modImages.push('storymenu/$i');
-						totalthing.push(i);
-					}
-				}
-
-				if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "music")) != null)
-				{
-					for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "music")))
-					{
-						if (!i.endsWith(".ogg"))
-							continue;
-						modMusic.push(i);
-						totalthing.push(i);
-					}
-				}
-
-				if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "sounds")) != null)
-				{
-					for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "sounds")))
-					{
-						if (!i.endsWith(".ogg"))
-							continue;
-						modMusic.push(i);
-						totalthing.push(i);
-					}
-				}
-
-				if (FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "songs")) != null)
-				{
-					for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "songs")))
-					{
-						if (!i.endsWith(".ogg"))
-							continue;
-						modMusic.push(i);
-						totalthing.push(i);
+						for (i in FileSystem.readDirectory(FileSystem.absolutePath("mods/" + ii + "songs")))
+						{
+							if (!i.endsWith(".ogg"))
+								continue;
+							modMusic.push(i);
+							totalthing.push(i);
+						}
 					}
 				}
 			} //this took me waaay too long to just delete
@@ -560,10 +830,22 @@ class CacheState extends MusicBeatState
 				add(loadingBar);
 			}
 
-			loadingWhat = new FlxText(FlxG.width/2 - 500, 0, 0, "", 24);
-			loadingWhat.setFormat(Paths.font("FridayNightFunkin.ttf"), 50, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			loadingWhat = new FlxText(FlxG.width/2 - 500, 0, 0, "Press ENTER to see cache options\nLoading will being soon", 24);
+			loadingWhat.setFormat(Paths.font("DS-DIGIB.TTF"), 50, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 			loadingWhat.screenCenter(XY);
+
+			loadingWhatMini = new FlxText(loadingWhat.x, loadingWhat.y+285, 0, "Currently Loading: Music", 24);
+			loadingWhatMini.setFormat(Paths.font("DS-DIGIB.TTF"), 50, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+			loadingWhatMini.setGraphicSize(Std.int(loadingWhatMini.width) * 0.5);
+			loadingWhatMini.screenCenter(X);
+
+			loadingBox = new FlxSprite(FlxG.width/2 - 500, 0).makeGraphic(Std.int(loadingWhat.width), Std.int(loadingWhat.height), FlxColor.BLACK);
+			loadingBox.screenCenter(XY);
+			loadingBox.alpha = 0.5;
+
+			add(loadingBox);
 			add(loadingWhat);
+			add(loadingWhatMini);
 
 			if(!cacheStart){
 				#if web
@@ -599,6 +881,8 @@ class CacheState extends MusicBeatState
 			}
 
 			totalToDo = totalthing.length;
+
+			FlxG.sound.playMusic(Paths.music('greetings'), 1, true);
 		}
 
 		super.create();
@@ -619,6 +903,8 @@ class CacheState extends MusicBeatState
 	var move:Bool = false;
 	override function update(elapsed) 
 	{
+		loadingBox.width = Std.int(loadingWhat.width);
+		loadingBox.height = Std.int(loadingWhat.height);
 		if (currentLoaded == loadTotal) gameCached = true;
 
 		if (!ClientPrefs.data.graphicsPreload2 && !ClientPrefs.data.musicPreload2) gameCached = true;
@@ -636,17 +922,29 @@ class CacheState extends MusicBeatState
 
 		if(menuBG.alpha == 0){
 			System.gc();
+			FlxG.sound.music.time = 0;
             FlxG.switchState(newDest);  
         }
 
-		if(gameCached && !(menuBG.alpha == 0)){
-            FlxTween.tween(menuBG, {alpha: 0}, 1, {ease: FlxEase.expoInOut});
+		if(!gameCached)
+		{
+			loadingWhat.text = 'Loading...\n(${loadingBar.percent}% // $currentLoaded out of $loadTotal)';
+			loadingWhat.screenCenter();
+		}
+
+		if(gameCached && menuBG.alpha == 1){
+            FlxTween.tween(FlxG.camera, {zoom: 0}, 1, {ease: FlxEase.sineOut});
+			FlxTween.tween(FlxG.camera, {angle: 360}, 1, {ease: FlxEase.sineOut});
+			FlxTween.tween(menuBG, {alpha: 0}, 1, {ease: FlxEase.sineInOut});
 			loadingWhat.text = "Done!";
 			loadingWhat.screenCenter(XY);
+			loadingWhatMini.text = "Done!";
+			loadingWhatMini.screenCenter(X);
 			if(loadingBar != null){
 				FlxTween.tween(loadingBar, {alpha: 0}, 0.3);
 			}
             menuBG.updateHitbox();
+			FlxG.sound.music.fadeOut(1, 0);
         }
 
 		if(!cacheStart){
@@ -663,7 +961,8 @@ class CacheState extends MusicBeatState
                 graphicsCached = true;
             }
             else{
-				loadingWhat.text = 'Loading';
+				loadingWhatMini.text = images[gfxI];
+				loadingWhatMini.screenCenter(X);
 				loadingWhat.screenCenter(XY);
 				if(CoolUtil.exists(Paths.file2(StringTools.replace(images[gfxI], '.png', ''), "images", "png"))){
 					ImageCache.add(Paths.file2(StringTools.replace(images[gfxI], '.png', ''), "images", "png"));
@@ -689,6 +988,8 @@ class CacheState extends MusicBeatState
 				{
 					for (ii in pathList)
 					{
+						loadingWhatMini.text = modImages[modImI];
+						loadingWhatMini.screenCenter(X);
 						if (CoolUtil.exists(Paths.file2(StringTools.replace(modImages[modImI], '.png', ''), '$i/images/$ii', "png", "mods"))) 
 							ImageCache.add(Paths.file2(StringTools.replace(modImages[modImI], '.png', ''), '$i/images/$ii', "png", "mods"));
 					}
@@ -707,12 +1008,14 @@ class CacheState extends MusicBeatState
             loadingBar.visible = true;
         }
 
+		#if sys
 		#if !linux
 		if(!songsCached){ 
-            #if sys sys.thread.Thread.create(() -> { #end
-                preloadMusic();
-            #if sys }); #end
-        }
+			#if sys sys.thread.Thread.create(() -> { #end
+				preloadMusic();
+			#if sys }); #end
+		}
+		#end
 
         if(!graphicsCached){
             startCachingGraphics = true;
@@ -755,7 +1058,6 @@ class CacheState extends MusicBeatState
 			//loadingWhat.text = 'Loading: ' + x;
 			currentLoaded++;
         }
-        loadingWhat.text = "Loading";
 		loadingWhat.screenCenter(XY);
         //FlxG.sound.play(Paths.sound("tick"), 1);
         songsCached = true;

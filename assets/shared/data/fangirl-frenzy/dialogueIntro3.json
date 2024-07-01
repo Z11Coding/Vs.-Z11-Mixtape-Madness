@@ -1,0 +1,203 @@
+{
+	"boxSkin": "dialogue/boxes/ds_dialogue_box",
+	"dialogue": [
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/ZenettaTalk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "Oh, so you got them both.",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/ZenettaTalk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "Perfect~",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/Z11Talk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": true,
+			"text": "Zenetta, You've got 5 seconds to explain what the heck",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/ZenettaTalk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": true,
+			"text": "Don't worry about it",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/Z11Talk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "Understood.",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "osky-dialogue",
+			"dialogueSound": "voice/dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": true,
+			"text": "Anyway. Now we can be together forev",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/Z11Talk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": true,
+			"text": "Oh yeah that reminds me",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "osky-dialogue",
+			"dialogueSound": "dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "angry",
+			"skipDis": false,
+			"text": "OH COME ON!",
+			"disableFadeBG": false,
+			"shake": true
+		},
+		{
+			"speed": 0.05,
+			"portrait": "osky-dialogue",
+			"dialogueSound": "dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "angry",
+			"skipDis": false,
+			"text": "CAN YOU PLEASE SHUT UP SO I CAN TALK TO BOYFRIEND!?!?",
+			"disableFadeBG": false,
+			"shake": true
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/Z11Talk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": true,
+			"text": "Ok ok jeez. Calm down.",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "manifest",
+			"dialogueSound": "voice/dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "mad",
+			"skipDis": false,
+			"text": "I AM CALM!!",
+			"disableFadeBG": false,
+			"shake": true
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/Z11Talk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "...",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "osky-dialogue",
+			"dialogueSound": "dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": true,
+			"text": "Anyways, as I was saying.",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/bfBeep",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": true,
+			"text": "Beep.",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "osky-dialogue",
+			"dialogueSound": "voice/dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "angry",
+			"skipDis": false,
+			"text": "I KNOW THAT.",
+			"disableFadeBG": false,
+			"shake": true
+		},
+		{
+			"speed": 0.05,
+			"portrait": "bf",
+			"dialogueSound": "voice/Z11Talk",
+			"boxAnimPrefix": "normal",
+			"expression": "talk",
+			"skipDis": false,
+			"text": "Speaking of her, here she comes now!",
+			"disableFadeBG": false,
+			"shake": false
+		},
+		{
+			"speed": 0.05,
+			"portrait": "osky-dialogue",
+			"dialogueSound": "voice/dialogue",
+			"boxAnimPrefix": "normal",
+			"expression": "pissed",
+			"skipDis": false,
+			"text": "what?",
+			"disableFadeBG": false,
+			"shake": false
+		}
+	],
+	"clickSound": "dialogueClose",
+	"handSkin": "Empty",
+	"outlineSize": 1.5,
+	"handEnable": true,
+	"dropTextColor": "#757575",
+	"outlineColor": "#000000",
+	"dropTextEnable": false,
+	"font": "comboFont.ttf",
+	"color": "#000000",
+	"size": 50,
+	"outlineEnable": false
+}

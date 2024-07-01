@@ -190,6 +190,21 @@ class FunkinLua {
 		set('noResetButton', ClientPrefs.data.noReset);
 		set('lowQuality', ClientPrefs.data.lowQuality);
 		set('shadersEnabled', ClientPrefs.data.shaders);
+		set('noParticles', ClientPrefs.data.noParticles);
+		set('modcharts', ClientPrefs.data.modcharts); //FOR ANYONE MAKING MODCHARTS; REMEMBER TO USE THIS! PLEASE DON'T MAKE ME AUTOMATE IT
+		set('allowHealthDrain', ClientPrefs.data.drain);
+		set('allowSwears', ClientPrefs.data.cursing);
+		set('allowViolence', ClientPrefs.data.violence);
+		set('allowGimmicks', ClientPrefs.data.gimmicksAllowed);
+		set('controllerMode', ClientPrefs.data.controllerMode);
+		set('comboStacking', ClientPrefs.data.comboStacking);
+		set('uiSkin', ClientPrefs.data.uiSkin);
+		set('antimash', ClientPrefs.data.antimash);
+		set('showKeybindsOnStart', ClientPrefs.data.showKeybindsOnStart);
+		set('startHidden', ClientPrefs.data.starHidden);
+		set('gameplaySettings', ClientPrefs.data.gameplaySettings);
+		set('inputSystem', ClientPrefs.data.inputSystem);
+
 		set('scriptName', scriptName);
 		set('currentModDirectory', Mods.currentModDirectory);
 
@@ -574,6 +589,7 @@ class FunkinLua {
 			luaTrace("getObjectOrder: Object " + obj + " doesn't exist!", false, false, FlxColor.RED);
 			return -1;
 		});
+		
 		Lua_helper.add_callback(lua, "setObjectOrder", function(obj:String, position:Int) {
 			var split:Array<String> = obj.split('.');
 			var leObj:FlxBasic = LuaUtils.getObjectDirectly(split[0]);
@@ -893,7 +909,7 @@ class FunkinLua {
 
 			#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+			FlxG.sound.playMusic(Paths.music('panixPress'));
 			PlayState.changedDifficulty = false;
 			PlayState.chartingMode = false;
 			game.transitioning = true;
@@ -1162,7 +1178,7 @@ class FunkinLua {
 		});
 		Lua_helper.add_callback(lua, "setGraphicSize", function(obj:String, x:Int, y:Int = 0, updateHitbox:Bool = true) {
 			if(game.getLuaObject(obj)!=null) {
-				var shit:FlxSprite = game.getLuaObject(obj);
+				var shit:FlxSprite = game.getLuaObject(obj);	
 				shit.setGraphicSize(x, y);
 				if(updateHitbox) shit.updateHitbox();
 				return;
@@ -1776,7 +1792,7 @@ class FunkinLua {
 			return true;
 		}
 
-		var foldersToCheck:Array<String> = [Paths.mods('shaders/')];
+		var foldersToCheck:Array<String> = Mods.directoriesWithFile(Paths.getSharedPath(), 'shaders/');
 		if(Mods.currentModDirectory != null && Mods.currentModDirectory.length > 0)
 			foldersToCheck.insert(0, Paths.mods(Mods.currentModDirectory + '/shaders/'));
 

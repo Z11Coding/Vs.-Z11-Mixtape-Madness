@@ -28,12 +28,6 @@ typedef EventNote = {
 class Note extends NoteObject
 {
 	public var vec3Cache:Vector3 = new Vector3(); // for vector3 operations in modchart code
-
-	override function destroy()
-	{
-		defScale.put();
-		super.destroy();
-	}
 	public var mAngle:Float = 0;
 	public var bAngle:Float = 0;
 
@@ -206,6 +200,29 @@ class Note extends NoteObject
         0.32 //18k
     ];
 
+	public static var gfxIndex:Array<Dynamic> = [
+		[4],
+		[0, 3],
+		[0, 4, 3],
+		[0, 1, 2, 3],
+		[0, 1, 4, 2, 3],
+		[0, 2, 3, 5, 1, 8],
+		[0, 2, 3, 4, 5, 1, 8],
+		[0, 1, 2, 3, 5, 6, 7, 8],
+		[0, 1, 2, 3, 4, 5, 6, 7, 8]
+	];
+	public static var gfxHud:Array<Dynamic> = [
+		[4],
+		[0, 3],
+		[0, 4, 3],
+		[0, 1, 2, 3],
+		[0, 1, 4, 2, 3],
+		[0, 2, 3, 0, 1, 3],
+		[0, 2, 3, 4, 0, 1, 3],
+		[0, 1, 2, 3, 0, 1, 2, 3],
+		[0, 1, 2, 3, 4, 0, 1, 2, 3]
+	];
+
 	// End of extra keys stuff
 	//////////////////////////////////////////////////
 
@@ -288,8 +305,6 @@ class Note extends NoteObject
 	public var eventVal2:String = '';
 
 	// etc
-
-	public var colorSwap:ColorSwap;
 	public var inEditor:Bool = false;
 	public var desiredZIndex:Float = 0;
 	
@@ -319,8 +334,14 @@ class Note extends NoteObject
 	public var typeOffsetY:Float = 0;
 	public var typeOffsetAngle:Float = 0;
 	public var multSpeed(default, set):Float = 1;
-
+	/** If you need to tap the note to hit it, or just have the direction be held when it can be judged to hit.
+		An example is Stepmania mines **/
+	public var requiresTap:Bool = true; 
+	public var tripProgress:Float = 0;
+	public var isHeld:Bool = false;
 	public var multAlpha:Float = 1;
+	/** The maximum amount of time you can release a hold before it counts as a miss**/
+	public var maxReleaseTime:Float = 0.25;
 
 	public var copyX:Bool = true;
 	public var copyY:Bool = true;
@@ -386,13 +407,14 @@ class Note extends NoteObject
 	}
 
 	public function resizeByRatio(ratio:Float) //haha funny twitter shit
-	{
-/* 		if(isSustainNote && !animation.curAnim.name.endsWith('end'))
+	{	
+	/*  if(isSustainNote && !animation.curAnim.name.endsWith('end'))
 		{
 			scale.y *= ratio;
 			baseScaleY = scale.y;
 			updateHitbox();
-		} */
+		} 
+	*/
 	}
 
 	private function set_texture(value:String):String {
@@ -403,31 +425,22 @@ class Note extends NoteObject
 		return value;
 	}
 
-	public function updateColours(ignore:Bool=false){		
-		if(!ignore && !usesDefaultColours)return;
-		if (colorSwap==null)return;
-		if (noteData > -1 && noteData < ClientPrefs.data.arrowHSV.length && Note.ammo[PlayState.mania] > 3)
+	public function defaultRGB()
+	{
+		var arr:Array<FlxColor> = ClientPrefs.data.arrowRGBExtra[gfxIndex[PlayState.mania][noteData]];
+		if(PlayState.isPixelStage) arr = ClientPrefs.data.arrowRGBPixelExtra[gfxIndex[PlayState.mania][noteData]];
+
+		if (noteData > -1 && noteData <= PlayState.mania)
 		{
-			colorSwap.hue = ClientPrefs.data.arrowHSV[Std.int(Note.keysShit.get(mania).get('pixelAnimIndex')[noteData] % Note.ammo[mania])][0] / 360;
-			colorSwap.saturation = ClientPrefs.data.arrowHSV[Std.int(Note.keysShit.get(mania).get('pixelAnimIndex')[noteData] % Note.ammo[mania])][1] / 100;
-			colorSwap.brightness = ClientPrefs.data.arrowHSV[Std.int(Note.keysShit.get(mania).get('pixelAnimIndex')[noteData] % Note.ammo[mania])][2] / 100;
+			rgbShader.r = arr[0];
+			rgbShader.g = arr[1];
+			rgbShader.b = arr[2];
 		}
 	}
 
 	private function set_noteType(value:String):String {
-		noteSplashTexture = PlayState.SONG.splashSkin;
-
-		updateColours();
-
-		// just to make sure they arent 0, 0, 0
-		colorSwap.hue += 0.0127;
-		colorSwap.saturation += 0.0127;
-		colorSwap.brightness += 0.0127;
-		var hue = colorSwap.hue;
-		var sat = colorSwap.saturation;
-		var brt = colorSwap.brightness;
-
-		
+		noteSplashTexture = PlayState.SONG != null ? PlayState.SONG.splashSkin : 'noteSplashes';
+		defaultRGB();
 		if(noteData > -1 && noteType != value) {
 			switch(value) {
 				case 'Hurt Note':
@@ -435,9 +448,6 @@ class Note extends NoteObject
 					reloadNote('HURT');
 					noteSplashTexture = 'HURTnoteSplashes';
 					usesDefaultColours = false;
-					colorSwap.hue = 0;
-					colorSwap.saturation = 0;
-					colorSwap.brightness = 0;
 					if(isSustainNote) {
 						missHealth = 0.1;
 					} else {
@@ -450,6 +460,8 @@ class Note extends NoteObject
 					noMissAnimation = true;
 				case 'Alt Animation':
 					animSuffix = '-alt';
+				case 'Beatbox Note':
+					animSuffix = '-beatbox';
 				case 'GF Sing':
 					gfNote = true;
 				case 'Ghost Note':
@@ -458,36 +470,22 @@ class Note extends NoteObject
 					exNote = true;
 				case 'Center Note':
 					reloadNote('CENTER');
-					colorSwap.hue = 0;
-					colorSwap.saturation = 0;
-					colorSwap.brightness = 0; 
 					hitCausesMiss = false;
 					centerNote = true;
+				default:
+					//Nothing
 						
 			}
 			noteType = value;
 		}
-		if(usesDefaultColours){
-			if(colorSwap.hue != hue || colorSwap.saturation != sat || colorSwap.brightness != brt){
-				usesDefaultColours = false;// just incase
-			}
-		}
-
-		if(colorSwap.hue==hue)
-			colorSwap.hue -= 0.0127;
-
-		if(colorSwap.saturation==sat)
-			colorSwap.saturation -= 0.0127;
-
-		if(colorSwap.brightness==brt)
-			colorSwap.brightness -= 0.0127;
 
 		return value;
 	}
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false)
+	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false, ?createdFrom:Dynamic = null)
 	{
 		super();
+		objType = NOTE;
 
 		animation = new PsychAnimationController(this);
 
@@ -500,6 +498,7 @@ class Note extends NoteObject
 		isSustainNote = sustainNote;
 		this.inEditor = inEditor;
 		this.moves = false;
+		if(createdFrom == null) createdFrom = PlayState.instance;
 
 		beat = Conductor.getBeat(strumTime);
 
@@ -524,17 +523,13 @@ class Note extends NoteObject
 
 		if(noteData > -1) {
 			texture = '';
-			colorSwap = new ColorSwap();
-			if (mania == 3) 
+			if (mania <= 8) 
 			{
 				rgbShader = new RGBShaderReference(this, initializeGlobalRGBShader(noteData));
-				rgbShader.enabled = false;
-			
 			}
-			if(PlayState.SONG != null && PlayState.SONG.disableNoteRGB && mania == 3) 
+			else
 			{
-				rgbShader.enabled = false;
-				shader = colorSwap.shader;
+				if (noteType == '' || noteType == null) reloadNote('normal');
 			}
 
 			x += swagWidth * (noteData % Note.ammo[mania]);
@@ -572,11 +567,7 @@ class Note extends NoteObject
 				prevNote.animation.play(Note.keysShit.get(mania).get('letters')[prevNote.noteData] + ' hold');
 
 				prevNote.scale.y *= Conductor.stepCrochet / 100 * 1.05;
-
-				if (PlayState.instance != null)
-				{
-					prevNote.scale.y *= PlayState.instance.songSpeed;
-				}
+				if(createdFrom != null && createdFrom.songSpeed != null) prevNote.scale.y *= createdFrom.songSpeed;
 
 				if(PlayState.isPixelStage) { ///Y E  A H
 					prevNote.scale.y *= 1.19;
@@ -608,7 +599,7 @@ class Note extends NoteObject
 			var newRGB:RGBPalette = new RGBPalette();
 			globalRgbShaders[noteData] = newRGB;
 
-			var arr:Array<FlxColor> = (!PlayState.isPixelStage) ? ClientPrefs.data.arrowRGB[noteData] : ClientPrefs.data.arrowRGBPixel[noteData];
+			var arr:Array<FlxColor> = (!PlayState.isPixelStage) ? ClientPrefs.data.arrowRGBExtra[noteData] : ClientPrefs.data.arrowRGBPixelExtra[noteData];
 			if (noteData > -1 && noteData <= arr.length) 
 			{
 				newRGB.r = arr[0];
@@ -801,8 +792,6 @@ class Note extends NoteObject
 		super.update(elapsed);
 
 		mania = PlayState.mania;
-
-		colorSwap.daAlpha = alphaMod * alphaMod2;
 
 		if (hitByOpponent)
 				wasGoodHit = true;

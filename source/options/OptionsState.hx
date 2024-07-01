@@ -1,12 +1,13 @@
 package options;
 
 import states.MainMenuState;
-
 import backend.StageData;
+import gamejolt.GameJolt.GameJoltAPI;
+import gamejolt.GameJolt.GameJoltLogin;
 
 class OptionsState extends MusicBeatState
 {
-	var options:Array<String> = ['Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay', 'Misc.'];
+	var options:Array<String> = ['Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay', 'GameJolt Login', 'Misc.'];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;
@@ -28,6 +29,8 @@ class OptionsState extends MusicBeatState
 				openSubState(new options.OtherSettingsSubState());
 			case 'Adjust Delay and Combo':
 				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
+			case 'GameJolt Login':
+				LoadingState.loadAndSwitchState(new GameJoltLogin());
 		}
 	}
 
@@ -52,16 +55,19 @@ class OptionsState extends MusicBeatState
 
 		for (i in 0...options.length)
 		{
-			var optionText:Alphabet = new Alphabet(0, 0, options[i], true);
+			var optionText:Alphabet = new Alphabet(50, 230, options[i], true);
 			optionText.screenCenter();
+			optionText.isMenuItem = true;
+			optionText.targetY = i;
+			optionText.ID = i;
 			optionText.y += (100 * (i - (options.length / 2))) + 50;
 			grpOptions.add(optionText);
 		}
 
 		selectorLeft = new Alphabet(0, 0, '>', true);
-		add(selectorLeft);
+		//add(selectorLeft);
 		selectorRight = new Alphabet(0, 0, '<', true);
-		add(selectorRight);
+		//add(selectorRight);
 
 		changeSelection();
 		ClientPrefs.saveSettings();

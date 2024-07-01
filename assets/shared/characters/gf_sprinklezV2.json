@@ -211,13 +211,13 @@
 		}
 	],
 	"vocals_file": "gf",
-	"no_antialiasing": false,
+	"no_antialiasing": true,
 	"image": "characters/ChibiGF-V2",
 	"position": [
-		140,
+		70,
 		240
 	],
-	"healthicon": "gf",
+	"healthicon": "gfchibi",
 	"flip_x": true,
 	"healthbar_colors": [
 		235,
@@ -225,8 +225,8 @@
 		161
 	],
 	"camera_position": [
-		230,
-		40
+		70,
+		10
 	],
 	"sing_duration": 6.1,
 	"scale": 1,

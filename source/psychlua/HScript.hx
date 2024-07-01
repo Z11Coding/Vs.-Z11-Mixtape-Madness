@@ -4,6 +4,7 @@ import flixel.FlxBasic;
 import objects.Character;
 import psychlua.LuaUtils;
 import psychlua.CustomSubstate;
+import flixel.math.FlxPoint;
 
 #if LUA_ALLOWED
 import psychlua.FunkinLua;
@@ -15,6 +16,7 @@ import modchart.SubModifier;
 class HScript extends SScript
 {
 	public var modFolder:String;
+
 	#if LUA_ALLOWED
 	public var parentLua:FunkinLua;
 	public static function initHaxeModule(parent:FunkinLua)
@@ -55,7 +57,7 @@ class HScript extends SScript
 		this.varsToBring = varsToBring;
 	
 		super(file, false, false);
-		
+
 		#if LUA_ALLOWED
 		parentLua = parent;
 		if (parent != null)
@@ -237,6 +239,7 @@ class HScript extends SScript
 			for (script in PlayState.instance.luaArray)
 				if(script != null && script.lua != null && !script.closed)
 					Lua_helper.add_callback(script.lua, name, func);
+
 			FunkinLua.customFunctions.set(name, func);
 		});
 
@@ -272,7 +275,6 @@ class HScript extends SScript
 				else trace('$origin - $msg');
 			}
 		});
-		
 		#if LUA_ALLOWED
 		set('parentLua', parentLua);
 		#else
@@ -349,56 +351,61 @@ class HScript extends SScript
 		{
 			PlayState.instance.modManager.setPercent(modName, val, player);
 		});
-		
+
 		set("addBlankMod", function(modName:String, defaultVal:Float = 0, player:Int = -1)
 		{
 			PlayState.instance.modManager.quickRegister(new SubModifier(modName, PlayState.instance.modManager));
 			PlayState.instance.modManager.setValue(modName, defaultVal);
 		});
-		
+
 		set("setValue", function(modName:String, val:Float, player:Int = -1)
 		{
 			PlayState.instance.modManager.setValue(modName, val, player);
 		});
-		
+
 		set("getPercent", function(modName:String, player:Int)
 		{
 			return PlayState.instance.modManager.getPercent(modName, player);
 		});
-		
+
 		set("getValue", function(modName:String, player:Int)
 		{
 			return PlayState.instance.modManager.getValue(modName, player);
 		});
-		
+
 		set("queueSet", 
 		function(step:Float, modName:String, target:Float, player:Int = -1)
 			{
 				PlayState.instance.modManager.queueSet(step, modName, target, player);
 			}
 		);
-		
+
 		set("queueSetP", 
 			function(step:Float, modName:String, perc:Float, player:Int = -1)
 			{
 				PlayState.instance.modManager.queueSetP(step, modName, perc, player);
 			}
 		);
-		
+
 		set("queueEase",
 			function(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1, ?startVal:Float) // lua is autistic and can only accept 5 args
 			{
 				PlayState.instance.modManager.queueEase(step, endStep, modName, percent, style, player, startVal);
 			}
 		);
-		
+
 		set("queueEaseP",
 			function(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1, ?startVal:Float) // lua is autistic and can only accept 5 args
 			{
 				PlayState.instance.modManager.queueEaseP(step, endStep, modName, percent, style, player, startVal);
 			}
 		);
-		
+
+		//Base game things
+		set("FlxPoint", {
+			get: FlxPoint.get,
+			weak: FlxPoint.weak
+		});
 
 		if(varsToBring != null) {
 			for (key in Reflect.fields(varsToBring)) {
@@ -410,9 +417,8 @@ class HScript extends SScript
 			varsToBring = null;
 		}
 	}
-	
 
-	public function executeCode(?funcToRun:String = null, ?funcArgs:Array<Dynamic> = null):Tea {
+	public function executeCode(?funcToRun:String = null, ?funcArgs:Array<Dynamic> = null):TeaCall {
 		if (funcToRun == null) return null;
 
 		if(!exists(funcToRun)) {
@@ -444,7 +450,7 @@ class HScript extends SScript
 		return callValue;
 	}
 
-	public function executeFunction(funcToRun:String = null, funcArgs:Array<Dynamic>):Tea {
+	public function executeFunction(funcToRun:String = null, funcArgs:Array<Dynamic>):TeaCall {
 		if (funcToRun == null) return null;
 		return call(funcToRun, funcArgs);
 	}
@@ -454,7 +460,7 @@ class HScript extends SScript
 		funk.addLocalCallback("runHaxeCode", function(codeToRun:String, ?varsToBring:Any = null, ?funcToRun:String = null, ?funcArgs:Array<Dynamic> = null):Dynamic {
 			#if SScript
 			initHaxeModuleCode(funk, codeToRun, varsToBring);
-			final retVal:Tea = funk.hscript.executeCode(funcToRun, funcArgs);
+			final retVal:TeaCall = funk.hscript.executeCode(funcToRun, funcArgs);
 			if (retVal != null) {
 				if(retVal.succeeded)
 					return (retVal.returnValue == null || LuaUtils.isOfTypes(retVal.returnValue, [Bool, Int, Float, String, Array])) ? retVal.returnValue : null;

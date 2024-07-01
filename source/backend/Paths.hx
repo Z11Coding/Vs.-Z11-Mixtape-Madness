@@ -192,6 +192,11 @@ class Paths
 		return sound(key + FlxG.random.int(min, max), library);
 	}
 
+	inline static public function track(song:String, track:String):Any
+	{
+		return returnSound('songs', '${formatToSongPath(song)}/$track');
+	}
+
 	inline static public function music(key:String, ?library:String):Sound
 	{
 		var file:Sound = returnSound('music', key, library);
@@ -200,7 +205,7 @@ class Paths
 
 	inline static public function voices(song:String, postfix:String = null):Any
 	{
-		var songKey:String = '${formatToSongPath(song)}/Voices';
+		var songKey:String = '${formatToSongPath(song).toLowerCase()}/Voices';
 		if(postfix != null) songKey += '-' + postfix;
 		//trace('songKey test: $songKey');
 		var voices = returnSound(null, songKey, 'songs');
@@ -209,7 +214,7 @@ class Paths
 
 	inline static public function inst(song:String):Any
 	{
-		var songKey:String = '${formatToSongPath(song)}/Inst';
+		var songKey:String = '${formatToSongPath(song).toLowerCase()}/Inst';
 		var inst = returnSound(null, songKey, 'songs');
 		return inst;
 	}
@@ -226,6 +231,8 @@ class Paths
             return ImageCache.get(modsImages(key));
         }
         else{
+			//if (allowGPU) trace(key + " can't be loaded due to GPU Cache being on");
+			//else trace(key + " is NOT in the cache");
 		
 			var bitmap:BitmapData = null;
 			var file:String = null;
@@ -263,7 +270,7 @@ class Paths
 		}
 	}
 
-	static public function cacheBitmap(file:String, ?bitmap:BitmapData = null, ?allowGPU:Bool = true)
+	static public function cacheBitmap(file:String, ?bitmap:BitmapData = null, ?allowGPU:Bool = false)
 	{
 		if(bitmap == null)
 		{
@@ -357,7 +364,7 @@ class Paths
 		return false;
 	}
 
-	static public function getAtlas(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxAtlasFrames
+	static public function getAtlas(key:String, ?library:String = null, ?allowGPU:Bool = false):FlxAtlasFrames
 	{
 		var useMod = false;
 		var imageLoaded:FlxGraphic = image(key, library, allowGPU);
@@ -385,7 +392,7 @@ class Paths
 		return getPackerAtlas(key, library);
 	}
 
-	inline static public function getSparrowAtlas(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxAtlasFrames
+	inline static public function getSparrowAtlas(key:String, ?library:String = null, ?allowGPU:Bool = false):FlxAtlasFrames
 	{
 		var imageLoaded:FlxGraphic = image(key, library, allowGPU);
 		#if MODS_ALLOWED
@@ -400,7 +407,7 @@ class Paths
 		#end
 	}
 
-	inline static public function getPackerAtlas(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxAtlasFrames
+	inline static public function getPackerAtlas(key:String, ?library:String = null, ?allowGPU:Bool = false):FlxAtlasFrames
 	{
 		var imageLoaded:FlxGraphic = image(key, library, allowGPU);
 		#if MODS_ALLOWED
@@ -415,7 +422,7 @@ class Paths
 		#end
 	}
 
-	inline static public function getAsepriteAtlas(key:String, ?library:String = null, ?allowGPU:Bool = true):FlxAtlasFrames
+	inline static public function getAsepriteAtlas(key:String, ?library:String = null, ?allowGPU:Bool = false):FlxAtlasFrames
 	{
 		var imageLoaded:FlxGraphic = image(key, library, allowGPU);
 		#if MODS_ALLOWED
@@ -656,7 +663,7 @@ class Paths
         	return file2(key, "music", audioExtension, fold);
 		}
     }
-
+	
 	static public function doesImageAssetExist(path:String)
 	{
 		if (path == null || path == "")

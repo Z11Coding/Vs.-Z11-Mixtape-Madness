@@ -40,6 +40,16 @@ class CreditsState extends MusicBeatState
 		#end
 
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
+			['Fanta in my system Team'],
+			['JDST',		        'jsdt',		        'Main Director, Artist, Animator and Composer of (SONG NAME HERE)',					 'https://docs.google.com/document/d/1Ece_WG4QBnYSlRPEotqwCXxAEz2o_ugF_9YgSQ3oelU/edit?usp=sharing',		'9ff1cd'],
+			['Magi',				'magi',			    'Composer of (SONG NAME HERE)',						                                 'https://twitter.com/vids144p/status/1792668118222864402',		'f62681'],
+			['Z11Gaming',			'z11',			    'Main Coder and Composer of Funky Fanta',						                     'https://www.youtube.com/watch?v=Lc1TUnTKMLo',		'2e1745'],
+			[''],
+			['Fanta in my system Special Thanks :)'],
+			['kmill2113',		    'kmill',			'Got that Fanta In His System',						         'https://www.tiktok.com/@kmill2113?lang=en',		'14967B'],
+			['BigNinjaKai',		    'kai',		        'OnlyCans',					                                 '',		'444444'],
+			['Kevin',				'k',			    'Can Solo Herobrine',						                 '',		'14967B'],
+			[''],
 			['Psych Engine Team'],
 			['Shadow Mario',		'shadowmario',		'Main Programmer and Head of Psych Engine',					 'https://ko-fi.com/shadowmario',		'444444'],
 			['Riveren',				'riveren',			'Main Artist/Animator of Psych Engine',						 'https://twitter.com/riverennn',		'14967B'],

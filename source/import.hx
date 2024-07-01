@@ -40,6 +40,8 @@ import backend.MusicBeatState;
 import backend.MusicBeatSubstate;
 import backend.CustomFadeTransition;
 
+import backend.util.ColorUtil; //Thanks, Jack Bass. Very Cool
+
 
 import objects.Note;
 import objects.Alphabet;

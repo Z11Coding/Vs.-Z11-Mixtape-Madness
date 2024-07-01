@@ -98,47 +98,36 @@ class StrumNote extends NoteObject
 		zIndex = getZIndex();
 	}
 	
-
+	var field:PlayField;
 	public var useRGBShader:Bool = true;
-	public function new(x:Float, y:Float, leData:Int, ?player:Int) {
+	public function new(x:Float, y:Float, leData:Int, ?field:PlayField) {
 		FlxG.plugins.add(new FlxMouseControl());
 		animation = new PsychAnimationController(this);
 
-		colorSwap = new ColorSwap();
-		if (PlayState.mania == 3) 
+		rgbShader = new RGBShaderReference(this, Note.initializeGlobalRGBShader(leData));
+		rgbShader.enabled = false;
+		if(PlayState.SONG != null && PlayState.SONG.disableNoteRGB) useRGBShader = false;
+		
+		var arr:Array<FlxColor> = ClientPrefs.data.arrowRGBExtra[Note.gfxIndex[PlayState.mania][leData]];
+		if(PlayState.isPixelStage) arr = ClientPrefs.data.arrowRGBPixelExtra[Note.gfxIndex[PlayState.mania][leData]];
+		if(leData <= PlayState.mania)
 		{
-			rgbShader = new RGBShaderReference(this, Note.initializeGlobalRGBShader(leData));
-			rgbShader.enabled = false;
-		}
-		if(PlayState.SONG != null && PlayState.SONG.disableNoteRGB && Note.ammo[PlayState.mania] == 4) 
-		{
-			useRGBShader = false;
-			shader = colorSwap.shader;
-		}
-
-		if (PlayState.mania == 3) 
-		{
-			var arr:Array<FlxColor> = ClientPrefs.data.arrowRGB[leData];
-			if(PlayState.isPixelStage) arr = ClientPrefs.data.arrowRGBPixel[leData];
-			
-			if(leData <= arr.length)
+			@:bypassAccessor
 			{
-				@:bypassAccessor
-				{
-					rgbShader.r = arr[0];
-					rgbShader.g = arr[1];
-					rgbShader.b = arr[2];
-				}
+				rgbShader.r = arr[0];
+				rgbShader.g = arr[1];
+				rgbShader.b = arr[2];
 			}
 		}
+		this.field = field;
 		super(x, y);
+		objType = STRUM;
 		noteData = leData;
-		this.player = player;
 		this.noteData = leData;
 		// trace(noteData);
 
 		var skin:String = 'normal';
-		if(PlayState.SONG.arrowSkin != null && PlayState.SONG.arrowSkin.length > 1 && (!Paths.doesImageAssetExist(Paths.modsImages('noteskins/'+PlayState.SONG.arrowSkin)) || !Paths.doesImageAssetExist(Paths.getPath('images/noteskins/'+PlayState.SONG.arrowSkin)))) skin = PlayState.SONG.arrowSkin;
+		if(PlayState.SONG.arrowSkin != null && PlayState.SONG.arrowSkin.length > 1 && (!Paths.doesImageAssetExist(Paths.modsImages('noteskins/normal')) || !Paths.doesImageAssetExist(Paths.getPath('images/noteskins/normal')))) skin = 'normal';
 			texture = skin; //Load texture and anims
 
 		scrollFactor.set();
@@ -246,26 +235,6 @@ class StrumNote extends NoteObject
 		centerOrigin();
 		centerOffsets();
 		updateZIndex();
-		if(animation.curAnim == null || animation.curAnim.name == 'static') {
-			colorSwap.hue = 0;
-			colorSwap.saturation = 0;
-			colorSwap.brightness = 0;
-		} else {
-			if (note == null)
-			{
-				colorSwap.hue =  0;
-				colorSwap.saturation = 0;
-				colorSwap.brightness = 0;
-			}
-			else
-			{
-				// ok now the quants should b fine lol
-				colorSwap.hue = note.colorSwap.hue;
-				colorSwap.saturation = note.colorSwap.saturation;
-				colorSwap.brightness = note.colorSwap.brightness;
-			}
-
-		}
-		//if(useRGBShader && Note.mania == 3) rgbShader.enabled = (animation.curAnim != null && animation.curAnim.name != 'static');
+		if(useRGBShader) rgbShader.enabled = (animation.curAnim != null && animation.curAnim.name != 'static');
 	}
 }

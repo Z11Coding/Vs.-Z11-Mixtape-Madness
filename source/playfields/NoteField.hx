@@ -198,6 +198,7 @@ class NoteField extends FieldBase
 			drawQueue.push(object);
 		}
 
+		/* //Maybe dont for now
 		// draw notesplashes
 		for (obj in field.grpNoteSplashes.members)
 		{
@@ -210,7 +211,7 @@ class NoteField extends FieldBase
 			object.zIndex += 2;
 			lookupMap.set(obj, object);
 			drawQueue.push(object);
-		}
+		}*/
 
 		// draw strumattachments
 		for (obj in field.strumAttachments.members)
@@ -612,52 +613,67 @@ class NoteField extends FieldBase
 
 		scalePoint.putWeak();
 
-		var frameRect = sprite.frame.frame;
-		var sourceBitmap = sprite.graphic.bitmap;
+		try
+		{
+			var frameRect = sprite.frame.frame;
+			var sourceBitmap = sprite.graphic.bitmap;
 
-		var leftUV = frameRect.left / sourceBitmap.width;
-		var rightUV = frameRect.right / sourceBitmap.width;
-		var topUV = frameRect.top / sourceBitmap.height;
-		var bottomUV = frameRect.bottom / sourceBitmap.height;
+			var leftUV = frameRect.left / sourceBitmap.width;
+			var rightUV = frameRect.right / sourceBitmap.width;
+			var topUV = frameRect.top / sourceBitmap.height;
+			var bottomUV = frameRect.bottom / sourceBitmap.height;
 
-		// order should be LT, RT, RB, LT, LB, RB
-		// R is right L is left T is top B is bottom
-		// order matters! so LT is left, top because they're represented as x, y
-		var vertices = new Vector<Float>(12, false, [
-			pos.x + quad[0].x, pos.y + quad[0].y,
-			pos.x + quad[1].x, pos.y + quad[1].y,
-			pos.x + quad[3].x, pos.y + quad[3].y,
+			// order should be LT, RT, RB, LT, LB, RB
+			// R is right L is left T is top B is bottom
+			// order matters! so LT is left, top because they're represented as x, y
+			var vertices = new Vector<Float>(12, false, [
+				pos.x + quad[0].x, pos.y + quad[0].y,
+				pos.x + quad[1].x, pos.y + quad[1].y,
+				pos.x + quad[3].x, pos.y + quad[3].y,
 
-			pos.x + quad[0].x, pos.y + quad[0].y,
-			pos.x + quad[2].x, pos.y + quad[2].y,
-			pos.x + quad[3].x, pos.y + quad[3].y
-		]);
+				pos.x + quad[0].x, pos.y + quad[0].y,
+				pos.x + quad[2].x, pos.y + quad[2].y,
+				pos.x + quad[3].x, pos.y + quad[3].y
+			]);
 
-		var uvData = new Vector<Float>(12, false, [
-			 leftUV,    topUV,
-			rightUV,    topUV,
-			rightUV, bottomUV,
+			var uvData = new Vector<Float>(12, false, [
+				leftUV,    topUV,
+				rightUV,    topUV,
+				rightUV, bottomUV,
 
-			 leftUV,    topUV,
-			 leftUV, bottomUV,
-			rightUV, bottomUV,
-		]);
+				leftUV,    topUV,
+				leftUV, bottomUV,
+				rightUV, bottomUV,
+			]);
 
-		var shader = sprite.shader != null ? sprite.shader : new FlxShader();
-		if (shader != sprite.shader)
-			sprite.shader = shader;
+			var shader = sprite.shader != null ? sprite.shader : new FlxShader();
+			if (shader != sprite.shader)
+				sprite.shader = shader;
 
-		shader.bitmap.input = sprite.graphic.bitmap;
-		shader.bitmap.filter = sprite.antialiasing ? LINEAR : NEAREST;
+			shader.bitmap.input = sprite.graphic.bitmap;
+			shader.bitmap.filter = sprite.antialiasing ? LINEAR : NEAREST;
 
-		return {
-			graphic: sprite.graphic,
-			shader: shader,
-			alphas: [for (i in 0...Std.int(vertices.length / 3))alpha],
-			glows: [for (i in 0...Std.int(vertices.length / 3)) glow],
-			uvData: uvData,
-			vertices: vertices,
-			zIndex: pos.z
+			return {
+				graphic: sprite.graphic,
+				shader: shader,
+				alphas: [for (i in 0...Std.int(vertices.length / 3))alpha],
+				glows: [for (i in 0...Std.int(vertices.length / 3)) glow],
+				uvData: uvData,
+				vertices: vertices,
+				zIndex: pos.z
+			}
+		}
+		catch(e)
+		{
+			var len:Int = e.message.indexOf('\n') + 1;
+			if(len <= 0) len = e.message.length;
+			#if windows
+			lime.app.Application.current.window.alert('ERROR: ' + e.message.substr(0, len), 'Error Loading!');
+			Sys.exit(0);
+			#else
+			throw 'Error: '+e;
+			#end
+			return null;
 		}
 	}
 

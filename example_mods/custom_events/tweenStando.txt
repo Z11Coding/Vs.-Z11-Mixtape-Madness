@@ -1,3 +1,0 @@
-So, value 1: dad, bf
-value 2: T, F
-Use value 2 to move it, T is stand on, F is stand false

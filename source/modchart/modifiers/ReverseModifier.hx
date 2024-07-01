@@ -7,6 +7,7 @@ import math.*;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import playfields.NoteField;
+import objects.NoteObject.ObjectType;
 
 class ReverseModifier extends NoteModifier 
 {
@@ -61,7 +62,7 @@ class ReverseModifier extends NoteModifier
 		#end
 	}
 
-	override function getPos(visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:FlxSprite, field:NoteField)
+	override function getPos(visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:NoteObject, field:NoteField)
 	{
 		var swagOffset = Note.swagWidth * 0.5 + modMgr.vPadding; // maybe vPadding can be a field variable?
 		var reversePerc = getReverseValue(data, player);
@@ -72,16 +73,12 @@ class ReverseModifier extends NoteModifier
 		
 		pos.y = shift + lerp(visualDiff, -visualDiff, reversePerc);
 
-		if ((obj is Note))
+		if ((obj.objType == NOTE))
 		{
 			var n:Note = cast obj;
 			pos.y += n.typeOffsetY;
 		}
-		if ((obj is NoteObject))
-		{
-			var nO:NoteObject = cast obj;
-			pos.y += nO.offsetY;
-		}
+		pos.y += obj.offsetY;
 
 		return pos;
 	}

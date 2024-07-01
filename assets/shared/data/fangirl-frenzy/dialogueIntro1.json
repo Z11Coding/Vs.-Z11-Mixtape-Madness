@@ -1,0 +1,49 @@
+{
+	"dialogue": [
+		{
+			"expression": "talk",
+			"disableFadeBG": false,
+			"portrait": "osky-dialogue",
+			"text": "IT WORKED!!",
+			"shake": true,
+			"boxAnimPrefix": "normal",
+			"dialogueSound": "dialogue",
+			"speed": 0.05,
+			"skipDis": false
+		},
+		{
+			"expression": "talk",
+			"disableFadeBG": false,
+			"portrait": "osky-dialogue",
+			"text": "THE SHIFT WORKED!!!",
+			"shake": true,
+			"boxAnimPrefix": "normal",
+			"dialogueSound": "dialogue",
+			"speed": 0.05,
+			"skipDis": false
+		},
+		{
+			"expression": "talk",
+			"disableFadeBG": false,
+			"portrait": "osky-dialogue",
+			"text": "Now we can be",
+			"shake": false,
+			"boxAnimPrefix": "normal",
+			"dialogueSound": "dialogue",
+			"speed": 0.05,
+			"skipDis": true
+		}
+	],
+	"boxSkin": "dialogue/boxes/ds_dialogue_box",
+	"size": 50,
+	"outlineColor": "#000000",
+	"handEnable": true,
+	"color": "#000000",
+	"outlineSize": 1.5,
+	"handSkin": "Empty",
+	"outlineEnable": false,
+	"font": "comboFont.ttf",
+	"dropTextEnable": false,
+	"clickSound": "dialogueClose",
+	"dropTextColor": "#757575"
+}

@@ -1,0 +1,124 @@
+{
+	"animations": [
+		{
+			"loop": false,
+			"offsets": [
+				83,
+				-345
+			],
+			"anim": "singDOWN",
+			"fps": 24,
+			"name": "down00",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-67,
+				-251
+			],
+			"anim": "singUP",
+			"fps": 24,
+			"name": "up00",
+			"indices": []
+		},
+		{
+			"offsets": [
+				126,
+				-306
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWNmiss",
+			"indices": [],
+			"name": "down miss00"
+		},
+		{
+			"offsets": [
+				-31,
+				-215
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUPmiss",
+			"indices": [],
+			"name": "up miss"
+		},
+		{
+			"offsets": [
+				-64,
+				-223
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "idle"
+		},
+		{
+			"offsets": [
+				-46,
+				-226
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singLEFT",
+			"indices": [],
+			"name": "right00"
+		},
+		{
+			"offsets": [
+				-1,
+				-186
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singLEFTmiss",
+			"indices": [],
+			"name": "right miss"
+		},
+		{
+			"offsets": [
+				-67,
+				-217
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singRIGHT",
+			"indices": [],
+			"name": "left00"
+		},
+		{
+			"offsets": [
+				-27,
+				-178
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singRIGHTmiss",
+			"indices": [],
+			"name": "left miss"
+		}
+	],
+	"vocals_file": "",
+	"no_antialiasing": true,
+	"image": "characters/Kyren_assets",
+	"position": [
+		0,
+		0
+	],
+	"healthicon": "kyren",
+	"flip_x": false,
+	"healthbar_colors": [
+		71,
+		44,
+		101
+	],
+	"camera_position": [
+		-40,
+		340
+	],
+	"sing_duration": 6,
+	"scale": 1,
+	"_editor_isPlayer": true
+}

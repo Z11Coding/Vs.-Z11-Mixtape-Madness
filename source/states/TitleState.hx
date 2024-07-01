@@ -28,6 +28,9 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
+import gamejolt.GameJolt.GameJoltAPI;
+import tentools.api.FlxGameJolt as GJApi;
+
 typedef TitleData =
 {
 
@@ -71,7 +74,9 @@ class TitleState extends MusicBeatState
 
 	var titleJSON:TitleData;
 
+	#if sys
 	var thrd:Thread;
+	#end
 
 	public static var updateVersion:String = '';
 
@@ -189,6 +194,10 @@ class TitleState extends MusicBeatState
 			if(FlxG.sound.music == null) {
 				FlxG.sound.playMusic(Paths.music('panixPress'), 0);
 			}
+			else if (!FlxG.sound.music.playing) FlxG.sound.playMusic(Paths.music('panixPress'), 0);
+
+			GameJoltAPI.connect();
+			GameJoltAPI.authDaUser(FlxG.save.data.gjUser, FlxG.save.data.gjToken);
 		}
 
 		Conductor.changeBPM(titleJSON.bpm);
@@ -436,6 +445,7 @@ class TitleState extends MusicBeatState
 				var tmr = new FlxTimer().start(2, function(tmr:FlxTimer)
 				{
 					if (!skipUpdate && ClientPrefs.data.checkForUpdates) {
+						#if sys
 						thrd = Thread.create(function() {
 							try {
 								var data = Http.requestUrl("https://raw.githubusercontent.com/Z11Coding/MixtapeEngine-Release/main/versions/list.txt");
@@ -452,6 +462,9 @@ class TitleState extends MusicBeatState
 						updateAlphabet.visible = true;
 						updateRibbon.visible = true;
 						updateRibbon.alpha = 0;
+						#else
+						FlxG.switchState(new MainMenuState());
+						#end
 					} else {
 						FlxG.switchState(new MainMenuState());
 					}
@@ -692,80 +705,9 @@ class TitleState extends MusicBeatState
 	{
 		if (!skippedIntro)
 		{
-			if (playJingle) //Ignore deez
-			{
-				var easteregg:String = FlxG.save.data.psychDevsEasterEgg;
-				if (easteregg == null) easteregg = '';
-				easteregg = easteregg.toUpperCase();
-
-				var sound:FlxSound = null;
-				switch(easteregg)
-				{
-					case 'RIVER':
-						sound = FlxG.sound.play(Paths.sound('JingleRiver'));
-					case 'SHUBS':
-						sound = FlxG.sound.play(Paths.sound('JingleShubs'));
-					case 'SHADOW':
-						FlxG.sound.play(Paths.sound('JingleShadow'));
-					case 'BBPANZU':
-						sound = FlxG.sound.play(Paths.sound('JingleBB'));
-
-					default: //Go back to normal ugly ass boring GF
-						remove(ngSpr);
-						remove(credGroup);
-						FlxG.camera.flash(FlxColor.WHITE, 2);
-						skippedIntro = true;
-						playJingle = false;
-
-						FlxG.sound.playMusic(Paths.music('panixPress'), 0);
-						FlxG.sound.music.fadeIn(4, 0, 0.7);
-						return;
-				}
-
-				transitioning = true;
-				if(easteregg == 'SHADOW')
-				{
-					new FlxTimer().start(3.2, function(tmr:FlxTimer)
-					{
-						remove(ngSpr);
-						remove(credGroup);
-						FlxG.camera.flash(FlxColor.WHITE, 0.6);
-						transitioning = false;
-					});
-				}
-				else
-				{
-					remove(ngSpr);
-					remove(credGroup);
-					FlxG.camera.flash(FlxColor.WHITE, 3);
-					sound.onComplete = function() {
-						FlxG.sound.playMusic(Paths.music('panixPress'), 0);
-						FlxG.sound.music.fadeIn(4, 0, 0.7);
-						transitioning = false;
-					};
-				}
-				playJingle = false;
-			}
-			else //Default! Edit this one!!
-			{
-				remove(ngSpr);
-				remove(credGroup);
-				FlxG.camera.flash(FlxColor.WHITE, 4);
-
-				var easteregg:String = FlxG.save.data.psychDevsEasterEgg;
-				if (easteregg == null) easteregg = '';
-				easteregg = easteregg.toUpperCase();
-				#if TITLE_SCREEN_EASTER_EGG
-				if(easteregg == 'SHADOW')
-				{
-					FlxG.sound.music.fadeOut();
-					if(FreeplayState.vocals != null)
-					{
-						FreeplayState.vocals.fadeOut();
-					}
-				}
-				#end
-			}
+			remove(ngSpr);
+			remove(credGroup);
+			FlxG.camera.flash(FlxColor.WHITE, 4);
 			skippedIntro = true;
 		}
 	}

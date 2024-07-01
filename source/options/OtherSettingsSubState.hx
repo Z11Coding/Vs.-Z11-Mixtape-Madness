@@ -2,7 +2,7 @@ package options;
 
 class OtherSettingsSubState extends BaseOptionsMenu
 {
-	public static var curBPMList:Array<Int> =  [0, 160, 105, 130, 100, 160, 180, 100, 125, 150];
+	public static var curBPMList:Array<Int> =  [0, 160, 105, 130, 100, 160, 180, 100, 125, 150, 140];
 	public function new()
 	{
 		title = 'Misc. Settings.';
@@ -106,7 +106,7 @@ class OtherSettingsSubState extends BaseOptionsMenu
 			"What song do you prefer for the Pause Screen?",
 			'pauseMusic',
 			'string',
-			['None', 'Breakfast', 'Tea Time', 'Celebration', 'Drippy Genesis', 'Reglitch', 'False Memory', 'Funky Genesis', 'Late Night Cafe', 'Late Night Jersey']);
+			['None', 'Breakfast', 'Tea Time', 'Celebration', 'Drippy Genesis', 'Reglitch', 'False Memory', 'Funky Genesis', 'Late Night Cafe', 'Late Night Jersey', 'Silly Little Sample Song']);
 		addOption(option);
 		option.onChange = onChangePauseMusic;
 
@@ -160,14 +160,16 @@ class OtherSettingsSubState extends BaseOptionsMenu
 			case 'Late Night Jersey':
 				indeed = 9;
 		}
-		/*if (controls.UI_RIGHT_P)
+		/*
+		if (controls.UI_RIGHT_P)
 			indeed++;
 		if (controls.UI_LEFT_P)
 			indeed--;
 		if (indeed < 0)
 			indeed = curBPMList.length - 1;
 		if (indeed >= curBPMList.length)
-			indeed = 0;*/
+			indeed = 0;
+		*/
 		if(ClientPrefs.data.pauseMusic == 'None')
 			FlxG.sound.music.volume = 0;
 		else
@@ -180,17 +182,17 @@ class OtherSettingsSubState extends BaseOptionsMenu
 
 	function onChangeSoundDown()
 	{
-		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound(ClientPrefs.data.volDown), FlxG.sound.volume);
+		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound('soundtray/'+ClientPrefs.data.volDown), FlxG.sound.volume);
 	}
 
 	function onChangeSoundUp()
 	{
-		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound(ClientPrefs.data.volUp), FlxG.sound.volume);
+		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound('soundtray/'+ClientPrefs.data.volUp), FlxG.sound.volume);
 	}
 
 	function onChangeSoundMax()
 	{
-		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound(ClientPrefs.data.volMax), FlxG.sound.volume);
+		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound('soundtray/'+ClientPrefs.data.volMax), FlxG.sound.volume);
 	}
 
 	override function destroy()

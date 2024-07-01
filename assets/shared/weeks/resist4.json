@@ -1,0 +1,33 @@
+{
+	"storyName": "",
+	"difficulties": "Hard",
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"weekBefore": "resist",
+	"startUnlocked": true,
+	"category": "main",
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"songs": [
+		[
+			"Fightback",
+			"z12",
+			[
+				255,
+				253,
+				255
+			]
+		]
+	],
+	"hideStoryMode": true,
+	"weekName": "Fightback",
+	"hiddenUntilUnlocked": false
+}

@@ -1,0 +1,60 @@
+{
+	"storyName": "",
+	"difficulties": "Hard",
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"weekBefore": "tutorial",
+	"startUnlocked": true,
+	"category": "main",
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"songs": [
+		[
+			"Resistance",
+			"z12",
+			[
+				255,
+				255,
+				255
+			]
+		],
+		[
+			"Resistance-k",
+			"z12",
+			[
+				255,
+				255,
+				255
+			]
+		],
+		[
+			"Resistance Awsome Mix",
+			"z12",
+			[
+				255,
+				255,
+				255
+			]
+		],
+		[
+			"Resistance-kai",
+			"z12",
+			[
+				255,
+				255,
+				255
+			]
+		]
+	],
+	"hideStoryMode": true,
+	"weekName": "Godly Resistance",
+	"hiddenUntilUnlocked": false
+}
