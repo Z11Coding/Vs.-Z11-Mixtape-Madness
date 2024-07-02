@@ -215,8 +215,8 @@ class FunkinLua {
 		set('trueMania', Note.ammo[PlayState.mania]);
 
 		// username
-	//	var names:Array<String> = ["user", "player", "boyfriend"];
-	//	set('username', SaveVariables.username ? Sys.getEnv("USERNAME") : names[Math.floor(Math.random() * names.length)]);
+		var names:Array<String> = ["user", "player", "boyfriend"];
+		set('username', ClientPrefs.data.username ? #if desktop Sys.environment()["USERNAME"] #else Sys.environment()["USER"] #end : names[Math.floor(Math.random() * names.length)]);
 
 		for (name => func in customFunctions)
 		{
