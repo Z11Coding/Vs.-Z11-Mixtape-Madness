@@ -214,11 +214,31 @@ class FunkinLua {
 		set('mania', PlayState.mania);
 		set('trueMania', Note.ammo[PlayState.mania]);
 
+		// username
+	//	var names:Array<String> = ["user", "player", "boyfriend"];
+	//	set('username', SaveVariables.username ? Sys.getEnv("USERNAME") : names[Math.floor(Math.random() * names.length)]);
+
 		for (name => func in customFunctions)
 		{
 			if(func != null)
 				Lua_helper.add_callback(lua, name, func);
 		}
+
+		Lua_helper.add_callback(lua, "set", function(varName:String, value:Dynamic) {
+			set(varName, value);
+		});
+
+		Lua_helper.add_callback(lua, "get", function(varName:String) {
+			return (varName);
+		});
+
+		Lua_helper.add_callback(lua, "addCallback", function(name:String, func:Dynamic) {
+			callbacks.set(name, func);
+		});
+
+		Lua_helper.add_callback(lua, "crawlDirectory", function(directory:String, ?extension:String = "") {
+			return Paths.crawlDirectory(directory, extension);
+		});
 
 		//Fun cursor things for lua
 		Lua_helper.add_callback(lua, "getCursorMode", function()

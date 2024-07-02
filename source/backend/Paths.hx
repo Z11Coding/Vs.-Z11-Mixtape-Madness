@@ -95,6 +95,23 @@ class Paths
 		currentLevel = name.toLowerCase();
 	}
 
+public static function crawlDirectory(directoryPath:String, fileExtension:String, ?targetArray:Array<String>):Array<String> {
+    var result:Array<String> = targetArray != null ? targetArray : [];
+    for (folder in FileSystem.readDirectory(FileSystem.absolutePath(directoryPath))) {
+        if (FileSystem.isDirectory('$directoryPath/$folder')) {
+            var subDirectoryResult = crawlDirectory('$directoryPath/$folder', fileExtension, result);
+            if (targetArray == null) {
+                result = result.concat(subDirectoryResult);
+            }
+        } else {
+            if (folder.endsWith(fileExtension)) {
+                result.push(directoryPath+'/'+folder);                    
+            }
+        }
+    }
+    return result;
+}
+
 	public static function getPath(file:String, ?type:AssetType = TEXT, ?library:Null<String> = null, ?modsAllowed:Bool = false):String
 	{
 		#if MODS_ALLOWED

@@ -214,37 +214,28 @@ class CacheState extends MusicBeatState
 			menuBG.screenCenter();
 			add(menuBG);
 
-			function crawlDirectory(directoryPath:String, fileExtension:String, targetArray:Array<String>):Void {
-				for (folder in FileSystem.readDirectory(FileSystem.absolutePath(directoryPath))) {
-					if (FileSystem.isDirectory('$directoryPath/$folder')) {
-						crawlDirectory('$directoryPath/$folder', fileExtension, targetArray);
-					} else {
-						if (folder.endsWith(fileExtension)) {
-							targetArray.push(directoryPath+'/'+folder);
-							totalthing.push(directoryPath+'/'+folder);						
-						}
-					}
-				}
-            }
+
 
 			#if cpp
 			if (ClientPrefs.data.graphicsPreload2)
 			{
-				crawlDirectory("assets/shared", ".png", images);
-				crawlDirectory("mods", ".png", modImages);
+				Paths.crawlDirectory("assets/shared", ".png", images);
+				Paths.crawlDirectory("mods", ".png", modImages);
 			}
 
 			if (ClientPrefs.data.musicPreload2)
 			{
-				crawlDirectory("assets/shared", ".ogg", music);
-				crawlDirectory("mods", ".png", modMusic);
+				Paths.crawlDirectory("assets/shared", ".ogg", music);
+				Paths.crawlDirectory("mods", ".png", modMusic);
 			}
 			//this took me waaay too long to just delete
 			//nvm I ended up deleting it anyway
 			#end
 
-			loadTotal = totalthing.length;
-
+			loadTotal = images.length + modImages.length + music.length + modMusic.length + sounds.length + modSounds.length;
+			trace("Files: " + "Images: " + images + "(Mod): " + modImages + "Music: " + music + "(Mod): " + modMusic + "Sounds: " + sounds + "(Mod): " + modSounds);
+			trace(loadTotal + " files to load");
+			
 			if(loadTotal > 0){
 				loadingBar = new FlxBar(0, 605, LEFT_TO_RIGHT, 600, 24, this, 'currentLoaded', 0, loadTotal);
 				loadingBar.createGradientBar([0xFF333333, 0xFFFFFFFF], [0xFF7233D8, 0xFFD89033]);
