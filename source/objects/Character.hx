@@ -302,7 +302,7 @@ class Character extends FlxSprite
 				case 'fangirl-frenzy':
 					switch (curCharacter)
 					{
-						case 'Z11-true-playable':
+						case 'Z11-true-player':
 							if(animationNotes.length > 0 && Conductor.songPosition > animationNotes[0][0])
 							{
 								var noteData:Int = 1;

@@ -1,6 +1,6 @@
-curRainAmount = 0.05
-smoothRain = 0.05
-nextRainAmount = 0.05
+curRainAmount = 0
+smoothRain = 0
+nextRainAmount = 0
 function onCreate() 
     if shadersEnabled then  
         local ShaderName = 'rain'

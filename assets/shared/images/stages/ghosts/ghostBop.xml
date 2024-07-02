@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="ghostBop.png">
+	<!-- Created with Adobe Animate version 22.0.7.214 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="ghostbop0000" x="10" y="10" width="314" height="285"/>
+	<SubTexture name="ghostbop0001" x="10" y="10" width="314" height="285"/>
+	<SubTexture name="ghostbop0002" x="334" y="10" width="314" height="285"/>
+	<SubTexture name="ghostbop0003" x="334" y="10" width="314" height="285"/>
+	<SubTexture name="ghostbop0004" x="334" y="10" width="314" height="285"/>
+	<SubTexture name="ghostbop0005" x="658" y="10" width="314" height="285"/>
+	<SubTexture name="ghostbop0006" x="658" y="10" width="314" height="285"/>
+	<SubTexture name="ghostbop0007" x="658" y="10" width="314" height="285"/>
+	<SubTexture name="ghostbop0008" x="10" y="305" width="314" height="285"/>
+	<SubTexture name="ghostbop0009" x="10" y="305" width="314" height="285"/>
+	<SubTexture name="ghostbop0010" x="10" y="305" width="314" height="285"/>
+</TextureAtlas>

@@ -1,0 +1,4 @@
+yeah
+
+value 1 : hex color (default is white)
+value 2 : time (default is 1)

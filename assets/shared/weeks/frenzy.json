@@ -1,0 +1,42 @@
+{
+	"storyName": "",
+	"difficulties": "Hard",
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"weekBefore": "tutorial",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"startUnlocked": true,
+	"hideStoryMode": false,
+	"songs": [
+		[
+			"Fangirl Frenzy",
+			"sky",
+			[
+				26,
+				173,
+				253
+			]
+		],
+		[
+			"Familiar Freakout",
+			"dad",
+			[
+				146,
+				113,
+				253
+			]
+		]
+	],
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"category": "extras",
+	"hiddenUntilUnlocked": false,
+	"weekName": "Fanicon"
+}
