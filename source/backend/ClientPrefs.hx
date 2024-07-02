@@ -352,7 +352,7 @@ class ClientPrefs {
 		'accept'		=> [SPACE, ENTER],
 		'back'			=> [BACKSPACE, ESCAPE],
 		'pause'			=> [ENTER, ESCAPE],
-		'reset'			=> [R, NONE],
+		'reset'			=> [R, DELETE],
 		
 		'volume_mute'	=> [ZERO, NUMPADZERO],
 		'volume_up'		=> [NUMPADPLUS, PLUS],

@@ -935,22 +935,24 @@ class PlayState extends MusicBeatState
 			camPos.y += gf.getGraphicMidpoint().y + gf.cameraPosition[1];
 		}
 
-		if(dad.curCharacter.startsWith('gf')) {
-			dad.setPosition(GF_X, GF_Y);
-			if(gf != null) gf.visible = false;
-		}
-		if(dad2 != null && dad2.curCharacter.startsWith('gf')) {
-			dad2.setPosition(GF_X, GF_Y);
-			if(gf != null) gf.visible = false;
+		if (WeekData.getWeekFileName() != 'lost' && !stageData.hide_girlfriend) //GF needs to still be there
+		{
+			if(dad.curCharacter.startsWith('gf')) {
+				dad.setPosition(GF_X, GF_Y);
+				if(gf != null) gf.visible = false;
+			}
+			if(dad2 != null && dad2.curCharacter.startsWith('gf')) {
+				dad2.setPosition(GF_X, GF_Y);
+				if(gf != null) gf.visible = false;
+			}
 		}
 
-		if(dad.curCharacter.startsWith('gf')) {
-			//Do Nothing
-		}
-		else
+		if (!stageData.hide_girlfriend)
 		{
-			addCharacterToList('gf', 2);
-			addCharacterToList('gf-cheer', 2);
+			if(!dad.curCharacter.startsWith('gf')) {
+				addCharacterToList('gf', 2);
+				addCharacterToList('gf-cheer', 2);
+			}
 		}
 		
 		stagesFunc(function(stage:BaseStage) stage.createPost());
