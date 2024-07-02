@@ -46,10 +46,8 @@ class CacheState extends MusicBeatState
 	public static var bitmapData:Map<String, FlxGraphic>;
 	var images:Array<String> = [];
 	var music:Array<String> = [];
-	var sounds:Array<String> = [];
 	var modImages:Array<String> = [];
 	var modMusic:Array<String> = [];
-	var modSounds:Array<String> = [];
 
 	var boolshit = true;
 	var daMods:Array<String> = [];
@@ -68,6 +66,7 @@ class CacheState extends MusicBeatState
 	var menuBG:FlxSprite;
 	var cacheStart:Bool = false;
 	var startCachingModImages:Bool = false;
+	var startCachingSoundsAndMusic:Bool = false;
 	var songsCached:Bool;
 	var graphicsCached:Bool;
     var startCachingGraphics:Bool = false;
@@ -77,6 +76,7 @@ class CacheState extends MusicBeatState
 	var totalToDo:Int = 0;
 	var modImI:Int = 0;
 	var gfxI:Int = 0;
+	var sNmI:Int = 0;
 	public var percentLabel:FlxText;
 	var filesDone = 0;
 	var totalFiles = 0;
@@ -232,8 +232,8 @@ class CacheState extends MusicBeatState
 			//nvm I ended up deleting it anyway
 			#end
 
-			loadTotal = images.length + modImages.length + music.length + modMusic.length + sounds.length + modSounds.length;
-			trace("Files: " + "Images: " + images + "(Mod): " + modImages + "Music: " + music + "(Mod): " + modMusic + "Sounds: " + sounds + "(Mod): " + modSounds);
+			loadTotal = images.length + modImages.length + music.length + modMusic.length;
+			trace("Files: " + "Images: " + images + "Images(Mod): " + modImages + "Music: " + music + "Music(Mod): " + modMusic);
 			trace(loadTotal + " files to load");
 			
 			if(loadTotal > 0){
@@ -412,6 +412,38 @@ class CacheState extends MusicBeatState
 				currentLoaded++;
             }
         }
+
+		if(startCachingSoundsAndMusic){
+            if(sNmI >= music.length){
+				trace("Music and Sounds cached");
+                startCachingSoundsAndMusic = false;
+                startCachingGraphics = true;
+            }
+            else{
+				loadingWhatMini.text = music[sNmI];
+				loadingWhatMini.screenCenter(X);
+				loadingWhat.screenCenter(XY);
+				if(CoolUtil.exists(music[sNmI])){
+					if(CoolUtil.exists(Paths.cacheInst(music[sNmI]))){
+						FlxG.sound.cache(Paths.cacheInst(music[sNmI]));
+					}
+					if(CoolUtil.exists(Paths.cacheVoices(music[sNmI]))){
+						FlxG.sound.cache(Paths.cacheVoices(music[sNmI]));
+					}
+					if(CoolUtil.exists(Paths.cacheSound(music[sNmI]))){
+						FlxG.sound.cache(Paths.cacheSound(music[sNmI]));
+					}
+					if(CoolUtil.exists(Paths.cacheMusic(music[sNmI]))) {
+						FlxG.sound.cache(Paths.cacheMusic(music[sNmI]));
+					}
+				}
+				else{
+					trace("Image: File at " + music[sNmI] + " not found, skipping cache.");
+				}
+                sNmI++;
+				currentLoaded++;
+            }
+        }
 		
 		super.update(elapsed);
 	}
@@ -423,18 +455,7 @@ class CacheState extends MusicBeatState
         }
 
 		#if sys
-		#if !linux
-		if(!songsCached){ 
-			#if sys sys.thread.Thread.create(() -> { #end
-				preloadMusic();
-			#if sys }); #end
-		}
-		#end
-
-        if(!graphicsCached){
-            startCachingGraphics = true;
-        }
-
+		startCachingSoundsAndMusic = true;
 		#end
 	}
 
@@ -443,13 +464,13 @@ class CacheState extends MusicBeatState
 			if(CoolUtil.exists(Paths.cacheInst(x))){
                 FlxG.sound.cache(Paths.cacheInst(x));
             }
-			else if(CoolUtil.exists(Paths.cacheVoices(x))){
+			if(CoolUtil.exists(Paths.cacheVoices(x))){
                 FlxG.sound.cache(Paths.cacheVoices(x));
             }
-			else if(CoolUtil.exists(Paths.cacheSound(x))){
+			if(CoolUtil.exists(Paths.cacheSound(x))){
                 FlxG.sound.cache(Paths.cacheSound(x));
             }
-            else{
+            if(CoolUtil.exists(Paths.cacheMusic(x))) {
                 FlxG.sound.cache(Paths.cacheMusic(x));
             }
 			//loadingWhat.text = 'Loading: ' + x;
@@ -460,13 +481,13 @@ class CacheState extends MusicBeatState
             if(CoolUtil.exists(Paths.cacheInst(x))){
                 FlxG.sound.cache(Paths.cacheInst(x));
             }
-			else if(CoolUtil.exists(Paths.cacheVoices(x))){
+			if(CoolUtil.exists(Paths.cacheVoices(x))){
                 FlxG.sound.cache(Paths.cacheVoices(x));
             }
-			else if(CoolUtil.exists(Paths.cacheSound(x))){
+			if(CoolUtil.exists(Paths.cacheSound(x))){
                 FlxG.sound.cache(Paths.cacheSound(x));
             }
-            else{
+            if(CoolUtil.exists(Paths.cacheMusic(x))) {
                 FlxG.sound.cache(Paths.cacheMusic(x));
             }
 			//loadingWhat.text = 'Loading: ' + x;

@@ -1,6 +1,7 @@
 beat
 cawm
 resist
-megalosist
+meaglosist
 resist4
-TheEndOfVirginityq
+save
+lost
