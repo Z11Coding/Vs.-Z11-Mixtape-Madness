@@ -1,15 +1,15 @@
 function onCreate()
-	makeAnimatedLuaSprite('bg','sky/bg_normal',-212,-200)
+	makeAnimatedLuaSprite('bg','stages/sky/bg_normal',-212,-200)
 	addAnimationByPrefix('bg','bg','bg',24,false)
 	playAnim('bg','bg',true)
 	addLuaSprite('bg',false)
 	setScrollFactor('bg',0,0.9)
 
-	makeAnimatedLuaSprite("shift", "sky/bg_manifest", -388.05, -232);
+	makeAnimatedLuaSprite("shift", "stages/sky/bg_manifest", -388.05, -232);
     addAnimationByIndices("shift", "idle", "bg_manifest", "5", 24);
     addAnimationByPrefix('shift', 'bop', 'bg_manifest', 24, false);
 	objectPlayAnimation('shift', 'idle');
-    makeAnimatedLuaSprite("floor", "sky/floorManifest", -1053.1, -464.7);
+    makeAnimatedLuaSprite("floor", "stages/sky/floorManifest", -1053.1, -464.7);
     addAnimationByIndices("floor", "idle", "floorManifest", "5", 24);
     addAnimationByPrefix('floor', 'bop', 'floorManifest', 24, false);
 	objectPlayAnimation('floor', 'idle');

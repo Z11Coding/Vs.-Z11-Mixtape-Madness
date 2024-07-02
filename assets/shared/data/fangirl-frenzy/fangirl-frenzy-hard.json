@@ -44,7 +44,7 @@
 					[
 						"Change Character",
 						"dad",
-						"OskyHighMad"
+						"sky-annoyed"
 					]
 				]
 			],
@@ -8476,6 +8476,26 @@
 			{
 				"sectionBeats": 4,
 				"sectionNotes": [],
+				"gfSection": false,
+				"altAnim": false,
+				"exSection": false,
+				"mustHitSection": true,
+				"changeBPM": false,
+				"bpm": 200
+			},
+			{
+				"sectionNotes": [],
+				"sectionBeats": 4,
+				"altAnim": false,
+				"exSection": false,
+				"gfSection": false,
+				"bpm": 200,
+				"changeBPM": false,
+				"mustHitSection": true
+			},
+			{
+				"sectionBeats": 4,
+				"sectionNotes": [],
 				"exSection": false,
 				"gfSection": false,
 				"altAnim": false,
@@ -8492,13 +8512,23 @@
 				"changeBPM": false,
 				"exSection": false,
 				"mustHitSection": true
+			},
+			{
+				"gfSection": false,
+				"altAnim": false,
+				"sectionNotes": [],
+				"bpm": 200,
+				"sectionBeats": 4,
+				"changeBPM": false,
+				"exSection": false,
+				"mustHitSection": true
 			}
 		],
-		"player2": "OskyHigh",
+		"player2": "sky",
 		"player3": null,
 		"mania": 3,
 		"player4": "Zenetta",
-		"player5": "Z11-true-playable",
+		"player5": "Z11-true-player",
 		"song": "Fangirl Frenzy",
 		"stage": "manifest",
 		"needsVoices": true,

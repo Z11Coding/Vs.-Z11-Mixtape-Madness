@@ -4,4 +4,4 @@ resist
 meaglosist
 resist4
 save
-lost
+ghosts
