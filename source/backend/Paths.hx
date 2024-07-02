@@ -97,19 +97,50 @@ class Paths
 
 public static function crawlDirectory(directoryPath:String, fileExtension:String, ?targetArray:Array<String>):Array<String> {
     var result:Array<String> = targetArray != null ? targetArray : [];
+	var recurrsion = 0;
+	var fileCount = 0;
     for (folder in FileSystem.readDirectory(FileSystem.absolutePath(directoryPath))) {
         if (FileSystem.isDirectory('$directoryPath/$folder')) {
+			recurrsion++;
             var subDirectoryResult = crawlDirectory('$directoryPath/$folder', fileExtension, result);
             if (targetArray == null) {
                 result = result.concat(subDirectoryResult);
             }
         } else {
             if (folder.endsWith(fileExtension)) {
+				fileCount++;
                 result.push(directoryPath+'/'+folder);                    
             }
         }
     }
+	trace('Crawled directory: ${directoryPath}, and found ${fileCount} files with extension ${fileExtension}. Total files found: ${result.length}');
+//	trace('Files found: ${result}');
+	trace('Recursion: $recurrsion');
     return result;
+}
+
+public static function crawlDirectoryAlt(directoryPath:String, fileExtension:String, ?targetArray:Array<String>):Array<String> {
+    // Helper function with an additional parameter for counting subdirectories
+    function crawl(directoryPath:String, fileExtension:String, result:Array<String>, subdirectoryCount:Int):Array<String> {
+        for (folder in FileSystem.readDirectory(FileSystem.absolutePath(directoryPath))) {
+            if (FileSystem.isDirectory('$directoryPath/$folder')) {
+                // Increment the subdirectory count
+                result = crawl('$directoryPath/$folder', fileExtension, result, subdirectoryCount + 1);
+            } else {
+                if (folder.endsWith(fileExtension)) {
+                    result.push(directoryPath+'/'+folder);                    
+                }
+            }
+        }
+        // Trace the count at the root level of recursion
+        if (subdirectoryCount == 0) {
+            trace('Total subdirectories crawled in: ${directoryPath} = ${subdirectoryCount}');
+        }
+        return result;
+    }
+
+    // Initialize the helper function with a subdirectory count of 0
+    return crawl(directoryPath, fileExtension, targetArray != null ? targetArray : [], 0);
 }
 
 	public static function getPath(file:String, ?type:AssetType = TEXT, ?library:Null<String> = null, ?modsAllowed:Bool = false):String
