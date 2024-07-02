@@ -38,6 +38,7 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 import sys.io.Process;
+import backend.JSONCache;
 
 using StringTools;
 
@@ -225,12 +226,34 @@ class CacheState extends MusicBeatState
 
 			if (ClientPrefs.data.musicPreload2)
 			{
-				Paths.crawlDirectory("assets/shared", ".ogg", music);
+				Paths.crawlDirectory("assets", ".ogg", music);
 				Paths.crawlDirectory("mods", ".png", modMusic);
 			}
 			//this took me waaay too long to just delete
 			//nvm I ended up deleting it anyway
+
+			//JSONCache.addToCache(Paths.crawlDirectory("assets/shared", ".json"));
+			//JSONCache.addToCache(Paths.crawlDirectory("mods", ".json"));
+
+			var jsonCache = function() {
+				var jsonCache:Array<String> = [];
+				Paths.crawlDirectory("assets", ".json", jsonCache);
+				Paths.crawlDirectory("mods", ".json", jsonCache);
+				
+				for (json in jsonCache)
+				{
+					JSONCache.addToCache(json);
+				}
+				return true;
+			}
+
+			jsonCache();
+
+			trace(JSONCache.charts());
+
+
 			#end
+
 
 			loadTotal = images.length + modImages.length + music.length + modMusic.length;
 			trace("Files: " + "Images: " + images + "Images(Mod): " + modImages + "Music: " + music + "Music(Mod): " + modMusic);
