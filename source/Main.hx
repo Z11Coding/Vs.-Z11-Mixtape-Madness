@@ -47,6 +47,8 @@ class Main extends Sprite
 		startFullscreen: false // if the game should start at fullscreen mode
 	};
 
+	//public var initStuff = game;
+
 	public static var fpsVar:FPS;
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
@@ -337,22 +339,23 @@ class Main extends Sprite
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
 	// very cool person for real they don't get enough credit for their work
 	#if CRASH_HANDLER
-	function onCrash(e:UncaughtErrorEvent):Void
-	{
+	public static function onCrash(e:UncaughtErrorEvent):Void {
+	// Prevent further propagation of the error to avoid crashing the application
+	e.preventDefault();
 		var errMsg:String = "";
+		var errType:String = e.error;
 		var path:String;
 		var callStack:Array<StackItem> = CallStack.exceptionStack(true);
 		var dateNow:String = Date.now().toString();
+		var crashState:String = Std.string(FlxG.state);
 
 		dateNow = dateNow.replace(" ", "_");
 		dateNow = dateNow.replace(":", "'");
 
 		path = "./crash/" + "MixtapeEngine_" + dateNow + ".txt";
 
-		for (stackItem in callStack)
-		{
-			switch (stackItem)
-			{
+		for (stackItem in callStack) {
+			switch (stackItem) {
 				case FilePos(s, file, line, column):
 					errMsg += file + " (line " + line + ")\n";
 				default:
@@ -360,10 +363,11 @@ class Main extends Sprite
 			}
 		}
 
-		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/Z11Coding/Mixtape-Engine\n\n> Crash Handler written by: sqirra-rng\n\nThe Game Will Now Close...";
+		errMsg += "\nUncaught Error: " + e.error + "\nPlease report this error to the GitHub page: https://github.com/Z11Coding/Mixtape-Engine\n\n> Crash Handler written by: sqirra-rng\n> Crash prevented!";
 
-		if (!FileSystem.exists("./crash/"))
+		if (!FileSystem.exists("./crash/")) {
 			FileSystem.createDirectory("./crash/");
+		}
 
 		File.saveContent(path, errMsg + "\n");
 
@@ -371,10 +375,70 @@ class Main extends Sprite
 		Sys.println("Crash dump saved in " + Path.normalize(path));
 
 		Application.current.window.alert(errMsg, "Error!");
-		#if DISCORD_ALLOWED
-		DiscordClient.shutdown();
-		#end
-		Sys.exit(1);
+		trace("Crash caused in: " + Type.getClassName(Type.getClass(FlxG.state)));
+		// Handle different states
+		switch (Type.getClassName(Type.getClass(FlxG.state)).split(".")[Lambda.count(Type.getClassName(Type.getClass(FlxG.state)).split(".")) - 1])
+		{
+			case "PlayState":
+				//	PlayState.instance.Crashed = true;
+				// Check if it's a Null Object Reference error
+				if (errType.contains("Null Object Reference"))
+				{
+					if (PlayState.isStoryMode)
+					{
+						FlxG.switchState(new states.StoryMenuState());
+					}
+					else
+					{
+						FlxG.switchState(new states.FreeplayState());
+					}
+				}
+
+
+			case "ChartingState":
+				// Check if it's a "Chart doesn't exist" error
+				if (e.error.toLowerCase().contains("null object reference"))
+				{
+					// Show an extra error dialog
+					Application.current.window.alert("You tried to load a Chart that doesn't exist!", "Chart Error");
+				}
+
+
+			case "FreeplayState", "StoryModeState":
+				// Switch back to MainMenuState
+				FlxG.switchState(new states.MainMenuState());
+
+
+			case "MainMenuState":
+				// Go back to TitleState
+				FlxG.switchState(new states.TitleState());
+
+
+			case "TitleState":
+				// Show an error dialog and close the game
+				Application.current.window.alert("Something went extremely wrong... You may want to check some things in the files!\nFailed to load TitleState!", "Fatal Error");
+							trace("Unable to recover...");
+							//var assetWaitState:AssetWaitState = new AssetWaitState(MusicBeatState); // Provide the initial state
+							Sys.exit(1);
+
+			case "CacheState":
+				Application.current.window.alert("Major Error occurred while caching data.\nSkipping Cache Operation.", "Fatal Error");
+				FlxG.switchState(new states.What());
+
+			default:
+				// For other states, reset to MainMenuState
+				var mainInstance = new Main();
+				var mainGame = mainInstance.game;
+				FlxG.switchState(Type.createInstance(mainGame.initialState, []));
+				trace("Unhandled state: " + (Type.getClassName(Type.getClass(FlxG.state))));
+				trace("Restarting Game...");
+		}
+	
+
+
+	    // Additional error handling or recovery mechanisms can be added here
+
+
 	}
 	#end
 }

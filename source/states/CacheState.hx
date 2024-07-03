@@ -461,7 +461,7 @@ class CacheState extends MusicBeatState
 					}
 				}
 				else{
-					trace("Image: File at " + music[sNmI] + " not found, skipping cache.");
+					trace("Music/Sound: File at " + music[sNmI] + " not found, skipping cache.");
 				}
                 sNmI++;
 				currentLoaded++;
