@@ -433,21 +433,28 @@ class Main extends Sprite
 
 			case "OptionsState", "GameJoltState", "What":
 				// Show an error dialog and restart the game
-				Application.current.window.alert("The game encountered a critical error and will now restart.", "Game Bricked");
-				trace("The game was bricked. Restarting...");
-				var mainInstance = new Main();
-				var mainGame = mainInstance.game;
-				var initialState = Type.getClass(mainGame.initialState);
-				// var cachedData = new haxe.ds.StringMap<Dynamic>();
-				// var cachedData = new haxe.ds.StringMap<Dynamic>();
-				// cachedData.set("ImageCache", ImageCache.cache);
-				// cachedData.set("JSONCache", JSONCache.cache);
-				// var cache = Json.stringify(cachedData);
-				
-				var restartProcess = new Process("MixEngine.exe", ["GameJoltBug", "restart"]);
-				// FlxG.switchState(restartProcess);
-				Sys.exit(1);
+				if (Sys.args().indexOf("-livereload") != -1) {
+					Sys.println("Cannot restart from compiled build.");
+					Application.current.window.alert("The game encountered a critical error.", "Game Bricked");
+					Application.current.window.alert("Unable to restart due to running a Compiled build.", "Error");
 
+				} else {
+					Application.current.window.alert("The game encountered a critical error and will now restart.", "Game Bricked");
+					trace("The game was bricked. Restarting...");
+					var mainInstance = new Main();
+					var mainGame = mainInstance.game;
+					var initialState = Type.getClass(mainGame.initialState);
+					// var cachedData = new haxe.ds.StringMap<Dynamic>();
+					// var cachedData = new haxe.ds.StringMap<Dynamic>();
+					// cachedData.set("ImageCache", ImageCache.cache);
+					// cachedData.set("JSONCache", JSONCache.cache);
+					// var cache = Json.stringify(cachedData);
+					
+					var restartProcess = new Process("MixEngine.exe", ["GameJoltBug", "restart"]);
+					// FlxG.switchState(restartProcess);
+					Sys.exit(1);
+				}
+				trace("Recommended to recompile the game to fix the issue.");
 
 			default:
 				// For other states, reset to MainMenuState
