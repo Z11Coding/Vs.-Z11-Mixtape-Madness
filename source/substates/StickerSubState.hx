@@ -5,7 +5,7 @@ import haxe.Json;
 import lime.utils.Assets;
 import backend.FunkinSprite;
 // import flxtyped group
-import backend.MusicBeatSubState;
+import backend.MusicBeatSubstate;
 import states.StoryMenuState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxTimer;
@@ -26,7 +26,7 @@ import flixel.FlxState;
 using Lambda;
 using StringTools;
 
-class StickerSubState extends MusicBeatSubState
+class StickerSubState extends MusicBeatSubstate
 {
   public var grpStickers:FlxTypedGroup<StickerSprite>;
 
