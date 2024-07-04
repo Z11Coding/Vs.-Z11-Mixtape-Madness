@@ -85,7 +85,7 @@ class FunkinSprite extends FlxSprite
    */
   public function loadTexture(key:String):FunkinSprite
   {
-    var graphicKey:String = Paths.image(key);
+    var graphicKey:String = Paths.image(key).assetsKey;
     if (!isTextureCached(graphicKey)) FlxG.log.warn('Texture not cached, may experience stuttering! $graphicKey');
 
     loadGraphic(graphicKey);
@@ -124,7 +124,7 @@ class FunkinSprite extends FlxSprite
    */
   public function loadSparrow(key:String):FunkinSprite
   {
-    var graphicKey:String = Paths.image(key);
+    var graphicKey:String = Paths.image(key).assetsKey;
     if (!isTextureCached(graphicKey)) FlxG.log.warn('Texture not cached, may experience stuttering! $graphicKey');
 
     this.frames = Paths.getSparrowAtlas(key);
@@ -139,7 +139,7 @@ class FunkinSprite extends FlxSprite
    */
   public function loadPacker(key:String):FunkinSprite
   {
-    var graphicKey:String = Paths.image(key);
+    var graphicKey:String = Paths.image(key).assetsKey;
     if (!isTextureCached(graphicKey)) FlxG.log.warn('Texture not cached, may experience stuttering! $graphicKey');
 
     this.frames = Paths.getPackerAtlas(key);
@@ -191,12 +191,12 @@ class FunkinSprite extends FlxSprite
 
   public static function cacheSparrow(key:String):Void
   {
-    cacheTexture(Paths.image(key));
+    cacheTexture(Paths.image(key).assetsKey);
   }
 
   public static function cachePacker(key:String):Void
   {
-    cacheTexture(Paths.image(key));
+    cacheTexture(Paths.image(key).assetsKey);
   }
 
   /**
