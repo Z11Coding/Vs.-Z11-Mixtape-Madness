@@ -352,7 +352,7 @@ class TitleState extends MusicBeatState
 	
 	public static function transitionRandom():Void {
 		// List of all transition types.
-		var transitionTypes:Array<String> = ["fadeOut", "fadeColor", "slideLeft", "slideRight", "slideUp", "slideDown", "slideRandom", "fallRandom", "fallSequential"];
+		var transitionTypes:Array<String> = ["fadeOut", "fadeColor", "slideLeft", "slideRight", "slideUp", "slideDown", "slideRandom", "fallRandom", "fallSequential", "stickers"];
 		
 		// Randomly select a transition type using FlxG.random for better seed management
 		var randomTransitionType:String = transitionTypes[FlxG.random.int(0, transitionTypes.length - 1)];

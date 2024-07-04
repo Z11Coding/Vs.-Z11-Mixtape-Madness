@@ -123,6 +123,25 @@ class MusicBeatState extends FlxUIState
 		if(curSection > lastSection) sectionHit();
 	}
 
+	    /**
+     * Plays music and sets the BPM for the Conductor.
+     * @param musicPath The path to the music file.
+     * @param bpm The beats per minute to set for the Conductor.
+     * @param volume The volume for the music (0 to 1). Optional, defaults to 1.
+     */
+	 public function playMusic(musicPath:String, bpm:Float, volume:Float = 1):Void {
+        // Stop any currently playing music
+        if (FlxG.sound.music != null && FlxG.sound.music.playing) {
+            FlxG.sound.music.stop();
+        }
+
+        // Play the new music track
+        FlxG.sound.playMusic(Paths.music(musicPath), volume);
+
+        // Change the BPM in the Conductor
+        Conductor.changeBPM(bpm);
+    }
+
 	private function updateBeat():Void
 	{
 		curBeat = Math.floor(curStep / 4);

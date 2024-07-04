@@ -150,6 +150,33 @@ class StickerSubState extends MusicBeatSubstate
     }
   }
 
+  function getRandomStickerSet(stickers:Map<String, Array<String>>):String {
+    var stickerSets:Array<String> = [];
+    for (stickerSet in stickers.keys()) {
+      stickerSets.push(stickerSet);
+    }
+    var totalWeight:Int = 0;
+    var weights:Array<Int> = [];
+
+    for (stickerSet in stickerSets) {
+      var weight:Int = stickers.get(stickerSet).length;
+      totalWeight += weight;
+      weights.push(totalWeight);
+    }
+
+    var randomValue:Int = FlxG.random.int(0, totalWeight - 1);
+
+    for (i in 0...weights.length) {
+      if (randomValue < weights[i]) {
+      trace(stickerSets[i]);
+      return stickerSets[i];
+      }
+    }
+
+    trace("");
+    return "";
+    }
+
   function regenStickers():Void
   {
     if (grpStickers.members.length > 0)
@@ -166,11 +193,14 @@ class StickerSubState extends MusicBeatSubstate
 
     var xPos:Float = -100;
     var yPos:Float = -100;
-    while (xPos <= FlxG.width)
+    var loopCount:Int = 0; // Add a loop count variable
+    while (xPos <= FlxG.width && loopCount < 100) // Add a condition to limit the loop count
     {
-      var stickerSet:String = FlxG.random.getObject(stickers.keyValues());
+      var stickerSet:String = getRandomStickerSet(stickers);
       var sticker:String = FlxG.random.getObject(stickers.get(stickerSet));
       var sticky:StickerSprite = new StickerSprite(0, 0, stickerInfo.name, sticker);
+
+
       sticky.visible = false;
 
       sticky.x = xPos;
@@ -188,38 +218,12 @@ class StickerSubState extends MusicBeatSubstate
 
       sticky.angle = FlxG.random.int(-60, 70);
       grpStickers.add(sticky);
+
+      loopCount++; // Increment the loop count
     }
 
     FlxG.random.shuffle(grpStickers.members);
 
-    // var stickerCount:Int = 0;
-
-    // for (w in 0...6)
-    // {
-    //   var xPos:Float = FlxG.width * (w / 6);
-    //   for (h in 0...6)
-    //   {
-    //     var yPos:Float = FlxG.height * (h / 6);
-    //     var sticker = grpStickers.members[stickerCount];
-    //     xPos -= sticker.width / 2;
-    //     yPos -= sticker.height * 0.9;
-    //     sticker.x = xPos;
-    //     sticker.y = yPos;
-
-    //     stickerCount++;
-    //   }
-    // }
-
-    // for (ind => sticker in grpStickers.members)
-    // {
-    //   sticker.x = (ind % 8) * sticker.width;
-    //   var yShit:Int = Math.floor(ind / 8);
-    //   sticker.y += yShit * sticker.height;
-    //   // scales it juuuust a smidge
-    //   sticker.y += 20 * yShit;
-    // }
-
-    // another damn for loop... apologies!!!
     for (ind => sticker in grpStickers.members)
     {
       sticker.timing = FlxMath.remapToRange(ind, 0, grpStickers.members.length, 0, 0.9);
@@ -229,12 +233,10 @@ class StickerSubState extends MusicBeatSubstate
 
         sticker.visible = true;
         var daSound:String = FlxG.random.getObject(sounds);
-        //FunkinSound.playOnce(Paths.sound(daSound));
         FlxG.sound.play(Paths.sound(daSound));
 
         var frameTimer:Int = FlxG.random.int(0, 2);
 
-        // always make the last one POP
         if (ind == grpStickers.members.length - 1) frameTimer = 2;
 
         new FlxTimer().start((1 / 24) * frameTimer, _ -> {
@@ -249,24 +251,7 @@ class StickerSubState extends MusicBeatSubstate
             FlxTransitionableState.skipNextTransIn = true;
             FlxTransitionableState.skipNextTransOut = true;
 
-            // I think this grabs the screen and puts it under the stickers?
-            // Leaving this commented out rather than stripping it out because it's cool...
-            /*
-              dipshit = new Sprite();
-              var scrn:BitmapData = new BitmapData(FlxG.width, FlxG.height, true, 0x00000000);
-              var mat:Matrix = new Matrix();
-              scrn.draw(grpStickers.cameras[0].canvas, mat);
-
-              var bitmap:Bitmap = new Bitmap(scrn);
-
-              dipshit.addChild(bitmap);
-              // FlxG.addChildBelowMouse(dipshit);
-             */
-
             FlxG.switchState(() -> {
-              // TODO: Rework this asset caching stuff
-              // NOTE: This has to come AFTER the state switch,
-              // otherwise the game tries to render destroyed sprites!
               FunkinSprite.preparePurgeCache();
               FunkinSprite.purgeCache();
 
@@ -281,7 +266,6 @@ class StickerSubState extends MusicBeatSubstate
       return FlxSort.byValues(ord, a.timing, b.timing);
     });
 
-    // centers the very last sticker
     var lastOne:StickerSprite = grpStickers.members[grpStickers.members.length - 1];
     lastOne.updateHitbox();
     lastOne.angle = 0;
