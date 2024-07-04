@@ -188,7 +188,7 @@ class MusicBeatState extends FlxUIState
 		else 
 		{
 			//trace("Transitioning to ${nextState} with random transition: ${options}");
-			TransitionState.transitionState(nextState, options);
+			TransitionState.transitionState(Type.getClass(nextState), options);
 			trace("Transition complete");
 		}
 		FlxTransitionableState.skipNextTransIn = false;
