@@ -165,8 +165,32 @@ class MusicBeatState extends FlxUIState
 			return;
 		}
 
+		// List of all transition types.
+		var transitionTypes:Array<String> = [/*"fadeOut", "fadeColor", "slideLeft", "slideRight", "slideUp", "slideDown", "slideRandom", "fallRandom", "fallSequential",*/ "stickers"];
+		
+		// Randomly select a transition type using FlxG.random for better seed management
+		var randomTransitionType:String = transitionTypes[FlxG.random.int(0, transitionTypes.length - 1)];
+		
+		// Randomly select a color for fadeColor transition, if chosen, using FlxG.random
+		var randomColor:Int = randomTransitionType == "fadeColor" ? FlxG.random.color() : FlxColor.BLACK;
+		
+		// Define options with random values
+		var options:Dynamic = {
+			transitionType: randomTransitionType,
+			duration: FlxG.random.float(0.5, 2), // Random duration between 0.5 and 2 seconds
+			color: randomColor, // Only used if fadeColor is selected
+			createInstance: true,
+			// For fallRandom and fallSequential, decide randomly if objects should fall in random directions
+			randomDirection: FlxG.random.bool()
+		};
+
 		if(FlxTransitionableState.skipNextTransIn) FlxG.switchState(nextState);
-		else startTransition(nextState);
+		else 
+		{
+			//trace("Transitioning to ${nextState} with random transition: ${options}");
+			TransitionState.transitionState(nextState, options);
+			trace("Transition complete");
+		}
 		FlxTransitionableState.skipNextTransIn = false;
 	}
 

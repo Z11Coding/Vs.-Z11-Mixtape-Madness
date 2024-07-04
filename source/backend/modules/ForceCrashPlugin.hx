@@ -27,6 +27,7 @@ class ForceCrashPlugin extends FlxBasic
     {
       // TODO: Make this message 87% funnier.
       throw "DEBUG: Crashing the game via debug keybind!";
+      Sys.exit(1); //Makes sure the came closes
     }
   }
 
