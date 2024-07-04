@@ -207,7 +207,7 @@ class CacheState extends MusicBeatState
 				&& FlxG.save.data.graphicsPreload2 != null && ClientPrefs.data.graphicsPreload2 == false) {
 				new FlxTimer().start(1, function(tmr:FlxTimer)
 				{
-					LoadingState.loadAndSwitchState(new TitleState());
+					LoadingState.loadAndSwitchState(new What());
 				});
 			}	
 
@@ -220,7 +220,7 @@ class CacheState extends MusicBeatState
 			#if cpp
 			if (ClientPrefs.data.graphicsPreload2)
 			{
-				Paths.crawlDirectory("assets/shared", ".png", images);
+				Paths.crawlDirectory("assets", ".png", images);
 				Paths.crawlDirectory("mods", ".png", modImages);
 			}
 

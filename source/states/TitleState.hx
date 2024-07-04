@@ -10,6 +10,7 @@ import flixel.graphics.frames.FlxFrame;
 import flixel.group.FlxGroup;
 import flixel.input.gamepad.FlxGamepad;
 import haxe.Json;
+import flixel.math.FlxRandom;
 
 import openfl.Assets;
 import openfl.display.Bitmap;
@@ -50,6 +51,7 @@ class TitleState extends MusicBeatState
 	public static var volumeUpKeys:Array<FlxKey> = [];
 	public static var initialized:Bool = false;
 	public static var globalBPM:Float;
+	private static var GJBug:Bool = false;
 
 	var blackScreen:FlxSprite;
 	var gradientBar:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, 1, 0xFF6800BD);
@@ -159,6 +161,14 @@ class TitleState extends MusicBeatState
 			}
 		}
 		#end
+		if (Main.cmdArgs.indexOf("GameJoltBug") != -1 && !GJBug)
+		{
+			GJBug = true;
+				FlxG.sound.playMusic(Paths.music('panixPress'), 0);
+			
+		
+			FlxG.switchState(new options.OptionsState());
+		}
 	}
 
 	var logoBl:FlxSprite;
@@ -191,10 +201,9 @@ class TitleState extends MusicBeatState
 			// FlxG.sound.list.add(music);
 			// music.play();
 
-			if(FlxG.sound.music == null) {
+			if (FlxG.sound.music == null || !FlxG.sound.music.playing) {
 				FlxG.sound.playMusic(Paths.music('panixPress'), 0);
 			}
-			else if (!FlxG.sound.music.playing) FlxG.sound.playMusic(Paths.music('panixPress'), 0);
 
 			GameJoltAPI.connect();
 			GameJoltAPI.authDaUser(FlxG.save.data.gjUser, FlxG.save.data.gjToken);
@@ -340,6 +349,33 @@ class TitleState extends MusicBeatState
 		// credGroup.add(credTextShit);
 	}
 
+	
+	public static function transitionRandom():Void {
+		// List of all transition types.
+		var transitionTypes:Array<String> = ["fadeOut", "fadeColor", "slideLeft", "slideRight", "slideUp", "slideDown", "slideRandom", "fallRandom", "fallSequential"];
+		
+		// Randomly select a transition type using FlxG.random for better seed management
+		var randomTransitionType:String = transitionTypes[FlxG.random.int(0, transitionTypes.length - 1)];
+		
+		// Randomly select a color for fadeColor transition, if chosen, using FlxG.random
+		var randomColor:Int = randomTransitionType == "fadeColor" ? FlxG.random.color() : FlxColor.BLACK;
+		
+		// Define options with random values
+		var options:Dynamic = {
+			transitionType: randomTransitionType,
+			duration: FlxG.random.float(0.5, 2), // Random duration between 0.5 and 2 seconds
+			color: randomColor, // Only used if fadeColor is selected
+			createInstance: true,
+			// For fallRandom and fallSequential, decide randomly if objects should fall in random directions
+			randomDirection: FlxG.random.bool()
+		};
+		
+		// Call transitionState with MainMenuState as the target state and random options
+		trace("Transitioning to MainMenuState with random transition: " + options);
+		TransitionState.transitionState(MainMenuState, options);
+		trace("Transition complete");
+	}
+
 	function getIntroTextShit():Array<Array<String>>
 	{
 		var fullText:String = Assets.getText(Paths.txt('introText'));
@@ -454,7 +490,7 @@ class TitleState extends MusicBeatState
 							} catch(e) {
 								trace(e.details());
 								trace(e.stack.toString());
-								FlxG.switchState(new MainMenuState());
+								transitionRandom();
 								
 							}
 						});
@@ -462,11 +498,19 @@ class TitleState extends MusicBeatState
 						updateAlphabet.visible = true;
 						updateRibbon.visible = true;
 						updateRibbon.alpha = 0;
+						
+						// var slideDirection:Float = FlxG.random.sign();
+						// var slideSpeed:Float = FlxG.random.float(100, 200);
+						
+						// var randomDuration:Float = FlxG.random.float(1, 3);
+						// FlxTween.tween(updateIcon, { x: updateIcon.x + (slideDirection * FlxG.width) }, randomDuration, { ease: FlxEase.linear });
+						// FlxTween.tween(updateAlphabet, { x: updateAlphabet.x + (slideDirection * FlxG.width) }, randomDuration, { ease: FlxEase.linear });
+						// FlxTween.tween(updateRibbon, { x: updateRibbon.x + (slideDirection * FlxG.width) }, randomDuration, { ease: FlxEase.linear });
 						#else
-						FlxG.switchState(new MainMenuState());
+						transitionRandom();
 						#end
 					} else {
-						FlxG.switchState(new MainMenuState());
+						transitionRandom();
 					}
 					
 				});
@@ -524,7 +568,7 @@ class TitleState extends MusicBeatState
 		else
 		{
 		#end
-		FlxG.switchState(new MainMenuState());
+		transitionRandom();
 		#if enable_updates
 		}
 		#end
@@ -586,9 +630,12 @@ class TitleState extends MusicBeatState
 			switch (sickBeats)
 			{
 				case 1:
-					//FlxG.sound.music.stop();
-					FlxG.sound.playMusic(Paths.music('panixPress'), 0);
-					FlxG.sound.music.fadeIn(4, 0, 0.7);
+					if (!playJingle) {
+						//FlxG.sound.music.stop();
+						FlxG.sound.playMusic(Paths.music('panixPress'), 0);
+						FlxG.sound.music.fadeIn(4, 0, 0.7);
+						playJingle = true;
+					}
 				case 2:
 					#if PSYCH_WATERMARKS
 					createCoolText(['Psych Engine by'], 15);

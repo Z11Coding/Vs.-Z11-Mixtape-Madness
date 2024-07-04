@@ -16,6 +16,8 @@ import backend.AudioSwitchFix;
 import backend.FunkinRatioScaleMode;
 import backend.MemoryCounter;
 import haxe.ui.Toolkit;
+import backend.ImageCache;
+import backend.JSONCache;
 
 #if linux
 import lime.graphics.Image;
@@ -46,6 +48,7 @@ class Main extends Sprite
 		skipSplash: true, // if the default flixel splash screen should be skipped
 		startFullscreen: false // if the game should start at fullscreen mode
 	};
+	public static var cmdArgs:Array<String> = Sys.args();
 
 	//public var initStuff = game;
 
@@ -427,6 +430,24 @@ class Main extends Sprite
 			case "CacheState":
 				Application.current.window.alert("Major Error occurred while caching data.\nSkipping Cache Operation.", "Fatal Error");
 				FlxG.switchState(new states.What());
+
+			case "OptionsState", "GameJoltState", "What":
+				// Show an error dialog and restart the game
+				Application.current.window.alert("The game encountered a critical error and will now restart.", "Game Bricked");
+				trace("The game was bricked. Restarting...");
+				var mainInstance = new Main();
+				var mainGame = mainInstance.game;
+				var initialState = Type.getClass(mainGame.initialState);
+				// var cachedData = new haxe.ds.StringMap<Dynamic>();
+				// var cachedData = new haxe.ds.StringMap<Dynamic>();
+				// cachedData.set("ImageCache", ImageCache.cache);
+				// cachedData.set("JSONCache", JSONCache.cache);
+				// var cache = Json.stringify(cachedData);
+				
+				var restartProcess = new Process("MixEngine.exe", ["GameJoltBug", "restart"]);
+				// FlxG.switchState(restartProcess);
+				Sys.exit(1);
+
 
 			default:
 				// For other states, reset to MainMenuState
