@@ -94,6 +94,21 @@ class FunkinSprite extends FlxSprite
   }
 
   /**
+   * Load a static image as the sprite's texture.
+   * @param key The key of the texture to load.
+   * @return This sprite, for chaining.
+   */
+  public function loadSticker(key:String):FunkinSprite
+  {
+    var graphicKey:String = Paths.file2(key, 'images/transitionSwag', 'png');
+    if (!isTextureCached(graphicKey)) FlxG.log.warn('Texture not cached, may experience stuttering! $graphicKey');
+
+    loadGraphic(graphicKey);
+
+    return this;
+  }
+
+  /**
    * Apply an OpenFL `BitmapData` to this sprite.
    * @param input The OpenFL `BitmapData` to apply
    * @return This sprite, for chaining

@@ -193,8 +193,8 @@ class StickerSubState extends MusicBeatSubstate
 
     var xPos:Float = -100;
     var yPos:Float = -100;
-    var loopCount:Int = 0; // Add a loop count variable
-    while (xPos <= FlxG.width && loopCount < 100) // Add a condition to limit the loop count
+    //var loopCount:Int = 0; // Add a loop count variable
+    while (xPos <= FlxG.width /*&& loopCount < 100*/) // Add a condition to limit the loop count
     {
       var stickerSet:String = getRandomStickerSet(stickers);
       var sticker:String = FlxG.random.getObject(stickers.get(stickerSet));
@@ -219,7 +219,7 @@ class StickerSubState extends MusicBeatSubstate
       sticky.angle = FlxG.random.int(-60, 70);
       grpStickers.add(sticky);
 
-      loopCount++; // Increment the loop count
+      //loopCount++; // Increment the loop count
     }
 
     FlxG.random.shuffle(grpStickers.members);
@@ -304,7 +304,7 @@ class StickerSprite extends FunkinSprite
   public function new(x:Float, y:Float, stickerSet:String, stickerName:String):Void
   {
     super(x, y);
-    loadTexture('transitionSwag/' + stickerSet + '/' + stickerName);
+    loadSticker('' + stickerSet + '/' + stickerName);
     updateHitbox();
     scrollFactor.set();
   }
