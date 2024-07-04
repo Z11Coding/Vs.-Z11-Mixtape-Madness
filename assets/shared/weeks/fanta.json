@@ -1,0 +1,33 @@
+{
+	"storyName": "",
+	"difficulties": "Hard",
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"weekBefore": "tutorial",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"startUnlocked": true,
+	"hideStoryMode": false,
+	"songs": [
+		[
+			"Funky Fanta",
+			"fanta",
+			[
+				254,
+				134,
+				29
+			]
+		]
+	],
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"category": "oneshots",
+	"hiddenUntilUnlocked": false,
+	"weekName": ""
+}

@@ -1,0 +1,42 @@
+{
+	"storyName": "",
+	"difficulties": "Hard",
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"weekBefore": "tutorial",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"startUnlocked": true,
+	"hideStoryMode": true,
+	"songs": [
+		[
+			"Beat Battle 2",
+			"cg",
+			[
+				67,
+				67,
+				175
+			]
+		],
+		[
+			"ULS",
+			"fanta",
+			[
+				155,
+				40,
+				255
+			]
+		]
+	],
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"category": "oneshots",
+	"hiddenUntilUnlocked": false,
+	"weekName": ""
+}

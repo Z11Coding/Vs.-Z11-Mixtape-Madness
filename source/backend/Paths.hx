@@ -718,6 +718,11 @@ public static function crawlDirectoryAlt(directoryPath:String, fileExtension:Str
 			return false;
 		return OpenFlAssets.exists(path, AssetType.IMAGE);
 	}
+
+	public static function file(file:String, type:AssetType = TEXT, ?library:String):String
+	{
+		return getPath(file, type, library);
+	}
 	
 	static final audioExtension:String = "ogg";
 
