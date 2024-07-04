@@ -428,11 +428,11 @@ class MainMenuState extends MusicBeatState
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				TransitionState.transitionState(TitleState, null, []);
 				// Main Menu Back Animations
-				// FlxTween.tween(FlxG.camera, {zoom: 5}, 0.8, {ease: FlxEase.expoIn});
-				// FlxTween.tween(bg, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
-				// FlxTween.tween(bgdiferent, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
-				// FlxTween.tween(bg, {alpha: 0}, 0.8, {ease: FlxEase.expoIn});
-				// FlxTween.tween(bgdiferent, {alpha: 0}, 0.8, {ease: FlxEase.expoIn});
+				FlxTween.tween(FlxG.camera, {zoom: 5}, 0.8, {ease: FlxEase.expoIn});
+				FlxTween.tween(bg, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
+				FlxTween.tween(bgdiferent, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
+				FlxTween.tween(bg, {alpha: 0}, 0.8, {ease: FlxEase.expoIn});
+				FlxTween.tween(bgdiferent, {alpha: 0}, 0.8, {ease: FlxEase.expoIn});
 				if (!ClientPrefs.data.lowQuality)
 				{
 					FlxTween.tween(logoBl, {
