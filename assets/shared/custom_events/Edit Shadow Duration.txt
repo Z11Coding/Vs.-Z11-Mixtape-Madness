@@ -1,0 +1,9 @@
+Value 1: Character to edit the duration (dad, gf, boyfriend)
+Value 2: New durtaion number
+
+To edit the duration of a character, put a new number in 
+Value 2 to edit the duration of the shadow.
+Bigger the number, Longer the duration.
+Fill the Value 2 with 0 if you want to use default. 
+
+WARNING : VALUE 2 MUST BE AN INTEGER

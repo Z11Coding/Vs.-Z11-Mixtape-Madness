@@ -40,9 +40,7 @@ class JSONCache {
                             }
                         }
                         cache.set(filePath, noteList);
-                        
-                trace("Notes cached successfully");
-
+                        trace("Notes cached successfully");
                     }
                 }
             }            } catch (error:Dynamic) {

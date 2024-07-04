@@ -16,18 +16,18 @@
 			"Fangirl Frenzy",
 			"sky",
 			[
-				26,
-				173,
-				253
+				0,
+				140,
+				240
 			]
 		],
 		[
 			"Familiar Freakout",
-			"dad",
+			"manifest",
 			[
-				146,
-				113,
-				253
+				0,
+				0,
+				0
 			]
 		]
 	],
@@ -36,7 +36,7 @@
 		"",
 		""
 	],
-	"category": "extras",
+	"category": "bonus",
 	"hiddenUntilUnlocked": false,
 	"weekName": "Fanicon"
 }

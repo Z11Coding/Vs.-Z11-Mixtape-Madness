@@ -1,0 +1,5 @@
+Fatality Popup WOW (this only took me 15 hours to make) 
+Value 1: the amount of pop-ups
+Value 2: type (a, b, or c)
+Type b ignores the hard cap of 10 pop-ups and are also a bit bigger.
+Type c is the same but a lot bigger and covers most of the screen.

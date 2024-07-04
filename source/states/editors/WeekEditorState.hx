@@ -719,6 +719,15 @@ class WeekEditorFreeplayState extends MusicBeatState
 			}
 		});
 
+		var decideIconColor:FlxButton = new FlxButton(140, copyColor.y + 30, "Get Icon Color", function()
+		{
+			var coolColor:FlxColor = FlxColor.fromInt(CoolUtil.dominantColor(iconArray[curSelected]));
+			bgColorStepperR.value = coolColor.red;
+			bgColorStepperG.value = coolColor.green;
+			bgColorStepperB.value = coolColor.blue;
+			updateBG();
+		});
+
 		iconInputText = new FlxUIInputText(10, bgColorStepperR.y + 70, 100, '', 8);
 
 		var hideFreeplayCheckbox:FlxUICheckBox = new FlxUICheckBox(10, iconInputText.y + 30, null, null, "Hide Week from Freeplay?", 100);
@@ -735,6 +744,7 @@ class WeekEditorFreeplayState extends MusicBeatState
 		tab_group.add(bgColorStepperB);
 		tab_group.add(copyColor);
 		tab_group.add(pasteColor);
+		tab_group.add(decideIconColor);
 		tab_group.add(iconInputText);
 		tab_group.add(hideFreeplayCheckbox);
 		UI_box.addGroup(tab_group);
@@ -787,7 +797,11 @@ class WeekEditorFreeplayState extends MusicBeatState
 		updateBG();
 	}
 
+	var icon:HealthIcon;
 	override function update(elapsed:Float) {
+
+		icon = iconArray[curSelected];
+
 		if(WeekEditorState.loadedWeek != null) {
 			super.update(elapsed);
 			FlxTransitionableState.skipNextTransIn = true;

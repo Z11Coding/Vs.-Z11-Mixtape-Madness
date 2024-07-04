@@ -3,19 +3,14 @@
 	"difficulties": "Hard",
 	"hideFreeplay": false,
 	"weekBackground": "",
+	"weekBefore": "tutorial",
 	"freeplayColor": [
 		146,
 		113,
 		253
 	],
-	"weekBefore": "tutorial",
 	"startUnlocked": true,
-	"category": "main",
-	"weekCharacters": [
-		"",
-		"",
-		""
-	],
+	"hideStoryMode": true,
 	"songs": [
 		[
 			"Resistance",
@@ -54,7 +49,12 @@
 			]
 		]
 	],
-	"hideStoryMode": true,
-	"weekName": "Godly Resistance",
-	"hiddenUntilUnlocked": false
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"category": "bonus",
+	"hiddenUntilUnlocked": false,
+	"weekName": "Godly Resistance"
 }

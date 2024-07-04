@@ -6,7 +6,7 @@ class CategoryState extends MusicBeatState
 	var grpLocks:FlxTypedGroup<FlxSprite>;
 
 	public var menuItems:Array<String> = [
-		"Main", "Extras"
+		"Oneshots", "Remixes", "Bonus", "Secrets"
 	];
 	public var menuLocks:Array<Bool> = [
 		false, false

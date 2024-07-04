@@ -1,0 +1,33 @@
+{
+	"storyName": "Nothin' Personel, Kid.",
+	"difficulties": "Personel, Serious",
+	"hideFreeplay": false,
+	"weekBackground": "stage",
+	"weekBefore": "tutorial",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"startUnlocked": true,
+	"category": "remixes",
+	"hideStoryMode": true,
+	"songs": [
+		[
+			"Personel (Z11 Mix)",
+			"coldsteel",
+			[
+				206,
+				93,
+				253
+			]
+		]
+	],
+	"weekCharacters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"hiddenUntilUnlocked": false,
+	"weekName": "My Personel Buisness"
+}

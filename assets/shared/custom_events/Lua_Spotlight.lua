@@ -15,7 +15,7 @@ function onCreatePost()
     setProperty('dramaticBlackBG.visible', false)
     addLuaSprite('dramaticBlackBG')
 
-    makeLuaSprite('dadSpotlight', 'spotlight', 400, -400) -- light
+    makeLuaSprite('dadSpotlight', 'stages/stage/spotlight', 400, -400) -- light
     setProperty('dadSpotlight.alpha', 0.375)
     setProperty('dadSpotlight.visible', false)
     scaleObject('dadSpotlight', 1.5, 1.5, true)
@@ -33,7 +33,7 @@ function onCreatePost()
         end
 
         -- smoke barbecue bacon burger
-        makeLuaSprite('stageSmoke'..i, 'smoke', smokeX + 200, 660 + getRandomFloat(-20, 20))
+        makeLuaSprite('stageSmoke'..i, 'stages/stage/smoke', smokeX + 200, 660 + getRandomFloat(-20, 20))
         setScrollFactor('stageSmoke'..i, 1.2, 1.05)
         setGraphicSize('stageSmoke'..i, getProperty('stageSmoke'..i..'.width') * getRandomFloat(1.1, 1.22))
         updateHitbox('stageSmoke'..i)

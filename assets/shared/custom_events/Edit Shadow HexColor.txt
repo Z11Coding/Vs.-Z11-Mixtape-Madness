@@ -1,0 +1,6 @@
+Value 1: Character to edit the shadow (dad, gf, boyfriend)
+Value 2: HexColor 
+
+If you want to edit the color of the shadow,
+put at new hex color to value2 to make a 
+new color. *(Example : 00f2ff) for blue color

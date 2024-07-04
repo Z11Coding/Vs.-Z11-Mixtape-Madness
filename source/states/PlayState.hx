@@ -1090,7 +1090,7 @@ class PlayState extends MusicBeatState
 			iconP1.alpha = ClientPrefs.data.healthBarAlpha;
 			add(iconP1);
 
-			if (bf2 != null)
+			if (bf2 != null && bf2.curCharacter == 'girlf')
 			{
 				iconP12 = new HealthIcon(bf2.healthIcon, true);
 				iconP12.y = healthBar.y - 115;
@@ -4099,9 +4099,9 @@ class PlayState extends MusicBeatState
 				var multA:Float = FlxMath.lerp(1, iconP12.angle, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
 				iconP12.angle = multA;
 				switch (iconP12.type) {
-					case SINGLE: iconP12.animation.curAnim.curFrame = 0;
-					case WINNING: iconP12.animation.curAnim.curFrame = (healthBar.percent > 80 ? 2 : (healthBar.percent < 20 ? 1 : 0));
-					default: iconP12.animation.curAnim.curFrame = (healthBar.percent < 20 ? 1 : 0);
+					case SINGLE: iconP2.animation.curAnim.curFrame = 0;
+					case WINNING: iconP2.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : (healthBar.percent < 20 ? 2 : 0));
+					default: iconP2.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : 0);
 				}
 				iconP12.x = iconP1.x + 25;
 			}
@@ -4423,7 +4423,8 @@ class PlayState extends MusicBeatState
 				} else if(boyfriend.holdTimer > Conductor.stepCrochet * 0.001 * boyfriend.singDuration && boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss')) {
 					boyfriend.dance();
 					//boyfriend.animation.curAnim.finish();
-				} else if(bf2 != null && bf2.holdTimer > Conductor.stepCrochet * 0.001 * bf2.singDuration && bf2.animation.curAnim.name.startsWith('sing') && !bf2.animation.curAnim.name.endsWith('miss')) {
+				}
+				if(bf2 != null && bf2.holdTimer > Conductor.stepCrochet * 0.001 * bf2.singDuration && bf2.animation.curAnim.name.startsWith('sing') && !bf2.animation.curAnim.name.endsWith('miss')) {
 					bf2.dance();
 					//boyfriend.animation.curAnim.finish();
 				}

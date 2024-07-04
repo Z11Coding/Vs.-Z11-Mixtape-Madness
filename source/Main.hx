@@ -289,6 +289,9 @@ class Main extends Sprite
 
 		gjToastManager = new GJToastManager();
 		addChild(gjToastManager);
+		backend.modules.EvacuateDebugPlugin.initialize();
+		backend.modules.ForceCrashPlugin.initialize();
+		backend.modules.MemoryGCPlugin.initialize();
 	}
 
 	function initHaxeUI():Void

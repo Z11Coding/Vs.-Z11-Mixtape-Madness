@@ -24,7 +24,7 @@ class EvacuateDebugPlugin extends FlxBasic
 
     if (FlxG.keys.justPressed.F4)
     {
-      FlxG.switchState(() -> new states.MainMenuState());
+      FlxG.switchState(new states.MainMenuState());
     }
   }
 
