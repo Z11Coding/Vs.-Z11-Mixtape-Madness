@@ -5,6 +5,8 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.math.FlxRandom;
+import flixel.state.*;
+import substates.StickerSubState;
 
 class TransitionState {
     static function switchState(targetState:Class<FlxState>, ?onComplete:Dynamic, ?stateArgs:Array<Dynamic> = null):Void {
@@ -18,7 +20,7 @@ class TransitionState {
     public static function transitionState(targetState:Class<FlxState>, options:Dynamic = null, ?args:Array<Dynamic>):Void {
         if (options == null) {
             // If options are null, select a random transition
-            var transitions = ["fadeOut", "fadeColor", "slideLeft", "slideRight", "slideUp", "slideDown", "slideRandom", "fallRandom", "fallSequential"];
+            var transitions = ["fadeOut", "fadeColor", "slideLeft", "slideRight", "slideUp", "slideDown", "slideRandom", "fallRandom", "fallSequential", "stickers"];
             var random = new FlxRandom();
             options = {
                 transitionType: transitions[random.int(0, transitions.length - 1)],
@@ -128,8 +130,51 @@ class TransitionState {
                     
                     // Start processing with the first object
                     processNextObject();
+
+                    case "stickers":
+                        FlxG.state.openSubState(new substates.StickerSubState(null,  (sticker) -> Type.createInstance(targetState, args != null ? args : [])));
+
+                // case "stickersAlt": 
+                //     var stickers: Array<FlxSprite> = [];
+                //     var completedTweens = 0;
+                //     var totalTweens = 0;
+                
+                //     // Collect valid sprites
+                //     for (object in FlxG.state.members) {
+                //         if (object != null && Std.is(object, FlxSprite)) {
+                //             stickers.push(cast(object));
+                //         }
+                //     }
+                //     totalTweens = stickers.length;
+                
+                //     // Function to check if all tweens are complete
+                //     var checkAllComplete = function() {
+                //         if (completedTweens >= totalTweens) {
+                //             switchState(targetState, onComplete, args);
+                //         }
+                //     };
+                
+                //     // Apply a tween to each sprite with a random delay
+                //     for (sticker in stickers) {
+                //         var delay = FlxG.random.float(0, 1); // Adjust max delay as needed
+                //         var direction = FlxG.random.float(-1, 1);
+                //         var timer = new FlxTimer();
+                //         timer.start(delay, function(timer:FlxTimer) {
+                //             FlxTween.tween(sticker, { y: FlxG.height + sticker.height, x: sticker.x + direction * FlxG.random.float(100, 200) }, duration, {
+                //                 onComplete: function(_) {
+                //                     sticker.exists = false;
+                //                     completedTweens++;
+                //                     checkAllComplete();
+                //                 }
+                //             });
+                //         }, 1);
+                //     }
+                
+                    // In case there are no sprites, directly switch state
+                 //   if (totalTweens == 0) {
+                   //     switchState(targetState, onComplete, args);
         }
-    }
+}
 
     static function slideScreen(x:Float, y:Float, duration:Float, targetState:Class<FlxState>, onComplete:Dynamic, ?args:Array<Dynamic>):Void {
         FlxTween.tween(FlxG.camera.scroll, { x: x, y: y }, duration, {
