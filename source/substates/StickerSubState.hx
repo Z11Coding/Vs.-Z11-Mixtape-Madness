@@ -254,8 +254,9 @@ class StickerSubState extends MusicBeatSubstate
             FlxG.switchState(() -> {
               FunkinSprite.preparePurgeCache();
               FunkinSprite.purgeCache();
-              var emptyStickers = new StickerSubState(grpStickers.members);
-              FlxG.state.openSubState(emptyStickers);
+              MusicBeatState.emptyStickers = new StickerSubState(grpStickers.members);
+              MusicBeatState.reopen = true;
+              //FlxG.state.openSubState(emptyStickers);
               return targetState(this);
             });
           }

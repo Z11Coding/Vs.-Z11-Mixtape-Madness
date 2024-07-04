@@ -4,6 +4,7 @@ import flixel.addons.ui.FlxUIState;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.FlxState;
 import backend.PsychCamera;
+import substates.StickerSubState;
 
 class MusicBeatState extends FlxUIState
 {
@@ -34,10 +35,17 @@ class MusicBeatState extends FlxUIState
 		if(!skip) {
 			openSubState(new CustomFadeTransition(0.6, true));
 		}
+		if (reopen)
+		{
+			reopen = false;
+			openSubState(emptyStickers);
+		}
 		FlxTransitionableState.skipNextTransOut = false;
 		timePassedOnState = 0;
 	}
 
+	public static var emptyStickers:StickerSubState = null;
+	public static var reopen:Bool = false;
 	public function initPsychCamera():PsychCamera
 	{
 		var camera = new PsychCamera();
