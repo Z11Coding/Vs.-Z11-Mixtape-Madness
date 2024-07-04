@@ -116,9 +116,7 @@ class StickerSubState extends MusicBeatSubstate
 
   public function degenStickers():Void
   {
-    trace("degen moment");
     grpStickers.cameras = FlxG.cameras.list;
-    
 
     /*
       if (dipshit != null)
@@ -178,8 +176,6 @@ class StickerSubState extends MusicBeatSubstate
     trace("");
     return "";
     }
-
-    
 
   function regenStickers():Void
   {

@@ -206,8 +206,4 @@ class TransitionState {
     function getTargetState(state:FlxState) {
         
     }
-
-    public static function stickersEnd(stickers:FlxTypedGroup<StickerSprite>):Void {
-        FlxG.state.openSubState(new substates.StickerSubState(null, stickers);
-    }   
 }
