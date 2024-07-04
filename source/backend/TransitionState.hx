@@ -138,4 +138,8 @@ class TransitionState {
             }
         });
     }
+
+    function getTargetState(state:FlxState) {
+        
+    }
 }

@@ -331,14 +331,13 @@ class GameJoltLogin extends MusicBeatState
 
         if(!login)
         {
-            FlxG.sound.playMusic(Paths.music('funky-genesis'),0);
+            FlxG.sound.playMusic(Paths.music('funky-genesis'), 0);
             FlxG.sound.music.fadeIn(2, 0, 0.85);
+            Conductor.changeBPM(100);
         }
 
         trace(GJApi.initialized);
         FlxG.mouse.visible = true;
-
-        Conductor.changeBPM(100);
 
         var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.setGraphicSize(FlxG.width);
@@ -514,16 +513,14 @@ class GameJoltLogin extends MusicBeatState
         if (FlxG.sound.music != null)
             Conductor.songPosition = FlxG.sound.music.time;
 
-        if (!FlxG.sound.music.playing)
-        {
-            FlxG.sound.playMusic(Paths.music('funky-genesis'));
-        }
-
         if (FlxG.keys.justPressed.ESCAPE)
         {
             FlxG.save.flush();
             FlxG.mouse.visible = false;
             FlxG.switchState(GameJoltInfo.changeState);
+            FlxG.sound.playMusic(Paths.music('panixPress'), 0);
+			FlxG.sound.music.fadeIn(4, 0, 0.7);
+            Conductor.changeBPM(states.TitleState.globalBPM);
         }
 
         super.update(elapsed);
