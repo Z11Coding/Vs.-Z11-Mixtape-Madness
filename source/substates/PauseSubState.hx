@@ -314,6 +314,7 @@ class PauseSubState extends MusicBeatSubstate
 					}
 					OptionsState.cameFromPlaystate = true;
 				case "Exit to menu":
+					close();
 					#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 					PlayState.deathCounter = 0;
 					PlayState.seenCutscene = false;
