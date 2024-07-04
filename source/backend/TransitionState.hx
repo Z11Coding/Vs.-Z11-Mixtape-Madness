@@ -12,6 +12,7 @@ import flixel.FlxSprite;
 
 
 class TransitionState {
+    public static var stickers:FlxTypedGroup<StickerSprite>;
     static function switchState(targetState:Class<FlxState>, ?onComplete:Dynamic, ?stateArgs:Array<Dynamic> = null):Void {
         FlxG.switchState(Type.createInstance(targetState, stateArgs != null ? stateArgs : []));
         if (onComplete != null && Reflect.isFunction(onComplete)) {

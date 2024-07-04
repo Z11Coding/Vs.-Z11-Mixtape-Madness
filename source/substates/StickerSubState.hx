@@ -28,7 +28,7 @@ using StringTools;
 
 class StickerSubState extends MusicBeatSubstate
 {
-  public var grpStickers:FlxTypedGroup<StickerSprite>;
+  public static var grpStickers:FlxTypedGroup<StickerSprite>;
 
   // yes... a damn OpenFL sprite!!!
   public var dipshit:Sprite;
@@ -254,12 +254,14 @@ class StickerSubState extends MusicBeatSubstate
             FlxG.switchState(() -> {
               FunkinSprite.preparePurgeCache();
               FunkinSprite.purgeCache();
-
+              var emptyStickers = new StickerSubState(grpStickers.members);
+              FlxG.state.openSubState(emptyStickers);
               return targetState(this);
             });
           }
         });
       });
+   
     }
 
     grpStickers.sort((ord, a, b) -> {
