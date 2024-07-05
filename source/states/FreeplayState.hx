@@ -625,7 +625,7 @@ class FreeplayState extends MusicBeatState
 				if (FlxG.keys.pressed.SHIFT){
 					MusicBeatState.switchState(new ChartingState());
 				}else{
-					MusicBeatState.switchState(new PlayState());
+					TransitionState.transitionState(PlayState, {transitionType: "stickers"});
 				}
 
 				FlxG.sound.music.volume = 0;

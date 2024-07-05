@@ -150,6 +150,8 @@ class TransitionState {
                     processNextObject();
 
                     case "stickers":
+                        trace("Opening sticker substate...");
+                        MusicBeatState.reopen = true;
                         FlxG.state.openSubState(new substates.StickerSubState(null,  (sticker) -> Type.createInstance(targetState, args != null ? args : [])));
 
                 // case "stickersAlt": 

@@ -95,7 +95,33 @@ class CategoryState extends MusicBeatState
 		{
 			var daSelected:String = menuItems[curSelected];
 			loadWeekForce = daSelected.toLowerCase();
-			MusicBeatState.switchState(new FreeplayState());
+			if (loadWeekForce == "secrets") {
+				TransitionState.transitionState(FreeplayState, {
+					transitionType: (function() {
+						var transitions = ["fadeOut", "fadeColor", "slideLeft", "slideRight", "slideUp", "slideDown", "slideRandom", "fallRandom", "fallSequential", "stickers"];
+						var options:Array<Chance> = [];
+					
+						for (transition in transitions) {
+							var chance:Float;
+							if (transition == "stickers") {
+								// Assign a lower chance for "stickers"
+								chance = 1 + Math.random() * 4; // 1% to 5%
+							} else if (transition == "fallRandom" || transition == "fallSequential") {
+								// Assign a higher chance for "fallRandom" and "fallSequential"
+								chance = 50 + Math.random() * 50; // 50% to 100%
+							} else {
+								// Assign a moderate chance for other transitions
+								chance = 10 + Math.random() * 40; // 10% to 50%
+							}
+							options.push({item: transition, chance: chance});
+						}
+					
+						return ChanceSelector.selectOption(options);
+					})()
+				});
+			} else {
+				MusicBeatState.switchState(new FreeplayState());
+			}
 		}
 		grpLocks.forEach(function(lock:FlxSprite)
 		{

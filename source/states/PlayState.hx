@@ -535,7 +535,7 @@ class PlayState extends MusicBeatState
 		video.playVideo(Paths.video(name));
 		return video;
 	}*/
-	public static var Crashed:Bool = false;
+	public var Crashed:Bool = false;
 
 	override public function create()
 	{

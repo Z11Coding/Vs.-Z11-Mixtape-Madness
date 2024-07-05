@@ -25,6 +25,7 @@ class MusicBeatState extends FlxUIState
 	var _psychCameraInitialized:Bool = false;
 
 	override function create() {
+		trace('Creating MusicBeatState');
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		#if MODS_ALLOWED Mods.updatedOnState = false; #end
 
@@ -39,6 +40,7 @@ class MusicBeatState extends FlxUIState
 		{
 			reopen = false;
 			openSubState(emptyStickers);
+			trace('reopened stickers');
 		}
 		FlxTransitionableState.skipNextTransOut = false;
 		timePassedOnState = 0;
@@ -175,18 +177,37 @@ class MusicBeatState extends FlxUIState
 
 
 
-		if(FlxTransitionableState.skipNextTransIn) FlxG.switchState(nextState);
+		if(FlxTransitionableState.skipNextTransIn) {FlxG.switchState(nextState); FlxTransitionableState.skipNextTransIn = false;}
 		else 
 		{
 			//trace("Transitioning to ${nextState} with random transition: ${options}");
-			TransitionState.transitionState(Type.getClass(nextState));
+			TransitionState.transitionState(Type.getClass(nextState), {
+				transitionType: (function() {
+					var transitions = ["fadeOut", "fadeColor", "slideLeft", "slideRight", "slideUp", "slideDown", "slideRandom", "fallRandom", "fallSequential", "stickers"];
+					var options:Array<Chance> = [];
+				
+					for (transition in transitions) {
+						var chance:Float;
+						if (transition == "stickers") {
+							// Assign a random chance between 70% and 100% for "stickers"
+							chance = 70 + Math.random() * 30;
+						} else {
+							// Assign a random chance between 1% and 5% for other transitions
+							chance = 1 + Math.random() * 4;
+						}
+						options.push({item: transition, chance: chance});
+					}
+				
+					return ChanceSelector.selectOption(options);
+				})()
+			});
 			trace("Transition complete");
 		}
 		FlxTransitionableState.skipNextTransIn = false;
 	}
 
 	public static function resetState() {
-		if(FlxTransitionableState.skipNextTransIn) FlxG.resetState();
+		if(FlxTransitionableState.skipNextTransIn) {FlxG.resetState(); FlxTransitionableState.skipNextTransIn = false;}
 		else startTransition();
 		FlxTransitionableState.skipNextTransIn = false;
 	}
