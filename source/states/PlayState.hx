@@ -535,6 +535,7 @@ class PlayState extends MusicBeatState
 		video.playVideo(Paths.video(name));
 		return video;
 	}*/
+	public static var Crashed:Bool = false;
 
 	override public function create()
 	{
@@ -1252,7 +1253,7 @@ class PlayState extends MusicBeatState
 		add(playfields);
 		add(notefields);
 
-		if (gf != null)
+		if (gf != null && !Crashed)
 		{
 			#if desktop
 			// Updating Discord Rich Presence.
@@ -2396,7 +2397,7 @@ class PlayState extends MusicBeatState
 		songLength = FlxG.sound.music.length;
 		FlxTween.tween(timeBar, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 		FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
-		if (!playAsGF)
+		if (!playAsGF && !Crashed)
 		{
 			#if DISCORD_ALLOWED
 			// Updating Discord Rich Presence (with Time Left)
@@ -3572,7 +3573,7 @@ class PlayState extends MusicBeatState
 			callOnScripts('onResume');
 			resetRPC(startTimer != null && startTimer.finished);
 
-			if (gf != null)
+			if (gf != null && !Crashed)
 			{
 				#if desktop
 				if (startTimer != null && startTimer.finished)
@@ -3618,7 +3619,7 @@ class PlayState extends MusicBeatState
 				track.pause();
 		}
 		lostFocus = true;
-		if (gf != null)
+		if (gf != null && !Crashed)
 		{
 			#if DISCORD_ALLOWED
 			if (health > 0 && !paused)
@@ -3682,7 +3683,7 @@ class PlayState extends MusicBeatState
 	function resetRPC(?cond:Bool = false)
 	{
 		#if desktop
-		if (cond)
+		if (cond && !Crashed	)
 			DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter(), true, songLength - Conductor.songPosition - ClientPrefs.data.noteOffset);
 		else
 			DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
@@ -4030,7 +4031,7 @@ class PlayState extends MusicBeatState
 					openSubState(new PauseSubState());
 				}
 		
-				if (gf != null)
+				if (gf != null && !Crashed)
 				{
 					#if DISCORD_ALLOWED
 					DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", if (playAsGF && gf != null) iconGF.getCharacter() else iconP2.getCharacter());
@@ -4785,7 +4786,7 @@ class PlayState extends MusicBeatState
 				openSubState(new GameOverSubstate());
 
 				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-				if (gf != null)
+				if (gf != null && !Crashed)
 				{
 					#if DISCORD_ALLOWED
 					// Game Over doesn't get his own variable because it's only used here

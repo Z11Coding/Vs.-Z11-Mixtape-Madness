@@ -296,7 +296,7 @@ class Main extends Sprite
 		switch (Type.getClassName(Type.getClass(FlxG.state)).split(".")[Lambda.count(Type.getClassName(Type.getClass(FlxG.state)).split(".")) - 1])
 		{
 			case "PlayState":
-				//	PlayState.instance.Crashed = true;
+				PlayState.instance.Crashed = true;
 				// Check if it's a Null Object Reference error
 				if (errType.contains("Null Object Reference"))
 				{
