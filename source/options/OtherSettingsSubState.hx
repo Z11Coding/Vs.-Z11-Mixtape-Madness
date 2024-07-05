@@ -130,6 +130,12 @@ class OtherSettingsSubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
+		var option:Option = new Option('Break the sticker audio',
+			"Literally just locks the sound to a funny bug I found.",
+			'audioBreak',
+			'bool');
+		addOption(option);
+
 		super();
 	}
 

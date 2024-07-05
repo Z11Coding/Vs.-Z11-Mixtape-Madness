@@ -134,6 +134,7 @@ import states.TitleState;
 	public var useMarvs:Bool = true;
 	public var guitarHeroSustains:Bool = true;
 	public var discordRPC:Bool = true;
+	public var audioBreak:Bool = false;
 
 	//charcter select stuff
 	public static var bfMultiUnlock:Bool = false;

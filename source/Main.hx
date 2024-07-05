@@ -49,6 +49,8 @@ class Main extends Sprite
 		startFullscreen: false // if the game should start at fullscreen mode
 	};
 	public static var cmdArgs:Array<String> = Sys.args();
+	public static var noTerminalColor:Bool = false;
+	public static var forceGPUOnlyBitmapsOff:Bool = #if windows false #else true #end;
 
 	//public var initStuff = game;
 
@@ -134,9 +136,8 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
-		//initHaxeUI();
 		Toolkit.init();
-		//Toolkit.theme = 'dark'; // don't be cringe
+		Toolkit.theme = 'dark'; // don't be cringe
 		backend.Cursor.registerHaxeUICursors();
 
 		var stageWidth:Int = Lib.current.stage.stageWidth;
@@ -167,77 +168,7 @@ class Main extends Sprite
 		ClientPrefs.loadPrefs();
 		AudioSwitchFix.init();
 		FlxG.signals.preStateSwitch.add(onStateSwitch);
-		FlxG.signals.postStateSwitch.add(onStateSwitchPost);
 		FlxGraphic.defaultPersist = false;
-		FlxG.signals.preStateSwitch.add(function()
-		{
-
-			//i tihnk i finally fixed it
-
-			@:privateAccess
-			for (key in FlxG.bitmap._cache.keys())
-			{
-				var obj = FlxG.bitmap._cache.get(key);
-				if (obj != null)
-				{
-					lime.utils.Assets.cache.image.remove(key);
-					openfl.Assets.cache.removeBitmapData(key);
-					FlxG.bitmap._cache.remove(key);
-					//obj.destroy(); //breaks the game lol
-				}
-			}
-
-			//idk if this helps because it looks like just clearing it does the same thing
-			for (k => f in lime.utils.Assets.cache.font)
-				lime.utils.Assets.cache.font.remove(k);
-			for (k => s in lime.utils.Assets.cache.audio)
-				lime.utils.Assets.cache.audio.remove(k);
-
-			/* 
-			@:privateAccess
-			{
-				for (k => f in openfl.Assets.cache._font)
-					openfl.Assets.cache._font.removeFont(k);
-				for (k => s in openfl.Assets.cache._audio)
-					openfl.Assets.cache.audio.removeSound(k);
-			}
-			*/
-
-			
-
-
-			//Paths.clearMemory();
-			lime.utils.Assets.cache.clear();
-
-			openfl.Assets.cache.clear();
-	
-			FlxG.bitmap.dumpCache();
-	
-			#if polymod
-			polymod.Polymod.clearCache();
-			
-			#end
-
-			#if cpp
-			cpp.vm.Gc.enable(true);
-			#end
-	
-			#if sys
-			openfl.system.System.gc();	
-			#end
-		});
-
-		FlxG.signals.postStateSwitch.add(function()
-		{
-			#if cpp
-			cpp.vm.Gc.enable(true);
-			#end
-	
-			#if sys
-			openfl.system.System.gc();	
-			#end
-		});
-
 		#if !mobile
 		fpsVar = new FPS(10, 3, 0xFFFFFF);
 		addChild(fpsVar);
@@ -297,20 +228,6 @@ class Main extends Sprite
 		backend.modules.MemoryGCPlugin.initialize();
 	}
 
-	function initHaxeUI():Void
-	{
-		// Calling this before any HaxeUI components get used is important:
-		// - It initializes the theme styles.
-		// - It scans the class path and registers any HaxeUI components.
-		Toolkit.init();
-		Toolkit.theme = 'gradient'; // don't be cringe
-		// Toolkit.theme = 'light'; // embrace cringe
-		Toolkit.autoScale = false;
-		// Don't focus on UI elements when they first appear.
-		haxe.ui.focus.FocusManager.instance.autoFocus = false;
-		haxe.ui.tooltips.ToolTipManager.defaultDelay = 200;
-	}
-
 	static function resetSpriteCache(sprite:Sprite):Void {
 		@:privateAccess {
 		        sprite.__cacheBitmap = null;
@@ -320,13 +237,6 @@ class Main extends Sprite
 
 	private static function onStateSwitch() {
 		scaleMode.resetSize();
-	}
-
-	private static function onStateSwitchPost() {
-		// manual asset clearing since base openfl one doesnt clear lime one
-		// doesnt clear bitmaps since flixel fork does it auto
-
-		MemoryUtil.clearMajor();
 	}
 
 	public function getFPS():Float
