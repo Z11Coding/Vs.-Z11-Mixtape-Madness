@@ -77,7 +77,7 @@ class StickerSubState extends MusicBeatSubstate
       soundSelections.push(i);
     }
 
-    trace(soundSelections);
+    //trace(soundSelections);
 
     soundSelection = FlxG.random.getObject(soundSelections);
 
@@ -92,7 +92,7 @@ class StickerSubState extends MusicBeatSubstate
       sounds[i] = sounds[i].substring(0, sounds[i].lastIndexOf('.'));
     }
 
-    trace(sounds);
+    //trace(sounds);
 
     grpStickers = new FlxTypedGroup<StickerSprite>();
     add(grpStickers);
@@ -168,12 +168,12 @@ class StickerSubState extends MusicBeatSubstate
 
     for (i in 0...weights.length) {
       if (randomValue < weights[i]) {
-      trace(stickerSets[i]);
+      //trace(stickerSets[i]);
       return stickerSets[i];
       }
     }
 
-    trace("");
+    //trace("");
     return "";
     }
 
@@ -224,6 +224,7 @@ class StickerSubState extends MusicBeatSubstate
 
     FlxG.random.shuffle(grpStickers.members);
 
+    var funny = ['AB1', 'AB2'];
     for (ind => sticker in grpStickers.members)
     {
       sticker.timing = FlxMath.remapToRange(ind, 0, grpStickers.members.length, 0, 0.9);
@@ -233,7 +234,8 @@ class StickerSubState extends MusicBeatSubstate
 
         sticker.visible = true;
         var daSound:String = FlxG.random.getObject(sounds);
-        FlxG.sound.play(Paths.sound(daSound));
+        if (!ClientPrefs.data.audioBreak) FlxG.sound.play(Paths.sound(daSound));
+        else FlxG.sound.play(Paths.sound(funny[FlxG.random.int(0,1)]));
 
         var frameTimer:Int = FlxG.random.int(0, 2);
 

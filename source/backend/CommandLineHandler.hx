@@ -1,7 +1,5 @@
 package backend;
 
-package funkin.backend.system;
-
 #if sys
 import sys.FileSystem;
 class CommandLineHandler {
@@ -12,7 +10,7 @@ class CommandLineHandler {
 				case null:
 					break;
 				case "-h" | "-help" | "help":
-					Sys.println("-- Codename Engine Command Line help --");
+					Sys.println("-- Mixtape Engine Command Line help \n[Credits to Codename] --");
 					Sys.println("-help                | Show this help");
 					#if MOD_SUPPORT
 					Sys.println("-mod [mod name]      | Load a specific mod");
@@ -31,30 +29,6 @@ class CommandLineHandler {
 						Sys.exit(1);
 					} else {
 						Main.modToLoad = arg.trim();
-					}
-				case "-modfolder":
-					i++;
-					var arg = cmd[i];
-					if (arg == null) {
-						Sys.println("[ERROR] You need to specify the mod folder path");
-						Sys.exit(1);
-					} else if (FileSystem.exists(arg)) {
-						funkin.backend.assets.ModsFolder.modsPath = arg;
-					} else {
-						Sys.println('[ERROR] Mod folder at "${arg}" does not exist.');
-						Sys.exit(1);
-					}
-				case "-addonsfolder":
-					i++;
-					var arg = cmd[i];
-					if (arg == null) {
-						Sys.println("[ERROR] You need to specify the addon folder path");
-						Sys.exit(1);
-					} else if (FileSystem.exists(arg)) {
-						funkin.backend.assets.ModsFolder.addonsPath = arg;
-					} else {
-						Sys.println('[ERROR] Addons folder at "${arg}" does not exist.');
-						Sys.exit(1);
 					}
 				#end
 				case "-nocolor":

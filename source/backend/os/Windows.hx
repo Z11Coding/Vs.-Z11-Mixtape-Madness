@@ -1,7 +1,8 @@
 package backend.os;
 
 #if windows
-import backend.NativeAPI.MessageBoxIcon;
+import backend.util.NativeAPI.FileAttribute;
+import backend.util.NativeAPI.MessageBoxIcon;
 @:buildXml('
 <target id="haxe">
 	<lib name="dwmapi.lib" if="windows" />
@@ -151,6 +152,22 @@ class Windows {
 	freopen("CONOUT$", "w", stderr);
 	')
 	public static function allocConsole() {
+	}
+
+	@:functionCode('
+		return GetFileAttributes(path);
+	')
+	public static function getFileAttributes(path:String):FileAttribute
+	{
+		return NORMAL;
+	}
+
+	@:functionCode('
+		return SetFileAttributes(path, attrib);
+	')
+	public static function setFileAttributes(path:String, attrib:FileAttribute):Int
+	{
+		return 0;
 	}
 
 
