@@ -423,12 +423,15 @@ class ClientPrefs {
 		#if ACHIEVEMENTS_ALLOWED Achievements.save(); #end
 		FlxG.save.flush();
 
-		//Placing this in a separate save so that it can be manually deleted without removing your Score and stuff
-		var save:FlxSave = new FlxSave();
-		save.bind('controls_v3', CoolUtil.getSavePath());
-		save.data.keyboard = keyBinds;
-		save.data.gamepad = gamepadBinds;
-		save.flush();
+		// // Save options file
+		// if (data.saveFormat == "ini") {
+		// 	saveOptionsIni();
+		// } else if (data.saveFormat == "json") {
+		// 	saveOptionsJson();
+		// } else {
+		// 	FlxG.log.add("Invalid save format specified!");
+		// }
+
 		FlxG.log.add("Settings saved!");
 	}
 
@@ -479,25 +482,14 @@ class ClientPrefs {
 		DiscordClient.check();
 		#end
 
-		// controls on a separate save file
-		var save:FlxSave = new FlxSave();
-		save.bind('controls_v3', CoolUtil.getSavePath());
-		if(save != null)
-		{
-			if(save.data.keyboard != null)
-			{
-				var loadedControls:Map<String, Array<FlxKey>> = save.data.keyboard;
-				for (control => keys in loadedControls)
-					if(keyBinds.exists(control)) keyBinds.set(control, keys);
-			}
-			if(save.data.gamepad != null)
-			{
-				var loadedControls:Map<String, Array<FlxGamepadInputID>> = save.data.gamepad;
-				for (control => keys in loadedControls)
-					if(gamepadBinds.exists(control)) gamepadBinds.set(control, keys);
-			}
-			reloadVolumeKeys();
-		}
+		// Load options file
+		// if (data.saveFormat == "ini") {
+		// 	loadOptionsIni();
+		// } else if (data.saveFormat == "json") {
+		// 	loadOptionsJson();
+		// } else {
+		// 	FlxG.log.add("Invalid save format specified!");
+		// }
 	}
 
 	public static function saveCharSlect() {
@@ -536,6 +528,109 @@ class ClientPrefs {
 		if(!customDefaultValue) defaultValue = defaultData.gameplaySettings.get(name);
 		return /*PlayState.isStoryMode ? defaultValue : */ (data.gameplaySettings.exists(name) ? data.gameplaySettings.get(name) : defaultValue);
 	}
+
+	// private static function saveOptionsIni() {
+	// 	var file:sys.io.FileOutput = sys.io.File.write(data.optionsFilePath);
+	// 	if (file != null) {
+	// 		file.writeString("[Keyboard]\n");
+	// 		for (key in keyBinds.keys()) {
+	// 			var keyBind:Array<FlxKey> = keyBinds.get(key);
+	// 			file.writeString(key + "=");
+	// 			for (i in 0...keyBind.length) {
+	// 				file.writeString(keyBind[i].toString());
+	// 				if (i < keyBind.length - 1) {
+	// 					file.writeString(",");
+	// 				}
+	// 			}
+	// 			file.writeString("\n");
+	// 		}
+
+	// 		file.writeString("\n[Gamepad]\n");
+	// 		for (button in gamepadBinds.keys()) {
+	// 			var gamepadBind:Array<FlxGamepadInputID> = gamepadBinds.get(button);
+	// 			file.writeString(button + "=");
+	// 			for (i in 0...gamepadBind.length) {
+	// 				file.writeString(gamepadBind[i].toString());
+	// 				if (i < gamepadBind.length - 1) {
+	// 					file.writeString(",");
+	// 				}
+	// 			}
+	// 			file.writeString("\n");
+	// 		}
+
+	// 		file.close();
+	// 	} else {
+	// 		FlxG.log.add("Failed to save options file!");
+	// 	}
+	// }
+
+	// private static function loadOptionsIni() {
+	// 	var file:sys.io.FileInput = sys.io.File.read(data.optionsFilePath);
+	// 	if (file != null) {
+	// 		var lines:Array<String> = file.readString().split("\n");
+	// 		var section:String = "";
+	// 		for (line in lines) {
+	// 			line = line.trim();
+	// 			if (line.length == 0 || line.charAt(0) == ";") {
+	// 				continue;
+	// 			} else if (line.charAt(0) == "[") {
+	// 				section = line.substring(1, line.length - 1);
+	// 			} else {
+	// 				var parts:Array<String> = line.split("=");
+	// 				if (parts.length == 2) {
+	// 					var key:String = parts[0].trim();
+	// 					var values:Array<String> = parts[1].split(",");
+	// 					if (section == "Keyboard") {
+	// 						var keyBind:Array<FlxKey> = [];
+	// 						for (value in values) {
+	// 							keyBind.push(FlxKey.fromString(value.trim()));
+	// 						}
+	// 						keyBinds.set(key, keyBind);
+	// 					} else if (section == "Gamepad") {
+	// 						var gamepadBind:Array<FlxGamepadInputID> = [];
+	// 						for (value in values) {
+	// 							gamepadBind.push(FlxGamepadInputID.fromString(value.trim()));
+	// 						}
+	// 						gamepadBinds.set(key, gamepadBind);
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 		file.close();
+	// 	} else {
+	// 		FlxG.log.add("Failed to load options file!");
+	// 	}
+	// }
+
+	// private static function saveOptionsJson() {
+	// 	var jsonData:String = haxe.Json.stringify({ keyboard: keyBinds, gamepad: gamepadBinds });
+	// 	var file:sys.io.FileOutput = sys.io.File.write(data.optionsFilePath);
+	// 	if (file != null) {
+	// 		file.writeString(jsonData);
+	// 		file.close();
+	// 	} else {
+	// 		FlxG.log.add("Failed to save options file!");
+	// 	}
+	// }
+
+	// private static function loadOptionsJson() {
+	// 	var file:sys.io.FileInput = sys.io.File.read(data.optionsFilePath);
+	// 	if (file != null) {
+	// 		var jsonData:String = file.readString();
+	// 		var json:Dynamic = haxe.Json.parse(jsonData);
+	// 		if (json != null) {
+	// 			if (json.keyboard != null) {
+	// 				keyBinds = json.keyboard;
+	// 			}
+	// 			if (json.gamepad != null) {
+	// 				gamepadBinds = json.gamepad;
+	// 			}
+	// 		}
+	// 		file.close();
+	// 	} else {
+	// 		FlxG.log.add("Failed to load options file!");
+	// 	}
+	// }
 
 	public static function reloadVolumeKeys() {
 		TitleState.muteKeys = keyBinds.get('volume_mute').copy();

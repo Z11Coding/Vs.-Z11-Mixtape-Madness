@@ -67,6 +67,30 @@ class ChanceSelector {
         return options;
     }
 
+    public static function fromMap(map:Map<Dynamic, Float>):Array<Chance> {
+        trace("Entering fromMap function");
+        trace("Input map:", map);
+
+        var options:Array<Chance> = [];
+        var totalChance:Float = 0;
+        for (item in map.keys()) {
+            var chance = map.get(item);
+            options.push({item: item, chance: chance});
+            totalChance += chance;
+        }
+
+        if (totalChance > 100) {
+            var scaleFactor:Float = 100 / totalChance;
+            for (o in options) {
+                o.chance *= scaleFactor;
+            }
+        }
+
+        trace("Output options:", options);
+
+        return options;
+    }
+
     public static function chanceArrays(items:Array<Dynamic>, chances:Array<Float> = null):Dynamic {
         trace("Entering chanceArrays function");
         trace("Input items:", items);
@@ -216,6 +240,24 @@ class ChanceExtensions {
         return selectedOption;
     }
 
+        // Extension method for FlxG
+        public static function chanceInt(min:Int, max:Int):Int {
+            trace("Entering chanceInt function");
+            trace("Input min:", min);
+            trace("Input max:", max);
+    
+            var options:Array<Chance> = [];
+            for (i in min...max+1) {
+                options.push({item: i, chance: 100});
+            }
+            trace("Options:", options);
+    
+            var selectedOption = ChanceSelector.selectFromOptions(options);
+            trace("Selected option:", selectedOption);
+    
+            return selectedOption;
+        }
+    
     // public static function chanceAny(input:Dynamic, splitComplexTypes:Bool = false, treatMapsAsChanceMaps:Bool = false, passChanceObjectsFromArray:Bool = true):Dynamic {
     //     if (splitComplexTypes) {
     //         if (Std.is(input, Array)) {

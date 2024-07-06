@@ -22,31 +22,39 @@ class JSONCache {
         try {
             var fileContents = sys.io.File.getContent(filePath);
             var parsed = haxe.Json.parse(fileContents);
-            cache.set(filePath, parsed); // Cache the entire parsed JSON
-            trace("Data loaded successfully");
-
-            // Assuming parsed is a Dynamic object, directly check if "notes" exists and is an array
-            if (Reflect.hasField(parsed, "notes") && Reflect.isObject(parsed.notes)) {
+            var notesToCache:Array<Note> = []; // Step 1: Initialize an array for notes
+    
+            // Check if "notes" exists and is an array
+            if (Reflect.hasField(parsed, "notes") && Std.is(Reflect.field(parsed, "notes"), Array)) {
                 var notes:Array<Dynamic> = Reflect.field(parsed, "notes");
-                trace("Notes found in JSON. Further caching data...");
+                trace("Notes found in JSON. Further processing...");
+    
+                // Process each note
                 for (note in notes) {
-                    if (Reflect.hasField(note, "sectionNotes") && Reflect.isObject(note.sectionNotes)) {
-                        var noteList:Array<Note> = [];
+                    if (Reflect.hasField(note, "sectionNotes") && Std.is(Reflect.field(note, "sectionNotes"), Array)) {
                         var sectionNotes:Array<Dynamic> = Reflect.field(note, "sectionNotes");
                         for (sectionNote in sectionNotes) {
-                            if (sectionNote != null && sectionNote.length >= 2) {
-                                var noteObj:Note = new Note(sectionNote[0], sectionNote[1]);
-                                noteList.push(noteObj);
+                            // Ensure sectionNote is an array with at least 2 elements
+                            if (sectionNote != null && Std.is(sectionNote, Array) && sectionNote.length >= 2) {
+                                var noteObj:Note = new Note(sectionNote[0], sectionNote[1]); // Create a Note object
+                                notesToCache.push(noteObj); // Step 3: Add notes to the array
                             }
                         }
-                        cache.set(filePath, noteList);
-                        trace("Notes cached successfully");
                     }
                 }
-            }            } catch (error:Dynamic) {
-                trace("Failed to load data: " + error + " at " + filePath);
+                if (notesToCache.length > 0) {
+                    cache.set(filePath, notesToCache); // Step 4: Cache the notes array
+                    trace("Notes cached successfully");
+                } else {
+                    trace("No valid notes found to cache.");
+                }
+            } else {
+                trace("No 'notes' field found in JSON.");
             }
+        } catch (error:Dynamic) {
+            trace("Failed to load data: " + error + " at " + filePath);
         }
+    }
     
     public static function get(filePath:String):Dynamic {
         return cache.get(filePath);

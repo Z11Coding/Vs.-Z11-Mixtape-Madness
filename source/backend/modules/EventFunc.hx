@@ -13,15 +13,19 @@ class EventFunc {
     public var watchedVariable: Dynamic;
     public var func: Void -> Void;
     private var lastValue: Dynamic;
-    private var destroyOnTrigger: Null<Bool>; // New variable to control destruction behavior
+    private var destroyOnTrigger: Null<Bool>;
+
+    private static var instances: Array<EventFunc> = []; // Static array to hold instances
 
     public function new(eventName: String, eventType: EventType, watchedVariable: Dynamic, func: Void -> Void, ?destroyOnTrigger: Bool = true) {
         this.eventName = eventName;
         this.eventType = eventType;
         this.watchedVariable = watchedVariable;
         this.func = func;
-        this.lastValue = watchedVariable; // Initialize with the current value
-        this.destroyOnTrigger = destroyOnTrigger; // Initialize with the provided value or default to true
+        this.lastValue = watchedVariable;
+        this.destroyOnTrigger = destroyOnTrigger;
+
+        instances.push(this); // Add this instance to the array
     }
 
     public function check(): Bool {
@@ -46,10 +50,10 @@ class EventFunc {
         }
         if (triggered) {
             execute();
-            lastValue = watchedVariable; // Update lastValue for change detection
+            lastValue = watchedVariable;
             return true;
         }
-        lastValue = watchedVariable; // Update lastValue for change detection
+        lastValue = watchedVariable;
         return false;
     }
 
@@ -57,6 +61,8 @@ class EventFunc {
         func();
         trace('${eventName} event triggered: ${Std.string(eventType)}');
         if (destroyOnTrigger) {
+            // Remove this instance from the array
+            instances = instances.filter(function(e) return e != this);
             // Nullify references to the object
             eventName = null;
             eventType = null;
@@ -64,12 +70,16 @@ class EventFunc {
             func = null;
             lastValue = null;
             destroyOnTrigger = null;
-            // this = null;
         }
-        }
+    }
 
-    public  function update(): Void {
-
+    public function update(): Void {
         check();
+    }
+
+    public static function updateAll(): Void {
+        for (instance in instances) {
+            instance.update();
+        }
     }
 }

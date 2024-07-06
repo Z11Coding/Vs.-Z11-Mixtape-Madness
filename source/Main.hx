@@ -383,3 +383,7 @@ class Main extends Sprite
 	}
 	#end
 }
+
+class GlobalResources {
+    public static var jsonFilePaths:Array<String> = [];
+}
