@@ -25,6 +25,13 @@ class What extends MusicBeatState
 
     override public function create()
     {
+        var titleStateCheckFunc = new EventFunc(
+            "CheckForTitleState", // eventName
+            EventType.EqualTo(TitleState), // eventType, checking for equality with TitleState class
+            FlxG.state, // watchedVariable, assuming FlxG.state returns the current state
+            function() { trace("Now in TitleState!"); }, // func, the action to perform when the condition is met
+            true // destroyOnTrigger, set to false if you want to keep checking
+        );
         FlxG.sound.volume = 0.5;
         whatGrad = new FlxSprite().loadGraphic(Paths.image('effects/GradientSplash'));
         whatGrad.screenCenter();

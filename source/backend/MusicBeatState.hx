@@ -62,6 +62,7 @@ class MusicBeatState extends FlxUIState
 	public static var timePassedOnState:Float = 0;
 	override function update(elapsed:Float)
 	{
+		 EventFunc.updateAll();
 		if (Main.audioDisconnected && getState() == PlayState.instance)
 		{
 			//Save your progress and THEN reset it (I knew there was a common use for this)
