@@ -5296,8 +5296,8 @@ class PlayState extends MusicBeatState
 					var next:Dynamic = timerExtensions[0];
 					var toValue:Float = (next != null && next > 0) ? next : songLength;
 					// maskedSongLength = value; instead of tweenMask.bind(timeTxt)
-					FlxTween.num(maskedSongLength, toValue, Conductor.crochet / 1000, {
-						ease: FlxEase.elasticInOut,
+					FlxTween.num(maskedSongLength, toValue, if (flValue1 != null) flValue1 else Conductor.stepCrochet*0.001*16, {
+						ease: LuaUtils.getTweenEaseByString(value2),
 						onComplete: function(twn:FlxTween)
 						{
 							maskedSongLength = toValue;

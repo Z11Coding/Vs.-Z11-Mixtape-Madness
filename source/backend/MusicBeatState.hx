@@ -42,7 +42,6 @@ class MusicBeatState extends FlxUIState
 			openSubState(emptyStickers);
 			trace('reopened stickers');
 		}
-		FlxTransitionableState.skipNextTransOut = false;
 		timePassedOnState = 0;
 	}
 

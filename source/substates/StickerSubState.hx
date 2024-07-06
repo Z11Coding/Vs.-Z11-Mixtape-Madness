@@ -50,6 +50,10 @@ class StickerSubState extends MusicBeatSubstate
   {
     super();
 
+    if (oldStickers == null && targetState == null) 
+    {
+      return;
+    }
     this.targetState = (targetState == null) ? ((sticker) -> new MainMenuState()) : targetState;
 
     // todo still
@@ -139,10 +143,12 @@ class StickerSubState extends MusicBeatSubstate
         sticker.visible = false;
         var daSound:String = FlxG.random.getObject(sounds);
         //FunkinSound.playOnce(Paths.sound(daSound));
-        FlxG.sound.play(Paths.sound(daSound));
+        if (!ClientPrefs.data.audioBreak) FlxG.sound.play(Paths.sound(daSound));
+        else FlxG.sound.play(Paths.sound(funny[FlxG.random.int(0,1)]));
 
         if (grpStickers == null || ind == grpStickers.members.length - 1)
         {
+          MusicBeatState.emptyStickers = null;
           switchingState = false;
           close();
         }
@@ -177,6 +183,7 @@ class StickerSubState extends MusicBeatSubstate
     return "";
     }
 
+  var funny = ['AB1', 'AB2'];
   function regenStickers():Void
   {
     if (grpStickers.members.length > 0)
@@ -224,7 +231,6 @@ class StickerSubState extends MusicBeatSubstate
 
     FlxG.random.shuffle(grpStickers.members);
 
-    var funny = ['AB1', 'AB2'];
     for (ind => sticker in grpStickers.members)
     {
       sticker.timing = FlxMath.remapToRange(ind, 0, grpStickers.members.length, 0, 0.9);

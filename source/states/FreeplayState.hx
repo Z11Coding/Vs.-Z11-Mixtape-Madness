@@ -13,6 +13,7 @@ import flixel.addons.ui.FlxUIInputText;
 
 import substates.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
+import flixel.addons.transition.FlxTransitionableState;
 
 import flixel.math.FlxMath;
 import flixel.ui.FlxButton;
@@ -595,6 +596,8 @@ class FreeplayState extends MusicBeatState
 				}*/
 				trace(poop);
 
+				FlxTransitionableState.skipNextTransIn = false;
+				FlxTransitionableState.skipNextTransOut = false;
 				try
 				{
 					PlayState.SONG = Song.loadFromJson(poop, songLowercase);

@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextureAtlas imagePath="NOTE_heart.png">
-	<SubTexture name="blue0000" x="0" y="0" width="157" height="154"/>
-	<SubTexture name="green0000" x="0" y="0" width="157" height="154"/>
-	<SubTexture name="purple0000" x="0" y="0" width="157" height="154"/>
-	<SubTexture name="red0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="A0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="B0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="C0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="D0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="E0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="F0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="G0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="H0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="I0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="J0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="K0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="L0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="M0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="N0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="O0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="P0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="Q0000" x="0" y="0" width="157" height="154"/>
+	<SubTexture name="R0000" x="0" y="0" width="157" height="154"/>
 </TextureAtlas>
