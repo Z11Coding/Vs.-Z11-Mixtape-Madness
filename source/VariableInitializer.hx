@@ -1,6 +1,6 @@
 import haxe.macro.Context;
 import haxe.macro.Expr;
-import haxe.macros.*;
+import haxe.macro.*;
 
 class VariableInitializer {
 	public static function build():Void {

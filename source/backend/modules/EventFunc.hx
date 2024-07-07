@@ -21,9 +21,10 @@ class EventFunc {
         this.eventType = eventType;
         this.watchedVariable = watchedVariable;
         this.func = func;
-        var value = watchedVariable.evaluate();
-        this.lastValue = value; // Evaluate to initialize
+        this.lastValue = watchedVariable.evaluate(); // Evaluate to initialize
         this.destroyOnTrigger = destroyOnTrigger;
+        trace('EventFunc created: ${eventName}');
+        trace('Arguments: ${eventName}, ${eventType}, ${objectToString(watchedVariable)}, ${func}, ${destroyOnTrigger}');
         instances.push(this);
     }
 
@@ -59,8 +60,12 @@ class EventFunc {
 
 
     private inline function execute(): Void {
+        trace('Event triggered: ${eventName}');
+        trace('Event type: ${Std.string(eventType)}');
+        trace('Executing function: ${objectToString(func)}');
         func();
-        trace('${eventName} event triggered: ${Std.string(eventType)}');
+
+
         if (destroyOnTrigger) {
             // Remove this instance from the array
             instances = instances.filter(function(e) return e != this);
@@ -80,24 +85,60 @@ class EventFunc {
 
     public static inline function updateAll(): Void {
         for (instance in instances) {
-            instance.update();
+            try {
+                instance.update();
+            } catch (error: Dynamic) {
+                trace('Could not track variable for ${instance.eventName}. Could it be removed, or invalid?');
+                trace('Removing instance due to error');
+                // Remove this instance from the array
+                instances = instances.filter(function(e) return e != instance);
+                // Nullify references to the object
+                instance.eventName = null;
+                instance.eventType = null;
+                instance.watchedVariable = null;
+                instance.func = null;
+                instance.lastValue = null;
+                instance.destroyOnTrigger = null;
+            }
         }
     }
+
 
     public static inline function destroyAll(): Void {
         for (instance in instances) {
             instance = null;
         }
         instances = [];
+        trace('All events destroyed');
     }
 
     public static inline function tracker(v:Dynamic):Dynamic {
-        trace(v);
+        trace('Tracker called with value: ${Std.string(v)}');
         return v;
     }
 
     public static inline function getValue(v:Dynamic):Dynamic {
+        trace('getValue called with value: ${Std.string(v)}');
         return v;
+    }
+
+    
+    public static function objectToString(funcVar:Dynamic):String {
+    // Check if it's indeed a function
+        if (Reflect.isFunction(funcVar)) {
+            // Attempt to retrieve any possible metadata or properties that might be attached to the function
+            var properties:Array<String> = [];
+            for (field in Reflect.fields(funcVar)) {
+                var value = Reflect.field(funcVar, field);
+                properties.push('$field: ${Std.string(value)}');
+            }
+            var propertiesString = properties.join(', ');
+            return 'Function Variable' + (properties.length > 0 ? ' with properties { $propertiesString }' : '');
+        } else {
+            // Fallback for non-function variables, just in case
+            return 'Not a Function Variable';
+        }
+        return '(Unknown Error parsing object)';
     }
 
     // public static function createEventFunc(eventName:String, eventType:EventType, expression:Dynamic, func:Void->Void, ?destroyOnTrigger:Bool = true):EventFunc {
@@ -121,4 +162,3 @@ class EventFunc {
 
     // class Tracker {
     // }
-

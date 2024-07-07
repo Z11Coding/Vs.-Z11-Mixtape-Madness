@@ -84,22 +84,12 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-		var checkSickBeatsEvent = new EventFunc(
-			"CheckSickBeats", // eventName
-			EventType.EqualTo(true), // Assuming EventType.EqualTo is a valid type for checking equality
-			HoldableVariable.createVariable(sickBeats == 2), // Corrected: Use static method instead of constructor
-			function() { Sys.println('e'); }, // func, action to perform when the condition is met
-			true // destroyOnTrigger, assuming you want this event to deactivate after triggering
-		);
-		var checkSickBeatsEvent2 = new EventFunc(
-			"CheckSickBeats2", // eventName
-			EventType.EqualTo(4), // Assuming EventType.EqualTo is a valid type for checking equality
-			HoldableVariable.createVariable(sickBeats), // Corrected: Use static method instead of constructor
-			function() { Sys.println('e'); }, // func, action to perform when the condition is met
-			true // destroyOnTrigger, assuming you want this event to deactivate after triggering
-		);
+		var checkSickBeatsEvent = new EventFunc("CheckSickBeats", EqualTo(true), (sickBeats == 2).createVariable(), function() { Sys.println('e'); }, true);
+		var checkSickBeatsEvent2 = new EventFunc("CheckSickBeats2", EqualTo(4), sickBeats.createVariable(), function() { Sys.println('e'); }, true);
+		var checkSickBeatsEvent3 = new EventFunc("CheckSickBeats3", Change, sickBeats.createVariable(), function() { Sys.println('e'); }, false);
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 		curCrazy = FlxG.random.getObject(getMoreIntroTextShit());
+		// var checkUpdateEvent = new EventFunc("CheckUpdate", Change, Type.getClass(FlxG.state).tracker().createVariable(), function() { trace(HoldableVariable.createVariable(update(0))); }, false);
 
 		// DEBUG BULLSHIT
 		swagShader = new ColorSwap();

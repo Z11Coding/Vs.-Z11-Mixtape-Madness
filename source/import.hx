@@ -86,7 +86,7 @@ import playfields.*;
 
 
 import backend.modules.Variable;
-import HoldableVariable;
+using HoldableVariable;
 using backend.modules.EventFunc;
 
 using StringTools;
