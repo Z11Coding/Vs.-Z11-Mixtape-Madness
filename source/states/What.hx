@@ -28,7 +28,7 @@ class What extends MusicBeatState
         var titleStateCheckFunc = new EventFunc(
             "CheckForTitleState", // eventName
             EventType.EqualTo(TitleState), // eventType, checking for equality with TitleState class
-            FlxG.state, // watchedVariable, assuming FlxG.state returns the current state
+            EventFunc.tracker(FlxG.state.tracker()), // watchedVariable, assuming FlxG.state returns the current state
             function() { trace("Now in TitleState!"); }, // func, the action to perform when the condition is met
             true // destroyOnTrigger, set to false if you want to keep checking
         );

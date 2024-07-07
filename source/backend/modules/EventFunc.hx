@@ -17,7 +17,7 @@ class EventFunc {
 
     private static var instances: Array<EventFunc> = []; // Static array to hold instances
 
-    public function new(eventName: String, eventType: EventType, watchedVariable: Dynamic, func: Void -> Void, ?destroyOnTrigger: Bool = true) {
+    public inline function new(eventName: String, eventType: EventType, watchedVariable: Dynamic, func: Void -> Void, ?destroyOnTrigger: Bool = true) {
         this.eventName = eventName;
         this.eventType = eventType;
         this.watchedVariable = watchedVariable;
@@ -28,7 +28,7 @@ class EventFunc {
         instances.push(this); // Add this instance to the array
     }
 
-    public function check(): Bool {
+    public inline function check(): Bool {
         var triggered = false;
         switch eventType {
             case GreaterThan(value):
@@ -57,7 +57,7 @@ class EventFunc {
         return false;
     }
 
-    private function execute(): Void {
+    private inline function execute(): Void {
         func();
         trace('${eventName} event triggered: ${Std.string(eventType)}');
         if (destroyOnTrigger) {
@@ -73,13 +73,30 @@ class EventFunc {
         }
     }
 
-    public function update(): Void {
+    public inline function update(): Void {
         check();
     }
 
-    public static function updateAll(): Void {
+    public static inline function updateAll(): Void {
         for (instance in instances) {
             instance.update();
         }
     }
+
+    public static inline function destroyAll(): Void {
+        for (instance in instances) {
+            instance = null;
+        }
+        instances = [];
+    }
+
+    public static inline function tracker(v:Dynamic):Dynamic {
+        trace(v);
+        return v;
+    }
 }
+
+
+    // class Tracker {
+    // }
+

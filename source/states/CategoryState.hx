@@ -12,12 +12,26 @@ class CategoryState extends MusicBeatState
 		false, false
 	];
 
+
+
+
 	public static var loadWeekForce:String = 'Main';
 
 	private static var curSelected:Int = 0;
 
 	override function create()
 	{
+		var hh:Array<Chance> = [
+			{item: "h?", chance: 5}, // 5% chance to add "h?"
+			{item: "no", chance: 95} // 95% chance to do nothing
+		];
+		
+		
+		var h:String = ChanceSelector.selectOption(hh);
+		
+		if (h == "h?") {
+			menuItems.push("h?");
+		}
 		Cursor.cursorMode = Cross;
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = FlxColor.PURPLE;
@@ -95,6 +109,8 @@ class CategoryState extends MusicBeatState
 		{
 			var daSelected:String = menuItems[curSelected];
 			loadWeekForce = daSelected.toLowerCase();
+			if (loadWeekForce == 'h?')
+				throw "h?";
 			if (loadWeekForce == "secrets") {
 				TransitionState.transitionState(FreeplayState, {
 					transitionType: (function() {

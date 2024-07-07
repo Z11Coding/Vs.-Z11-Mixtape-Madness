@@ -84,7 +84,7 @@ import flixel.group.FlxGroup.FlxTypedGroup;
 
 import playfields.*;
 
-import backend.modules.EventFunc;
+using backend.modules.EventFunc;
 
 using StringTools;
 using backend.ChanceSelector;

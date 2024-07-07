@@ -5,7 +5,7 @@ typedef Chance = {
     chance: Float // Probability as a percentage (0 to 100)
 };
 typedef ChanceFunction = {
-    func: Void -> Void, // Function to execute
+    func: Void -> Dynamic, // Function to execute
     chance: Float // Chance of execution, assumed to be between 0 and 100
 };
 class ChanceSelector {
@@ -154,11 +154,12 @@ class ChanceSelector {
      * Attempts to execute a ChanceFunction based on its chance.
      * @param chanceFunc The ChanceFunction to potentially execute.
      */
-     public static function executeChanceFunction(chanceFunc:ChanceFunction):Void {
+     public static function executeChanceFunction(chanceFunc:ChanceFunction):Dynamic {
         var randomNumber = Math.random() * 100; // Generate a random number between 0 and 100
         if (randomNumber <= chanceFunc.chance) {
-            chanceFunc.func(); // Execute the function if the random number is within the chance threshold
+           return chanceFunc.func(); // Execute the function if the random number is within the chance threshold
         }
+        return null; // Return null if the function is not executed
     }
     
     /**
@@ -166,7 +167,7 @@ class ChanceSelector {
      * @param func The function to potentially execute.
      * @param chance The chance of the function being executed.
      */
-    public static function chanceFunction(func:Void->Void, chance:Float):Void {
+    public static function chanceFunction(func:Void->Dynamic, chance:Float):Void {
         var chanceFunc:ChanceFunction = {func: func, chance: chance};
         executeChanceFunction(chanceFunc); // Attempt to execute the ChanceFunction
     }
@@ -201,6 +202,29 @@ class ChanceExtensions {
         trace("Selected option:", selectedOption);
 
         return selectedOption;
+    }
+
+    public static function chanceDynamicMap(map:Map<Dynamic, Dynamic>, returnKey:Bool = true):Dynamic {
+        trace("Entering chanceDynamicMap function");
+        trace("Input map:", map);
+        trace("Input returnKey:", returnKey);
+
+        var array:Array<Dynamic> = [];
+        for (item in map.keys()) {
+            array.push(item);
+        }
+
+        var options = ChanceSelector.fromArray(array);
+        trace("Options:", options);
+
+        var selectedOption = ChanceSelector.selectOption(options);
+        trace("Selected option:", selectedOption);
+
+        if (returnKey) {
+            return selectedOption;
+        } else {
+            return map.get(selectedOption);
+        }
     }
 
     // Extension method for Bool
