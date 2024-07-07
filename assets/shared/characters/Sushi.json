@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "Idle"
+		},
+		{
+			"offsets": [
+				105,
+				-18
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singLEFT",
+			"indices": [],
+			"name": "Left"
+		},
+		{
+			"offsets": [
+				3,
+				-222
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "Down"
+		},
+		{
+			"offsets": [
+				0,
+				102
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [],
+			"name": "Up"
+		},
+		{
+			"offsets": [
+				0,
+				15
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singRIGHT",
+			"indices": [],
+			"name": "Right"
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/YouMeSushi",
+	"position": [
+		-150,
+		90
+	],
+	"healthicon": "sushi",
+	"flip_x": false,
+	"healthbar_colors": [
+		236,
+		184,
+		171
+	],
+	"camera_position": [
+		330,
+		210
+	],
+	"sing_duration": 6.1,
+	"scale": 0.4
+}

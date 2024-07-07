@@ -1,15 +1,16 @@
 package states;
-
+import flixel.input.keyboard.FlxKey;
+import flixel.addons.transition.FlxTransitionableState;
 class CategoryState extends MusicBeatState
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 	var grpLocks:FlxTypedGroup<FlxSprite>;
 
-	public var menuItems:Array<String> = [
+	public static var menuItems:Array<String> = [
 		"Oneshots", "Remixes", "Bonus", "Secrets"
 	];
-	public var menuLocks:Array<Bool> = [
-		false, false
+	public static var menuLocks:Array<Bool> = [
+		false, false, false, true
 	];
 
 
@@ -18,6 +19,12 @@ class CategoryState extends MusicBeatState
 	public static var loadWeekForce:String = 'Main';
 
 	private static var curSelected:Int = 0;
+
+	var easterEggKeys:Array<String> = [
+		'CAPTAINZ', 'TRIALS'
+	];
+	var allowedKeys:String = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	var easterEggKeysBuffer:String = '';
 
 	override function create()
 	{
@@ -68,6 +75,7 @@ class CategoryState extends MusicBeatState
 		super.create();
 	}
 
+	var inDialogue:Bool = false;
 	override function update(elapsed:Float)
 	{
 		if (FlxG.sound.music != null)
@@ -81,62 +89,121 @@ class CategoryState extends MusicBeatState
 		var back = controls.BACK;
 		var controlsStrings:Array<String> = [];
 		var shiftMult:Int = 1;
-		if(FlxG.keys.pressed.SHIFT) shiftMult = 3;
-		if (upP)
+		if (!inDialogue)
 		{
-			changeSelection(-shiftMult);
-		}
-		if (downP)
-		{
-			changeSelection(shiftMult);
-		}
-
-		if (controls.BACK)
-		{
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MusicBeatState.switchState(new MainMenuState());
-		}
-		if (accepted && menuLocks[curSelected])
-		{
-			FlxG.camera.shake(0.005, 0.5);
-			FlxG.sound.play(Paths.sound("badnoise"+FlxG.random.int(1,3)), 1);
-			grpMenuShit.forEach(function(item:FlxSprite)
+			if(FlxG.keys.pressed.SHIFT) shiftMult = 3;
+			if (upP)
 			{
-				if (item.ID == curSelected) FlxTween.color(item, 1, 0xffcc0002, 0xffffffff, {ease: FlxEase.sineIn});
-			});
-		}
-		else if (accepted)
-		{
-			var daSelected:String = menuItems[curSelected];
-			loadWeekForce = daSelected.toLowerCase();
-			if (loadWeekForce == 'h?')
-				throw "h?";
-			if (loadWeekForce == "secrets") {
-				TransitionState.transitionState(FreeplayState, {
-					transitionType: (function() {
-						var transitions = ["fadeOut", "fadeColor", "slideLeft", "slideRight", "slideUp", "slideDown", "slideRandom", "fallRandom", "fallSequential", "stickers"];
-						var options:Array<Chance> = [];
-					
-						for (transition in transitions) {
-							var chance:Float;
-							if (transition == "stickers") {
-								// Assign a lower chance for "stickers"
-								chance = 1 + Math.random() * 4; // 1% to 5%
-							} else if (transition == "fallRandom" || transition == "fallSequential") {
-								// Assign a higher chance for "fallRandom" and "fallSequential"
-								chance = 50 + Math.random() * 50; // 50% to 100%
-							} else {
-								// Assign a moderate chance for other transitions
-								chance = 10 + Math.random() * 40; // 10% to 50%
-							}
-							options.push({item: transition, chance: chance});
-						}
-					
-						return ChanceSelector.selectOption(options);
-					})()
+				changeSelection(-shiftMult);
+			}
+			if (downP)
+			{
+				changeSelection(shiftMult);
+			}
+
+			if (controls.BACK)
+			{
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+				MusicBeatState.switchState(new MainMenuState());
+			}
+
+			if (accepted && menuLocks[curSelected])
+			{
+				
+				accepted = false;
+				FlxG.camera.shake(0.005, 0.5);
+				FlxG.sound.play(Paths.sound("badnoise"+FlxG.random.int(1,3)), 1);
+				grpMenuShit.forEach(function(item:FlxSprite)
+				{
+					if (item.ID == curSelected) FlxTween.color(item, 1, 0xffcc0002, 0xffffffff, {ease: FlxEase.sineIn});
 				});
-			} else {
-				MusicBeatState.switchState(new FreeplayState());
+			}
+			else if (accepted)
+			{
+				
+				var daSelected:String = menuItems[curSelected];
+				loadWeekForce = daSelected.toLowerCase();
+				if (loadWeekForce == 'secrets' && menuLocks[curSelected] == false)
+				{
+					TransitionState.transitionState(FreeplayState, {
+						transitionType: (function() {
+							var transitions = ["fadeOut", "fadeColor", "slideLeft", "slideRight", "slideUp", "slideDown", "slideRandom", "fallRandom", "fallSequential", "stickers"];
+							var options:Array<Chance> = [];
+						
+							for (transition in transitions) {
+								var chance:Float;
+								if (transition == "stickers") {
+									// Assign a lower chance for "stickers"
+									chance = 1 + Math.random() * 4; // 1% to 5%
+								} else if (transition == "fallRandom" || transition == "fallSequential") {
+									// Assign a higher chance for "fallRandom" and "fallSequential"
+									chance = 50 + Math.random() * 50; // 50% to 100%
+								} else {
+									// Assign a moderate chance for other transitions
+									chance = 10 + Math.random() * 40; // 10% to 50%
+								}
+								options.push({item: transition, chance: chance});
+							}
+						
+							return ChanceSelector.selectOption(options);
+						})()
+					});
+				}
+				else if (loadWeekForce == 'secrets' && menuLocks[curSelected] == true)
+				{
+					//Ill put the dialogue sequence in here later
+				}
+				else if (FlxG.keys.firstJustPressed() != FlxKey.NONE)
+				{
+					var keyPressed:FlxKey = FlxG.keys.firstJustPressed();
+					var keyName:String = Std.string(keyPressed);
+					if(allowedKeys.contains(keyName)) {
+						easterEggKeysBuffer += keyName;
+						if(easterEggKeysBuffer.length >= 32) easterEggKeysBuffer = easterEggKeysBuffer.substring(1);
+						//trace('Test! Allowed Key pressed!!! Buffer: ' + easterEggKeysBuffer);
+	
+						for (wordRaw in easterEggKeys)
+						{
+							var word:String = wordRaw.toUpperCase(); //just for being sure you're doing it right
+							if (easterEggKeysBuffer.contains(word))
+							{
+								//trace('YOOO! ' + word);
+								if (FlxG.save.data.passwordEasterEgg == word)
+									FlxG.save.data.passwordEasterEgg = '';
+								else
+									FlxG.save.data.passwordEasterEgg = word;
+								FlxG.save.flush();
+	
+								FlxG.sound.play(Paths.sound('ToggleJingle'));
+	
+								var black:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+								black.alpha = 0;
+								add(black);
+	
+								FlxTween.tween(black, {alpha: 1}, 1, {onComplete:
+									function(twn:FlxTween) {
+										FlxTransitionableState.skipNextTransIn = true;
+										FlxTransitionableState.skipNextTransOut = true;
+										MusicBeatState.switchState(new states.GodCode());
+									}
+								});
+								FlxG.sound.music.fadeOut();
+								if(FreeplayState.vocals != null)
+								{
+									FreeplayState.vocals.fadeOut();
+								}
+								easterEggKeysBuffer = '';
+								break;
+							}
+						}
+					}
+				}
+				else if (loadWeekForce == 'h?')
+					throw "h?"; 
+				else
+				{
+					MusicBeatState.switchState(new FreeplayState());
+				}
 			}
 		}
 		grpLocks.forEach(function(lock:FlxSprite)

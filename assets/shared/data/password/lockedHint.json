@@ -1,0 +1,40 @@
+{
+	"dialogue": [
+		{
+			"expression": "talk",
+			"text": "Large attempt number detected. Activating hint system.",
+			"boxState": "normal",
+			"skipDis": false,
+			"sound": "",
+			"speed": 0.095,
+			"portrait": "bf"
+		},
+		{
+			"expression": "talk",
+			"text": "If you want to figure out the code, a good hint for it is on the gamebanana page.",
+			"boxState": "normal",
+			"skipDis": false,
+			"sound": "Z11Talk",
+			"speed": 0.05,
+			"portrait": "bf"
+		},
+		{
+			"expression": "talk",
+			"text": "You might wanna double check it. >:)",
+			"boxState": "normal",
+			"skipDis": false,
+			"sound": "Z11Talk",
+			"speed": 0.05,
+			"portrait": "bf"
+		},
+		{
+			"expression": "talk",
+			"text": "End of message. Closing dialogue box.",
+			"boxState": "normal",
+			"skipDis": false,
+			"sound": "",
+			"speed": 0.095,
+			"portrait": "bf"
+		}
+	]
+}

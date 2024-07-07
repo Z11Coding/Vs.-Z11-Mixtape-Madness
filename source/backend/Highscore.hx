@@ -6,6 +6,8 @@ class Highscore
 	public static var songScores:Map<String, Int> = new Map<String, Int>();
 	public static var songRating:Map<String, Float> = new Map<String, Float>();
 	public static var songMisses:Map<String, Int> = new Map<String, Int>();
+	public static var songRanks:Map<String, Int> = new Map<String, Int>();
+	public static var songDeaths:Map<String, Int> = new Map<String, Int>();
 
 	public static function resetSong(song:String, diff:Int = 0):Void
 	{
@@ -35,6 +37,26 @@ class Highscore
 		}
 		var newValue:Float = Math.floor(value * tempMult);
 		return newValue / tempMult;
+	}
+
+	public static function saveRank(song:String, score:Int = 0, ?diff:Int = 0):Void
+	{
+		var daSong:String = formatSong(song, diff);
+
+		if (songRanks.exists(daSong))
+		{
+			if (songRanks.get(daSong) > score)
+				setRank(daSong, score);
+		}
+		else
+			setRank(daSong, score);
+	}
+
+	public static function saveDeaths(song:String, deaths:Int = 0, ?diff:Int = 0):Void
+	{
+		var daSong:String = formatSong(song, diff);
+
+		setDeaths(daSong, deaths);
 	}
 
 	public static function saveScore(song:String, score:Int = 0, ?diff:Int = 0, ?rating:Float = -1, ?misses:Int = 0):Void
@@ -84,6 +106,22 @@ class Highscore
 	/**
 	 * YOU SHOULD FORMAT SONG WITH formatSong() BEFORE TOSSING IN SONG VARIABLE
 	 */
+	static function setRank(song:String, score:Int):Void
+	{
+		// Reminder that I don't need to format this song, it should come formatted!
+		songRanks.set(song, score);
+		FlxG.save.data.songRanks = songRanks;
+		FlxG.save.flush();
+	}
+	static function setDeaths(song:String, deaths:Int):Void
+	{
+		// Reminder that I don't need to format this song, it should come formatted!
+		var deathCounter:Int = songDeaths.get(song) + deaths;
+
+		songDeaths.set(song, deathCounter);
+		FlxG.save.data.songDeaths = songDeaths;
+		FlxG.save.flush();
+	}
 	static function setScore(song:String, score:Int):Void
 	{
 		// Reminder that I don't need to format this song, it should come formatted!
@@ -128,7 +166,20 @@ class Highscore
 
 		return songScores.get(daSong);
 	}
+	public static function getRank(song:String, diff:Int):Int
+	{
+		if (!songRanks.exists(formatSong(song, diff)))
+			setRank(formatSong(song, diff), 16);
 
+		return songRanks.get(formatSong(song, diff));
+	}
+	public static function getDeaths(song:String, diff:Int):Int
+	{
+		if (!songDeaths.exists(formatSong(song, diff)))
+			setDeaths(formatSong(song, diff), 0);
+
+		return songDeaths.get(formatSong(song, diff));
+	}
 	public static function getRating(song:String, diff:Int):Float
 	{
 		var daSong:String = formatSong(song, diff);
@@ -173,6 +224,14 @@ class Highscore
 		if (FlxG.save.data.songMisses != null)
 		{
 			songMisses = FlxG.save.data.songMisses;
+		}
+		if (FlxG.save.data.songRanks != null)
+		{
+			songRanks = FlxG.save.data.songRanks;
+		}
+		if (FlxG.save.data.songDeaths != null)
+		{
+			songDeaths = FlxG.save.data.songDeaths;
 		}
 	}
 }

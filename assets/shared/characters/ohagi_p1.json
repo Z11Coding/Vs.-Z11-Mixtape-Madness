@@ -1,0 +1,83 @@
+{
+	"animations": [
+		{
+			"loop": false,
+			"offsets": [
+				0,
+				0
+			],
+			"anim": "idle",
+			"fps": 24,
+			"name": "ohagi_idle",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				21,
+				-12
+			],
+			"anim": "singLEFT",
+			"fps": 24,
+			"name": "ohagi_left",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-15,
+				-7
+			],
+			"anim": "singRIGHT",
+			"fps": 24,
+			"name": "ohagi_right",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				15,
+				-40
+			],
+			"anim": "singDOWN",
+			"fps": 24,
+			"name": "ohagi_down",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				-7,
+				73
+			],
+			"anim": "singUP",
+			"fps": 24,
+			"name": "ohagi_up",
+			"indices": []
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/Ohagi_p1",
+	"position": [
+		-180,
+		-150
+	],
+	"healthicon": "Ohagi",
+	"flip_x": false,
+	"healthbar_colors": [
+		255,
+		185,
+		74
+	],
+	"healthbar_colors_alt": [
+		177,
+		84,
+		36
+	],
+	"camera_position": [
+		50,
+		40
+	],
+	"sing_duration": 4.5,
+	"scale": 1
+}

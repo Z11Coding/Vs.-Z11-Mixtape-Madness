@@ -1,0 +1,416 @@
+{
+	"song": {
+		"events": [
+			[
+				0,
+				[
+					[
+						"CameraBump",
+						"",
+						""
+					]
+				]
+			],
+			[
+				75,
+				[
+					[
+						"modchart system",
+						"CamBopGf",
+						""
+					]
+				]
+			],
+			[
+				1200,
+				[
+					[
+						"dodge",
+						"",
+						""
+					]
+				]
+			],
+			[
+				1275,
+				[
+					[
+						"modchart system",
+						"CamBopGf",
+						""
+					]
+				]
+			],
+			[
+				4725,
+				[
+					[
+						"modchart system",
+						"CamBopGf",
+						""
+					]
+				]
+			],
+			[
+				6225,
+				[
+					[
+						"modchart system",
+						"CamBopGf",
+						""
+					]
+				]
+			],
+			[
+				7200,
+				[
+					[
+						"modchart system",
+						"Characters Bop",
+						""
+					]
+				]
+			],
+			[
+				9525,
+				[
+					[
+						"modchart system",
+						"CamBopGf",
+						""
+					]
+				]
+			],
+			[
+				10500,
+				[
+					[
+						"modchart system",
+						"CamBopGf",
+						""
+					]
+				]
+			],
+			[
+				10725,
+				[
+					[
+						"modchart system",
+						"NoteBump",
+						""
+					]
+				]
+			],
+			[
+				10800,
+				[
+					[
+						"modchart system",
+						"NoteBump",
+						""
+					],
+					[
+						"modchart system",
+						"CamBopGf",
+						""
+					]
+				]
+			],
+			[
+				20400,
+				[
+					[
+						"dodge",
+						"",
+						""
+					]
+				]
+			],
+			[
+				30000,
+				[
+					[
+						"dodge",
+						"",
+						""
+					]
+				]
+			],
+			[
+				33600,
+				[
+					[
+						"dodge",
+						"",
+						""
+					]
+				]
+			],
+			[
+				49200,
+				[
+					[
+						"modchart system",
+						"Wavy Notes",
+						""
+					],
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					],
+					[
+						"Set GF Speed",
+						"2",
+						""
+					],
+					[
+						"modchart system",
+						"NoteBump",
+						""
+					],
+					[
+						"dodge",
+						"",
+						""
+					]
+				]
+			],
+			[
+				51600,
+				[
+					[
+						"dodge",
+						"",
+						""
+					]
+				]
+			],
+			[
+				54000,
+				[
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					]
+				]
+			],
+			[
+				58800,
+				[
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					]
+				]
+			],
+			[
+				61200,
+				[
+					[
+						"dodge",
+						"",
+						""
+					]
+				]
+			],
+			[
+				63600,
+				[
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					]
+				]
+			],
+			[
+				63600,
+				[
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					]
+				]
+			],
+			[
+				67800,
+				[
+					[
+						"modchart system",
+						"Move Window",
+						"0, -100"
+					]
+				]
+			],
+			[
+				68325,
+				[
+					[
+						"modchart system",
+						"Move Window",
+						"0, 100"
+					]
+				]
+			],
+			[
+				68400,
+				[
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					],
+					[
+						"modchart system",
+						"noteShimmy",
+						""
+					]
+				]
+			],
+			[
+				70800,
+				[
+					[
+						"dodge",
+						"",
+						""
+					]
+				]
+			],
+			[
+				73200,
+				[
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					]
+				]
+			],
+			[
+				78000,
+				[
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					]
+				]
+			],
+			[
+				78000,
+				[
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					]
+				]
+			],
+			[
+				78000,
+				[
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					],
+					[
+						"modchart system",
+						"noteShimmy",
+						""
+					]
+				]
+			],
+			[
+				82800,
+				[
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					]
+				]
+			],
+			[
+				82800,
+				[
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					]
+				]
+			],
+			[
+				87600,
+				[
+					[
+						"modchart system",
+						"noteSpin",
+						""
+					],
+					[
+						"Set GF Speed",
+						"1",
+						""
+					],
+					[
+						"modchart system",
+						"rumblething",
+						""
+					],
+					[
+						"modchart system",
+						"NoteBump",
+						""
+					],
+					[
+						"modchart system",
+						"noteShimmy",
+						""
+					],
+					[
+						"modchart system",
+						"CamBopGf",
+						""
+					]
+				]
+			],
+			[
+				99600,
+				[
+					[
+						"dodge",
+						"",
+						""
+					]
+				]
+			],
+			[
+				126000,
+				[
+					[
+						"dodge",
+						"",
+						""
+					]
+				]
+			],
+			[
+				132000,
+				[
+					[
+						"dodge",
+						"",
+						""
+					]
+				]
+			]
+		]
+	}
+}

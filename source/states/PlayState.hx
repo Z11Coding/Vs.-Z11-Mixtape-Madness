@@ -364,7 +364,7 @@ class PlayState extends MusicBeatState
 	public var camGame:FlxCamera;
 	public var camCredit:FlxCamera;
 	public var camOther:FlxCamera;
-	public var camFilters:FlxCamera;
+	public var camDialogue:FlxCamera;
 	public var cameraSpeed:Float = 1;
 
 	public var songScore:Int = 0;
@@ -384,6 +384,11 @@ class PlayState extends MusicBeatState
 	public static var campaignMisses:Int = 0;
 	public static var seenCutscene:Bool = false;
 	public static var deathCounter:Int = 0;
+	public static var marvs:Int;
+	public static var sicks:Int;
+	public static var goods:Int;
+	public static var bads:Int;
+	public static var shits:Int;
 
 	public var defaultCamZoom:Float = 1.05;
 
@@ -576,6 +581,7 @@ class PlayState extends MusicBeatState
 		return video;
 	}*/
 	public var Crashed:Bool = false;
+	public static var gameplayArea:String = "Story";
 
 	override public function create()
 	{
@@ -640,18 +646,18 @@ class PlayState extends MusicBeatState
 		camVisual = new FlxCamera();
 		camCredit = new FlxCamera();
 		camOther = new FlxCamera();
-		camFilters = new FlxCamera();
+		camDialogue = new FlxCamera();
 		camHUD.bgColor.alpha = 0;
 		camVisual.bgColor.alpha = 0;
 		camCredit.bgColor.alpha = 0;
 		camOther.bgColor.alpha = 0;
-		camFilters.bgColor.alpha = 0;
+		camDialogue.bgColor.alpha = 0;
 
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camVisual, false);
 		FlxG.cameras.add(camCredit, false);
 		FlxG.cameras.add(camOther, false);
-		FlxG.cameras.add(camFilters, false);
+		FlxG.cameras.add(camDialogue, false);
 		if (ClientPrefs.data.starHidden)
 			camHUD.alpha = 0;
 
@@ -665,8 +671,8 @@ class PlayState extends MusicBeatState
 			camVisual.filtersEnabled = true;
 			camOther.setFilters(filters);
 			camOther.filtersEnabled = true;
-			camFilters.setFilters(filters);
-			camFilters.filtersEnabled = true;
+			camDialogue.setFilters(filters);
+			camDialogue.filtersEnabled = true;
 			filters.push(shaders.ShadersHandler.chromaticAberration);
 			camfilters2.push(shaders.ShadersHandler.chromaticAberration);
 			// camfilters2.push(shaders.ShadersHandler.rainShader);
@@ -1930,7 +1936,7 @@ class PlayState extends MusicBeatState
 			}
 			psychDialogue.nextDialogueThing = startNextDialogue;
 			psychDialogue.skipDialogueThing = skipDialogue;
-			psychDialogue.cameras = [camHUD];
+			psychDialogue.cameras = [camVisual];
 			add(psychDialogue);
 		}
 		else
@@ -2282,11 +2288,6 @@ class PlayState extends MusicBeatState
 
 	public dynamic function fullComboFunction()
 	{
-		var marvs:Int;
-		var sicks:Int;
-		var goods:Int;
-		var bads:Int;
-		var shits:Int;
 
 		ratingFC = "";
 
@@ -2670,12 +2671,127 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public function generateChart(noteData:Array<SwagSection>):Array<Note>
+	var debugNum:Int = 0;
+	var stair:Int = 0;
+	var noteIndex:Int = -1;
+	private var noteTypes:Array<String> = [];
+	private var eventsPushed:Array<String> = [];
+	private function generateSong(dataPath:String):Void
 	{
+		songSpeedType = ClientPrefs.getGameplaySetting('scrolltype','multiplicative');
+
+		switch(songSpeedType)
+		{
+			case "multiplicative":
+				songSpeed = SONG.speed * ClientPrefs.getGameplaySetting('scrollspeed', 1);
+			case "constant":
+				songSpeed = ClientPrefs.getGameplaySetting('scrollspeed', 1);
+		}
+
+		var songData = SONG;
+		Conductor.changeBPM(songData.bpm);
+
+		curSong = songData.song;
+
 		var AIPlayMap = [];
 
 		if (AIPlayer.active)
 			AIPlayMap = AIPlayer.GeneratePlayMap(SONG, AIPlayer.diff);
+
+		Paths.inst(curSong.toLowerCase());
+		Paths.voices(curSong.toLowerCase());
+		
+		vocals = new FlxSound();
+		opponentVocals = new FlxSound();
+		gfVocals = new FlxSound();
+
+		try 
+		{
+			if (songData.needsVoices && songData.newVoiceStyle)
+			{
+				var playerVocals = Paths.voices(songData.song, (boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) ? 'player' : boyfriend.vocalsFile);
+				if(playerVocals != null) 
+				{
+					vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.music('empty'));
+					FlxG.sound.list.add(vocals);
+				}
+
+				var oppVocals = Paths.voices(songData.song, (dad.vocalsFile == null || dad.vocalsFile.length < 1) ? 'opponent' : dad.vocalsFile);
+				if(oppVocals != null) 
+				{
+					opponentVocals.loadEmbedded(oppVocals != null ? oppVocals : Paths.music('empty'));
+					FlxG.sound.list.add(opponentVocals);
+				}
+
+				if (((dad.vocalsFile == null || dad.vocalsFile.length < 1) && dad.vocalsFile != 'gf') && ((boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) && boyfriend.vocalsFile != 'gf'))
+				{	
+					var gfVoc = Paths.voices(songData.song, (gf.vocalsFile == null || gf.vocalsFile.length < 1) ? 'gf' : dad.vocalsFile);
+					if(gfVoc != null) 
+					{
+						gfVocals.loadEmbedded(gfVoc != null ? gfVoc : Paths.music('empty'));
+						FlxG.sound.list.add(gfVocals);
+					}
+				}
+			}
+			else if (songData.needsVoices && !songData.newVoiceStyle)
+			{
+				var playerVocals = Paths.voices(songData.song);
+				if(playerVocals != null) 
+				{
+					vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.voices(songData.song));
+					FlxG.sound.list.add(vocals);
+				}
+			}
+		}
+		catch(e) {}
+
+		inst = new FlxSound();
+		try {
+			inst.loadEmbedded(Paths.inst(songData.song));
+		}
+		catch(e:Dynamic) 
+		{
+			inst.loadEmbedded(Paths.music('empty'));
+		}
+		FlxG.sound.list.add(inst);
+
+		if (SONG.extraTracks != null){
+			for (trackName in SONG.extraTracks){
+				var newTrack = Paths.track(songData.song, trackName);
+				if(newTrack != null)
+				{
+					tracks.push(newTrack);
+					FlxG.sound.list.add(newTrack);
+				}
+			}
+		}
+
+		add(notes);
+
+		var noteData:Array<SwagSection>;
+
+		// NEW SHIT
+		noteData = songData.notes;
+
+		var playerCounter:Int = 0;
+		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
+
+		var songName:String = Paths.formatToSongPath(SONG.song);
+		var file:String = Paths.json(songName + '/events');
+		#if MODS_ALLOWED
+		if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file)) {
+		#else
+		if (OpenFlAssets.exists(file)) {
+		#end
+			var eventsData:Array<Dynamic> = Song.loadFromJson('events', songName).events;
+			for (event in eventsData) //Event Notes
+				for (i in 0...event[1].length)
+					makeEvent(event, i);
+		}
+
+
+		speedChanges.sort(svSort);
+
 		for (section in noteData)
 		{
 			for (songNotes in section.sectionNotes)
@@ -3126,137 +3242,10 @@ class PlayState extends MusicBeatState
 					noteTypes.push(swagNote.noteType);
 				}
 			}
-			// daBeats += 1;
-		}
-		return allNotes;
-	}
-
-	var debugNum:Int = 0;
-	var stair:Int = 0;
-	var noteIndex:Int = -1;
-	private var noteTypes:Array<String> = [];
-	private var eventsPushed:Array<String> = [];
-
-	private function generateSong(dataPath:String):Void
-	{
-		songSpeedType = ClientPrefs.getGameplaySetting('scrolltype', 'multiplicative');
-
-		switch (songSpeedType)
-		{
-			case "multiplicative":
-				songSpeed = SONG.speed * ClientPrefs.getGameplaySetting('scrollspeed', 1);
-			case "constant":
-				songSpeed = ClientPrefs.getGameplaySetting('scrollspeed', 1);
+			daBeats += 1;
 		}
 
-		var songData = SONG;
-		Conductor.changeBPM(songData.bpm);
-
-		curSong = songData.song;
-
-		Paths.inst(curSong.toLowerCase());
-		Paths.voices(curSong.toLowerCase());
-
-		vocals = new FlxSound();
-		opponentVocals = new FlxSound();
-		gfVocals = new FlxSound();
-
-		try
-		{
-			if (songData.needsVoices && songData.newVoiceStyle)
-			{
-				var playerVocals = Paths.voices(songData.song,
-					(boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) ? 'player' : boyfriend.vocalsFile);
-				if (playerVocals != null)
-				{
-					vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.music('empty'));
-					FlxG.sound.list.add(vocals);
-				}
-
-				var oppVocals = Paths.voices(songData.song, (dad.vocalsFile == null || dad.vocalsFile.length < 1) ? 'opponent' : dad.vocalsFile);
-				if (oppVocals != null)
-				{
-					opponentVocals.loadEmbedded(oppVocals != null ? oppVocals : Paths.music('empty'));
-					FlxG.sound.list.add(opponentVocals);
-				}
-
-				if (((dad.vocalsFile == null || dad.vocalsFile.length < 1) && dad.vocalsFile != 'gf')
-					&& ((boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) && boyfriend.vocalsFile != 'gf'))
-				{
-					var gfVoc = Paths.voices(songData.song, (gf.vocalsFile == null || gf.vocalsFile.length < 1) ? 'gf' : dad.vocalsFile);
-					if (gfVoc != null)
-					{
-						gfVocals.loadEmbedded(gfVoc != null ? gfVoc : Paths.music('empty'));
-						FlxG.sound.list.add(gfVocals);
-					}
-				}
-			}
-			else if (songData.needsVoices && !songData.newVoiceStyle)
-			{
-				var playerVocals = Paths.voices(songData.song);
-				if (playerVocals != null)
-				{
-					vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.voices(songData.song));
-					FlxG.sound.list.add(vocals);
-				}
-			}
-		}
-		catch (e)
-		{
-		}
-
-		inst = new FlxSound();
-		try
-		{
-			inst.loadEmbedded(Paths.inst(songData.song));
-		}
-		catch (e:Dynamic)
-		{
-			inst.loadEmbedded(Paths.music('empty'));
-		}
-		FlxG.sound.list.add(inst);
-
-		if (SONG.extraTracks != null)
-		{
-			for (trackName in SONG.extraTracks)
-			{
-				var newTrack = Paths.track(songData.song, trackName);
-				if (newTrack != null)
-				{
-					tracks.push(newTrack);
-					FlxG.sound.list.add(newTrack);
-				}
-			}
-		}
-
-		add(notes);
-
-		var noteData:Array<SwagSection>;
-
-		// NEW SHIT
-		noteData = songData.notes;
-
-		var playerCounter:Int = 0;
-		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
-
-		var songName:String = Paths.formatToSongPath(SONG.song);
-		var file:String = Paths.json(songName + '/events');
-		#if MODS_ALLOWED
-		if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file))
-		{
-		#else
-		if (OpenFlAssets.exists(file))
-		{
-		#end
-			var eventsData:Array<Dynamic> = Song.loadFromJson('events', songName).events;
-			for (event in eventsData) // Event Notes
-				for (i in 0...event[1].length)
-					makeEvent(event, i);
-		}
-
-		speedChanges.sort(svSort);
-		generateChart(noteData);
-		for (event in songData.events) // Event Notes
+		for (event in songData.events) //Event Notes
 			for (i in 0...event[1].length)
 				makeEvent(event, i);
 		// playerCounter += 1;
@@ -6411,11 +6400,8 @@ class PlayState extends MusicBeatState
 
 				if (storyPlaylist.length <= 0)
 				{
-					Mods.loadTopMod();
-					FlxG.sound.playMusic(Paths.music('panixPress'));
+					gameplayArea = "Story";
 					#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
-					MusicBeatState.switchState(new StoryMenuState());
-
 					// if ()
 					if (!ClientPrefs.getGameplaySetting('practice', false) && !ClientPrefs.getGameplaySetting('botplay', false))
 					{
@@ -6430,31 +6416,27 @@ class PlayState extends MusicBeatState
 						FlxG.save.flush();
 					}
 					changedDifficulty = false;
+					new FlxTimer().start(0.1, function(tmr:FlxTimer)
+					{
+						camHUD.alpha -= 1 / 10;
+					}, 10);
+					openSubState(new substates.RankingSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 				}
 				else
 				{
-					var difficulty:String = Difficulty.getFilePath();
-
-					trace('LOADING NEXT SONG');
-					trace(Paths.formatToSongPath(PlayState.storyPlaylist[0]) + difficulty);
-
-					FlxTransitionableState.skipNextTransIn = true;
-					FlxTransitionableState.skipNextTransOut = true;
-					prevCamFollow = camFollow;
-
-					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + difficulty, PlayState.storyPlaylist[0]);
-					FlxG.sound.music.stop();
-
-					MusicBeatState.switchState(new PlayState());
+					new FlxTimer().start(0.1, function(tmr:FlxTimer)
+					{
+						camHUD.alpha -= 1 / 10;
+					}, 10);
+					gameplayArea = "Story";
+					openSubState(new substates.RankingSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 				}
 			}
 			else
 			{
-				trace('WENT BACK TO FREEPLAY??');
-				Mods.loadTopMod();
+				gameplayArea = "Freeplay";
 				#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
-				MusicBeatState.switchState(new FreeplayState());
-				FlxG.sound.playMusic(Paths.music('panixPress'));
+				openSubState(new substates.RankingSubstate(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 				changedDifficulty = false;
 			}
 			transitioning = true;

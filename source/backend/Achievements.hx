@@ -26,27 +26,24 @@ class Achievements {
 	public static function init()
 	{
 		createAchievement('friday_night_play',		{name: "Freaky on a Friday Night", description: "Play on a Friday... Night.", hidden: true});
-		createAchievement('week1_nomiss',			{name: "She Calls Me Daddy Too", description: "Beat Week 1 on Hard with no Misses."});
-		createAchievement('week2_nomiss',			{name: "No More Tricks", description: "Beat Week 2 on Hard with no Misses."});
-		createAchievement('week3_nomiss',			{name: "Call Me The Hitman", description: "Beat Week 3 on Hard with no Misses."});
-		createAchievement('week4_nomiss',			{name: "Lady Killer", description: "Beat Week 4 on Hard with no Misses."});
-		createAchievement('week5_nomiss',			{name: "Missless Christmas", description: "Beat Week 5 on Hard with no Misses."});
-		createAchievement('week6_nomiss',			{name: "Highscore!!", description: "Beat Week 6 on Hard with no Misses."});
-		createAchievement('week7_nomiss',			{name: "God Effing Damn It!", description: "Beat Week 7 on Hard with no Misses."});
 		createAchievement('ur_bad',					{name: "What a Funkin' Disaster!", description: "Complete a Song with a rating lower than 20%."});
 		createAchievement('ur_good',				{name: "Perfectionist", description: "Complete a Song with a rating of 100%."});
-		createAchievement('roadkill_enthusiast',	{name: "Roadkill Enthusiast", description: "Watch the Henchmen die 50 times.", maxScore: 50, maxDecimals: 0});
-		createAchievement('oversinging', 			{name: "Oversinging Much...?", description: "Hold down a note for 10 seconds."});
-		createAchievement('hype',					{name: "Hyperactive", description: "Finish a Song without going Idle."});
-		createAchievement('two_keys',				{name: "Just the Two of Us", description: "Finish a Song pressing only two keys."});
 		createAchievement('toastie',				{name: "Toaster Gamer", description: "Have you tried to run the game on a toaster?"});
-		createAchievement('way_too_spoopy',			{name: "Way Too Spoopy", description: "PFC Week 2. On Hard. Yeah Right.", hidden: false});
-		createAchievement('smooth_moves',			{name: "Smooth Moves", description: "PFC Tutorial. On Hard. Good Freaking Luck.", hidden: false});
-		createAchievement('not_4k',					{name: "4K Only, Huh?", description: "Beat a 4K Song while having 4K only mode on.", hidden: true});
-		createAchievement('gf_mode',				{name: "Average GF Enjoyer", description: "Beat Any Song In GF Mode.", hidden: true});
-		createAchievement('beat_battle',			{name: "Rhythm Master", description: "Beat \"Beat Battle\" on any difficulty higher than Normal.", hidden: true});
-		createAchievement('beat_battle_master',		{name: "King Of Memory", description: "Beat \"Beat Battle\" on at least Reasonable difficulty or higher with no higher then 10 misses.", hidden: true});
-		createAchievement('beat_battle_god',		{name: "God Teir Memory", description: "Beat \"Beat Battle\" on at least Semi-Impossible difficulty or higher with no higher then 25 misses.", hidden: true});
+		createAchievement('beat_battle',			{name: "Rhythm Master", description: "Beat \"Beat Battle\" on any difficulty higher than Normal."});
+		createAchievement('beat_battle_master',		{name: "King Of Memory", description: "Beat \"Beat Battle\" on at least Reasonable difficulty or higher with no higher then 10 misses."});
+		createAchievement('beat_battle_god',		{name: "God Teir Memory", description: "Beat \"Beat Battle\" on at least Semi-Impossible difficulty or higher with no higher then 25 misses."});
+		createAchievement('beat_battle_fanatic',	{name: "Number One Fan", description: "Beat \"Beat Battle\" on at least Reasonable difficulty or higher and \"Beat Battle 2\" with modcharts on", maxScore: 2, maxDecimals: 0});
+		createAchievement('feelinfrisky',	        {name: "FANTA IN MY SYSTEM", description: "Beat \"Funky Fanta\" without missing"});
+		createAchievement('leantastic',	            {name: "Maybe We Should Cool It On The Lean...", description: "Beat \"ULS\" without missing"});
+		createAchievement('punchout',	            {name: "Where's The COD Reference?", description: "Beat \"Pack-A-Punch\" without missing"});
+		createAchievement('rawr',	                {name: "Don't mess with michael", description: "Beat \"Rawr\" without missing"});
+		createAchievement('underlust',	            {name: "DETERMINATION...I Think...", description: "Beat \"Resistalovania (Mega Mix)\" on the hardest difficulty"});
+		createAchievement('resistified',	        {name: "True Resistance", description: "Beat Every version of Resistance without missing", maxScore: 7, maxDecimals: 0});
+		createAchievement('skysthelimit',	        {name: "Sky's The Limit", description: "Beat \"Fangirl Frenzy\" and \"Familiar Freakout\" without missing", maxScore: 2, maxDecimals: 0});
+		createAchievement('secretsunveiled',	    {name: "THERE'S MORE???", description: "Find the Secrets Category", hidden: true});
+		createAchievement('secretsuntold',	        {name: "Secret's Untold", description: "Unlock the Secrets Category", hidden: true});
+		createAchievement('potato',	                {name: "Slow-Mo", description: "Set the game to 1 FPS", hidden: true});
+		createAchievement('potatogameplay',	        {name: "YOU CAN PLAY LIKE THIS?!?!", description: "Beat a song while the FPS is set to 1", hidden: true});
 		
 		//dont delete this thing below
 		_originalLength = _sortID + 1;

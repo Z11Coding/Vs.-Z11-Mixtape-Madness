@@ -1,0 +1,124 @@
+{
+	"dialogue": [
+		{
+			"sound": "ohagi_d",
+			"speed": 0.05,
+			"portrait": "ohagi",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Whoops, I got so into the groove that I didn't even notice you were here. My bad!"
+		},
+		{
+			"sound": "ohagi_d",
+			"speed": 0.05,
+			"portrait": "ohagi",
+			"boxState": "normal",
+			"expression": "smile",
+			"text": "So, you called me, got something on your mind?"
+		},
+		{
+			"sound": "bf_d",
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Oh, I just wanted someone to help me test out this new singing technique."
+		},
+		{
+			"sound": "bf_d",
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "I heard your singing and thought you could help me out."
+		},
+		{
+			"sound": "ohagi_d",
+			"speed": 0.05,
+			"portrait": "ohagi",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "A new singin' technique?"
+		},
+		{
+			"sound": "ohagi_d",
+			"speed": 0.05,
+			"portrait": "ohagi",
+			"boxState": "normal",
+			"expression": "smile",
+			"text": "Haha! That's awsome! I'd be more than down to help you out!"
+		},
+		{
+			"sound": "ohagi_d",
+			"speed": 0.05,
+			"portrait": "ohagi",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "By the way, what's your name?"
+		},
+		{
+			"sound": "bf_d",
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "excited",
+			"text": "Oh, My name's Z11."
+		},
+		{
+			"sound": "ohagi_d",
+			"speed": 0.05,
+			"portrait": "ohagi",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Z11?"
+		},
+		{
+			"sound": "ohagi_d",
+			"speed": 0.05,
+			"portrait": "ohagi",
+			"boxState": "normal",
+			"expression": "smile",
+			"text": "That's a weird name! I'm Ohagi. Nice to meet ya!"
+		},
+		{
+			"sound": "bf_d",
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "excited",
+			"text": "Hehe. Nice to meet you, too."
+		},
+		{
+			"sound": "ohagi_d",
+			"speed": 0.05,
+			"portrait": "ohagi",
+			"boxState": "normal",
+			"expression": "grin",
+			"text": "So, Z11, you ready?"
+		},
+		{
+			"sound": "bf_d",
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Yeah, just about."
+		},
+		{
+			"sound": "bf_d",
+			"speed": 0.05,
+			"portrait": "bf",
+			"boxState": "normal",
+			"expression": "talk",
+			"text": "Again, thank you so much for helping me out. I really appreciate it."
+		},
+		{
+			"sound": "ohagi_d",
+			"speed": 0.05,
+			"portrait": "ohagi",
+			"boxState": "normal",
+			"expression": "smile",
+			"text": "Hehe, no problem, man! Let's get this party started!"
+		}
+	]
+}

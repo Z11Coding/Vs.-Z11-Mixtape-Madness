@@ -1,0 +1,33 @@
+{
+	"storyName": "Your New Week",
+	"difficulties": "Normal",
+	"hideFreeplay": false,
+	"weekBackground": "stage",
+	"weekBefore": "ohagi",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"startUnlocked": true,
+	"category": "oneshots",
+	"hideStoryMode": true,
+	"songs": [
+		[
+			"Test Field",
+			"ohagi",
+			[
+				255,
+				200,
+				40
+			]
+		]
+	],
+	"weekCharacters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"hiddenUntilUnlocked": false,
+	"weekName": "Custom Week"
+}

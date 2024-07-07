@@ -38,7 +38,9 @@ import states.TitleState;
 	public var drawDistanceModifier:Float = 1;
 	public var holdSubdivs:Float = 2;
 	public var optimizeHolds:Bool = true;
+	public var gotit:Bool = false;
 	public var noteOffset:Int = 0;
+	public var progression:Int = 0;
 	public var arrowHSV:Array<Array<Int>> = [
 		[0, 0, 0], [0, 0, 0], 
 		[0, 0, 0], [0, 0, 0], 
@@ -48,7 +50,8 @@ import states.TitleState;
 		[0, 0, 0], [0, 0, 0], 
 		[0, 0, 0], [0, 0, 0], 
 		[0, 0, 0], [0, 0, 0], 
-		[0, 0, 0], [0, 0, 0]];
+		[0, 0, 0], [0, 0, 0]
+	];
 	public var arrowRGB:Array<Array<FlxColor>> = [
 		[0xFFC24B99, 0xFFFFFFFF, 0xFF3C1F56],
 		[0xFF00FFFF, 0xFFFFFFFF, 0xFF1542B7],

@@ -84,13 +84,12 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 		curCrazy = FlxG.random.getObject(getMoreIntroTextShit());
 
 		// DEBUG BULLSHIT
-
 		swagShader = new ColorSwap();
+		
 		super.create();
 
 		ClientPrefs.toggleVolumeKeys(true);
