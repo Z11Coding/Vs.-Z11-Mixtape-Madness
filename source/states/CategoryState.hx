@@ -109,6 +109,52 @@ class CategoryState extends MusicBeatState
 				MusicBeatState.switchState(new MainMenuState());
 			}
 
+			if (FlxG.keys.firstJustPressed() != FlxKey.NONE)
+			{
+				var keyPressed:FlxKey = FlxG.keys.firstJustPressed();
+				var keyName:String = Std.string(keyPressed);
+				if(allowedKeys.contains(keyName)) {
+					easterEggKeysBuffer += keyName;
+					if(easterEggKeysBuffer.length >= 32) easterEggKeysBuffer = easterEggKeysBuffer.substring(1);
+					//trace('Test! Allowed Key pressed!!! Buffer: ' + easterEggKeysBuffer);
+
+					for (wordRaw in easterEggKeys)
+					{
+						var word:String = wordRaw.toUpperCase(); //just for being sure you're doing it right
+						if (easterEggKeysBuffer.contains(word))
+						{
+							//trace('YOOO! ' + word);
+							if (FlxG.save.data.passwordEasterEgg == word)
+								FlxG.save.data.passwordEasterEgg = '';
+							else
+								FlxG.save.data.passwordEasterEgg = word;
+							FlxG.save.flush();
+
+							FlxG.sound.play(Paths.sound('ToggleJingle'));
+
+							var black:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+							black.alpha = 0;
+							add(black);
+
+							FlxTween.tween(black, {alpha: 1}, 1, {onComplete:
+								function(twn:FlxTween) {
+									FlxTransitionableState.skipNextTransIn = true;
+									FlxTransitionableState.skipNextTransOut = true;
+									MusicBeatState.switchState(new states.GodCode());
+								}
+							});
+							FlxG.sound.music.fadeOut();
+							if(FreeplayState.vocals != null)
+							{
+								FreeplayState.vocals.fadeOut();
+							}
+							easterEggKeysBuffer = '';
+							break;
+						}
+					}
+				}
+			}
+
 			if (accepted && menuLocks[curSelected])
 			{
 				
@@ -154,51 +200,6 @@ class CategoryState extends MusicBeatState
 				else if (loadWeekForce == 'secrets' && menuLocks[curSelected] == true)
 				{
 					//Ill put the dialogue sequence in here later
-				}
-				else if (FlxG.keys.firstJustPressed() != FlxKey.NONE)
-				{
-					var keyPressed:FlxKey = FlxG.keys.firstJustPressed();
-					var keyName:String = Std.string(keyPressed);
-					if(allowedKeys.contains(keyName)) {
-						easterEggKeysBuffer += keyName;
-						if(easterEggKeysBuffer.length >= 32) easterEggKeysBuffer = easterEggKeysBuffer.substring(1);
-						//trace('Test! Allowed Key pressed!!! Buffer: ' + easterEggKeysBuffer);
-	
-						for (wordRaw in easterEggKeys)
-						{
-							var word:String = wordRaw.toUpperCase(); //just for being sure you're doing it right
-							if (easterEggKeysBuffer.contains(word))
-							{
-								//trace('YOOO! ' + word);
-								if (FlxG.save.data.passwordEasterEgg == word)
-									FlxG.save.data.passwordEasterEgg = '';
-								else
-									FlxG.save.data.passwordEasterEgg = word;
-								FlxG.save.flush();
-	
-								FlxG.sound.play(Paths.sound('ToggleJingle'));
-	
-								var black:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-								black.alpha = 0;
-								add(black);
-	
-								FlxTween.tween(black, {alpha: 1}, 1, {onComplete:
-									function(twn:FlxTween) {
-										FlxTransitionableState.skipNextTransIn = true;
-										FlxTransitionableState.skipNextTransOut = true;
-										MusicBeatState.switchState(new states.GodCode());
-									}
-								});
-								FlxG.sound.music.fadeOut();
-								if(FreeplayState.vocals != null)
-								{
-									FreeplayState.vocals.fadeOut();
-								}
-								easterEggKeysBuffer = '';
-								break;
-							}
-						}
-					}
 				}
 				else if (loadWeekForce == 'h?')
 					throw "h?"; 
