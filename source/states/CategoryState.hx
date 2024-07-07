@@ -28,6 +28,8 @@ class CategoryState extends MusicBeatState
 
 	override function create()
 	{
+		trace("Killing game.");
+		// Main.simulateIntenseMaps();
 		var hh:Array<Chance> = [
 			{item: "h?", chance: 5}, // 5% chance to add "h?"
 			{item: "no", chance: 95} // 95% chance to do nothing
