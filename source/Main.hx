@@ -132,6 +132,7 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
+		trace(HoldableVariable.createVariable(2).evaluate());
 		Toolkit.init();
 		Toolkit.theme = 'dark'; // don't be cringe
 		backend.Cursor.registerHaxeUICursors();

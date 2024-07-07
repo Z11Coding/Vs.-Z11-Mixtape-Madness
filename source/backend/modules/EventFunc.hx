@@ -10,24 +10,25 @@ enum EventType {
 class EventFunc {
     public var eventName: String;
     public var eventType: EventType;
-    public var watchedVariable: Void -> Dynamic; // Now a function returning Dynamic
+    public var watchedVariable: Variable<Dynamic>; // Now a function returning Dynamic
     public var func: Void -> Void;
     private var lastValue: Dynamic;
     private var destroyOnTrigger: Null<Bool>;
     private static var instances: Array<EventFunc> = [];
 
-    public inline function new(eventName: String, eventType: EventType, watchedVariable: Void -> Dynamic, func: Void -> Void, ?destroyOnTrigger: Bool = true) {
+    public inline function new(eventName: String, eventType: EventType, watchedVariable: Dynamic, func: Void -> Void, ?destroyOnTrigger: Bool = true) {
         this.eventName = eventName;
         this.eventType = eventType;
         this.watchedVariable = watchedVariable;
         this.func = func;
-        this.lastValue = watchedVariable(); // Evaluate to initialize
+        var value = watchedVariable.evaluate();
+        this.lastValue = value; // Evaluate to initialize
         this.destroyOnTrigger = destroyOnTrigger;
         instances.push(this);
     }
 
     public inline function check(): Bool {
-        var currentValue = watchedVariable(); // Evaluate the expression
+        var currentValue = watchedVariable.evaluate(); // Evaluate the expression
         var triggered = false;
         switch eventType {
             case GreaterThan(value):
@@ -94,7 +95,28 @@ class EventFunc {
         trace(v);
         return v;
     }
+
+    public static inline function getValue(v:Dynamic):Dynamic {
+        return v;
+    }
+
+    // public static function createEventFunc(eventName:String, eventType:EventType, expression:Dynamic, func:Void->Void, ?destroyOnTrigger:Bool = true):EventFunc {
+    //     // Use HoldableVariable.createVariable to wrap the expression in a Variable
+    //     var variableExpr = null;
+        
+    //     // Since createVariable is a macro, it returns an Expr, which needs to be evaluated to a Variable<Dynamic>
+    //     // This step is conceptual and assumes the existence of a mechanism to convert Expr to Variable<Dynamic>
+    //     // In practice, this might involve macro magic or a different approach to directly instantiate Variable
+    //     var variable:Variable<Dynamic> = HoldableVariable.createVariable(expression);
+    //     trace(variable + " is the variable");
+        
+    //     // Create the EventFunc instance with the Variable
+    //     var eventFunc = new EventFunc(eventName, eventType, variable, func, destroyOnTrigger);
+        
+    //     return eventFunc;
+    // }
 }
+
 
 
     // class Tracker {
