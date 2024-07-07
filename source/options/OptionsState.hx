@@ -76,10 +76,12 @@ class OptionsState extends MusicBeatState
 	}
 
 	override function closeSubState() {
+		FlxTween.globalManager.clear();
 		super.closeSubState();
 		ClientPrefs.saveSettings();
 		#if DISCORD_ALLOWED
 		DiscordClient.changePresence("Options Menu", null);
+		
 		#end
 	}
 

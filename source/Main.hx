@@ -232,6 +232,10 @@ class Main extends Sprite
 		backend.modules.MemoryGCPlugin.initialize();
 	}
 
+	public static function dummy():Void
+	{}
+
+	
 	static function resetSpriteCache(sprite:Sprite):Void
 	{
 		@:privateAccess {
@@ -389,6 +393,21 @@ class Main extends Sprite
 		}
 
 		// Additional error handling or recovery mechanisms can be added here
+
+			for (stackItem in callStack)
+				{
+					switch (stackItem)
+					{
+						case FilePos(s, file, line, column):
+							if (file.contains("FlxTween.hx")) {
+								FlxTween.globalManager.clear();
+								trace("Tween Error occurred. Clearing all tweens.");
+							}
+							
+						default:
+							dummy();
+					}
+				}
 	}
 	#end
 
