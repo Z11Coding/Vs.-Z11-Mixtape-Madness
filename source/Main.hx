@@ -438,9 +438,23 @@ class Main extends Sprite
 		for (i in 0...10000)
 		{ // Frequent calls
 			var selectedOption = ChanceSelector.selectFromMap(itemChancesMap);
-			// Assuming we don't need to trace every selected option to avoid flooding the output
 		}
 		trace("Completed frequent calls to selectFromMap");
+	}
+
+	public static function simulateIntenseMaps():Void
+	{
+		var numMaps:Int = Std.int(Math.random() * 10 + 1); // Random number of maps between 1 and 10
+		var maps:Array<Chance> = [];
+		
+		for (i in 0...numMaps)
+		{
+			var chance:Float = Math.random() * 99999999; // Random chance value between 0 and 99999999
+			maps.push({item: "Map" + i, chance: chance});
+		}
+		
+		var selectedMap = ChanceSelector.selectFromOptions(maps);
+		trace("Selected map from random maps:", selectedMap);
 	}
 
 	public static function simulateLargeOptions():Void
