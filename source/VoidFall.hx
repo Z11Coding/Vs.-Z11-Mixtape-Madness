@@ -12,7 +12,7 @@ class VoidFall {
         var scrambledFileName = scrambleFileName(randomFileName);
 
                 // Step 1: Create the temporary map
-                var tempMap:Map<String, Float> = ["Void" => 20, "Compile" => 80];
+                var tempMap:Map<String, Float> = ["Void" => 1, "Compile" => 99];
 
                 // Step 3: Use the chanceMap function
                 var result = tempMap.chanceMap();
