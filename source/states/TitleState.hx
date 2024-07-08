@@ -96,7 +96,7 @@ class TitleState extends MusicBeatState
 		
 		super.create();
 
-		ClientPrefs.toggleVolumeKeys(true);
+		//ClientPrefs.toggleVolumeKeys(true);
 		#if CHECK_FOR_UPDATES
 		if(ClientPrefs.data.checkForUpdates && !closedState) {
 			trace('checking for update');
@@ -167,7 +167,7 @@ class TitleState extends MusicBeatState
 		if (Main.cmdArgs.indexOf("GameJoltBug") != -1 && !GJBug)
 		{
 			GJBug = true;
-				FlxG.sound.playMusic(Paths.music('panixPress'), 0);
+			FlxG.sound.playMusic(Paths.music('panixPress'), 0);
 			
 		
 			FlxG.switchState(new options.OptionsState());
@@ -205,6 +205,7 @@ class TitleState extends MusicBeatState
 			// music.play();
 
 			if (FlxG.sound.music == null || !FlxG.sound.music.playing) {
+				FlxG.sound.music.time = 0;
 				FlxG.sound.playMusic(Paths.music('panixPress'), 0);
 			}
 
@@ -635,6 +636,7 @@ class TitleState extends MusicBeatState
 				case 1:
 					if (!playJingle) {
 						//FlxG.sound.music.stop();
+						FlxG.sound.music.time = 0;
 						FlxG.sound.playMusic(Paths.music('panixPress'), 0);
 						FlxG.sound.music.fadeIn(4, 0, 0.7);
 						playJingle = true;

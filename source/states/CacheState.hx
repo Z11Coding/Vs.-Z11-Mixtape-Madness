@@ -1,9 +1,5 @@
 package states;
 #if sys
-import backend.Achievements;
-import backend.WeekData;
-import backend.Highscore;
-
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
@@ -24,7 +20,6 @@ import openfl.display.BitmapData;
 import backend.GPUBitmap;
 import backend.ImageCache;
 import options.CacheSettings;
-import backend.util.WindowUtil;
 #if windows
 import backend.Discord.DiscordClient;
 #end
@@ -96,31 +91,6 @@ class CacheState extends MusicBeatState
 	override function create()
 	{
 		trace('ngl pretty cool');
-
-		Paths.clearStoredMemory();
-		Paths.clearUnusedMemory();
-
-		WindowUtil.initWindowEvents();
-		WindowUtil.disableCrashHandler();
-		FlxSprite.defaultAntialiasing = true;
-
-		#if LUA_ALLOWED
-		Mods.pushGlobalMods();
-		#end
-		Mods.loadTopMod();
-
-		FlxG.game.focusLostFramerate = 60;
-		FlxG.keys.preventDefaultKeys = [TAB, ALT];
-		FlxG.sound.volumeUpKeys = [];
-		FlxG.sound.volumeDownKeys = [];
-		FlxG.sound.muteKeys = [];
-
-		FlxG.save.bind('Mixtape' #if (flixel < "5.0.0"), 'Z11Gaming' #end);
-		ClientPrefs.loadPrefs();
-
-		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
-
-		Highscore.load();
 
 		//Cursor.cursorMode = Cross;
 

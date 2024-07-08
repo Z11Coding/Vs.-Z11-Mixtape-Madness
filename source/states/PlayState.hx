@@ -1102,7 +1102,7 @@ class PlayState extends MusicBeatState
 
 		dadField = new PlayField(modManager);
 		dadField.isPlayer = opponentmode && !playAsGF;
-		dadField.autoPlayed = (opponentmode && cpuControlled) || playAsGF;
+		dadField.autoPlayed = !opponentmode || (opponentmode && cpuControlled) || playAsGF;
 		dadField.AIPlayer = AIMode;
 		dadField.modNumber = 1;
 		dadField.characters = [];
@@ -5129,7 +5129,6 @@ class PlayState extends MusicBeatState
 	function openChartEditor()
 	{
 		FlxG.camera.followLerp = 0;
-		persistentUpdate = false;
 		paused = true;
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -5140,18 +5139,17 @@ class PlayState extends MusicBeatState
 		DiscordClient.resetClientID();
 		#end
 
-		MusicBeatState.switchState(new ChartingState());
+		FlxG.switchState(new ChartingState());
 	}
 
 	function openCharacterEditor()
 	{
 		FlxG.camera.followLerp = 0;
-		persistentUpdate = false;
 		paused = true;
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 		#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
-		MusicBeatState.switchState(new CharacterEditorState(SONG.player2));
+		FlxG.switchState(new CharacterEditorState(SONG.player2));
 	}
 
 	public var isDead:Bool = false; // Don't mess with this on Lua!!!
