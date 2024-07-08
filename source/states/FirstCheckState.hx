@@ -2,8 +2,12 @@ package states;
 import backend.Highscore;
 import backend.Achievements;
 import backend.util.WindowUtil;
+import flixel.input.keyboard.FlxKey;
 class FirstCheckState extends MusicBeatState
 {
+	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
+	public static var volumeDownKeys:Array<FlxKey> = [FlxKey.NUMPADMINUS, FlxKey.MINUS];
+	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
 
 	override public function create()
 	{
@@ -26,6 +30,7 @@ class FirstCheckState extends MusicBeatState
 
 		FlxG.save.bind('Mixtape' #if (flixel < "5.0.0"), 'Z11Gaming' #end);
 		ClientPrefs.loadPrefs();
+		ClientPrefs.reloadVolumeKeys();
 
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
 

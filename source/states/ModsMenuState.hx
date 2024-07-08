@@ -53,6 +53,7 @@ class ModsMenuState extends MusicBeatState
 		this.startMod = startMod;
 		super();
 	}
+	
 	override function create()
 	{
 		Paths.clearStoredMemory();
