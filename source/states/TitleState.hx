@@ -88,7 +88,7 @@ class TitleState extends MusicBeatState
 		//var checkSickBeatsEvent2 = new EventFunc("CheckSickBeats2", EqualTo(4), sickBeats.createVariable(), function() { Sys.println('B'); }, true);
 		//var checkSickBeatsEvent3 = new EventFunc("CheckSickBeats3", Change, curWacky[0].createVariable(), function() { Sys.println('C'); }, false);
 		curWacky = FlxG.random.getObject(getIntroTextShit());
-		curCrazy = FlxG.random.getObject(getMoreIntroTextShit());
+		curCrazy = FlxG.random.getObject(getMoreIntroTextShit()); 
 
 		// DEBUG BULLSHIT
 		swagShader = new ColorSwap();
