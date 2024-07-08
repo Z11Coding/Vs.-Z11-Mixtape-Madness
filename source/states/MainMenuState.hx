@@ -49,7 +49,7 @@ class MainMenuState extends MusicBeatState
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
-	var optionShit:Array<String> = ['story_mode', 'freeplay', #if ACHIEVEMENTS_ALLOWED 'awards', #end 'mods', 'socials', 'credits', 'options'];
+	var optionShit:Array<String> = ['freeplay', #if ACHIEVEMENTS_ALLOWED 'awards', #end 'mods', 'socials', 'credits', 'options'];
 
 	public var iconBG:FlxSprite;
 

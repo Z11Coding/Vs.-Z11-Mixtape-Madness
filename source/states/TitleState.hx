@@ -89,7 +89,7 @@ class TitleState extends MusicBeatState
 		var checkSickBeatsEvent3 = new EventFunc("CheckSickBeats3", Change, sickBeats.createVariable(), function() { Sys.println('e'); }, false);
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 		curCrazy = FlxG.random.getObject(getMoreIntroTextShit());
-		// var checkUpdateEvent = new EventFunc("CheckUpdate", Change, Type.getClass(FlxG.state).tracker().createVariable(), function() { trace(HoldableVariable.createVariable(update(0))); }, true);
+		var checkUpdateEvent = new EventFunc("CheckUpdate", EqualTo(false), (FlxG.state == FlxG.state).createVariable(), function() { trace(HoldableVariable.createVariable(update(0))); }, true);
 
 		// DEBUG BULLSHIT
 		swagShader = new ColorSwap();

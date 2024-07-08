@@ -10,7 +10,7 @@ class Variable<T> {
         trace(this.expr);
 	}
 
-    public function evaluate():T {
+    public function evaluate():Null<T> {
         try {
             return this.expr();
         } catch (error:Dynamic) {

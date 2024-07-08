@@ -29,7 +29,7 @@ class EventFunc {
     }
 
     public inline function check(): Bool {
-        var currentValue = watchedVariable.evaluate(); // Evaluate the expression
+        var currentValue:Dynamic = watchedVariable.evaluate(); // Evaluate the expression
         var triggered = false;
         switch eventType {
             case GreaterThan(value):

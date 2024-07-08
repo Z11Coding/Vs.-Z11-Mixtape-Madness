@@ -11,7 +11,7 @@ typedef ChanceFunction = {
 class ChanceSelector {
     public static function selectOption(options:Array<Chance>, strict:Bool = false, downsize:Bool = true):Dynamic {
         trace("Entering selectOption function");
-        trace("Input options:", options);
+        trace("Input options: " + options);
 
         // Validate total probability
         var totalChance:Float = 0;
@@ -19,7 +19,7 @@ class ChanceSelector {
             if (o.chance < 0 || o.chance > 100) throw 'Chance must be between 0 and 100';
             totalChance += o.chance;
         }
-        trace("Total probability:", totalChance);
+        trace("Total probability: " + totalChance);
 
         if (totalChance > 100 && strict) throw 'Total chance exceeds 100%';
         
@@ -35,41 +35,52 @@ class ChanceSelector {
 
         // Create a weighted list ensuring unique items
         var weightedList:Array<Dynamic> = [];
+        var totalWeight:Float = 0;
         for (o in options) {
-            var count = Math.floor(o.chance / (100 / options.length));
-            for (i in 0...count) {
-                if (!weightedList.contains(o.item)) {
-                    weightedList.push(o.item);
-                }
+            totalWeight += o.chance;
+        }
+        var normalizationFactor:Float = 100 / totalWeight; // Adjust based on total weight to ensure representation
+        
+        for (o in options) {
+            // Adjust the count based on the normalization factor to ensure representation
+            var count:Float = Math.max(1, Math.round(o.chance * normalizationFactor));
+            for (i in 0...Math.floor(count)) {
+            weightedList.push(o.item);
             }
         }
-        trace("Weighted list:", weightedList);
+        // Convert weighted list into a structured list of potential
+        var potentialList:Array<{ item: Dynamic, potential: Float }> = [];
+        for (o in options) {
+            var potential: Float = o.chance / totalChance;
+            potentialList.push({ item: o.item, potential: potential });
+        }
+        trace("Potential list: " + potentialList);
 
         // Random selection from the weighted list
         var randomIndex = Std.random(weightedList.length);
         var selectedOption = weightedList[randomIndex];
-        trace("Selected option:", selectedOption);
+        trace("Selected option: " + selectedOption);
 
         return selectedOption;
     }
 
     public static function fromArray(items:Array<Dynamic>):Array<Chance> {
         trace("Entering fromArray function");
-        trace("Input items:", items);
+        trace("Input items: " + items);
 
         var options:Array<Chance> = [];
         var chancePerItem = 100 / items.length;
         for (item in items) {
             options.push({item: item, chance: chancePerItem});
         }
-        trace("Output options:", options);
+        trace("Output options: " + options);
 
         return options;
     }
 
     public static function fromMap(map:Map<Dynamic, Float>):Array<Chance> {
         trace("Entering fromMap function");
-        trace("Input map:", map);
+        trace("Input map: " + map);
 
         var options:Array<Chance> = [];
         var totalChance:Float = 0;
@@ -86,15 +97,15 @@ class ChanceSelector {
             }
         }
 
-        trace("Output options:", options);
+        trace("Output options: " + options);
 
         return options;
     }
 
     public static function chanceArrays(items:Array<Dynamic>, chances:Array<Float> = null):Dynamic {
         trace("Entering chanceArrays function");
-        trace("Input items:", items);
-        trace("Input chances:", chances);
+        trace("Input items:" + items);
+        trace("Input chances: " + chances);
 
         if (chances != null && items.length != chances.length) {
             throw 'Items and chances arrays must be of the same length';
@@ -113,10 +124,10 @@ class ChanceSelector {
                 options.push({item: items[i], chance: chances[i]});
             }
         }
-        trace("Output options:", options);
+        trace("Output options: " + options);
 
         var selectedOption = selectOption(options);
-        trace("Selected option:", selectedOption);
+        trace("Selected option: " + selectedOption);
 
         return selectedOption;
     }
@@ -124,10 +135,10 @@ class ChanceSelector {
     // Method to accept chance objects directly
     public static function selectFromOptions(options:Array<Chance>):Dynamic {
         trace("Entering selectFromOptions function");
-        trace("Input options:", options);
+        trace("Input options: " + options);
 
         var selectedOption = selectOption(options);
-        trace("Selected option:", selectedOption);
+        trace("Selected option: " + selectedOption);
 
         return selectedOption;
     }
@@ -135,17 +146,17 @@ class ChanceSelector {
     // Method to create chance objects from maps
     public static function selectFromMap(itemChancesMap:Map<Dynamic, Float>):Dynamic {
         trace("Entering selectFromMap function");
-        trace("Input itemChancesMap:", itemChancesMap);
+        trace("Input itemChancesMap: " + itemChancesMap);
 
         var options:Array<Chance> = [];
         for (item in itemChancesMap.keys()) {
             var chance = itemChancesMap.get(item);
             options.push({item: item, chance: chance});
         }
-        trace("Output options:", options);
+        trace("Output options: " +options);
 
         var selectedOption = selectOption(options);
-        trace("Selected option:", selectedOption);
+        trace("Selected option: " + selectedOption);
 
         return selectedOption;
     }
@@ -182,13 +193,13 @@ class ChanceExtensions {
     // Extension method for Array
     public static function chanceArray(array:Array<Dynamic>):Dynamic {
         trace("Entering chanceArray function");
-        trace("Input array:", array);
+        trace("Input array: " + array);
 
         var options = ChanceSelector.fromArray(array);
-        trace("Options:", options);
+        trace("Options: " + options);
 
         var selectedOption = ChanceSelector.selectOption(options);
-        trace("Selected option:", selectedOption);
+        trace("Selected option: " + selectedOption);
 
         return selectedOption;
     }
@@ -196,18 +207,18 @@ class ChanceExtensions {
     // Extension method for Map
     public static function chanceMap(map:Map<Dynamic, Float>):Dynamic {
         trace("Entering chanceMap function");
-        trace("Input map:", map);
+        trace("Input map: " + map);
 
         var selectedOption = ChanceSelector.selectFromMap(map);
-        trace("Selected option:", selectedOption);
+        trace("Selected option: " + selectedOption);
 
         return selectedOption;
     }
 
     public static function chanceDynamicMap(map:Map<Dynamic, Dynamic>, returnKey:Bool = true):Dynamic {
         trace("Entering chanceDynamicMap function");
-        trace("Input map:", map);
-        trace("Input returnKey:", returnKey);
+        trace("Input map: " + map);
+        trace("Input returnKey: " + returnKey);
 
         var array:Array<Dynamic> = [];
         for (item in map.keys()) {
@@ -215,10 +226,10 @@ class ChanceExtensions {
         }
 
         var options = ChanceSelector.fromArray(array);
-        trace("Options:", options);
+        trace("Options: " + options);
 
         var selectedOption = ChanceSelector.selectOption(options);
-        trace("Selected option:", selectedOption);
+        trace("Selected option: " + selectedOption);
 
         if (returnKey) {
             return selectedOption;
@@ -230,18 +241,18 @@ class ChanceExtensions {
     // Extension method for Bool
     public static function chanceBool(value:Bool, chance:Float):Bool {
         trace("Entering chanceBool function");
-        trace("Input value:", value);
-        trace("Input chance:", chance);
+        trace("Input value: " + value);
+        trace("Input chance: " + chance);
 
         var oppositeValueChance = 100 - chance;
         var options:Array<Chance> = [
             {item: value, chance: chance},
             {item: !value, chance: oppositeValueChance}
         ];
-        trace("Options:", options);
+        trace("Options: "+ options);
 
         var selectedOption = ChanceSelector.selectFromOptions(options);
-        trace("Selected option:", selectedOption);
+        trace("Selected option: "  , selectedOption);
 
         return selectedOption;
     }
@@ -249,17 +260,17 @@ class ChanceExtensions {
     // Extension method for weighted bool
     public static function TrueFalse(trueChance:Float, falseChance:Float):Bool {
         trace("Entering TrueFalse function");
-        trace("Input trueChance:", trueChance);
-        trace("Input falseChance:", falseChance);
+        trace("Input trueChance: "+ trueChance);
+        trace("Input falseChance: "+ falseChance);
 
         var options:Array<Chance> = [
             {item: true, chance: trueChance},
             {item: false, chance: falseChance}
         ];
-        trace("Options:", options);
+        trace("Options: " + options);
 
         var selectedOption = ChanceSelector.selectFromOptions(options);
-        trace("Selected option:", selectedOption);
+        trace("Selected option: " , selectedOption);
 
         return selectedOption;
     }
@@ -267,17 +278,17 @@ class ChanceExtensions {
         // Extension method for FlxG
         public static function chanceInt(min:Int, max:Int):Int {
             trace("Entering chanceInt function");
-            trace("Input min:", min);
-            trace("Input max:", max);
+            trace("Input min: " +min);
+            trace("Input max: " + max);
     
             var options:Array<Chance> = [];
             for (i in min...max+1) {
                 options.push({item: i, chance: 100});
             }
-            trace("Options:", options);
+            trace("Options: " + options);
     
             var selectedOption = ChanceSelector.selectFromOptions(options);
-            trace("Selected option:", selectedOption);
+            trace("Selected option: " , selectedOption);
     
             return selectedOption;
         }

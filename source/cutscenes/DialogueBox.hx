@@ -4,6 +4,7 @@ import flixel.addons.text.FlxTypeText;
 
 class DialogueBox extends FlxSpriteGroup
 {
+	var dialogueCamera:FlxCamera;
 	var box:FlxSprite;
 
 	var curCharacter:String = '';
@@ -119,11 +120,25 @@ class DialogueBox extends FlxSpriteGroup
 		swagDialogue.color = 0xFF3F2021;
 		swagDialogue.sounds = [FlxG.sound.load(Paths.sound('pixelText'), 0.6)];
 		add(swagDialogue);
+		dialogueCamera = new FlxCamera(0, 0, FlxG.width, FlxG.height);
+		FlxG.cameras.add(dialogueCamera);
+		// Ensure dialogueCamera is above other cameras
+		dialogueCamera.setScrollBoundsRect(0, 0, FlxG.width, FlxG.height, true);
+		dialogueCamera.bgColor = FlxColor.TRANSPARENT;
+	
+		// Set dialogue elements to be rendered by dialogueCamera
+		portraitLeft.set_camera(dialogueCamera);
+		portraitRight.set_camera(dialogueCamera);
+		swagDialogue.set_camera(dialogueCamera);
+		dropText.set_camera(dialogueCamera);
+		dialogueCamera.set_camera(FlxG.cameras.list[0]);
+		dialogueCamera.cameras = FlxG.cameras.list;
 	}
 
 	var dialogueOpened:Bool = false;
 	var dialogueStarted:Bool = false;
 	var dialogueEnded:Bool = false;
+
 
 	override function update(elapsed:Float)
 	{

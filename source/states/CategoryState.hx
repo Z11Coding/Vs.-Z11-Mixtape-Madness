@@ -1,6 +1,7 @@
 package states;
 import flixel.input.keyboard.FlxKey;
 import flixel.addons.transition.FlxTransitionableState;
+import backend.WeekData;
 class CategoryState extends MusicBeatState
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
@@ -28,7 +29,68 @@ class CategoryState extends MusicBeatState
 
 	override function create()
 	{
-		trace("Killing game.");
+
+
+
+
+
+
+		WeekData.reloadWeekFiles(false);
+		var weeks:Array<WeekData> = [];
+		for (i in 0...WeekData.weeksList.length) {
+			weeks.push(WeekData.weeksLoaded.get(WeekData.weeksList[i]));
+		}
+		var mods:Bool = false;
+		for (i in 0...weeks.length) {
+			//if(weekIsLocked(weeks[i].name)) continue;
+			if (mods) break;
+
+			var leWeek:WeekData = weeks[i];
+			var leSongs:Array<String> = [];
+			var leChars:Array<String> = [];
+
+			for (j in 0...leWeek.songs.length)
+			{
+				leSongs.push(leWeek.songs[j][0]);
+				leChars.push(leWeek.songs[j][1]);
+			}
+
+			if (leWeek.category == null) {
+				mods = true;
+				if (!menuItems.contains("Mods")) {
+					menuItems.push("Mods");
+				}
+				break;
+			}
+		}
+
+		// Check for missing categories
+		var existingCategories:Array<String> = [];
+		for (item in menuItems) {
+			existingCategories.push(item.toLowerCase());
+		}
+
+		for (week in weeks) {
+			if (week.category != null && !existingCategories.contains(week.category.toLowerCase())) {
+				menuItems.push(week.category);
+			}
+		}
+
+				// Remove duplicates from menuItems
+				var filteredItems:Array<String> = [];
+				for (item in menuItems) {
+					if (!filteredItems.contains(item)) {
+						filteredItems.push(item);
+					}
+				}
+				menuItems = filteredItems;
+
+				// Move "Main" to the front of menuItems
+				if (menuItems.contains("Main")) {
+					menuItems.remove("Main");				menuItems.insert(0, "Main");
+				}
+
+
 		// Main.simulateIntenseMaps();
 		var hh:Array<Chance> = [
 			{item: "h?", chance: 5}, // 5% chance to add "h?"
