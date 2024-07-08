@@ -26,6 +26,7 @@ class EventFunc {
         trace('EventFunc created: ${eventName}');
         trace('Arguments: ${eventName}, ${eventType}, ${objectToString(watchedVariable)}, ${func}, ${destroyOnTrigger}');
         instances.push(this);
+        trace(this.lastValue);
     }
 
     public inline function check(): Bool {
@@ -54,6 +55,8 @@ class EventFunc {
             lastValue = currentValue; // Update lastValue after execution
             return true;
         }
+        //trace(lastValue);
+        //trace(currentValue);
         lastValue = currentValue; // Always update lastValue
         return false;
     }
@@ -117,10 +120,10 @@ class EventFunc {
         return v;
     }
 
-    public static inline function getValue(v:Dynamic):Dynamic {
+    /*public static inline function getValue(v:Dynamic):Dynamic {
         trace('getValue called with value: ${Std.string(v)}');
         return v;
-    }
+    }*/
 
     
     public static function objectToString(funcVar:Dynamic):String {

@@ -74,9 +74,10 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		optionsArray.push(new GameplayOption('Practice Mode', 'practice', 'bool', false));
 		optionsArray.push(new GameplayOption('Botplay', 'botplay', 'bool', false));
 		optionsArray.push(new GameplayOption('GF Mode', 'gfMode', 'bool', false));
-		optionsArray.push(new GameplayOption('AI Mode', 'aiMode', 'bool', false));
+		optionsArray.push(new GameplayOption('Opponent Mode', 'opponentplay', 'bool', false));
+		optionsArray.push(new GameplayOption('"AI" Opponent', 'aiMode', 'bool', false));
 
-		var option:GameplayOption = new GameplayOption('AI Difficulty', 'aiDifficulty', 'int', 1);
+		var option:GameplayOption = new GameplayOption('"AI" Difficulty', 'aiDifficulty', 'int', 1);
 		option.scrollSpeed = 1;
 		option.minValue = 0;
 		option.maxValue = 5;
