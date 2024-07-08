@@ -294,7 +294,7 @@ class PlayState extends MusicBeatState
 	public var gfSpeed:Int = 1;
 	public var health:Float = 1;
 	public var healthGF:Float = 1;
-	public var MaxHP:Float = 1;
+	public var MaxHP:Float = 2;
 	public var combo:Int = 0;
 	public var comboOpp:Int = 0;
 
@@ -586,10 +586,17 @@ class PlayState extends MusicBeatState
 	override public function create()
 	{
 		MemoryUtil.clearMajor();
-		opponentmode = ClientPrefs.getGameplaySetting('opponentplay', false);
 
-		startCallback = startCountdown;
-		endCallback = endSong;
+		if (SONG.song == 'Funky Fanta' && !seenCutscene)
+		{
+			startCallback = ffOpenPrep;	
+			endCallback = endSong;
+		}
+		else
+		{
+			startCallback = startCountdown;
+			endCallback = endSong;
+		}	
 
 		// for lua
 		instance = this;
@@ -632,8 +639,9 @@ class PlayState extends MusicBeatState
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay', false);
 		chartModifier = ClientPrefs.getGameplaySetting('chartModifier', 'Normal');
 		playAsGF = ClientPrefs.getGameplaySetting('gfMode', false); // dont do it to yourself its not worth it
-		AIMode = ClientPrefs.getGameplaySetting('aiMode', false); // This is just to test it.
-		AIDifficulty = ClientPrefs.getGameplaySetting('aiDifficulty', 1); // This is just to test it.
+		AIMode = ClientPrefs.getGameplaySetting('aiMode', false);
+		AIDifficulty = ClientPrefs.getGameplaySetting('aiDifficulty', 1);
+		opponentmode = ClientPrefs.getGameplaySetting('opponentplay', false);
 		gimmicksAllowed = ClientPrefs.data.gimmicksAllowed;
 		guitarHeroSustains = ClientPrefs.data.guitarHeroSustains;
 
@@ -1088,13 +1096,13 @@ class PlayState extends MusicBeatState
 		for (n => ch in boyfriendMap2)
 			playerField.characters.push(ch);
 
-		playerField.isPlayer = true;
-		playerField.autoPlayed = cpuControlled;
-		playerField.noteHitCallback = goodNoteHit;
+		playerField.isPlayer = !opponentmode && !playAsGF;
+		playerField.autoPlayed = opponentmode || cpuControlled || playAsGF;
+		playerField.noteHitCallback = opponentmode ? opponentNoteHit : goodNoteHit;
 
 		dadField = new PlayField(modManager);
-		dadField.isPlayer = false;
-		dadField.autoPlayed = true;
+		dadField.isPlayer = opponentmode && !playAsGF;
+		dadField.autoPlayed = !opponentmode || (opponentmode && cpuControlled) || playAsGF;
 		dadField.AIPlayer = AIMode;
 		dadField.modNumber = 1;
 		dadField.characters = [];
@@ -1102,7 +1110,7 @@ class PlayState extends MusicBeatState
 			dadField.characters.push(ch);
 		for (n => ch in dadMap2)
 			dadField.characters.push(ch);
-		dadField.noteHitCallback = opponentNoteHit;
+		dadField.noteHitCallback = opponentmode ? goodNoteHit : opponentNoteHit;
 
 		playfields.add(dadField);
 		playfields.add(playerField);
@@ -1156,6 +1164,12 @@ class PlayState extends MusicBeatState
 			healthBar2.alpha = ClientPrefs.data.healthBarAlpha;
 			add(healthBar);
 			add(healthBar2);
+
+			if (opponentmode)
+			{
+				healthBar.leftToRight = true;
+				healthBar2.leftToRight = true;
+			}
 
 			iconP1 = new HealthIcon(boyfriend.healthIcon, true);
 			iconP1.y = healthBar.y - 75;
@@ -3942,6 +3956,11 @@ class PlayState extends MusicBeatState
 		#end
 	}
 
+	function ffOpenPrep()
+	{
+		startVideo('fanta_cutscene_wip_lol');
+	}
+
 	public var paused:Bool = false;
 	var startedCountdown:Bool = false;
 	var countActive:Bool = false;
@@ -3973,7 +3992,11 @@ class PlayState extends MusicBeatState
 		for (field in playfields)
 			field.noteField.songSpeed = songSpeed;
 
-		playerField.autoPlayed = cpuControlled;
+		for (playfield in playfields.members)
+		{
+			if (playfield.isPlayer)
+				playfield.autoPlayed = cpuControlled;
+		}
 
 		if (noteHits.length > 0)
 		{
@@ -5106,7 +5129,6 @@ class PlayState extends MusicBeatState
 	function openChartEditor()
 	{
 		FlxG.camera.followLerp = 0;
-		persistentUpdate = false;
 		paused = true;
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -5117,18 +5139,17 @@ class PlayState extends MusicBeatState
 		DiscordClient.resetClientID();
 		#end
 
-		MusicBeatState.switchState(new ChartingState());
+		FlxG.switchState(new ChartingState());
 	}
 
 	function openCharacterEditor()
 	{
 		FlxG.camera.followLerp = 0;
-		persistentUpdate = false;
 		paused = true;
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 		#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
-		MusicBeatState.switchState(new CharacterEditorState(SONG.player2));
+		FlxG.switchState(new CharacterEditorState(SONG.player2));
 	}
 
 	public var isDead:Bool = false; // Don't mess with this on Lua!!!
@@ -7411,46 +7432,139 @@ class PlayState extends MusicBeatState
 				if (SONG.notes[curSection].altAnim && !SONG.notes[curSection].gfSection)
 					altAnim = '-alt';
 
-			if (!note.exNote && !note.gfNote && note.noteType != 'GF Duet')
+			if (opponentmode)
 			{
-				if (dad != null)
+				if (!note.exNote && !note.gfNote && note.noteType != 'GF Duet')
 				{
-					if (!note.animation.curAnim.name.endsWith('tail'))
+					if (boyfriend != null)
 					{
-						dad.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
-						dad.holdTimer = 0;
+						if (!note.animation.curAnim.name.endsWith('tail'))
+						{
+							boyfriend.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
+							boyfriend.holdTimer = 0;
+						}
+					}
+				}
+
+				if (!note.exNote && !note.gfNote && note.noteType == 'GF Duet')
+				{
+					gf.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
+					gf.holdTimer = 0;
+					boyfriend.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
+					boyfriend.holdTimer = 0;
+				}
+
+				if (!note.exNote && note.gfNote && note.noteType != 'GF Duet')
+				{
+					if (gf != null)
+					{
+						if (!note.animation.curAnim.name.endsWith('tail'))
+						{
+							gf.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
+							gf.holdTimer = 0;
+						}
+					}
+				}
+
+				if (note.exNote && !note.gfNote && note.noteType != 'GF Duet')
+				{
+					if (bf2 != null)
+					{
+						if (!note.animation.curAnim.name.endsWith('tail'))
+						{
+							bf2.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
+							bf2.holdTimer = 0;
+						}
+					}
+				}
+
+				if (note.noteType == 'Hey!')
+				{
+					if (boyfriend.animOffsets.exists('hey'))
+					{
+						boyfriend.playAnim('hey', true);
+						boyfriend.specialAnim = true;
+						boyfriend.heyTimer = 0.6;
+					}
+					if (bf2 != null && bf2.animOffsets.exists('hey'))
+					{
+						bf2.playAnim('hey', true);
+						bf2.specialAnim = true;
+						bf2.heyTimer = 0.6;
+					}
+					if (gf != null && gf.animOffsets.exists('cheer'))
+					{
+						gf.playAnim('cheer', true);
+						gf.specialAnim = true;
+						gf.heyTimer = 0.6;
 					}
 				}
 			}
-
-			if (!note.exNote && !note.gfNote && note.noteType == 'GF Duet')
+			else
 			{
-				gf.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
-				gf.holdTimer = 0;
-				dad.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
-				dad.holdTimer = 0;
-			}
-
-			if (!note.exNote && note.gfNote && note.noteType != 'GF Duet')
-			{
-				if (gf != null)
+				if (!note.exNote && !note.gfNote && note.noteType != 'GF Duet')
 				{
-					if (!note.animation.curAnim.name.endsWith('tail'))
+					if (dad != null)
 					{
-						gf.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
-						gf.holdTimer = 0;
+						if (!note.animation.curAnim.name.endsWith('tail'))
+						{
+							dad.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
+							dad.holdTimer = 0;
+						}
 					}
 				}
-			}
 
-			if (note.exNote && !note.gfNote && note.noteType != 'GF Duet')
-			{
-				if (dad2 != null)
+				if (!note.exNote && !note.gfNote && note.noteType == 'GF Duet')
 				{
-					if (!note.animation.curAnim.name.endsWith('tail'))
+					gf.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
+					gf.holdTimer = 0;
+					dad.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
+					dad.holdTimer = 0;
+				}
+
+				if (!note.exNote && note.gfNote && note.noteType != 'GF Duet')
+				{
+					if (gf != null)
 					{
-						dad2.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
-						dad2.holdTimer = 0;
+						if (!note.animation.curAnim.name.endsWith('tail'))
+						{
+							gf.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
+							gf.holdTimer = 0;
+						}
+					}
+				}
+
+				if (note.exNote && !note.gfNote && note.noteType != 'GF Duet')
+				{
+					if (dad2 != null)
+					{
+						if (!note.animation.curAnim.name.endsWith('tail'))
+						{
+							dad2.playAnim('sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))] + altAnim, true);
+							dad2.holdTimer = 0;
+						}
+					}
+				}
+
+				if (note.noteType == 'Hey!')
+				{
+					if (dad.animOffsets.exists('hey'))
+					{
+						dad.playAnim('hey', true);
+						dad.specialAnim = true;
+						dad.heyTimer = 0.6;
+					}
+					if (dad2 != null && bf2.animOffsets.exists('hey'))
+					{
+						dad2.playAnim('hey', true);
+						dad2.specialAnim = true;
+						dad2.heyTimer = 0.6;
+					}
+					if (gf != null && gf.animOffsets.exists('cheer'))
+					{
+						gf.playAnim('cheer', true);
+						gf.specialAnim = true;
+						gf.heyTimer = 0.6;
 					}
 				}
 			}
@@ -7634,54 +7748,110 @@ class PlayState extends MusicBeatState
 			}
 		}*/
 
-			if (note.noteType == 'GF Duet' && !note.gfNote && !note.exNote)
+			if (opponentmode)
 			{
-				gf.playAnim(animToPlay, true);
-				gf.holdTimer = 0;
-				boyfriend.playAnim(animToPlay, true);
-				boyfriend.holdTimer = 0;
-			}
-
-			if (!note.gfNote && !note.exNote && note.noteType != 'GF Duet')
-			{
-				boyfriend.playAnim(animToPlay, true);
-				boyfriend.holdTimer = 0;
-			}
-
-			if (note.exNote && note.mustPress && note.noteType != 'GF Duet')
-			{
-				if (bf2 != null)
+				if (note.noteType == 'GF Duet' && !note.gfNote && !note.exNote)
 				{
-					bf2.playAnim(animToPlay, true);
-					bf2.holdTimer = 0;
+					gf.playAnim(animToPlay, true);
+					gf.holdTimer = 0;
+					dad.playAnim(animToPlay, true);
+					dad.holdTimer = 0;
+				}
+	
+				if (!note.gfNote && !note.exNote && note.noteType != 'GF Duet')
+				{
+					dad.playAnim(animToPlay, true);
+					dad.holdTimer = 0;
+				}
+	
+				if (note.exNote && note.mustPress && note.noteType != 'GF Duet')
+				{
+					if (dad2 != null)
+					{
+						dad2.playAnim(animToPlay, true);
+						dad2.holdTimer = 0;
+					}
+				}
+	
+				if (gf != null && note.gfNote && !note.exNote && note.noteType != 'GF Duet')
+				{
+					gf.playAnim(animToPlay, true);
+					gf.holdTimer = 0;
+				}
+	
+				if (note.noteType == 'Hey!')
+				{
+					if (dad.animOffsets.exists('hey'))
+					{
+						dad.playAnim('hey', true);
+						dad.specialAnim = true;
+						dad.heyTimer = 0.6;
+					}
+					if (dad2 != null && bf2.animOffsets.exists('hey'))
+					{
+						dad2.playAnim('hey', true);
+						dad2.specialAnim = true;
+						dad2.heyTimer = 0.6;
+					}
+					if (gf != null && gf.animOffsets.exists('cheer'))
+					{
+						gf.playAnim('cheer', true);
+						gf.specialAnim = true;
+						gf.heyTimer = 0.6;
+					}
 				}
 			}
-
-			if (gf != null && note.gfNote && !note.exNote && note.noteType != 'GF Duet')
+			else
 			{
-				gf.playAnim(animToPlay, true);
-				gf.holdTimer = 0;
-			}
-
-			if (note.noteType == 'Hey!')
-			{
-				if (boyfriend.animOffsets.exists('hey'))
+				if (note.noteType == 'GF Duet' && !note.gfNote && !note.exNote)
 				{
-					boyfriend.playAnim('hey', true);
-					boyfriend.specialAnim = true;
-					boyfriend.heyTimer = 0.6;
+					gf.playAnim(animToPlay, true);
+					gf.holdTimer = 0;
+					boyfriend.playAnim(animToPlay, true);
+					boyfriend.holdTimer = 0;
 				}
-				if (bf2 != null && bf2.animOffsets.exists('hey'))
+	
+				if (!note.gfNote && !note.exNote && note.noteType != 'GF Duet')
 				{
-					bf2.playAnim('hey', true);
-					bf2.specialAnim = true;
-					bf2.heyTimer = 0.6;
+					boyfriend.playAnim(animToPlay, true);
+					boyfriend.holdTimer = 0;
 				}
-				if (gf != null && gf.animOffsets.exists('cheer'))
+	
+				if (note.exNote && note.mustPress && note.noteType != 'GF Duet')
 				{
-					gf.playAnim('cheer', true);
-					gf.specialAnim = true;
-					gf.heyTimer = 0.6;
+					if (bf2 != null)
+					{
+						bf2.playAnim(animToPlay, true);
+						bf2.holdTimer = 0;
+					}
+				}
+	
+				if (gf != null && note.gfNote && !note.exNote && note.noteType != 'GF Duet')
+				{
+					gf.playAnim(animToPlay, true);
+					gf.holdTimer = 0;
+				}
+	
+				if (note.noteType == 'Hey!')
+				{
+					if (boyfriend.animOffsets.exists('hey'))
+					{
+						boyfriend.playAnim('hey', true);
+						boyfriend.specialAnim = true;
+						boyfriend.heyTimer = 0.6;
+					}
+					if (bf2 != null && bf2.animOffsets.exists('hey'))
+					{
+						bf2.playAnim('hey', true);
+						bf2.specialAnim = true;
+						bf2.heyTimer = 0.6;
+					}
+					if (gf != null && gf.animOffsets.exists('cheer'))
+					{
+						gf.playAnim('cheer', true);
+						gf.specialAnim = true;
+						gf.heyTimer = 0.6;
+					}
 				}
 			}
 		}

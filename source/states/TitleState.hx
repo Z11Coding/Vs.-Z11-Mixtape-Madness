@@ -84,19 +84,18 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
-		var checkSickBeatsEvent = new EventFunc("CheckSickBeats", EqualTo(true), (sickBeats == 2).createVariable(), function() { Sys.println('e'); }, true);
-		var checkSickBeatsEvent2 = new EventFunc("CheckSickBeats2", EqualTo(4), sickBeats.createVariable(), function() { Sys.println('e'); }, true);
-		var checkSickBeatsEvent3 = new EventFunc("CheckSickBeats3", Change, sickBeats.createVariable(), function() { Sys.println('e'); }, false);
+		//var checkSickBeatsEvent = new EventFunc("CheckSickBeats", EqualTo(true), (sickBeats == 2).createVariable(), function() { Sys.println('A'); }, true);
+		//var checkSickBeatsEvent2 = new EventFunc("CheckSickBeats2", EqualTo(4), sickBeats.createVariable(), function() { Sys.println('B'); }, true);
+		//var checkSickBeatsEvent3 = new EventFunc("CheckSickBeats3", Change, curWacky[0].createVariable(), function() { Sys.println('C'); }, false);
 		curWacky = FlxG.random.getObject(getIntroTextShit());
 		curCrazy = FlxG.random.getObject(getMoreIntroTextShit());
-		var checkUpdateEvent = new EventFunc("CheckUpdate", EqualTo(false), (FlxG.state == FlxG.state).createVariable(), function() { trace(HoldableVariable.createVariable(update(0))); }, true);
 
 		// DEBUG BULLSHIT
 		swagShader = new ColorSwap();
 		
 		super.create();
 
-		ClientPrefs.toggleVolumeKeys(true);
+		//ClientPrefs.toggleVolumeKeys(true);
 		#if CHECK_FOR_UPDATES
 		if(ClientPrefs.data.checkForUpdates && !closedState) {
 			trace('checking for update');
@@ -167,7 +166,7 @@ class TitleState extends MusicBeatState
 		if (Main.cmdArgs.indexOf("GameJoltBug") != -1 && !GJBug)
 		{
 			GJBug = true;
-				FlxG.sound.playMusic(Paths.music('panixPress'), 0);
+			FlxG.sound.playMusic(Paths.music('panixPress'), 0);
 			
 		
 			FlxG.switchState(new options.OptionsState());
@@ -205,6 +204,7 @@ class TitleState extends MusicBeatState
 			// music.play();
 
 			if (FlxG.sound.music == null || !FlxG.sound.music.playing) {
+				FlxG.sound.music.time = 0;
 				FlxG.sound.playMusic(Paths.music('panixPress'), 0);
 			}
 
@@ -635,6 +635,7 @@ class TitleState extends MusicBeatState
 				case 1:
 					if (!playJingle) {
 						//FlxG.sound.music.stop();
+						FlxG.sound.music.time = 0;
 						FlxG.sound.playMusic(Paths.music('panixPress'), 0);
 						FlxG.sound.music.fadeIn(4, 0, 0.7);
 						playJingle = true;
