@@ -5,6 +5,7 @@ import flixel.addons.transition.FlxTransitionableState;
 import flixel.FlxState;
 import backend.PsychCamera;
 import substates.StickerSubState;
+import backend.Song;
 
 class MusicBeatState extends FlxUIState
 {
@@ -167,6 +168,53 @@ class MusicBeatState extends FlxUIState
 		curStep = lastChange.stepTime + Math.floor(shit);
 	}
 
+	public static function playSong(storyPlaylist:Array<String>, storyMode:Bool = false, difficulty:Int = 0, ?transition:String, ?type:String = null):Void {
+		var songs:Array<SwagSong> = [];
+
+		if (storyPlaylist.length > 1) {
+			storyMode = true;
+		}
+
+		if (storyMode) {
+			for (songPath in storyPlaylist) {
+				var songLowercase:String = Paths.formatToSongPath(songPath);
+				var formattedSong:String = Highscore.formatSong(songLowercase, difficulty);
+				songs.push(Song.loadFromJson(songLowercase));
+			}
+			PlayState.storyPlaylist = songs.map(function(song:SwagSong):String {
+				return song.song;
+			});
+		} else {
+			// songsInput is a String when storyMode is false
+			var songLowercase:String = Paths.formatToSongPath(storyPlaylist[0]);
+			var formattedSong:String = Highscore.formatSong(songLowercase, difficulty);
+			PlayState.SONG = Song.loadFromJson(formattedSong, songLowercase);
+		}
+
+		PlayState.isStoryMode = storyMode;
+		PlayState.storyDifficulty = difficulty;
+
+		// Additional setup for PlayState as needed
+
+		// Transition to PlayState
+		switch (transition) {
+			case "FlxG", "FlxG.switchState":
+				FlxG.switchState(new PlayState());
+				
+			case "MusicBeatState":
+				FlxG.switchState(new MusicBeatState());
+				
+			case "TransitionState":
+				TransitionState.transitionState(PlayState, {
+					transitionType: type
+				});
+				
+			default:
+				FlxG.switchState(new PlayState());
+
+		}
+	}
+
 	public static function switchState(nextState:FlxState = null) {
 		if(nextState == null) nextState = FlxG.state;
 		if(nextState == FlxG.state)
@@ -174,6 +222,7 @@ class MusicBeatState extends FlxUIState
 			resetState();
 			return;
 		}
+		
 
 
 

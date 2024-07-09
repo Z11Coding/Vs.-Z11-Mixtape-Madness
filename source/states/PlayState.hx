@@ -257,6 +257,8 @@ class PlayState extends MusicBeatState
 
 	public var inst:FlxSound;
 	public var vocals:FlxSound;
+	public static var fnfc:Bool = false;
+	public static var fnfcData:Dynamic = null;
 	public var opponentVocals:FlxSound;
 	public var gfVocals:FlxSound;
 	public var tracks:Array<FlxSound> = [];
@@ -585,6 +587,17 @@ class PlayState extends MusicBeatState
 
 	override public function create()
 	{
+		try {
+			if ((PlayState.SONG == null || PlayState.storyPlaylist.length == 0) && (PlayState.SONG == null && PlayState.storyPlaylist.length == 0)) {
+				throw "Both PlayState.SONG and PlayState.storyPlaylist are null or empty";
+			} else if (PlayState.SONG == null && PlayState.storyPlaylist.length > 0) {
+				PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + PlayState.storyDifficulty, PlayState.storyPlaylist[0].toLowerCase());
+			}
+		} catch (e:Dynamic) {
+			trace("Error: PlayState was initialized with no, or invalid data");
+			throw e;
+		}
+
 		MemoryUtil.clearMajor();
 
 		if (SONG.song == 'Funky Fanta' && !seenCutscene)
