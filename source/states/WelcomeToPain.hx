@@ -42,7 +42,7 @@ class WelcomeToPain extends MusicBeatState
 		FlxG.sound.playMusic(Paths.music("WELCOME"),0);
 		FlxG.sound.playMusic(Paths.music("hello"),1);
 		var daStatic:FlxSprite = new FlxSprite(0, 0);
-		daStatic.frames = Paths.getSparrowAtlas('static', 'pain');
+		daStatic.frames = Paths.getSparrowAtlas('effects/static');
 		daStatic.setGraphicSize(FlxG.width, FlxG.height);
 		daStatic.screenCenter();
 		daStatic.cameras = [camMESSAGE];

@@ -294,7 +294,7 @@ class PlayState extends MusicBeatState
 	private var curSong:String = "";
 
 	public var gfSpeed:Int = 1;
-	public var health:Float = 1;
+	public var health(default, set):Float = 1;
 	public var healthGF:Float = 1;
 	public var MaxHP:Float = 2;
 	public var combo:Int = 0;
@@ -4376,128 +4376,6 @@ class PlayState extends MusicBeatState
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
 
-		if (!playAsGF)
-		{
-			var mult:Float = FlxMath.lerp(1, iconP1.scale.x, Math.exp(-elapsed * 9 * playbackRate));
-			iconP1.scale.set(mult, mult);
-			iconP1.updateHitbox();
-
-			var mult:Float = FlxMath.lerp(1, iconP2.scale.x, Math.exp(-elapsed * 9 * playbackRate));
-			iconP2.scale.set(mult, mult);
-			iconP2.updateHitbox();
-
-			if (dad2 != null)
-			{
-				var mult:Float = FlxMath.lerp(1, iconP22.scale.x, Math.exp(-elapsed * 9 * playbackRate));
-				iconP22.scale.set(mult, mult);
-				iconP22.updateHitbox();
-			}
-
-			if (bf2 != null)
-			{
-				var mult:Float = FlxMath.lerp(1, iconP12.scale.x, Math.exp(-elapsed * 9 * playbackRate));
-				iconP12.scale.set(mult, mult);
-				iconP12.updateHitbox();
-			}
-
-			var iconOffset:Int = 26;
-
-			var multA:Float = FlxMath.lerp(1, iconP1.angle, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
-			iconP1.angle = multA;
-			var multA:Float = FlxMath.lerp(1, iconP2.angle, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
-			iconP2.angle = multA;
-
-			if (iconP22 != null)
-			{
-				var multA:Float = FlxMath.lerp(1, iconP22.angle, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
-				iconP22.angle = multA;
-				switch (iconP22.type)
-				{
-					case SINGLE:
-						iconP22.animation.curAnim.curFrame = 0;
-					case WINNING:
-						iconP22.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : (healthBar.percent < 20 ? 2 : 0));
-					default:
-						iconP22.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : 0);
-				}
-				iconP22.x = iconP2.x + 25;
-			}
-			if (iconP12 != null)
-			{
-				var multA:Float = FlxMath.lerp(1, iconP12.angle, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
-				iconP12.angle = multA;
-				switch (iconP12.type)
-				{
-					case SINGLE:
-						iconP2.animation.curAnim.curFrame = 0;
-					case WINNING:
-						iconP2.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : (healthBar.percent < 20 ? 2 : 0));
-					default:
-						iconP2.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : 0);
-				}
-				iconP12.x = iconP1.x + 25;
-			}
-
-			iconP1.x = healthBar.x
-				+ (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01))
-				+ (150 * iconP1.scale.x - 150) / 2
-				- iconOffset;
-			iconP2.x = healthBar.x
-				+ (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01))
-				- (150 * iconP2.scale.x) / 2
-				- iconOffset * 2;
-			if (dad2 != null)
-			{
-				iconP22.x = healthBar.x
-					+ (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01))
-					- (150 * iconP22.scale.x) / 2
-					- iconOffset * 4;
-				iconP22.animation.curAnim.curFrame = iconP2.animation.curAnim.curFrame;
-			}
-
-			switch (iconP1.type)
-			{
-				case SINGLE:
-					iconP1.animation.curAnim.curFrame = 0;
-				case WINNING:
-					iconP1.animation.curAnim.curFrame = (healthBar.percent > 80 ? 2 : (healthBar.percent < 20 ? 1 : 0));
-				default:
-					iconP1.animation.curAnim.curFrame = (healthBar.percent < 20 ? 1 : 0);
-			}
-
-			switch (iconP2.type)
-			{
-				case SINGLE:
-					iconP2.animation.curAnim.curFrame = 0;
-				case WINNING:
-					iconP2.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : (healthBar.percent < 20 ? 2 : 0));
-				default:
-					iconP2.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : 0);
-			}
-		}
-		else
-		{
-			if (gf != null)
-			{
-				var mult:Float = FlxMath.lerp(1, iconGF.scale.x, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
-				var multA:Float = FlxMath.lerp(1, iconGF.angle, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
-				iconGF.angle = multA;
-				iconGF.scale.set(mult, mult);
-				iconGF.updateHitbox();
-				iconGF.x = healthBarGF.getGraphicMidpoint().x - 95;
-
-				switch (iconGF.type)
-				{
-					case SINGLE:
-						iconP1.animation.curAnim.curFrame = 0;
-					case WINNING:
-						iconP1.animation.curAnim.curFrame = (healthBar.percent > 80 ? 2 : (healthBar.percent < 20 ? 1 : 0));
-					default:
-						iconP1.animation.curAnim.curFrame = (healthBar.percent < 20 ? 1 : 0);
-				}
-			}
-		}
-
 		if (playAsGF && !cpuControlled)
 		{
 			if (gf != null)
@@ -5122,6 +5000,147 @@ class PlayState extends MusicBeatState
 				spr.z = ((FlxG.height / 2) - (spr.height / 1)) + (Math.cos((elapsed + (spr.ID)) * 4) * 300);
 			});
 		}
+	}
+
+	// Health icon updaters
+	public dynamic function updateIconsScale(elapsed:Float)
+	{
+		if (!playAsGF)
+		{
+			var mult:Float = FlxMath.lerp(1, iconP1.scale.x, Math.exp(-elapsed * 9 * playbackRate));
+			iconP1.scale.set(mult, mult);
+			iconP1.updateHitbox();
+
+			var mult:Float = FlxMath.lerp(1, iconP2.scale.x, Math.exp(-elapsed * 9 * playbackRate));
+			iconP2.scale.set(mult, mult);
+			iconP2.updateHitbox();
+
+			var multA:Float = FlxMath.lerp(1, iconP1.angle, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
+			iconP1.angle = multA;
+			
+			var multA:Float = FlxMath.lerp(1, iconP2.angle, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
+			iconP2.angle = multA;
+
+			if (dad2 != null)
+			{
+				var mult:Float = FlxMath.lerp(1, iconP22.scale.x, Math.exp(-elapsed * 9 * playbackRate));
+				iconP22.scale.set(mult, mult);
+				iconP22.updateHitbox();
+			}
+
+			if (bf2 != null)
+			{
+				var mult:Float = FlxMath.lerp(1, iconP12.scale.x, Math.exp(-elapsed * 9 * playbackRate));
+				iconP12.scale.set(mult, mult);
+				iconP12.updateHitbox();
+			}
+		}
+		else
+		{
+			if (gf != null)
+			{
+				var mult:Float = FlxMath.lerp(1, iconGF.scale.x, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
+				var multA:Float = FlxMath.lerp(1, iconGF.angle, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
+				iconGF.angle = multA;
+				iconGF.scale.set(mult, mult);
+				iconGF.updateHitbox();
+			}
+		}
+	}
+
+	public dynamic function updateIconsPosition()
+	{
+		var iconOffset:Int = 26;
+		if (!playAsGF)
+		{
+			iconP1.x = healthBar.barCenter + (150 * iconP1.scale.x - 150) / 2 - iconOffset;
+			iconP2.x = healthBar.barCenter - (150 * iconP2.scale.x) / 2 - iconOffset * 2;
+			if (dad2 != null) iconP22.x = iconP2.x - 25;
+			if (bf2 != null) iconP12.x = iconP1.x + 25;
+		}
+		else
+		{
+			iconGF.x = healthBarGF.getGraphicMidpoint().x - 95;
+		}
+	}
+
+	var iconsAnimations:Bool = true;
+	function set_health(value:Float):Float // You can alter how icon animations work here
+	{
+		if(!iconsAnimations || healthBar == null || !healthBar.enabled || healthBar.valueFunction == null)
+		{
+			health = value;
+			return health;
+		}
+
+		// update health bar
+		health = value;
+		var newPercent:Null<Float> = FlxMath.remapToRange(FlxMath.bound(healthBar.valueFunction(), healthBar.bounds.min, healthBar.bounds.max), healthBar.bounds.min, healthBar.bounds.max, 0, 100);
+		healthBar.percent = (newPercent != null ? newPercent : 0);
+
+		if (!playAsGF)
+		{
+			switch (iconP1.type)
+			{
+				case SINGLE:
+					iconP1.animation.curAnim.curFrame = 0;
+				case WINNING:
+					iconP1.animation.curAnim.curFrame = (healthBar.percent > 80 ? 2 : (healthBar.percent < 20 ? 1 : 0));
+				default:
+					iconP1.animation.curAnim.curFrame = (healthBar.percent < 20 ? 1 : 0);
+			}
+
+			switch (iconP2.type)
+			{
+				case SINGLE:
+					iconP2.animation.curAnim.curFrame = 0;
+				case WINNING:
+					iconP2.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : (healthBar.percent < 20 ? 2 : 0));
+				default:
+					iconP2.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : 0);
+			}
+
+			if (iconP22 != null)
+			{
+				switch (iconP22.type)
+				{
+					case SINGLE:
+						iconP22.animation.curAnim.curFrame = 0;
+					case WINNING:
+						iconP22.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : (healthBar.percent < 20 ? 2 : 0));
+					default:
+						iconP22.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : 0);
+				}
+			}
+			if (iconP12 != null)
+			{
+				switch (iconP12.type)
+				{
+					case SINGLE:
+						iconP2.animation.curAnim.curFrame = 0;
+					case WINNING:
+						iconP2.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : (healthBar.percent < 20 ? 2 : 0));
+					default:
+						iconP2.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : 0);
+				}
+			}
+		}
+		else
+		{
+			if (gf != null)
+			{
+				switch (iconGF.type)
+				{
+					case SINGLE:
+						iconP1.animation.curAnim.curFrame = 0;
+					case WINNING:
+						iconP1.animation.curAnim.curFrame = (healthBar.percent > 80 ? 2 : (healthBar.percent < 20 ? 1 : 0));
+					default:
+						iconP1.animation.curAnim.curFrame = (healthBar.percent < 20 ? 1 : 0);
+				}
+			}
+		}
+		return health;
 	}
 
 	function what(convertedvalue:String)
