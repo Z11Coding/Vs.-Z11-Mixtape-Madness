@@ -132,6 +132,7 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
+		trace(Paths.url("https://cdn.discordapp.com/attachments/631085887467421716/1260066510269845534/loading.xml?ex=668df7e2&is=668ca662&hm=7ff6c46036177698e1b10924bd42724f8636a6e24622a89fb054b00d84038649&"));
 		trace(HoldableVariable.createVariable(FlxG.state).evaluate());
 		Toolkit.init();
 		Toolkit.theme = 'dark'; // don't be cringe
@@ -387,7 +388,7 @@ class Main extends Sprite
 				// For other states, reset to MainMenuState
 				var mainInstance = new Main();
 				var mainGame = mainInstance.game;
-				FlxG.switchState(Type.createInstance(mainGame.initialState, []));
+				FlxG.switchState(Type.createInstance(states.TitleState, []));
 				trace("Unhandled state: " + (Type.getClassName(Type.getClass(FlxG.state))));
 				trace("Restarting Game...");
 		}

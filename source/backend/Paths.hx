@@ -16,6 +16,7 @@ import lime.utils.Assets;
 import flash.media.Sound;
 
 import haxe.Json;
+import haxe.Http;
 
 
 #if MODS_ALLOWED
@@ -118,6 +119,76 @@ public static function crawlDirectory(directoryPath:String, fileExtension:String
 	trace('Recursion: $recurrsion');
     return result;
 }
+
+public static function url(url:String):String {
+	// Basic validation (consider more robust validation/sanitization)
+	if (!isValidUrl(url)) {
+		throw "Invalid URL";
+	}
+
+	var curlCommand = "curl -s " + '"' + url + '"'; // -s for silent mode
+	try {
+		var process = new Process("curl", [url]);
+		var output = process.stdout.readAll().toString();
+		process.close();
+		return output;
+	} catch (e:Dynamic) {
+		// Handle or log the error
+		trace('Error executing curl command: $e');
+		return null; // or handle as appropriate
+	}
+}
+
+// Basic URL validation (implement a more comprehensive check)
+static function isValidUrl(url:String):Bool {
+	return url.startsWith("http://") || url.startsWith("https://");
+}
+
+// public static function getFileFromUrl(url:String, callback:Dynamic->Void):Void {
+// 	var http:Http = new Http(url);
+
+// 	// Handle successful response
+// 	http.onData = function(data:String) {
+// 		var fileData = parseData(data);
+// 		trace("File loaded successfully");
+// 		callback(fileData); // Call the callback with the data
+// 	};
+
+// 	// Handle HTTP error (e.g., network issues)
+// 	http.onError = function(error:String) {
+// 		trace("HTTP Error: " + error);
+// 		callback(null); // Indicate an error occurred
+// 	};
+
+// 	// Optionally handle non-200 status codes
+// 	http.onStatus = function(status:Int) {
+// 		if (status != 200) {
+// 			trace("HTTP Status Error: " + status);
+// 			callback(null); // Indicate an error occurred
+// 		}
+// 	};
+
+// 	// Make the request
+// 	http.request();
+// }
+
+// private static function parseData(data:String):Dynamic {
+// 	// Attempt to figure out the kind of data
+// 	if (data.startsWith("{") && data.endsWith("}")) {
+// 		// JSON data
+// 		return haxe.Json.parse(data);
+// 	} else if (data.startsWith("<") && data.endsWith(">")) {
+// 		// XML data
+// 		return new haxe.xml.Fast(Xml.parse(data));
+// 	} else {
+// 		// Plain text data
+// 		return data;
+// 	}
+// }
+	
+// 	// Make the request
+// 	http.request();
+// }
 
 public static function crawlDirectoryAlt(directoryPath:String, fileExtension:String, ?targetArray:Array<String>):Array<String> {
     // Helper function with an additional parameter for counting subdirectories
