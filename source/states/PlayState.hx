@@ -964,7 +964,7 @@ class PlayState extends MusicBeatState
 		}
 
 		dad = new Character(0, 0, SONG.player2);
-		startCharacterPos(dad, true);
+		startCharacterPos(dad);
 		dadGroup.add(dad);
 		startCharacterScripts(dad.curCharacter);
 
@@ -1005,7 +1005,7 @@ class PlayState extends MusicBeatState
 			camPos.y += gf.getGraphicMidpoint().y + gf.cameraPosition[1];
 		}
 
-		if (WeekData.getWeekFileName() != 'lost' && !stageData.hide_girlfriend) // GF needs to still be there
+		if ((WeekData.getWeekFileName() != 'lost' || WeekData.getWeekFileName() != 'beat') && !stageData.hide_girlfriend) // GF needs to still be there
 		{
 			if (dad.curCharacter.startsWith('gf'))
 			{

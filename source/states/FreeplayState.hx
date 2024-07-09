@@ -64,6 +64,12 @@ class FreeplayState extends MusicBeatState
 	public static var archipelago:Bool = false;
 
 	public static var curUnlocked:Array<String> = ['Tutorial'];
+	
+	var rankTable:Array<String> = [
+		'P-small', 'X-small', 'X--small', 'SS+-small', 'SS-small', 'SS--small', 'S+-small', 'S-small', 'S--small', 'A+-small', 'A-small', 'A--small',
+		'B-small', 'C-small', 'D-small', 'E-small', 'NA'
+	];
+	var rank:FlxSprite = new FlxSprite(0).loadGraphic(Paths.image('rankings/NA'));
 
 	override function create()
 	{
@@ -196,6 +202,17 @@ class FreeplayState extends MusicBeatState
 
 		add(scoreText);
 
+		rank.scale.x = rank.scale.y = 80 / rank.height;
+		rank.updateHitbox();
+		rank.antialiasing = true;
+		rank.scrollFactor.set();
+		rank.y = 690 - rank.height;
+		rank.x = -200 + FlxG.width - 50;
+		add(rank);
+		rank.antialiasing = true;
+
+		rank.alpha = 0;
+
 
 		missingTextBG = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		missingTextBG.alpha = 0.6;
@@ -233,6 +250,7 @@ class FreeplayState extends MusicBeatState
 		changeSelection();
 		updateTexts();
 		super.create();
+		FlxTween.tween(rank, {alpha: 1}, 0.5, {ease: FlxEase.quartInOut});
 		FlxTween.tween(searchBar, {y: 100}, 0.6, {
 			ease: FlxEase.elasticInOut, 
 			onComplete: function(twn:FlxTween){
@@ -668,9 +686,9 @@ class FreeplayState extends MusicBeatState
 			}
 			else 
 			{
-				FlxG.sound.muteKeys = TitleState.muteKeys;
-				FlxG.sound.volumeDownKeys = TitleState.volumeDownKeys;
-				FlxG.sound.volumeUpKeys = TitleState.volumeUpKeys;
+				FlxG.sound.muteKeys = FirstCheckState.muteKeys;
+				FlxG.sound.volumeDownKeys = FirstCheckState.volumeDownKeys;
+				FlxG.sound.volumeUpKeys = FirstCheckState.volumeUpKeys;
 				FlxG.keys.preventDefaultKeys = [TAB];
 				break;
 			}
@@ -704,6 +722,13 @@ class FreeplayState extends MusicBeatState
 		Highscore.isOppMode = ClientPrefs.getGameplaySetting('opponentplay', false);
 		intendedScore = Highscore.getScore(songs[curSelected].songName, curDifficulty);
 		intendedRating = Highscore.getRating(songs[curSelected].songName, curDifficulty);
+		rank.loadGraphic(Paths.image('rankings/' + rankTable[Highscore.getRank(songs[curSelected].songName, curDifficulty)]));
+		rank.scale.x = rank.scale.y = 200 / rank.height;
+		rank.updateHitbox();
+		rank.antialiasing = true;
+		rank.scrollFactor.set();
+		rank.y = 690 - rank.height;
+		rank.x = -200 + FlxG.width - 50;
 		#end
 
 		lastDifficultyName = Difficulty.getString(curDifficulty);

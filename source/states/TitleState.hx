@@ -46,9 +46,6 @@ typedef TitleData =
 }
 class TitleState extends MusicBeatState
 {
-	public static var muteKeys:Array<FlxKey> = [];
-	public static var volumeDownKeys:Array<FlxKey> = [];
-	public static var volumeUpKeys:Array<FlxKey> = [];
 	public static var initialized:Bool = false;
 	public static var globalBPM:Float;
 	private static var GJBug:Bool = false;

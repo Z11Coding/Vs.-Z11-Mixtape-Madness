@@ -33,7 +33,6 @@ class What extends MusicBeatState
         //     true // destroyOnTrigger, set to false if you want to keep checking
         // );
         // FlxG.sound.volume = 0.5;
-        ClientPrefs.reloadVolumeKeys();
         whatGrad = new FlxSprite().loadGraphic(Paths.image('effects/GradientSplash'));
         whatGrad.screenCenter();
         whatGrad.color = FlxColor.PURPLE;

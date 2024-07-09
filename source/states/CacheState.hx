@@ -63,6 +63,7 @@ class CacheState extends MusicBeatState
 	var cacheStart:Bool = false;
 	var startCachingModImages:Bool = false;
 	var startCachingSoundsAndMusic:Bool = false;
+	var startCachingSoundsAndMusicMods:Bool = false;
 	var songsCached:Bool;
 	var graphicsCached:Bool;
     var startCachingGraphics:Bool = false;
@@ -73,6 +74,7 @@ class CacheState extends MusicBeatState
 	var modImI:Int = 0;
 	var gfxI:Int = 0;
 	var sNmI:Int = 0;
+	var sNmmI:Int = 0;
 	public var percentLabel:FlxText;
 	var filesDone = 0;
 	var totalFiles = 0;
@@ -219,15 +221,15 @@ class CacheState extends MusicBeatState
 
 			jsonCache();
 
-			trace(JSONCache.charts());
+			//trace(JSONCache.charts());
 
 
 			#end
 
 
 			loadTotal = images.length + modImages.length + music.length + modMusic.length;
-			trace("Files: " + "Images: " + images + "Images(Mod): " + modImages + "Music: " + music + "Music(Mod): " + modMusic);
-			trace(loadTotal + " files to load");
+			//trace("Files: " + "Images: " + images + "Images(Mod): " + modImages + "Music: " + music + "Music(Mod): " + modMusic);
+			//trace(loadTotal + " files to load");
 			
 			if(loadTotal > 0){
 				loadingBar = new FlxBar(0, 605, LEFT_TO_RIGHT, 600, 24, this, 'currentLoaded', 0, loadTotal);
@@ -297,7 +299,7 @@ class CacheState extends MusicBeatState
 	function fileDone() {
 		filesDone++;
 		percentLabel.text = '${Math.round(((filesDone / totalFiles * 100)*100)/100)}%';
-		trace(totalFiles);
+		//trace(totalFiles);
 	}
 
 	function openPreloadSettings(){
@@ -364,7 +366,7 @@ class CacheState extends MusicBeatState
             if(gfxI >= images.length){
 				trace("Graphics cached");
                 startCachingGraphics = false;
-				startCachingModImages = true;
+				startCachingSoundsAndMusicMods = true;
                 graphicsCached = true;
             }
             else{
@@ -389,7 +391,8 @@ class CacheState extends MusicBeatState
                 modImagesCached = true;
             }
             else{
-				loadingWhat.text = 'Loading Mods';
+				loadingWhatMini.text = modImages[gfxI];
+				loadingWhatMini.screenCenter(X);
 				loadingWhat.screenCenter(XY);
 				for (i in daMods)
 				{
@@ -402,6 +405,38 @@ class CacheState extends MusicBeatState
 					}
 				}
 				modImI++;
+				currentLoaded++;
+            }
+        }
+
+		if(startCachingSoundsAndMusicMods){
+            if(sNmmI >= modMusic.length){
+				trace("Mods Music and Sounds cached");
+                startCachingSoundsAndMusicMods = false;
+                startCachingModImages = true;
+            }
+            else{
+				loadingWhatMini.text = modMusic[sNmmI];
+				loadingWhatMini.screenCenter(X);
+				loadingWhat.screenCenter(XY);
+				if(CoolUtil.exists(modMusic[sNmmI])){
+					if(CoolUtil.exists(Paths.cacheInst(modMusic[sNmmI]))){
+						FlxG.sound.cache(Paths.cacheInst(modMusic[sNmmI]));
+					}
+					if(CoolUtil.exists(Paths.cacheVoices(modMusic[sNmmI]))){
+						FlxG.sound.cache(Paths.cacheVoices(modMusic[sNmmI]));
+					}
+					if(CoolUtil.exists(Paths.cacheSound(modMusic[sNmmI]))){
+						FlxG.sound.cache(Paths.cacheSound(modMusic[sNmmI]));
+					}
+					if(CoolUtil.exists(Paths.cacheMusic(modMusic[sNmmI]))) {
+						FlxG.sound.cache(Paths.cacheMusic(modMusic[sNmmI]));
+					}
+				}
+				else{
+					trace("Music/Sound: File at " + modMusic[sNmmI] + " not found, skipping cache.");
+				}
+                sNmmI++;
 				currentLoaded++;
             }
         }

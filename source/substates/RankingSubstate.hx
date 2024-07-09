@@ -175,25 +175,27 @@ class RankingSubstate extends MusicBeatSubstate
 		else if (PlayState.instance.songMisses < 10) // Single Digit Combo Breaks
 			comboRank = "SDCB";
 
+		var acc = backend.Highscore.floorDecimal(PlayState.instance.ratingPercent * 100, 2);
+
 		// WIFE TIME :)))) (based on Wife3)
 
 		var wifeConditions:Array<Bool> = [
-			PlayState.instance.ratingPercent >= 99.9935, // P
-			PlayState.instance.ratingPercent >= 99.980, // X
-			PlayState.instance.ratingPercent >= 99.950, // X-
-			PlayState.instance.ratingPercent >= 99.90, // SS+
-			PlayState.instance.ratingPercent >= 99.80, // SS
-			PlayState.instance.ratingPercent >= 99.70, // SS-
-			PlayState.instance.ratingPercent >= 99.50, // S+
-			PlayState.instance.ratingPercent >= 99, // S
-			PlayState.instance.ratingPercent >= 96.50, // S-
-			PlayState.instance.ratingPercent >= 93, // A+
-			PlayState.instance.ratingPercent >= 90, // A
-			PlayState.instance.ratingPercent >= 85, // A-
-			PlayState.instance.ratingPercent >= 80, // B
-			PlayState.instance.ratingPercent >= 70, // C
-			PlayState.instance.ratingPercent >= 60, // D
-			PlayState.instance.ratingPercent < 60 // E
+			acc >= 99.9935, // P
+			acc >= 99.980, // X
+			acc >= 99.950, // X-
+			acc >= 99.90, // SS+
+			acc >= 99.80, // SS
+			acc >= 99.70, // SS-
+			acc >= 99.50, // S+
+			acc >= 99, // S
+			acc >= 96.50, // S-
+			acc >= 93, // A+
+			acc >= 90, // A
+			acc >= 85, // A-
+			acc >= 80, // B
+			acc >= 70, // C
+			acc >= 60, // D
+			acc < 60 // E
 		];
 
 		for (i in 0...wifeConditions.length)
@@ -238,7 +240,7 @@ class RankingSubstate extends MusicBeatSubstate
 						ranking = "E";
 				}
 
-				if (PlayState.deathCounter >= 30 || PlayState.instance.ratingPercent == 0)
+				if (PlayState.deathCounter >= 30 || acc == 0)
 					ranking = "F";
 				break;
 			}
