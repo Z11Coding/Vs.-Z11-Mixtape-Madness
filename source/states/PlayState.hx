@@ -4550,6 +4550,9 @@ class PlayState extends MusicBeatState
 			skipActive = false;
 		}
 
+		updateIconsScale(elapsed);
+		updateIconsPosition();
+
 		if (startingSong)
 		{
 			if (startedCountdown && Conductor.songPosition >= 0)

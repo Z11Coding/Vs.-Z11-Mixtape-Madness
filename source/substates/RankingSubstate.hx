@@ -18,8 +18,8 @@ class RankingSubstate extends MusicBeatSubstate
 
 	var rank:FlxSprite = new FlxSprite(-200, 730);
 	var combo:FlxSprite = new FlxSprite(-200, 730);
-	var comboRank:String = "N/A";
-	var ranking:String = "N/A";
+	var comboRank:String = "NA";
+	var ranking:String = "NA";
 	var rankingNum:Int = 15;
 
 	public function new(x:Float, y:Float)

@@ -226,8 +226,15 @@ class FreeplayState extends MusicBeatState
 		add(missingText);
 
 		if(curSelected >= songs.length) curSelected = 0;
-		bg.color = songs[curSelected].color;
-		intendedColor = bg.color;
+		try {
+			bg.color = songs[curSelected].color;
+			intendedColor = bg.color;
+		}
+		catch(e)
+		{
+			bg.color = FlxColor.WHITE;
+			intendedColor = bg.color;
+		}
 		lerpSelected = curSelected;
 
 		curDifficulty = Math.round(Math.max(0, Difficulty.defaultList.indexOf(lastDifficultyName)));
