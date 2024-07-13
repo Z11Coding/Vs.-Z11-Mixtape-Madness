@@ -7,7 +7,7 @@ import backend.Song;
 import objects.HealthIcon;
 import objects.MusicPlayer;
 
-import states.editors.ChartingState;
+import states.editors.ChartingStateOG;
 
 import flixel.addons.ui.FlxUIInputText;
 
@@ -60,6 +60,9 @@ class FreeplayState extends MusicBeatState
 	var bottomBG:FlxSprite;
 
 	var player:MusicPlayer;
+
+	var songChoices:Array<String> = [];
+	var listChoices:Array<String> = [];
 
 	public static var archipelago:Bool = false;
 
@@ -620,6 +623,20 @@ class FreeplayState extends MusicBeatState
 					trace('Couldnt find file');
 				}*/
 				trace(poop);
+				var multisong = false;
+				if (songLowercase == 'resistance')
+				{
+					multisong = true;
+					songChoices = ['Resistance', 'Resistance-k', 'Resistance Awsome Mix', 'Resistance-kai'];
+					listChoices = ['Resistance', 'Resistance (Kyren Mix)', 'Resistance (Awsome Mix)', 'Resistance (Kai Mix)'];
+				}
+
+				if (songLowercase == 'resistalovania')
+				{
+					multisong = true;
+					songChoices = ['Resistalovania', 'Resistalovania (Mega Mix)'];
+					listChoices = ['Resistalovania', 'Resistalovania (Mega Mix)'];
+				}
 
 				FlxTransitionableState.skipNextTransIn = false;
 				FlxTransitionableState.skipNextTransOut = false;
@@ -651,7 +668,11 @@ class FreeplayState extends MusicBeatState
 					return;
 				}
 				if (FlxG.keys.pressed.SHIFT){
-					MusicBeatState.switchState(new ChartingState());
+					TransitionState.transitionState(ChartingStateOG, {transitionType: "stickers"});
+				} else if (multisong) {
+					substates.DiffSubState.songChoices = songChoices;
+					substates.DiffSubState.listChoices = listChoices;
+					openSubState(new substates.DiffSubState());
 				}else{
 					TransitionState.transitionState(PlayState, {transitionType: "stickers"});
 				}

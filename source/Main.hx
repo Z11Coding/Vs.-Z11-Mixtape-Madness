@@ -62,7 +62,12 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
-
+		// Credits to MAJigsaw77 (he's the og author for this code)
+		#if android
+		Sys.setCwd(Path.addTrailingSlash(Context.getExternalFilesDir()));
+		#elseif ios
+		Sys.setCwd(lime.system.System.applicationStorageDirectory);
+		#end
 		if (stage != null)
 		{
 			init();
@@ -71,6 +76,9 @@ class Main extends Sprite
 		{
 			addEventListener(Event.ADDED_TO_STAGE, init);
 		}
+		#if VIDEOS_ALLOWED
+		hxvlc.util.Handle.init();
+		#end
 	}
 
 	@:dox(hide)
@@ -294,15 +302,11 @@ class Main extends Sprite
 			}
 		}
 
-		errMsg += "\nUncaught Error: "
-			+ e.error
-			+
-			"\nPlease report this error to the GitHub page: https://github.com/Z11Coding/Mixtape-Engine\n\n> Crash Handler written by: sqirra-rng\n> Crash prevented!";
+		errMsg += "\nUncaught Error: " + e.error;
+		errMsg += "\nPlease report this error to the GitHub page: https://github.com/Z11Coding/Mixtape-Engine\n\n> Crash Handler written by: sqirra-rng\n> Crash prevented!";
 
 		if (!FileSystem.exists("./crash/"))
-		{
 			FileSystem.createDirectory("./crash/");
-		}
 
 		File.saveContent(path, errMsg + "\n");
 

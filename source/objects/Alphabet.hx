@@ -1,5 +1,8 @@
 package objects;
 
+import haxe.Json;
+import openfl.utils.Assets;
+
 enum Alignment
 {
 	LEFT;
@@ -368,6 +371,58 @@ class AlphaCharacter extends FlxSprite
 		'}'  => null,
 		'•'  => {anim: 'bullet', offsets: [0, 18], offsetsBold: [0, 20]}
 	];
+
+	public static function loadAlphabetData(request:String = 'alphabet')
+	{
+		var path:String = Paths.getPath('images/$request.json');
+		#if MODS_ALLOWED
+		if(!FileSystem.exists(path))
+		#else
+		if(!Assets.exists(path, TEXT))
+		#end
+			path = Paths.getPath('images/alphabet.json');
+
+		allLetters = new Map<String, Null<Letter>>();
+		try
+		{
+			#if MODS_ALLOWED
+			var data:Dynamic = Json.parse(File.getContent(path));
+			#else
+			var data:Dynamic = Json.parse(Assets.getText(path));
+			#end
+
+			if(data.allowed != null && data.allowed.length > 0)
+			{
+				for (i in 0...data.allowed.length)
+				{
+					var char:String = data.allowed.charAt(i);
+					if(char == ' ') continue;
+					
+					allLetters.set(char.toLowerCase(), null); //Allows character to be used in Alphabet
+				}
+			}
+
+			if(data.characters != null)
+			{
+				for (char in Reflect.fields(data.characters))
+				{
+					var letterData = Reflect.field(data.characters, char);
+					var character:String = char.toLowerCase().substr(0, 1);
+					if((letterData.animation != null || letterData.normal != null || letterData.bold != null) && allLetters.exists(character))
+						allLetters.set(character, {anim: letterData.animation, offsets: letterData.normal, offsetsBold: letterData.bold});
+				}
+			}
+			trace('Reloaded letters successfully ($path)!');
+		}
+		catch(e:Dynamic)
+		{
+			FlxG.log.error('Error on loading alphabet data: $e');
+			trace('Error on loading alphabet data: $e');
+		}
+
+		if(!allLetters.exists('?'))
+			allLetters.set('?', {anim: 'question'});
+	}
 
 	var parent:Alphabet;
 	public var alignOffset:Float = 0; //Don't change this

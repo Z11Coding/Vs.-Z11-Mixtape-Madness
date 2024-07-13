@@ -22,18 +22,14 @@ class CategoryState extends MusicBeatState
 	private static var curSelected:Int = 0;
 
 	var easterEggKeys:Array<String> = [
-		'CAPTAINZ', 'TRIALS'
+		'CODES', 'SECRET', 'GARGANTUANELEPHANT'
 	];
 	var allowedKeys:String = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	var easterEggKeysBuffer:String = '';
 
 	override function create()
 	{
-
-
-
-
-
+		if (FlxG.save.data.enableCodes) menuItems.insert(99, 'Codes');
 
 		WeekData.reloadWeekFiles(false);
 		var weeks:Array<WeekData> = [];
@@ -87,7 +83,8 @@ class CategoryState extends MusicBeatState
 
 				// Move "Main" to the front of menuItems
 				if (menuItems.contains("Main")) {
-					menuItems.remove("Main");				menuItems.insert(0, "Main");
+					menuItems.remove("Main");				
+					menuItems.insert(0, "Main");
 				}
 
 
@@ -217,6 +214,8 @@ class CategoryState extends MusicBeatState
 				}
 			}
 
+			var daSelected:String = menuItems[curSelected];
+			loadWeekForce = daSelected.toLowerCase();
 			if (accepted && menuLocks[curSelected])
 			{
 				
@@ -230,9 +229,6 @@ class CategoryState extends MusicBeatState
 			}
 			else if (accepted)
 			{
-				
-				var daSelected:String = menuItems[curSelected];
-				loadWeekForce = daSelected.toLowerCase();
 				if (loadWeekForce == 'secrets' && menuLocks[curSelected] == false)
 				{
 					TransitionState.transitionState(FreeplayState, {
@@ -258,6 +254,10 @@ class CategoryState extends MusicBeatState
 							return ChanceSelector.selectOption(options);
 						})()
 					});
+				}
+				else if (loadWeekForce == 'codes')
+				{
+					TransitionState.transitionState(CodeState, {transitionType: "stickers"});
 				}
 				else if (loadWeekForce == 'secrets' && menuLocks[curSelected] == true)
 				{

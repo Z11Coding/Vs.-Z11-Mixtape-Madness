@@ -20,8 +20,8 @@ class MasterEditorMenu extends MusicBeatState
 		'Note Splash Debug'
 	];
 	var dialogueChoices:Array<String> = [
-		'Default Dialogue',
-		'DS Dialogue',
+		'OG Chart Editor',
+		'Psych Chart Editor',
 	];
 	private var grpTexts:FlxTypedGroup<Alphabet>;
 	private var directories:Array<String> = [null];
@@ -105,26 +105,51 @@ class MasterEditorMenu extends MusicBeatState
 
 		if (controls.BACK)
 		{
-			MusicBeatState.switchState(new MainMenuState());
+			if (options == dialogueChoices) {
+				options = optionsOG;
+				regenMenu();
+			}
+			else MusicBeatState.switchState(new MainMenuState());
 		}
 
 		if (controls.ACCEPT)
 		{
-			FlxG.sound.music.volume = 0;
-			FreeplayState.destroyFreeplayVocals();
-			switch(options[curSelected]) {
-				case 'Chart Editor'://felt it would be cool maybe
-					LoadingState.loadAndSwitchState(new ChartingState(), false);
-				case 'Character Editor':
-					LoadingState.loadAndSwitchState(new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
-				case 'Week Editor':
-					MusicBeatState.switchState(new WeekEditorState());
-				case 'Menu Character Editor':
-					MusicBeatState.switchState(new MenuCharacterEditorState());
-				case 'Dialogue Editor':
-					LoadingState.loadAndSwitchState(new DialogueEditorState(), false);
-				case 'Dialogue Portrait Editor':
-					LoadingState.loadAndSwitchState(new DialogueCharacterEditorState(), false);
+			if (options[curSelected] != 'Chart Editor')
+			{
+				FlxG.sound.music.volume = 0;
+				FreeplayState.destroyFreeplayVocals();
+			}
+			if (options == dialogueChoices)
+			{
+				switch (options[curSelected])
+				{
+					case 'OG Chart Editor':
+						MusicBeatState.switchState(new ChartingStateOG());
+					case 'Psych Chart Editor':
+						MusicBeatState.switchState(new ChartingStatePsych());
+				}
+				FlxG.sound.music.volume = 0;
+				#if PRELOAD_ALL
+				FreeplayState.destroyFreeplayVocals();
+				#end
+			}
+			else
+			{
+				switch(options[curSelected]) {
+					case 'Chart Editor'://felt it would be cool maybe
+						options = dialogueChoices;
+						regenMenu();
+					case 'Character Editor':
+						LoadingState.loadAndSwitchState(new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
+					case 'Week Editor':
+						MusicBeatState.switchState(new WeekEditorState());
+					case 'Menu Character Editor':
+						MusicBeatState.switchState(new MenuCharacterEditorState());
+					case 'Dialogue Editor':
+						LoadingState.loadAndSwitchState(new DialogueEditorState(), false);
+					case 'Dialogue Portrait Editor':
+						LoadingState.loadAndSwitchState(new DialogueCharacterEditorState(), false);
+				}
 			}
 		}
 		

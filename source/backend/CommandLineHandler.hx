@@ -2,6 +2,7 @@ package backend;
 
 #if sys
 import sys.FileSystem;
+import states.TitleState;
 class CommandLineHandler {
 	public static function parseCommandLine(cmd:Array<String>) {
 		var i:Int = 0;
@@ -37,6 +38,8 @@ class CommandLineHandler {
 					Main.forceGPUOnlyBitmapsOff = true;
 				case "-livereload":
 					// do nothing
+				case '-playtest':
+					MusicBeatState.playSong(['beat-battle'], false, 2, 'TransitionState', 'stickers');
 				default:
 					Sys.println("Unknown command");
 			}

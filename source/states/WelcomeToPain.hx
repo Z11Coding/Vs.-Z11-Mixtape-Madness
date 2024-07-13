@@ -32,9 +32,7 @@ class WelcomeToPain extends MusicBeatState
 	
 	override public function create():Void 
 	{
-		camMESSAGE = new FlxCamera();
-		camMESSAGE.bgColor.alpha = 0;
-		FlxG.cameras.add(camMESSAGE);
+		camMESSAGE = initPsychCamera();
 		super.create();
 		camMESSAGE.setFilters(camfilters);
 		camMESSAGE.filtersEnabled = true;	
@@ -46,7 +44,7 @@ class WelcomeToPain extends MusicBeatState
 		daStatic.setGraphicSize(FlxG.width, FlxG.height);
 		daStatic.screenCenter();
 		daStatic.cameras = [camMESSAGE];
-		daStatic.animation.addByPrefix('static','lestatic',24, false);
+		daStatic.animation.addByPrefix('static','lestatic',24, true);
 		add(daStatic);
 		if (daStatic.alpha != 0)
 			daStatic.alpha = 1;

@@ -174,6 +174,7 @@ class MusicBeatState extends FlxUIState
 		if (storyPlaylist.length > 1) {
 			storyMode = true;
 		}
+		Difficulty.resetList();
 
 		if (storyMode) {
 			for (songPath in storyPlaylist) {

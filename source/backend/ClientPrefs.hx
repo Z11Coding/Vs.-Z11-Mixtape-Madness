@@ -138,6 +138,8 @@ import states.FirstCheckState;
 	public var guitarHeroSustains:Bool = true;
 	public var discordRPC:Bool = true;
 	public var audioBreak:Bool = false;
+	public var loadingScreen:Bool = true;
+	public var language:String = 'en-US';
 
 	//charcter select stuff
 	public static var bfMultiUnlock:Bool = false;

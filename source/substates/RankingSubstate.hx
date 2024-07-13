@@ -128,7 +128,7 @@ class RankingSubstate extends MusicBeatSubstate
 					{
 						Mods.loadTopMod();
 					    FlxG.sound.playMusic(Paths.music('panixPress'));
-						MusicBeatState.switchState(new states.StoryMenuState());
+						TransitionState.transitionState(states.StoryMenuState, {transitionType: "stickers"});
 					}
 					else
 					{
@@ -142,13 +142,13 @@ class RankingSubstate extends MusicBeatSubstate
 
                         PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0] + difficulty, PlayState.storyPlaylist[0]);
                         FlxG.sound.music.stop();
-                        MusicBeatState.switchState(new states.PlayState());
+						TransitionState.transitionState(states.PlayState, {transitionType: "stickers"});
 					}
 				case "Freeplay":
                     trace('WENT BACK TO FREEPLAY??');
 				    Mods.loadTopMod();
-					MusicBeatState.switchState(new states.FreeplayState());
 				    FlxG.sound.playMusic(Paths.music('panixPress'));
+					TransitionState.transitionState(states.FreeplayState, {transitionType: "stickers"});
 			}
 		}
 	}

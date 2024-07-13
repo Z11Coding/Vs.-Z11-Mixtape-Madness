@@ -34,7 +34,6 @@ import tentools.api.FlxGameJolt as GJApi;
 
 typedef TitleData =
 {
-
 	titlex:Float,
 	titley:Float,
 	startx:Float,
@@ -78,6 +77,7 @@ class TitleState extends MusicBeatState
 	#end
 
 	public static var updateVersion:String = '';
+	public static var cueSong:Bool;
 
 	override public function create():Void
 	{
@@ -144,7 +144,8 @@ class TitleState extends MusicBeatState
 		#elseif CHARTING
 		MusicBeatState.switchState(new ChartingState());
 		#else
-		if(FlxG.save.data.flashing == null && !FlashingState.leftState) {
+		if (cueSong) MusicBeatState.playSong(['beat-battle'], false, 1, 'TransitionState', 'stickers');
+		else if(FlxG.save.data.flashing == null && !FlashingState.leftState) {
 			FlxTransitionableState.skipNextTransIn = true;
 			FlxTransitionableState.skipNextTransOut = true;
 			MusicBeatState.switchState(new FlashingState());
@@ -201,7 +202,6 @@ class TitleState extends MusicBeatState
 			// music.play();
 
 			if (FlxG.sound.music == null || !FlxG.sound.music.playing) {
-				FlxG.sound.music.time = 0;
 				FlxG.sound.playMusic(Paths.music('panixPress'), 0);
 			}
 

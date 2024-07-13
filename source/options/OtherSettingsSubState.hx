@@ -118,12 +118,6 @@ class OtherSettingsSubState extends BaseOptionsMenu
 		);
 		addOption(option);
 
-		var option:Option = new Option('Discord Rich Presence',
-			"Uncheck this to prevent accidental leaks, it will hide the Application from your \"Playing\" box on Discord\nReccomended to turn off if the game crashes/freezes alot.",
-			'discordRPC',
-			'bool');
-		addOption(option);
-
 		var option:Option = new Option('Allow Username Detection',
 			"Uncheck this to prevent the game from leaking your computer name. Usually a good idea for streamers.",
 			'username',

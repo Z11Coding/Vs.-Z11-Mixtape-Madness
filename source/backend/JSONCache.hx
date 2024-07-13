@@ -27,7 +27,7 @@ class JSONCache {
             // Check if "notes" exists and is an array
             if (Reflect.hasField(parsed, "notes") && Std.is(Reflect.field(parsed, "notes"), Array)) {
                 var notes:Array<Dynamic> = Reflect.field(parsed, "notes");
-                trace("Notes found in JSON. Further processing...");
+                //trace("Notes found in JSON. Further processing...");
     
                 // Process each note
                 for (note in notes) {
@@ -46,13 +46,13 @@ class JSONCache {
                     cache.set(filePath, notesToCache); // Step 4: Cache the notes array
                     trace("Notes cached successfully");
                 } else {
-                    trace("No valid notes found to cache.");
+                    //trace("No valid notes found to cache.");
                 }
             } else {
-                trace("No 'notes' field found in JSON.");
+                //trace("No 'notes' field found in JSON.");
             }
         } catch (error:Dynamic) {
-            trace("Failed to load data: " + error + " at " + filePath);
+            //trace("Failed to load data: " + error + " at " + filePath);
         }
     }
     
@@ -91,7 +91,7 @@ class JSONCache {
     public static function loadAll():Void {
         for (filePath in cache.keys()) {
             loadJson(filePath, function(data:Dynamic) {
-                trace("Loaded data from: " + filePath);
+                //trace("Loaded data from: " + filePath);
             });
         }
     }

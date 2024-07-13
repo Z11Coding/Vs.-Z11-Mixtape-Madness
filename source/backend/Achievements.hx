@@ -44,6 +44,11 @@ class Achievements {
 		createAchievement('secretsuntold',	        {name: "Secret's Untold", description: "Unlock the Secrets Category", hidden: true});
 		createAchievement('potato',	                {name: "Slow-Mo", description: "Set the game to 1 FPS", hidden: true});
 		createAchievement('potatogameplay',	        {name: "YOU CAN PLAY LIKE THIS?!?!", description: "Beat a song while the FPS is set to 1", hidden: true});
+		createAchievement('mattdestroyer',	        {name: "Max Efficiency", description: "Beat a song at 2X Speed or higher", hidden: true});
+		createAchievement('matteleminator',	        {name: "Max Efficiency 2X", description: "Beat a song at 5X Speed or higher", hidden: true});
+		createAchievement('mattgod',	            {name: "Max Efficiency 3X", description: "Beat a song at 10x Speed or higher", hidden: true});
+		createAchievement('matt',	                {name: "Max Efficiency 4X", description: "Beat a song at 15X Speed or higher", hidden: true});
+		createAchievement('mattbeyond',	            {name: "Bro what are you even doing anymore", description: "Beat a song at 20X Speed or higher", hidden: true});
 		
 		//dont delete this thing below
 		_originalLength = _sortID + 1;

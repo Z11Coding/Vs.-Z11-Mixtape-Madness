@@ -16,12 +16,7 @@ import flixel.util.FlxColor;
 import Sys;
 import backend.Achievements;
 import backend.Highscore;
-#if VIDEOS_ALLOWED
-#if (hxCodec >= "3.0.0") import hxcodec.flixel.FlxVideo as VideoHandler;
-#elseif (hxCodec >= "2.6.1") import hxcodec.VideoHandler as VideoHandler;
-#elseif (hxCodec == "2.6.0") import VideoHandler;
-#else import vlc.MP4Handler as VideoHandler; #end
-#end
+import objects.VideoSprite;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.group.FlxGroup.FlxTypedGroup;
 class CodeState extends MusicBeatState
@@ -34,8 +29,8 @@ class CodeState extends MusicBeatState
 	var curCode:Int = 0;
 	var curVid:Int = 0;
 	var checkingcode:Bool = false;
-	var songcodelist:Array<String> = []; //38
-	var songcodelistb:Array<Bool> = [];
+	var codelist:Array<String> = [];
+	var songcodelist:Array<String> = [];
 	private var blockPressWhileTypingOn:Array<FlxUIInputText> = [];
 	public static var blackscreen:FlxSprite;
 	var bg:FlxSprite;
@@ -69,6 +64,7 @@ class CodeState extends MusicBeatState
 		bg.antialiasing = ClientPrefs.data.globalAntialiasing;
 		bg.color = FlxColor.BLACK;
 		add(bg);
+
 		blackscreen = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
 		blackscreen.updateHitbox();
 		blackscreen.screenCenter();
@@ -77,13 +73,14 @@ class CodeState extends MusicBeatState
 		blackscreen.alpha = 0;
 		blackscreen.setGraphicSize(Std.int(blackscreen.width * 10.5));
 		blackscreen.color = FlxColor.BLACK;
+
 		codeInput = new FlxUIInputText(0, 0, 500, '', 20);
 		codeInput.screenCenter(XY);
-		codeInput.color = FlxColor.WHITE;
+		codeInput.color = FlxColor.BLACK;
 		add(codeInput);
 		blockPressWhileTypingOn.push(codeInput);
+
 		FlxG.mouse.visible = true;
-		FlxG.mouse.useSystemCursor = true;
 		codeCheck = new FlxButton(codeInput.x, codeInput.y - 30, 'Submit', function()
 		{
 			checkCode();
@@ -113,37 +110,49 @@ class CodeState extends MusicBeatState
 			rave.add(light2);
 		}
 		add(blackscreen);
-		for (i in songcodelist)
-		{
-			if (Highscore.getRank(i.toLowerCase(), 4) == 0)
-			{
-				songcodelistb.push(false);
-			}
-			else
-			{
-				songcodelistb.push(true);
-			}
-		}
 	}
 
-	public static var video:VideoHandler;
-
-	public static function playCutscene(name:String)
+	public var videoCutscene:VideoSprite = null;
+	public function startVideo(name:String, forMidSong:Bool = false, canSkip:Bool = true, loop:Bool = false, playOnLoad:Bool = true)
 	{
-		//inCutscene = true;
-		video = new VideoHandler();
-		#if (hxCodec >= "3.0.0")
-		// Recent versions
-		video.play(Paths.video(name));
-		video.onEndReached.add(nowWhat, true);
+		#if VIDEOS_ALLOWED
+		var foundFile:Bool = false;
+		var fileName:String = Paths.video(name);
+
+		#if sys
+		if (FileSystem.exists(fileName))
 		#else
-		// Older versions
-		video.playVideo(Paths.video(name));
-		video.finishCallback = function()
-		{
-			return;
-		}
+		if (OpenFlAssets.exists(fileName))
 		#end
+		foundFile = true;
+
+		if (foundFile)
+		{
+			var cutscene:VideoSprite = new VideoSprite(fileName, forMidSong, canSkip, loop);
+
+			// Finish callback
+			cutscene.finishCallback = function()
+			{
+				return;
+			};
+
+			// Skip callback
+			cutscene.onSkip = function()
+			{
+				return;
+			};
+			add(cutscene);
+
+			if (playOnLoad)
+				cutscene.videoSprite.play();
+			return cutscene;
+		}
+		else FlxG.log.error("Video not found: " + fileName);
+		#else
+		FlxG.log.warn('Platform not supported!');
+		startAndEnd();
+		#end
+		return null;
 	}
 
 	public static function nowWhat():Void
@@ -242,19 +251,6 @@ class CodeState extends MusicBeatState
 		rank.x = -200 + FlxG.width - 50;
 		if (FlxG.keys.justPressed.ENTER)
 			checkCode();
-
-		if(codeInput.text=="reality breaker"){
-			FlxG.camera.shake(0.002,0.1);
-		}
-		else if(codeInput.text=="!join party"){
-			ravemode = true;
-		}
-		else if(codeInput.text=="galaxy"){
-			FlxG.camera.shake(0.002,0.1);
-		}
-		else if(codeInput.text=="game"){
-			FlxG.camera.shake(0.002,0.1);
-		}
 
 		for (i in songcodelist)
 		{

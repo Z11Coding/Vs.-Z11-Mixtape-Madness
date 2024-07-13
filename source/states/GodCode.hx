@@ -31,11 +31,12 @@ class GodCode extends MusicBeatState
 		cmd_text.setFormat("VCR OSD Mono", 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 
 		var daStatic:FlxSprite = new FlxSprite(0, 0);
-		daStatic.frames = Paths.getSparrowAtlas('static', 'pain');
+		daStatic.frames = Paths.getSparrowAtlas('effects/static');
 		daStatic.setGraphicSize(FlxG.width, FlxG.height);
 		daStatic.screenCenter();
 		daStatic.alpha = 0.5;
 		daStatic.animation.addByPrefix('static','lestatic',24, true);
+		daStatic.animation.play('static');
 		super.create();
 		add(cmd_screen);
 		add(daStatic);
@@ -76,7 +77,7 @@ class GodCode extends MusicBeatState
 						case 21:
 							if (ltxt != '')
 							{
-								FlxG.switchState(new CodeState());
+								FlxG.switchState(new CategoryState());
 								cmd_text.text = 'aweonao';
 								cmd_wait = -2;
 							}
@@ -89,7 +90,9 @@ class GodCode extends MusicBeatState
 						case 24:
 							cmd_wait = 300;
 						case 25:
-							states.CategoryState.menuLocks[3] = false;
+							FlxG.save.data.enableCodes = true;
+						case 40:
+							FlxG.switchState(new CodeState());
 						default:
 							cmd_wait = 2;
 					}
@@ -128,19 +131,19 @@ class GodCode extends MusicBeatState
 		'Clearing up enviroment... OK.', //13
 		'WARNING: Extra VOID detected', //14
 		'Opening VOID parser...:', //15
-		"LOADING 'Reality-Breaker' VOID...", //16
+		"LOADING 'Reality-Modder' VOID...", //16
 		'Done.', //17
 		'VOID READY TO MOD!', //18
-		"Reading 'Reality-Destroyer V3...'",
-		'Install "Secrets" Category on ' + Sys.environment()["COMPUTERNAME"] + '? [y,n]', //20
+		"Reading 'Reality-Modder V3...'",
+		'Install "Codes" Category on ' + Sys.environment()["COMPUTERNAME"] + '? [y,n]', //20
 		'Downloading files...',
 		'Installing Reality-Destroyer V3...',
 		'..................................',
 		'SUCCESS.',
 		'Closing...'
-		];
+	];
 	
-		var cmd_accept:Array<String> = [
-		
-		];
+	var cmd_accept:Array<String> = [
+	
+	];
 }

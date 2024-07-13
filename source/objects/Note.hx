@@ -1,6 +1,6 @@
 package objects;
 
-import states.editors.ChartingState;
+import states.editors.ChartingStateOG;
 
 import backend.animation.PsychAnimationController;
 
@@ -226,7 +226,18 @@ class Note extends NoteObject
 	// End of extra keys stuff
 	//////////////////////////////////////////////////
 
-	public var extraData:Map<String,Dynamic> = [];
+	//This is needed for the hardcoded note types to appear on the Chart Editor,
+	//It's also used for backwards compatibility with 0.1 - 0.3.2 charts.
+	public static final defaultNoteTypes:Array<String> = [
+		'', //Always leave this one empty pls
+		'Alt Animation',
+		'Hey!',
+		'Hurt Note',
+		'GF Sing',
+		'No Animation'
+	];
+
+	public var extraData:Map<String, Dynamic> = new Map<String, Dynamic>();
 
 	public var noteDiff:Float = 1000;
 	
@@ -680,7 +691,7 @@ class Note extends NoteObject
 			animation.play(animName, true);
 
 		if(inEditor){
-			setGraphicSize(ChartingState.GRID_SIZE, ChartingState.GRID_SIZE);
+			setGraphicSize(ChartingStateOG.GRID_SIZE, ChartingStateOG.GRID_SIZE);
 			updateHitbox();
 		}
 	}

@@ -8,7 +8,6 @@ import openfl.utils.Assets as OpenFlAssets;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.graphics.FlxGraphic;
 import flixel.FlxState;
-import states.editors.ChartingState;
 
 import backend.Song;
 import backend.StageData;

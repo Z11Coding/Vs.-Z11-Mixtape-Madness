@@ -1,6 +1,5 @@
-package;
+package substates;
 
-import Controls.Control;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -16,11 +15,14 @@ import flixel.FlxCamera;
 import flixel.util.FlxStringUtil;
 import flixel.effects.FlxFlicker;
 import flixel.util.FlxTimer;
+import backend.Song;
+import backend.Highscore;
 
 class DiffSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
-	public static var difficultyChoices = [];
+	public static var songChoices = [];
+	public static var listChoices = [];
 	var curSelected:Int = 0;
 
 	var pausebg:FlxSprite;
@@ -34,21 +36,22 @@ class DiffSubState extends MusicBeatSubstate
 	{
 		super();
 
-		difficultyChoices.push('BACK');
+		listChoices.push('BACK');
+		songChoices.push('BACK');
 
 		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		bg.alpha = 0;
 		bg.scrollFactor.set();
 		add(bg);
 
-		if (!ClientPrefs.lowQuality)
+		if (!ClientPrefs.data.lowQuality)
 		{
-			pausebg = new FlxSprite().loadGraphic(Paths.image('pausemenubg'));
+			pausebg = new FlxSprite().loadGraphic(Paths.image('pause/pausemenubg'));
 			pausebg.color = 0xFF1E1E1E;
 			pausebg.scrollFactor.set();
 			pausebg.updateHitbox();
 			pausebg.screenCenter();
-			pausebg.antialiasing = ClientPrefs.globalAntialiasing;
+			pausebg.antialiasing = ClientPrefs.data.globalAntialiasing;
 			add(pausebg);
 			pausebg.x += 200;
 			pausebg.y -= 200;
@@ -59,12 +62,12 @@ class DiffSubState extends MusicBeatSubstate
 				alpha: 1
 			}, 1, {ease: FlxEase.quadOut});
 
-			pausebg1 = new FlxSprite().loadGraphic(Paths.image('iconbackground'));
+			pausebg1 = new FlxSprite().loadGraphic(Paths.image('pause/iconbackground'));
 			pausebg1.color = 0xFF141414;
 			pausebg1.scrollFactor.set();
 			pausebg1.updateHitbox();
 			pausebg1.screenCenter();
-			pausebg1.antialiasing = ClientPrefs.globalAntialiasing;
+			pausebg1.antialiasing = ClientPrefs.data.globalAntialiasing;
 			add(pausebg1);
 			pausebg1.x -= 150;
 			pausebg1.y += 150;
@@ -75,12 +78,12 @@ class DiffSubState extends MusicBeatSubstate
 				alpha: 1
 			}, 0.9, {ease: FlxEase.quadOut});
 
-			iconBG = new FlxSprite().loadGraphic(Paths.image('iconbackground'));
+			iconBG = new FlxSprite().loadGraphic(Paths.image('pause/iconbackground'));
 			iconBG.flipX = true;
 			iconBG.scrollFactor.set();
 			iconBG.updateHitbox();
 			iconBG.screenCenter();
-			iconBG.antialiasing = ClientPrefs.globalAntialiasing;
+			iconBG.antialiasing = ClientPrefs.data.globalAntialiasing;
 			add(iconBG);
 			iconBG.x += 100;
 			iconBG.y += 100;
@@ -97,9 +100,9 @@ class DiffSubState extends MusicBeatSubstate
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
 
-		for (i in 0...difficultyChoices.length)
+		for (i in 0...listChoices.length)
 		{
-			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, difficultyChoices[i], true, false);
+			var songText:Alphabet = new Alphabet(0, (70 * i) + 30, listChoices[i], true);
 			songText.isMenuItem = true;
 			songText.targetY = i;
 			grpMenuShit.add(songText);
@@ -127,26 +130,16 @@ class DiffSubState extends MusicBeatSubstate
 			changeSelection(1);
 		}
 
-		var daSelected:String = difficultyChoices[curSelected];
+		var daSelected:String = songChoices[curSelected];
 
 		if (accepted)
 		{
-			if (daSelected != 'BACK' && difficultyChoices.contains(daSelected))
+			if (daSelected != 'BACK' && songChoices.contains(daSelected))
 			{
-				flick = true;
-				var name:String = PlayState.SONG.song.toLowerCase();
-				var poop = Highscore.formatSong(name, curSelected);
+				var name:String = daSelected;
+				var poop = Highscore.formatSong(name, PlayState.storyDifficulty);
 				PlayState.SONG = Song.loadFromJson(poop, name);
-				PlayState.storyDifficulty = curSelected;
-				CustomFadeTransition.nextCamera = transCamera;
-				new FlxTimer().start(1, function(tmr:FlxTimer)
-                {
-					openSubState(new LoadingsState());
-					FlxTransitionableState.skipNextTransIn = true;
-					var toSwitchToState = new PlayState();
-					LoadingState.loadAndSwitchState(toSwitchToState, true,true);
-					CharMenu.alreadySelected = false;
-				});
+				TransitionState.transitionState(PlayState, {transitionType: "stickers"});
 				FlxG.sound.music.volume = 0;
 				PlayState.chartingMode = false;
 				close();
@@ -156,16 +149,8 @@ class DiffSubState extends MusicBeatSubstate
 			switch (daSelected)
 			{
 				case 'BACK':
-					CharMenu.alreadySelected = false;
 					close();
 			}
-		}
-		if (flick)
-		{
-			for (item in grpMenuShit.members)
-				{ 
-					FlxFlicker.flicker(item, 0);
-				}
 		}
 	}
 
@@ -176,8 +161,8 @@ class DiffSubState extends MusicBeatSubstate
 		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 
 		if (curSelected < 0)
-			curSelected = difficultyChoices.length - 1;
-		if (curSelected >= difficultyChoices.length)
+			curSelected = songChoices.length - 1;
+		if (curSelected >= songChoices.length)
 			curSelected = 0;
 
 		var bullShit:Int = 0;
@@ -188,12 +173,10 @@ class DiffSubState extends MusicBeatSubstate
 			bullShit++;
 
 			item.alpha = 0.6;
-			// item.setGraphicSize(Std.int(item.width * 0.8));
 
 			if (item.targetY == 0)
 			{
 				item.alpha = 1;
-				// item.setGraphicSize(Std.int(item.width));
 			}
 		}
 	}
