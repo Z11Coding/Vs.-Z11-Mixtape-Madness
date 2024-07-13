@@ -642,6 +642,11 @@ class PlayState extends MusicBeatState
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
+		// if (PlayState.mania == -1 && SONG.startMania == -1) {
+		// 	mania = 3;
+		// 	SONG.startMania = 3;
+		// }
+
 		// For the "Just the Two of Us" achievement
 		for (i in 0...keysArray[mania].length)
 		{
