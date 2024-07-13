@@ -3948,7 +3948,7 @@ class PlayState extends MusicBeatState
 
 		playerField.strumNotes = [];
 		dadField.strumNotes = [];
-		setOnLuas('mania', mania);
+		setOnScripts('mania', mania);
 
 		notes.forEachAlive(function(note:Note)
 		{
@@ -3961,7 +3961,7 @@ class PlayState extends MusicBeatState
 			updateNote(note);
 		}
 
-		callOnLuas('onChangeMania', [mania, daOldMania]);
+		setOnScripts('onChangeMania', [mania, daOldMania]);
 
 		callOnScripts('preReceptorGeneration'); // backwards compat, deprecated
 		callOnScripts('onReceptorGeneration');
@@ -4153,8 +4153,7 @@ class PlayState extends MusicBeatState
 				songLength
 				- Conductor.songPosition
 				- ClientPrefs.data.noteOffset);
-		else
-			DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
+		else if (!Crashed) DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
 		#end
 	}
 
@@ -5486,7 +5485,7 @@ class PlayState extends MusicBeatState
 		DiscordClient.resetClientID();
 		#end
 
-		MusicBeatState.switchState(new ChartingStateOG());
+		FlxG.switchState(new ChartingStateOG());
 	}
 
 	function openCharacterEditor()
@@ -6539,13 +6538,9 @@ class PlayState extends MusicBeatState
 
 	function moveCameraSection(?sec:Null<Int>):Void
 	{
-		if (sec == null)
-			sec = curSection;
-		if (sec < 0)
-			sec = 0;
-
-		if (SONG.notes[sec] == null)
-			return;
+		if(sec == null) sec = curSection;
+		if(sec < 0) sec = 0;
+		if(SONG.notes[sec] == null) return;
 
 		if (gf != null && SONG.notes[curSection].gfSection)
 		{

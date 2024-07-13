@@ -86,7 +86,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 	public var isPlayer:Bool = false; // if this playfield takes input from the player
 	public var inControl:Bool = true; // if this playfield will take input at all
 	public var AIPlayer:Bool = false; // if this playfield is played by the "AI" instead
-	public var keyCount(default, set):Int = 4; // How many lanes are in this field
+	public var keyCount(default, set):Int = 6; // How many lanes are in this field
 	public var autoPlayed(default, set):Bool = false; // if this playfield should be played automatically (botplay, opponent, etc)
 
     public var x:Float = 0;
@@ -146,7 +146,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 
 		////
 		noteField = new NoteField(this, modMgr);
-		//add(noteField);
+		add(noteField);
 
 		// idk what haxeflixel does to regenerate the frames
 		// SO! this will be how we do it
@@ -160,7 +160,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 		retard.color = 0xFF000000; // just to make it a bit harder to see
 		retard.alpha = 0.9; // just to make it a bit harder to see
 		retard.scale.set(0.002, 0.002);
-		retard.handleRendering = true;
+		retard.handleRendering = false;
 		retard.updateHitbox();
 		retard.x = 400;
 		retard.y = 400;
@@ -291,7 +291,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 		for(i in 0...keyCount){
 			var babyArrow:StrumNote = new StrumNote(ClientPrefs.data.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X, PlayState.strumLine.y, i, this);
 			babyArrow.downScroll = ClientPrefs.data.downScroll;
-			babyArrow.alpha = 0;
+			babyArrow.alpha = 1;
 			insert(0, babyArrow);
 			babyArrow.handleRendering = false; // NoteField handles rendering
 			babyArrow.cameras = cameras;
@@ -306,7 +306,8 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 		for (data in 0...strumNotes.length)
 		{
 			var babyArrow:StrumNote = strumNotes[data];
-			if (skip)
+			babyArrow.alpha = 1;
+			/*if (skip)
 				babyArrow.alpha = 1;
 			else
 			{
@@ -314,7 +315,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 				var daY = babyArrow.downScroll ? -10 : 10;
 				babyArrow.offsetY -= daY;
 				FlxTween.tween(babyArrow, {offsetY: babyArrow.offsetY + daY, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (Conductor.crochet / 1000) * data});
-			}
+			}*/
 		}
 	}
 

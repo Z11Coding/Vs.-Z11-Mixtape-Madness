@@ -47,6 +47,7 @@ class Main extends Sprite
 
 	public static var cmdArgs:Array<String> = Sys.args();
 	public static var noTerminalColor:Bool = false;
+	public static var playTest:Bool = false;
 	public static var forceGPUOnlyBitmapsOff:Bool = #if windows false #else true #end;
 
 	// public var initStuff = game;
@@ -140,8 +141,8 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
-		trace(Paths.url("https://cdn.discordapp.com/attachments/631085887467421716/1260066510269845534/loading.xml?ex=668df7e2&is=668ca662&hm=7ff6c46036177698e1b10924bd42724f8636a6e24622a89fb054b00d84038649&"));
-		trace(HoldableVariable.createVariable(FlxG.state).evaluate());
+		//trace(Paths.url("https://cdn.discordapp.com/attachments/631085887467421716/1260066510269845534/loading.xml?ex=668df7e2&is=668ca662&hm=7ff6c46036177698e1b10924bd42724f8636a6e24622a89fb054b00d84038649&"));
+		//trace(HoldableVariable.createVariable(FlxG.state).evaluate());
 		Toolkit.init();
 		Toolkit.theme = 'dark'; // don't be cringe
 		backend.Cursor.registerHaxeUICursors();

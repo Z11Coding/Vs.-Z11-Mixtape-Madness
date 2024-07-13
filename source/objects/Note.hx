@@ -333,6 +333,7 @@ class Note extends NoteObject
         return realColumn = v;
 
 	public static var swagWidth:Float = 160 * 0.7;
+	public static var swagWidthAlt:Float = 160; //For ModManager
 	public static var colArray:Array<String> = ['purple', 'blue', 'green', 'red'];
 	public static var colArrayAlt:Array<String> = ['purple', 'blue', 'green', 'red', 'white', 'yellow', 'violet', 'black', 'dark'];
 
@@ -451,7 +452,7 @@ class Note extends NoteObject
 
 	private function set_noteType(value:String):String {
 		noteSplashTexture = PlayState.SONG != null ? PlayState.SONG.splashSkin : 'noteSplashes';
-		defaultRGB();
+		//defaultRGB();
 		if(noteData > -1 && noteType != value) {
 			switch(value) {
 				case 'Hurt Note':
@@ -536,7 +537,8 @@ class Note extends NoteObject
 			texture = '';
 			if (mania <= 8) 
 			{
-				rgbShader = new RGBShaderReference(this, initializeGlobalRGBShader(noteData));
+				//rgbShader = new RGBShaderReference(this, initializeGlobalRGBShader(noteData));
+				if (noteType == '' || noteType == null) reloadNote('normal');
 			}
 			else
 			{

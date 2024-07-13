@@ -275,8 +275,6 @@ class NoteField extends FieldBase
 	var matrix:FlxMatrix = new FlxMatrix();
 	override function draw()
 	{
-		if (!active || !exists || !visible)
-			return; // dont draw if visible = false
 		super.draw();
 
 		/*if ((FlxG.state is PlayState))

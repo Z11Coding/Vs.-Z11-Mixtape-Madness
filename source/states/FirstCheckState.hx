@@ -41,12 +41,17 @@ class FirstCheckState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
-		switch (FlxG.random.bool(3) && !ClientPrefs.data.gotit)
-		{
-			case false:
-				FlxG.switchState(new states.CacheState());
-			case true:
-				FlxG.switchState(new states.WelcomeToPain());
+		trace(Main.playTest);
+		if (Main.playTest) MusicBeatState.playSong(['beat-battle'], false, 2, 'TransitionState', 'stickers');
+		else
+		{ 
+			switch (FlxG.random.bool(3) && !ClientPrefs.data.gotit)
+			{
+				case false:
+					FlxG.switchState(new states.CacheState());
+				case true:
+					FlxG.switchState(new states.WelcomeToPain());
+			}
 		}
 	}
 }

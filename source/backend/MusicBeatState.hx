@@ -26,7 +26,7 @@ class MusicBeatState extends FlxUIState
 	var _psychCameraInitialized:Bool = false;
 
 	override function create() {
-		trace('Creating MusicBeatState');
+		//trace('Creating MusicBeatState');
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		#if MODS_ALLOWED Mods.updatedOnState = false; #end
 
@@ -41,7 +41,7 @@ class MusicBeatState extends FlxUIState
 		{
 			reopen = false;
 			openSubState(emptyStickers);
-			trace('reopened stickers');
+			//trace('reopened stickers');
 		}
 		timePassedOnState = 0;
 	}

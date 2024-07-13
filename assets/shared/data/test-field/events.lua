@@ -21,7 +21,7 @@ function onCreatePost()
     setGraphicSize('dark')
     addLuaSprite('dark', true);
     setProperty('dark.alpha', 1);
-    setObjectCamera('dark','other')
+    setObjectCamera('dark','hud')
 end
 
 function addCameraZoom(camGameValue, camHUDValue)

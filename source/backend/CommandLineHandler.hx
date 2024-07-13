@@ -39,7 +39,7 @@ class CommandLineHandler {
 				case "-livereload":
 					// do nothing
 				case '-playtest':
-					MusicBeatState.playSong(['beat-battle'], false, 2, 'TransitionState', 'stickers');
+					Main.playTest = true;
 				default:
 					Sys.println("Unknown command");
 			}

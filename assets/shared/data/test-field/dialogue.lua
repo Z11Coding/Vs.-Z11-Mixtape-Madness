@@ -33,7 +33,7 @@ function onStartCountdown()
         dialogueCount = dialogueCount + 1
         if dialogueCount == 1 then
             makeLuaSprite("d_blackbg", "")
-            addLuaSprite("d_blackbg", true)
+            --addLuaSprite("d_blackbg", true)
             setObjectCamera("d_blackbg", "hud")
             makeGraphic("d_blackbg", screenWidth, screenHeight, "000000")
             runTimer("dialogueDelay", 0.5)
@@ -41,7 +41,7 @@ function onStartCountdown()
             setProperty('boyfriend.alpha', 0)
             doTweenAlpha("d_blackbgA", "d_blackbg", 0, 2)
             inBoyfriendScene = true
-            runTimer("boyfriendSpeaks", 2)
+            runTimer("boyfriendSpeaks", 0.1)
         end
         return Function_Stop
     end

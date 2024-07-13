@@ -103,22 +103,25 @@ class StrumNote extends NoteObject
 	public function new(x:Float, y:Float, leData:Int, ?field:PlayField) {
 		FlxG.plugins.add(new FlxMouseControl());
 		animation = new PsychAnimationController(this);
-
-		rgbShader = new RGBShaderReference(this, Note.initializeGlobalRGBShader(leData));
-		rgbShader.enabled = false;
-		if(PlayState.SONG != null && PlayState.SONG.disableNoteRGB) useRGBShader = false;
 		
-		var arr:Array<FlxColor> = ClientPrefs.data.arrowRGBExtra[Note.gfxIndex[PlayState.mania][leData]];
-		if(PlayState.isPixelStage) arr = ClientPrefs.data.arrowRGBPixelExtra[Note.gfxIndex[PlayState.mania][leData]];
-		if(leData <= PlayState.mania)
+		if (PlayState.mania <= 8)
 		{
-			@:bypassAccessor
+			rgbShader = new RGBShaderReference(this, Note.initializeGlobalRGBShader(leData));
+			rgbShader.enabled = false;
+			if(PlayState.SONG != null && PlayState.SONG.disableNoteRGB) useRGBShader = false;
+			var arr:Array<FlxColor> = ClientPrefs.data.arrowRGBExtra[Note.gfxIndex[PlayState.mania][leData]];
+			if(PlayState.isPixelStage) arr = ClientPrefs.data.arrowRGBPixelExtra[Note.gfxIndex[PlayState.mania][leData]];
+			if(leData <= PlayState.mania)
 			{
-				rgbShader.r = arr[0];
-				rgbShader.g = arr[1];
-				rgbShader.b = arr[2];
+				@:bypassAccessor
+				{
+					rgbShader.r = arr[0];
+					rgbShader.g = arr[1];
+					rgbShader.b = arr[2];
+				}
 			}
 		}
+		else useRGBShader = false;
 		this.field = field;
 		super(x, y);
 		objType = STRUM;
