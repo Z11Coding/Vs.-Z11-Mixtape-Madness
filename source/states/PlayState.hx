@@ -3066,6 +3066,24 @@ class PlayState extends MusicBeatState
 						}
 						prevNoteData = daNoteData;
 						initialNoteData = thisNoteData;
+
+						case "Sequential":
+							daNoteData = (prevNoteData + 1) % mania;
+					
+						case "Mirror":
+							var midpoint = Math.floor(mania / 2);
+							if (initialNoteData == -1) {
+								initialNoteData = daNoteData;
+								daNoteData = (daNoteData < midpoint) ? daNoteData + midpoint : daNoteData - midpoint;
+							} else {
+								daNoteData = (prevNoteData < midpoint) ? prevNoteData + 1 : prevNoteData - 1;
+								if (daNoteData >= mania) daNoteData = 0;
+								if (daNoteData < 0) daNoteData = mania - 1;
+							}
+					
+						case "Skip":
+							var skipStep = 2; // Define the step size for skipping notes.
+							daNoteData = (prevNoteData + skipStep) % mania;
 					case "Flip":
 						if (gottaHitNote)
 						{
