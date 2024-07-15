@@ -1,0 +1,11 @@
+:disableTypeSound:
+:switchSound:capnoise
+:enableTypeSound:
+:capz:Hello there! My name is Captain Z-
+:cap-bruh:Wait...
+:cap-suprised:How did you get here?
+:switchSound:bfBeep
+:bf1:Beep Bep bap skebop.
+:switchSound:capnoise
+:cap-suprised:A rapping contest? Hmmm...
+:cap-happy:Sure, but then you have to tell me how you got here...

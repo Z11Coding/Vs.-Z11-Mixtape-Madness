@@ -1,0 +1,33 @@
+:disableTypeSound:
+:switchSound:capnoise
+:enableTypeSound:
+:cap-sweating:Ok Ok. NOW will you tell me?
+:switchSound:bfBeep
+:bf-laugh:Beep bop skebep bop bboo bee
+:bf-laugh:Skebep boop Bap bep bop bee
+:switchSound:capnoise
+:cap-suprised:...
+:cap-suprised:so...
+:cap-scilence:Your telling me...
+:cap-scilence:Your here because you saw a black and white line,
+:cap-scilence:And it sucked you in when you got too close?
+:switchSound:bfBeep
+:bf-happy:Beep!
+:switchSound:capnoise
+:cap-relaxed:...
+:switchSound:bfBeep
+:bf-happy: bep bap bop?
+:switchSound:capnoise
+:cap-happy:Sure. But lets raise the steaks
+:switchSound:bfBeep
+:sound:missnote1
+:bf-worried:Beep?
+:switchSound:capnoise
+:cap-smile:If I win this next one, I keep you here, in the void
+:cap-fear:But,
+:cap-worried:If YOU win this next one...
+:cap-worried:I get stuck here, and you two can just use that big portal
+:cap-worried:To go home.
+:cap-fear:Deal?
+:switchSound:bfBeep
+:bf-sweating:beep.

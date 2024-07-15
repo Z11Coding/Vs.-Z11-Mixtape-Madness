@@ -1,7 +1,7 @@
 import flixel.addons.effects.FlxTrail;
-var godCutEnd:Bool = false;
-var godMoveBf:Bool = true;
-var godMoveGf:Bool = false;
+var godCutEnd:Bool = true;
+var godMoveBf:Bool = false;
+var godMoveGf:Bool = true;
 var godMoveSh:Bool = false;
 var sh_r:Float = 600;
 var gf_launched:Bool = false;
@@ -78,6 +78,7 @@ function onCreate()
     gf_rock.animation.play('rock');
     gf_rock.scrollFactor.set(0.8, 0.8);
     gf_rock.antialiasing = true;
+    gf_rock.alpha = 0;
     addBehindGF(gf_rock);
 
     rock = new FlxSprite(20, 20);
@@ -86,7 +87,8 @@ function onCreate()
     rock.animation.play('rock');
     rock.scrollFactor.set(1, 1);
     rock.antialiasing = true;
-    addBehindGF(rock);
+    rock.alpha = 0;
+    addBehindDad(rock);
 
     //god eater legs
     legs = new FlxSprite(-850, -850);
@@ -97,8 +99,11 @@ function onCreate()
     legs.updateHitbox();
     legs.offset.set(legs.frameWidth / 2, 10);
     legs.alpha = 0;
-
     addBehindBF(legs);
+}
+
+function onSongStart() {
+    gf_rock.alpha = 1;
 }
 
 function onUpdate() {
@@ -165,13 +170,13 @@ function onUpdate() {
             game.gf.x += (gf_tox - game.gf.x) / derp;
             game.gf.y += (gf_toy - game.gf.y) / derp;
 
-            gf_rock.x = game.gf.x + 80;
-            gf_rock.y = game.gf.y + 530;
+            gf_rock.x = game.gf.x - 100;
+            gf_rock.y = game.gf.y + 450;
             gf_rock.alpha = 1;
             if (!gf_launched)
             {
                 game.gf.scrollFactor.set(0.8, 0.8);
-                game.gf.setGraphicSize(Std.int(gf.width * 0.8));
+                game.gf.setGraphicSize(Std.int(game.gf.width * 0.8));
                 gf_launched = true;
             }
         }
@@ -179,10 +184,6 @@ function onUpdate() {
     if (!godCutEnd || !godMoveBf)
     {
         rock.alpha = 0;
-    }
-    if (!godMoveGf)
-    {
-        gf_rock.alpha = 0;
     }
 }
 
@@ -192,7 +193,6 @@ function onStepHit() {
     {
         remove(shaggyT);
         FlxG.camera.flash(game.camGame, 0xFFFFFFFF, 2, true);
-        godCutEnd = true;
         godMoveBf = true;
         godMoveSh = true;
         shaggyT = new FlxTrail(game.boyfriend, null, 5, 7, 0.3, 0.001);
@@ -219,6 +219,7 @@ function superShaggy()
                 camLerp = 2;
             case 15:
                 game.boyfriend.playAnim('powerup', true);
+                game.boyfriend.specialAnim = true;
             case 48:
                 game.boyfriend.playAnim('danceLeft-alt', true);
                 game.triggerEvent('Alt Idle Animation', 'bf', '-alt');
@@ -235,9 +236,9 @@ function superShaggy()
 
                 FlxG.sound.play(Paths.sound('powerup'), 1);
 
-                shaggyT = new FlxTrail(dad, null, 3, 6, 0.3, 0.002);
-                shaggyT.visible = false;
-                add(shaggyT);
+                shaggyT = new FlxTrail(boyfriend, null, 3, 6, 0.3, 0.002);
+                shaggyT.visible = true;
+                insert(members.indexOf(boyfriendGroup) - 6, shaggyT);
             case 62:
                 burst.y = 0;
                 remove(burst);

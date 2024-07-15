@@ -1003,14 +1003,14 @@ class PlayState extends MusicBeatState
 			dad2 = null;
 		}
 
-		boyfriend = new Boyfriend(0, 0, SONG.player1);
+		boyfriend = new Character(0, 0, SONG.player1, true);
 		startCharacterPos(boyfriend);
 		boyfriendGroup.add(boyfriend);
 		startCharacterScripts(boyfriend.curCharacter);
 
 		if (SONG.player5 != null)
 		{
-			bf2 = new Boyfriend(0, 0, SONG.player5);
+			bf2 = new Character(0, 0, SONG.player5, true);
 			startCharacterPos(bf2, true);
 			boyfriendGroup2.add(bf2);
 			startCharacterScripts(bf2.curCharacter);
@@ -1199,7 +1199,7 @@ class PlayState extends MusicBeatState
 			iconP1.alpha = ClientPrefs.data.healthBarAlpha;
 			add(iconP1);
 
-			if (bf2 != null && bf2.curCharacter == 'girlf')
+			if (bf2 != null && bf2.curCharacter != 'girlf')
 			{
 				iconP12 = new HealthIcon(bf2.healthIcon, true);
 				iconP12.y = healthBar.y - 115;
@@ -1207,6 +1207,7 @@ class PlayState extends MusicBeatState
 				iconP12.alpha = ClientPrefs.data.healthBarAlpha;
 				add(iconP12);
 			}
+			else iconP12 = null;
 
 			iconP2 = new HealthIcon(dad.healthIcon, false);
 			iconP2.y = healthBar.y - 75;
@@ -1232,7 +1233,7 @@ class PlayState extends MusicBeatState
 		scoreTxt.visible = !ClientPrefs.data.hideHud;
 		add(scoreTxt);
 
-		botplayTxt = new FlxText(400, timeBar.y + 155, FlxG.width - 800, "BOTPLAY", 32);
+		botplayTxt = new FlxText(400, timeBar.y + 155, FlxG.width - 800, Language.getPhrase("Botplay").toUpperCase(), 32);
 		botplayTxt.setFormat(Paths.font("FridayNightFunkin.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		botplayTxt.scrollFactor.set();
 		botplayTxt.borderSize = 1.25;
@@ -1718,7 +1719,7 @@ class PlayState extends MusicBeatState
 			case 0:
 				if (!boyfriendMap.exists(newCharacter))
 				{
-					var newBoyfriend:Boyfriend = new Boyfriend(0, 0, newCharacter);
+					var newBoyfriend:Character = new Character(0, 0, newCharacter, true);
 					boyfriendMap.set(newCharacter, newBoyfriend);
 					boyfriendGroup.add(newBoyfriend);
 					startCharacterPos(newBoyfriend);
@@ -1766,7 +1767,7 @@ class PlayState extends MusicBeatState
 			case 4:
 				if (bf2 != null && !boyfriendMap2.exists(newCharacter))
 				{
-					var newBoyfriend:Boyfriend = new Boyfriend(0, 0, newCharacter);
+					var newBoyfriend:Character = new Character(0, 0, newCharacter, true);
 					boyfriendMap2.set(newCharacter, newBoyfriend);
 					boyfriendGroup2.add(newBoyfriend);
 					startCharacterPos(newBoyfriend);
@@ -2471,12 +2472,17 @@ class PlayState extends MusicBeatState
 		if (ret == LuaUtils.Function_Stop)
 			return;
 
-		var str:String = ratingName;
+		var str:String = Language.getPhrase('rating_$ratingName', ratingName);
 		if (totalPlayed != 0)
 		{
 			var percent:Float = CoolUtil.floorDecimal(ratingPercent * 100, 2);
-			str += ' (${percent}%) - ${ratingFC}';
+			str += ' (${percent}%) - ${Language.getPhrase(ratingFC)}';
 		}
+
+		var tempScore:String;
+		if(!instakillOnMiss) tempScore = Language.getPhrase('score_text', 'Score: {1} | Misses: {2} | Rating: {3}', [songScore, songMisses, str]);
+		else tempScore = Language.getPhrase('score_text_instakill', 'Score: {1} | Rating: {2}', [songScore, str]);
+		scoreTxt.text = tempScore;
 
 		if (!miss && !cpuControlled)
 			doScoreBop();
@@ -2736,23 +2742,22 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		/*if (!isStoryMode && playbackRate == 1)
+		if (!isStoryMode && playbackRate == 1)
+		{
+			for (i in 0...unspawnNotes.length + 1)
 			{
-				for (i in 0...unspawnNotes.length + 1)
+				var daNote:Note = unspawnNotes[i];
+				if (daNote != null && daNote.strumTime > 1000)
 				{
-					var daNote:Note = unspawnNotes[i];
-					if (daNote != null && daNote.strumTime > 1000)
-					{
-						needSkip = true;
-						skipTo = daNote.strumTime - 1000;
-					}
-					else
-					{
-						needSkip = false;
-					}
+					needSkip = true;
+					skipTo = daNote.strumTime - 1000;
 				}
-				
-		}*/
+				else
+				{
+					needSkip = false;
+				}
+			}	
+		}
 
 		FlxG.sound.music.time = Conductor.songPosition;
 		FlxG.sound.music.play();
@@ -2803,6 +2808,8 @@ class PlayState extends MusicBeatState
 		songLength = FlxG.sound.music.length;
 		FlxTween.tween(timeBar, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
 		FlxTween.tween(timeTxt, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
+		setOnScripts('songLength', songLength);
+		callOnScripts('onSongStart', []);
 		if (!playAsGF && !Crashed)
 		{
 			#if DISCORD_ALLOWED
@@ -2811,8 +2818,6 @@ class PlayState extends MusicBeatState
 				if (playAsGF && gf != null) iconGF.getCharacter() else iconP2.getCharacter(), true, songLength);
 			#end
 		}
-		setOnScripts('songLength', songLength);
-		callOnScripts('onSongStart', []);
 	}
 
 	public static function getNumberFromAnims(note:Int, mania:Int):Int
@@ -2995,17 +3000,15 @@ class PlayState extends MusicBeatState
 		var daBeats:Int = 0; // Not exactly representative of 'daBeats' lol, just how much it has looped
 
 		var songName:String = Paths.formatToSongPath(SONG.song);
-		var file:String = Paths.json(songName + '/events');
-		#if MODS_ALLOWED
-		if (FileSystem.exists(Paths.modsJson(songName + '/events')) || FileSystem.exists(file)) {
-		#else
-		if (OpenFlAssets.exists(file)) {
-		#end
-			var eventsData:Array<Dynamic> = Song.loadFromJson('events', songName).events;
-			for (event in eventsData) //Event Notes
-				for (i in 0...event[1].length)
-					makeEvent(event, i);
+		try
+		{
+			var eventsChart:SwagSong = Song.getChart('events', songName);
+			if(eventsChart != null)
+				for (event in eventsChart.events) //Event Notes
+					for (i in 0...event[1].length)
+						makeEvent(event, i);
 		}
+		catch(e:Dynamic) {}
 
 
 		speedChanges.sort(svSort);
@@ -3391,6 +3394,7 @@ class PlayState extends MusicBeatState
 				swagNote.mustPress = gottaHitNote;
 				swagNote.sustainLength = songNotes[2];
 				swagNote.gfNote = section.gfSection;
+				swagNote.animSuffix = section.altAnim ? '-alt' : '';
 				swagNote.noteType = type;
 				swagNote.noteIndex = noteIndex++;
 				if (!Std.isOfType(songNotes[3], String))
@@ -3435,7 +3439,7 @@ class PlayState extends MusicBeatState
 						var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet), daNoteData, oldNote, true);
 						sustainNote.mustPress = gottaHitNote;
 						sustainNote.gfNote = swagNote.gfNote;
-						swagNote.animSuffix = swagNote.animSuffix;
+						sustainNote.animSuffix = swagNote.animSuffix;
 						sustainNote.noteType = type;
 						sustainNote.noteIndex = swagNote.noteIndex;
 						if (chartModifier == 'Amalgam' && currentModifier == 11)
@@ -5310,6 +5314,8 @@ class PlayState extends MusicBeatState
 
 			if (dad2 != null)
 			{
+				var multA:Float = FlxMath.lerp(1, iconP22.angle, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
+				iconP22.angle = multA;
 				var mult:Float = FlxMath.lerp(1, iconP22.scale.x, Math.exp(-elapsed * 9 * playbackRate));
 				iconP22.scale.set(mult, mult);
 				iconP22.updateHitbox();
@@ -5317,6 +5323,8 @@ class PlayState extends MusicBeatState
 
 			if (bf2 != null)
 			{
+				var multA:Float = FlxMath.lerp(1, iconP12.angle, CoolUtil.boundTo(1 - (elapsed * 9 * playbackRate), 0, 1));
+				iconP12.angle = multA;
 				var mult:Float = FlxMath.lerp(1, iconP12.scale.x, Math.exp(-elapsed * 9 * playbackRate));
 				iconP12.scale.set(mult, mult);
 				iconP12.updateHitbox();
@@ -5518,7 +5526,7 @@ class PlayState extends MusicBeatState
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 		#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
-		TransitionState.transitionState(CharacterEditorState, {transitionType: "stickers"});
+		FlxG.switchState(new CharacterEditorState());
 	}
 
 	public var isDead:Bool = false; // Don't mess with this on Lua!!!

@@ -1,0 +1,16 @@
+:disableTypeSound:
+:switchSound:z
+:enableTypeSound:
+:z: Alright. so your good. And?
+:switchSound:bfBeep
+:bf-right: Beep bop skebop!
+:switchSound:z
+:z-mad: Oh shut up. Just because you beat split doesn't mean anything.
+:z-mad: I made them. I made THIS.
+:z: What have YOU donw other than BE HERE?
+:switchSound:bfBeep
+:bf-right: Beep bop rap be.
+:switchSound:z
+:z-mad: ...
+:z-mad: ...
+:z-mad: Just start the song.

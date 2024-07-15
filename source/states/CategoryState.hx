@@ -10,12 +10,10 @@ class CategoryState extends MusicBeatState
 	public static var menuItems:Array<String> = [
 		"Oneshots", "Remixes", "Bonus", "Secrets"
 	];
+
 	public static var menuLocks:Array<Bool> = [
 		false, false, false, true
 	];
-
-
-
 
 	public static var loadWeekForce:String = 'Main';
 
@@ -72,20 +70,20 @@ class CategoryState extends MusicBeatState
 			}
 		}
 
-				// Remove duplicates from menuItems
-				var filteredItems:Array<String> = [];
-				for (item in menuItems) {
-					if (!filteredItems.contains(item)) {
-						filteredItems.push(item);
-					}
-				}
-				menuItems = filteredItems;
+		// Remove duplicates from menuItems
+		var filteredItems:Array<String> = [];
+		for (item in menuItems) {
+			if (!filteredItems.contains(item)) {
+				filteredItems.push(item);
+			}
+		}
+		menuItems = filteredItems;
 
-				// Move "Main" to the front of menuItems
-				if (menuItems.contains("Main")) {
-					menuItems.remove("Main");				
-					menuItems.insert(0, "Main");
-				}
+		// Move "Main" to the front of menuItems
+		if (menuItems.contains("Main")) {
+			menuItems.remove("Main");				
+			menuItems.insert(0, "Main");
+		}
 
 
 		// Main.simulateIntenseMaps();

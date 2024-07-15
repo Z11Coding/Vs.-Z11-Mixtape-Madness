@@ -364,39 +364,6 @@ class MainMenuState extends MusicBeatState
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
 
-		if (charHitbox.isPressed)
-			LoadingState.loadAndSwitchState(new CharMenu());
-
-		if (Achievements.isUnlocked('smooth_moves'))
-		{
-			FlxG.save.data.bfMultiUnlock = true;
-		}
-
-		if (Achievements.isUnlocked('gf_mode'))
-		{
-			FlxG.save.data.playableGFUnlock = true;
-		}
-
-		if (Achievements.isUnlocked('beat_battle'))
-		{
-			FlxG.save.data.playablejellyUnlock = true;
-		}
-		
-		if (Achievements.isUnlocked('beat_battle_god'))
-		{
-			FlxG.save.data.playableneoUnlock = true;
-		}
-
-		if (Achievements.isUnlocked('beat_battle_master'))
-		{
-			FlxG.save.data.playablejmaidUnlock = true;
-		}
-
-		if (Achievements.isUnlocked('way_too_spoopy'))
-		{
-			FlxG.save.data.playablespoopyUnlock = true;
-		}
-
 		Conductor.songPosition = FlxG.sound.music.time;
 
 		if(FlxG.keys.justPressed.F11)

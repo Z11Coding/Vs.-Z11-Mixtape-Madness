@@ -1,0 +1,15 @@
+:disableTypeSound:
+:switchSound:capnoise
+:enableTypeSound:
+:cap-bruh:Well, you certainly good at this.
+:switchSound:bfBeep
+:bf-relaxed:Bop beep.
+:switchSound:capnoise
+:cap-bruh:Another one?
+:cap-bruh:Fine.
+:cap-mad:But can you at least tell me how you got here?
+:switchSound:bfBeep
+:bf-smile:...
+:switchSound:capnoise
+:cap-bruh:..?
+:cap-angry:Ya know what lets just start.

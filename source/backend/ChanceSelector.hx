@@ -10,8 +10,8 @@ typedef ChanceFunction = {
 };
 class ChanceSelector {
     public static function selectOption(options:Array<Chance>, strict:Bool = false, downsize:Bool = true):Dynamic {
-        trace("Entering selectOption function");
-        trace("Input options: " + options);
+        //trace("Entering selectOption function");
+        //trace("Input options: " + options);
 
         // Validate total probability
         var totalChance:Float = 0;
@@ -19,7 +19,7 @@ class ChanceSelector {
             if (o.chance < 0 || o.chance > 100) throw 'Chance must be between 0 and 100';
             totalChance += o.chance;
         }
-        trace("Total probability: " + totalChance);
+        //trace("Total probability: " + totalChance);
 
         if (totalChance > 100 && strict) throw 'Total chance exceeds 100%';
         
@@ -54,12 +54,12 @@ class ChanceSelector {
             var potential: Float = o.chance / totalChance;
             potentialList.push({ item: o.item, potential: potential });
         }
-        trace("Potential list: " + potentialList);
+        //trace("Potential list: " + potentialList);
 
         // Random selection from the weighted list
         var randomIndex = Std.random(weightedList.length);
         var selectedOption = weightedList[randomIndex];
-        trace("Selected option: " + selectedOption);
+        //trace("Selected option: " + selectedOption);
 
         return selectedOption;
     }
@@ -145,18 +145,18 @@ class ChanceSelector {
 
     // Method to create chance objects from maps
     public static function selectFromMap(itemChancesMap:Map<Dynamic, Float>):Dynamic {
-        trace("Entering selectFromMap function");
-        trace("Input itemChancesMap: " + itemChancesMap);
+        //trace("Entering selectFromMap function");
+        //trace("Input itemChancesMap: " + itemChancesMap);
 
         var options:Array<Chance> = [];
         for (item in itemChancesMap.keys()) {
             var chance = itemChancesMap.get(item);
             options.push({item: item, chance: chance});
         }
-        trace("Output options: " +options);
+        //trace("Output options: " +options);
 
         var selectedOption = selectOption(options);
-        trace("Selected option: " + selectedOption);
+        //trace("Selected option: " + selectedOption);
 
         return selectedOption;
     }
@@ -206,11 +206,11 @@ class ChanceExtensions {
 
     // Extension method for Map
     public static function chanceMap(map:Map<Dynamic, Float>):Dynamic {
-        trace("Entering chanceMap function");
-        trace("Input map: " + map);
+        //trace("Entering chanceMap function");
+        //trace("Input map: " + map);
 
         var selectedOption = ChanceSelector.selectFromMap(map);
-        trace("Selected option: " + selectedOption);
+        //trace("Selected option: " + selectedOption);
 
         return selectedOption;
     }

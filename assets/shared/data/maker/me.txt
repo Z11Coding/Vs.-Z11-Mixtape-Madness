@@ -1,0 +1,20 @@
+:disableTypeSound:
+:switchSound:z
+:enableTypeSound:
+:z: Heya.
+:switchSound:bfBeep
+:bf-right:Beep?
+:switchSound:z
+:z: Oh. you must be confused.
+:z: See, your in MY reality,
+:z: and in MY reality, I do what I want.
+:z: Now, before i rap you into the ground, I must tell the player something.
+:switchSound:bfBeep
+:bf-right:beep?
+:switchSound:z
+:z: Now. This mod took WAY longer to make then I had thought.
+:z: Especially since I had to make most of it by myself.
+:z: But I thank all of you who waited patiently for this, and hope you enjoy it.
+:z: So bf, ready to lose?
+:switchSound:bfBeep
+:bf-right:Beep!

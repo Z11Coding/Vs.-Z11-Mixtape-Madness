@@ -1,0 +1,59 @@
+{
+	"storyName": "The Anti-Hero",
+	"difficulties": "normal,hard,pain",
+	"hideFreeplay": false,
+	"weekBackground": "stage",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"weekBefore": "week1-cap",
+	"startUnlocked": true,
+	"weekCharacters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"songs": [
+		[
+			"loss",
+			"Anti",
+			[
+				0,
+				0,
+				0
+			]
+		],
+		[
+			"temper",
+			"Anti",
+			[
+				0,
+				0,
+				0
+			]
+		],
+		[
+			"revenge",
+			"Anti",
+			[
+				0,
+				0,
+				0
+			]
+		],
+		[
+			"split",
+			"split",
+			[
+				0,
+				0,
+				0
+			]
+		]
+	],
+	"hideStoryMode": false,
+	"weekName": "Anti",
+	"hiddenUntilUnlocked": false
+}

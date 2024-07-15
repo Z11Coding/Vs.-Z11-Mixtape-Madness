@@ -53,7 +53,7 @@
       {
         "name": "SScript",
         "type": "haxelib",
-        "version": null
+        "version": "7.7.0"
       },
       {
         "name": "hscript",
@@ -83,7 +83,7 @@
         "dir": null,
         "ref": "dev",
         "url": "https://github.com/ShadowMario/flxanimate"
-      },,
+      },
       {
         "name": "discord_rpc",
         "type": "git",
