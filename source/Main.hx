@@ -141,6 +141,10 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
+		var mathSolver:MathSolver2 = new MathSolver2();
+		var expression:String = Std.string(Std.random(10000)) + " + " + Std.string(Std.random(10000)) + " - " + Std.string(Std.random(10000)) + " * " + Std.string(Std.random(10000)) + " / " + Std.string(Std.random(10000)) + " & " + Std.string(Std.random(10000)) + " + (8 + 8)";
+		trace("Expression: " + expression);
+		trace("Evaluated Result: " + mathSolver.evaluate(expression));
 		//trace(Paths.url("https://cdn.discordapp.com/attachments/631085887467421716/1260066510269845534/loading.xml?ex=668df7e2&is=668ca662&hm=7ff6c46036177698e1b10924bd42724f8636a6e24622a89fb054b00d84038649&"));
 		//trace(HoldableVariable.createVariable(FlxG.state).evaluate());
 		Toolkit.init();
