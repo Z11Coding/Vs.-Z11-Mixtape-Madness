@@ -146,7 +146,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 
 		////
 		noteField = new NoteField(this, modMgr);
-		add(noteField);
+		//add(noteField);
 
 		// idk what haxeflixel does to regenerate the frames
 		// SO! this will be how we do it

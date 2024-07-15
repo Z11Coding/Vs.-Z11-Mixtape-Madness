@@ -1,172 +1,194 @@
 {
 	"animations": [
 		{
+			"loop": false,
 			"offsets": [
 				93,
 				-170
 			],
-			"loop": false,
-			"anim": "singDOWN",
 			"fps": 30,
-			"name": "shaggy_down",
-			"indices": []
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "shaggy_down"
 		},
 		{
+			"loop": false,
 			"offsets": [
 				-34,
 				27
 			],
-			"loop": false,
-			"anim": "singUP",
 			"fps": 30,
-			"name": "shaggy_up",
-			"indices": []
+			"anim": "singUP",
+			"indices": [],
+			"name": "shaggy_up"
 		},
 		{
+			"loop": false,
 			"offsets": [
 				-38,
 				25
 			],
-			"loop": false,
-			"anim": "powerup",
 			"fps": 24,
-			"name": "shaggy_powerup",
-			"indices": []
+			"anim": "powerup",
+			"indices": [],
+			"name": "shaggy_powerup"
 		},
 		{
+			"loop": false,
 			"offsets": [
 				150,
 				115
 			],
-			"loop": false,
-			"anim": "catch",
 			"fps": 30,
-			"name": "shaggy_catch",
-			"indices": []
+			"anim": "catch",
+			"indices": [],
+			"name": "shaggy_catch"
 		},
 		{
+			"loop": false,
 			"offsets": [
 				130,
 				0
 			],
-			"loop": false,
-			"anim": "fall",
 			"fps": 30,
-			"name": "shaggy_fall",
-			"indices": []
+			"anim": "fall",
+			"indices": [],
+			"name": "shaggy_fall"
 		},
 		{
+			"loop": false,
 			"offsets": [
 				110,
 				-123
 			],
-			"loop": false,
-			"anim": "kneel",
 			"fps": 30,
-			"name": "shaggy_half_ground",
-			"indices": []
+			"anim": "kneel",
+			"indices": [],
+			"name": "shaggy_half_ground"
 		},
 		{
+			"loop": true,
 			"offsets": [
 				99,
 				125
 			],
-			"loop": true,
-			"fps": 30,
 			"anim": "hold",
-			"indices": [],
-			"name": "shaggy_hold"
+			"fps": 30,
+			"name": "shaggy_hold",
+			"indices": []
 		},
 		{
-			"loop": false,
 			"offsets": [
 				90,
 				0
 			],
-			"anim": "h_half",
+			"loop": false,
 			"fps": 30,
-			"name": "shaggy_h_half",
+			"anim": "h_half",
 			"indices": [
 				0,
 				0
-			]
+			],
+			"name": "shaggy_h_half"
 		},
 		{
+			"loop": false,
 			"offsets": [
 				133,
 				-41
 			],
-			"loop": false,
-			"fps": 30,
 			"anim": "singLEFT",
-			"indices": [],
-			"name": "shaggy_right"
+			"fps": 30,
+			"name": "shaggy_right",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				-51,
 				-128
 			],
-			"loop": false,
-			"fps": 30,
 			"anim": "singRIGHT",
-			"indices": [],
-			"name": "shaggy_left"
+			"fps": 30,
+			"name": "shaggy_left",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				0,
 				0
 			],
-			"indices": [],
-			"fps": 30,
 			"anim": "danceLeft",
-			"loop": false,
-			"name": "shaggy_idle0"
+			"fps": 30,
+			"name": "shaggy_idle0",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				-29,
 				1
 			],
-			"indices": [],
-			"fps": 30,
 			"anim": "danceRight",
-			"loop": false,
-			"name": "shaggy_idle2"
+			"fps": 30,
+			"name": "shaggy_idle2",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				97,
 				-172
 			],
-			"indices": [],
-			"fps": 30,
 			"anim": "singDOWN-alt",
-			"loop": false,
-			"name": "shaggy_sdown"
+			"fps": 30,
+			"name": "shaggy_sdown",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				-37,
 				34
 			],
-			"indices": [],
-			"fps": 30,
 			"anim": "singUP-alt",
-			"loop": false,
-			"name": "shaggy_sup0"
+			"fps": 30,
+			"name": "shaggy_sup0",
+			"indices": []
 		},
 		{
+			"loop": false,
 			"offsets": [
 				131,
 				-26
 			],
-			"indices": [],
-			"fps": 30,
 			"anim": "singLEFT-alt",
+			"fps": 30,
+			"name": "shaggy_sright",
+			"indices": []
+		},
+		{
 			"loop": false,
-			"name": "shaggy_sright"
+			"offsets": [
+				4,
+				10
+			],
+			"anim": "danceLeft-alt",
+			"fps": 30,
+			"name": "shaggy_super_idle",
+			"indices": []
+		},
+		{
+			"loop": false,
+			"offsets": [
+				4,
+				10
+			],
+			"anim": "danceRight-alt",
+			"fps": 30,
+			"name": "shaggy_super_idle",
+			"indices": []
 		},
 		{
 			"offsets": [
@@ -175,31 +197,9 @@
 			],
 			"indices": [],
 			"fps": 30,
-			"anim": "singRIGHT-right",
+			"anim": "singRIGHT-alt",
 			"loop": false,
 			"name": "shaggy_sleft"
-		},
-		{
-			"offsets": [
-				4,
-				10
-			],
-			"indices": [],
-			"fps": 30,
-			"anim": "danceLeft-alt",
-			"loop": false,
-			"name": "shaggy_super_idle"
-		},
-		{
-			"offsets": [
-				4,
-				10
-			],
-			"indices": [],
-			"fps": 30,
-			"anim": "danceRight-alt",
-			"loop": false,
-			"name": "shaggy_super_idle"
 		}
 	],
 	"vocals_file": "",

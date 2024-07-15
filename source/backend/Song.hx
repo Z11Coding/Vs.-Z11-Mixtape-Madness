@@ -167,6 +167,7 @@ class Song
 	public static var loadedSongName:String;
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong
 	{
+		trace(jsonInput);
 		if(folder == null) folder = jsonInput;
 		PlayState.SONG = getChart(jsonInput, folder);
 		StageData.loadDirectory(PlayState.SONG);
@@ -200,7 +201,7 @@ class Song
 		return cast Json.parse(rawJson).song;
 	}
 
-	public static function parseJSON(rawData:String, ?nameForError:String = null, ?convertTo:String = null):SwagSong
+	public static function parseJSON(rawData:String, ?nameForError:String = null, ?convertTo:String = 'mixtape_v1'):SwagSong
 	{
 		var songJson:SwagSong = cast Json.parse(rawData).song;
 		if(convertTo != null && convertTo.length > 0)
@@ -218,7 +219,7 @@ class Song
 						convert(songJson);
 					}
 				case 'mixtape_v1':
-					if(!fmt.startsWith('mixtape_v1')) //Convert to Mictape 1.0 format
+					if(!fmt.startsWith('mixtape_v1')) //Convert to Mixtape 1.0 format
 					{
 						trace('converting chart $nameForError with format $fmt to mixtape_v1 format...');
 						songJson.format = 'mixtape_v1_convert';

@@ -13,11 +13,12 @@ class MasterEditorMenu extends MusicBeatState
 	var optionsOG:Array<String> = [
 		'Chart Editor',
 		'Character Editor',
+		'Stage Editor',
 		'Week Editor',
 		'Menu Character Editor',
 		'Dialogue Editor',
 		'Dialogue Portrait Editor',
-		'Note Splash Debug'
+		/*'Note Splash Debug'*/ //Might bother with notesplash in general in the future. def not right now though
 	];
 	var dialogueChoices:Array<String> = [
 		'OG Chart Editor',
@@ -140,7 +141,9 @@ class MasterEditorMenu extends MusicBeatState
 						options = dialogueChoices;
 						regenMenu();
 					case 'Character Editor':
-						LoadingState.loadAndSwitchState(new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
+						MusicBeatState.switchState(new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
+					case 'Stage Editor':
+						MusicBeatState.switchState(new StageEditorState());
 					case 'Week Editor':
 						MusicBeatState.switchState(new WeekEditorState());
 					case 'Menu Character Editor':

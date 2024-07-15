@@ -1,0 +1,23 @@
+:musicloop:bgms/2
+:disableTypeSound:
+:switchSound:antinoise
+:enableTypeSound:
+:anti-why: WHY WONT YOU LEAVE!?!?
+:anti-why: PLEASE JUST LEAVE ALREADY.
+:anti-why: Im afraid of what will happen if you stay much longer.
+:anti-angry: And I STILL have to find my brother.
+:switchSound:bfBeep
+:bf1: Beep bap skebeep.
+:switchSound:antinoise
+:anti-suprised: You think SINGING in here will get his attention?
+:anti-bruh: What do you think this is, sha-
+:switchSound:bfBeep
+:bf-angry: BEEP BAP BOOP BEE-
+:chromeoffset:4
+:musicstop: 
+:switchSound:antinoise
+:anti-smile: YOU SHUT YOUR MOUTH WHILE IM TALKING, PRICK
+:anti-smile: Now...
+:anti-smile: Im going to go off on you.
+:anti-weird: (and while that's probably not a good idea)
+:anti-happy: I think its about time I gave you some REAL pain.

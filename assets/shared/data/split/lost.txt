@@ -1,0 +1,14 @@
+:disableTypeSound:
+:chromeoffset:8
+:musicloop:bgms/3
+:split-crying: Ḧ̴̞́́̕e̸̡̩̒̊̑l̸͉̮̑p̴̼̾̀̆ ̴̝̪͘m̴͍̞͒͊͑ͅe̷͍̘͛͑͘.̶̧̈́.̷̢͛̔̆.̴̤̆
+:gf: Boyfriend I think its about time we used that portal and lea-
+:split-smile: YoU cAn NEvEr LeAvE aNyMoRe
+:split-smile: Ẃ̷̜e̸̩͑ ̴̲͆â̴̡r̸͇̿e̸͍͝ ̷̲̏g̴̰̈́ọ̵̀ĭ̵̩ǹ̶̫ğ̶̘ ̸̧̂t̵̼͐o̶͚͆ ̸̭̄s̸̩̈p̶̥̔l̷͠ͅi̴̫̓t̵͕͆ ̶̘̀ÿ̴͓́o̷̯̓u̸̎͜ ̶̩̓ḯ̶̬n̸̻̓ ̴̥̌h̶͇̄ǎ̵̺l̵͈͆f̸̿ͅ
+:disableTypeSound:
+:switchSound:bfBeep
+:sound:missnote2
+:musicstop:
+:chromeoffset:2
+:enableTypeSound:
+:bf-fear: Oh shi-

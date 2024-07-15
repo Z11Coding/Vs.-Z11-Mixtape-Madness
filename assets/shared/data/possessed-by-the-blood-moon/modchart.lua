@@ -11,32 +11,32 @@ function onCreatePost()
         addLuaSprite('bg')
         setObjectOrder("bg", getObjectOrder('boyfriendGroup')+1)
 
-        makeLuaSprite("actualbg", 'pbtbm/bg', 0, 0)
+        makeLuaSprite("actualbg", 'stages/pbtbm/bg', 0, 0)
         setObjectCamera("actualbg", "hud")
         scaleObject("actualbg", 2, 1.5)
         screenCenter("actualbg", 'xy')
         addLuaSprite('actualbg')
 
-        makeLuaSprite("moonMask", 'pbtbm/moon_glow', 0, -20)
+        makeLuaSprite("moonMask", 'stages/pbtbm/moon_glow', 0, -20)
         setObjectCamera("moonMask", "hud")
         scaleObject("moonMask", 0.3, 0.3)
         screenCenter("moonMask", 'x')
         addLuaSprite('moonMask')
         setBlendMode('moonMask', 'lighten')
 
-        makeLuaSprite("moon", 'pbtbm/moon', 0, 60)
+        makeLuaSprite("moon", 'stages/pbtbm/moon', 0, 60)
         setObjectCamera("moon", "hud")
         scaleObject("moon", 0.3, 0.3)
         screenCenter("moon", 'x')
         addLuaSprite('moon')
 
-        makeLuaSprite("atmos", 'pbtbm/atmos', 0, 0)
+        makeLuaSprite("atmos", 'stages/pbtbm/atmos', 0, 0)
         setObjectCamera("atmos", "hud")
         scaleObject("atmos", 2.5, 1.5)
         screenCenter("atmos", 'xy')
         addLuaSprite('atmos')
 
-        makeLuaSprite("radial", 'pbtbm/radial', 0, 0)
+        makeLuaSprite("radial", 'stages/pbtbm/radial', 0, 0)
         setObjectCamera("radial", "other")
         scaleObject("radial", 2.5, 1.5)
         screenCenter("radial", 'xy')
@@ -50,7 +50,7 @@ function onCreatePost()
         addLuaSprite('redFlash')
         setProperty("redFlash.alpha", 0)
 
-        makeLuaSprite("moonP", 'pbtbm/pixel/moon', 0, 60)
+        makeLuaSprite("moonP", 'stages/pbtbm/pixel/moon', 0, 60)
         scaleObject("moonP", 4, 4)
         screenCenter("moonP", 'x')
         addLuaSprite('moonP')
@@ -66,7 +66,7 @@ function onCreatePost()
         setTextFont("themoon", "pixel.otf")
         addLuaText('themoon')
 
-        makeLuaSprite("dust", 'pbtbm/dust', 0, 60)
+        makeLuaSprite("dust", 'stages/pbtbm/dust', 0, 60)
         setObjectCamera("dust", "other")
         scaleObject("dust", 2, 1)
         screenCenter("dust", 'xy')
@@ -74,14 +74,14 @@ function onCreatePost()
         setBlendMode('dust', 'add')
         setProperty("dust.alpha", 0.1)
 
-        makeLuaSprite("pixel", nil, 0, 0)
+        --[[makeLuaSprite("pixel", nil, 0, 0)
         --setObjectCamera("dust", "other")
         scaleObject("pixel", 2, 1)
         screenCenter("pixel", 'xy')
         addLuaSprite('pixel')
         initLuaShader("pixel")
         setSpriteShader("pixel", "pixel")
-        setShaderSampler2D("pixel", "mult", 1)
+        setShaderSampler2D("pixel", "mult", 1)]]
 
         setProperty("boyfriend.visible", false)
         setProperty("gf.visible", false)
@@ -1313,9 +1313,17 @@ function onStepHit()
             setValue("cmod", 2)
         end
 
+        if curStep == 2431 then
+            discombobulate = true
+        end
+
         if curStep == 2432 then
             setValue("cmod", 5)
             queueEase(curStep, curStep+3, 'mirrorZoom', 5, 'sineOut')
+        end
+
+        if curStep == 2463 then
+            discombobulate = false
         end
 
         if curStep == 2492 then
@@ -1328,12 +1336,20 @@ function onStepHit()
             queueEase(curStep, curStep+3, 'grey', 0, 'cubeOut')
         end
 
+        if curStep == 2495 then
+            discombobulate = true
+        end
+
         if curStep == 2496 then
             queueEase(curStep, curStep+3, 'grey', 1, 'cubeOut')
             queueEase(curStep, curStep+3, 'mirrorAngle', 0, 'elasticOut')
             queueEase(curStep, curStep+1, 'mirrorZoom', 5, 'elasticOut')
             queueEase(curStep, curStep+3, 'centered', 0, 'cubeOut')
             setValue("cmod", 5)
+        end
+
+        if curStep == 2551 then
+            discombobulate = false
         end
 
         if curStep == 2552 then
@@ -1344,13 +1360,22 @@ function onStepHit()
             setValue("cmod", 0)
             queueEase(curStep, curStep+15, 'cmod', 5, 'cubeOut')
         end
+
+        if curStep == 2559 then
+            discombobulate = true
+        end
+
         if curStep == 2592 then
             queueEase(curStep, curStep+31, 'centerrotateY', 360*16, 'cubeIn')
             queueEase(curStep, curStep+31, 'mirrorAngle', 360*16, 'cubeOut')
             queueEase(curStep, curStep+31, 'mirrorZoom', 1, 'cubeOut')
             queueEase(curStep, curStep+31, 'mirrorX', 0, 'cubeOut')
         end
-
+        
+        if curStep == 2607 then
+            discombobulate = false
+        end
+        
         if curStep == 2623 then
             cameraFlash('other', 'FF0000', 2, true)
             setValue("cmod", 0.5)

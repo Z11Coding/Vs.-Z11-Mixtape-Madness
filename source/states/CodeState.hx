@@ -95,6 +95,9 @@ class CodeState extends MusicBeatState
 		add(rank);
 		rank.antialiasing = true;
 
+		if (FlxG.sound.music.playing)
+			FlxG.sound.music.fadeOut(1, 0);
+
 		//rank.alpha = 0;
 		super.create();
 		rave = new FlxTypedGroup<FlxSprite>();

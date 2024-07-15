@@ -560,7 +560,7 @@ class FreeplayState extends MusicBeatState
 					try
 					{
 						var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
-						PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
+						Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
 						if (PlayState.SONG.needsVoices)
 						{
 							vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
@@ -634,7 +634,7 @@ class FreeplayState extends MusicBeatState
 				if (songLowercase == 'resistalovania')
 				{
 					multisong = true;
-					songChoices = ['Resistalovania', 'Resistalovania (Mega Mix)'];
+					songChoices = ['Resistalovania', 'Resistalovania Mega Mix'];
 					listChoices = ['Resistalovania', 'Resistalovania (Mega Mix)'];
 				}
 
@@ -642,7 +642,7 @@ class FreeplayState extends MusicBeatState
 				FlxTransitionableState.skipNextTransOut = false;
 				try
 				{
-					PlayState.SONG = Song.loadFromJson(poop, songLowercase);
+					Song.loadFromJson(poop, songLowercase);
 					PlayState.isStoryMode = false;
 					PlayState.storyDifficulty = curDifficulty;
 

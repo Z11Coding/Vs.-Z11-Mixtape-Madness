@@ -1,0 +1,68 @@
+{
+	"storyName": "Bonus",
+	"difficulties": "hard",
+	"hideFreeplay": false,
+	"weekBackground": "stage",
+	"weekBefore": "week3-cap",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"startUnlocked": true,
+	"hideStoryMode": true,
+	"songs": [
+		[
+			"tutorial-remix",
+			"gf",
+			[
+				146,
+				0,
+				0
+			]
+		],
+		[
+			"harmony",
+			"bf",
+			[
+				0,
+				200,
+				253
+			]
+		],
+		[
+			"bdm",
+			"bf",
+			[
+				0,
+				200,
+				253
+			]
+		],
+		[
+			"replica",
+			"gf",
+			[
+				146,
+				0,
+				0
+			]
+		],
+		[
+			"ham",
+			"dad",
+			[
+				115,
+				0,
+				173
+			]
+		]
+	],
+	"weekCharacters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"hiddenUntilUnlocked": false,
+	"weekName": "Bonus"
+}

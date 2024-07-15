@@ -13,3 +13,10 @@ resist
 meaglosist
 resist4
 frenzy
+week1-cap
+week2-cap
+week3-cap
+week4-cap
+week5-cap
+week6-cap
+sticky
