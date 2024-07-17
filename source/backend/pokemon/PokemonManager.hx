@@ -115,3 +115,55 @@ class PokemonManager {
 	}
 }
 
+class TypeWeaknessManager {
+	static var weaknesses:Map<PokeType, Array<PokeType>> = new Map();
+	static var immunities:Map<PokeType, Array<PokeType>> = new Map();
+	static var resistances:Map<PokeType, Array<PokeType>> = new Map();
+
+	// fuck
+	static function __init__() {
+		weaknesses.set(PokeType.Normal, [PokeType.Fighting]);
+		weaknesses.set(PokeType.Fire, [PokeType.Water, PokeType.Ground, PokeType.Rock]);
+		weaknesses.set(PokeType.Water, [PokeType.Electric, PokeType.Grass]);
+		weaknesses.set(PokeType.Electric, [PokeType.Ground]);
+		weaknesses.set(PokeType.Grass, [PokeType.Fire, PokeType.Ice, PokeType.Poison, PokeType.Flying, PokeType.Bug]);
+		weaknesses.set(PokeType.Ice, [PokeType.Fire, PokeType.Fighting, PokeType.Rock, PokeType.Steel]);
+		weaknesses.set(PokeType.Fighting, [PokeType.Flying, PokeType.Psychic, PokeType.Fairy]);
+		weaknesses.set(PokeType.Poison, [PokeType.Ground, PokeType.Psychic]);
+		weaknesses.set(PokeType.Ground, [PokeType.Water, PokeType.Grass, PokeType.Ice]);
+		weaknesses.set(PokeType.Flying, [PokeType.Electric, PokeType.Ice, PokeType.Rock]);
+		weaknesses.set(PokeType.Psychic, [PokeType.Bug, PokeType.Ghost, PokeType.Dark]);
+		weaknesses.set(PokeType.Bug, [PokeType.Fire, PokeType.Flying, PokeType.Rock]);
+		weaknesses.set(PokeType.Rock, [PokeType.Water, PokeType.Grass, PokeType.Fighting, PokeType.Ground, PokeType.Steel]);
+		weaknesses.set(PokeType.Ghost, [PokeType.Ghost, PokeType.Dark]);
+		weaknesses.set(PokeType.Dragon, [PokeType.Ice, PokeType.Dragon, PokeType.Fairy]);
+		weaknesses.set(PokeType.Dark, [PokeType.Fighting, PokeType.Bug, PokeType.Fairy]);
+		weaknesses.set(PokeType.Steel, [PokeType.Fire, PokeType.Fighting, PokeType.Ground]);
+		weaknesses.set(PokeType.Fairy, [PokeType.Poison, PokeType.Steel]);
+
+		// Initialize immunities
+		immunities.set(PokeType.Ghost, [PokeType.Normal, PokeType.Fighting]);
+		immunities.set(PokeType.Normal, [PokeType.Ghost]);
+		// Add more immunities as needed
+
+		// Initialize resistances
+		resistances.set(PokeType.Fire, [PokeType.Grass, PokeType.Ice, PokeType.Bug, PokeType.Steel, PokeType.Fairy]);
+		resistances.set(PokeType.Water, [PokeType.Fire, PokeType.Steel, PokeType.Water, PokeType.Ice]);
+		// Add more resistances as needed
+	} //lazy
+
+	public static function isWeakAgainst(type:PokeType, againstType:PokeType):Bool {
+		return weaknesses.exists(type) && weaknesses.get(type).indexOf(againstType) != -1;
+	}
+
+	public static function isImmuneTo(type:PokeType, againstType:PokeType):Bool {
+		return immunities.exists(type) && immunities.get(type).indexOf(againstType) != -1;
+	}
+
+	public static function isResistantTo(type:PokeType, againstType:PokeType):Bool {
+		return resistances.exists(type) && resistances.get(type).indexOf(againstType) != -1;
+	}
+}
+
+
+
