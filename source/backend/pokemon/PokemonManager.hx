@@ -1,12 +1,11 @@
 package backend.pokemon;
-
 class PokeSprite {
     public var front:String;
     public var back:String;
 
-    public function new(sprite:String) {
-        this.front = sprite + "-front";
-        this.back = sprite + "-back";
+    public function new(sprite:String, moe:Bool = false) {
+        this.front = sprite + (moe ? "-moe" : "") + "-front";
+        this.back = sprite + (moe ? "-moe" : "") + "-back";
     }
 
     public function loadFrontSprite():FlxSprite {
@@ -61,7 +60,6 @@ typedef PokeMove = {
 }
 
 typedef PokeMoves = Array<PokeMove>;
-
 typedef Pokemon = {
     var id:Int;
     var name:String;
@@ -70,6 +68,7 @@ typedef Pokemon = {
     var type:PokeTypePair;
     var moves:PokeMoves;
     var sprite:PokeSprite;
+    var moe:Bool;
 }
 
 typedef PokeItems = {
@@ -106,13 +105,9 @@ class PokemonManager {
 		trainers.push(trainer);
 	}
 
-	// Function to handle sprite naming convention
-	public static function createPokeSprite(spriteName:String):PokeSprite {
-		return {
-			front: spriteName + "-front",
-			back: spriteName + "-back"
-		};
-	}
+    public static function createPokeSprite(spriteName:String, moe:Bool = false):PokeSprite {
+        return new PokeSprite(spriteName, moe);
+    }
 }
 
 class TypeWeaknessManager {
