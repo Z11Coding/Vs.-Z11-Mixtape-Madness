@@ -60,6 +60,7 @@ typedef PokeMove = {
 }
 
 typedef PokeMoves = Array<PokeMove>;
+
 typedef Pokemon = {
     var id:Int;
     var name:String;
@@ -69,6 +70,8 @@ typedef Pokemon = {
     var moves:PokeMoves;
     var sprite:PokeSprite;
     var moe:Bool;
+    var ability:String;
+    var heldItem:PokeItems;
 }
 
 typedef PokeItems = {
