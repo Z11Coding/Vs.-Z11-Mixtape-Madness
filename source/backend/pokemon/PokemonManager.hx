@@ -116,54 +116,80 @@ class PokemonManager {
 }
 
 class TypeWeaknessManager {
-	static var weaknesses:Map<PokeType, Array<PokeType>> = new Map();
-	static var immunities:Map<PokeType, Array<PokeType>> = new Map();
-	static var resistances:Map<PokeType, Array<PokeType>> = new Map();
+    static var weaknesses:Map<PokeType, Array<{type:PokeType, percentage:Float}>> = new Map();
+    static var immunities:Map<PokeType, Array<PokeType>> = new Map();
+    static var resistances:Map<PokeType, Array<{type:PokeType, percentage:Float}>> = new Map();
 
-	// fuck
-	static function __init__() {
-		weaknesses.set(PokeType.Normal, [PokeType.Fighting]);
-		weaknesses.set(PokeType.Fire, [PokeType.Water, PokeType.Ground, PokeType.Rock]);
-		weaknesses.set(PokeType.Water, [PokeType.Electric, PokeType.Grass]);
-		weaknesses.set(PokeType.Electric, [PokeType.Ground]);
-		weaknesses.set(PokeType.Grass, [PokeType.Fire, PokeType.Ice, PokeType.Poison, PokeType.Flying, PokeType.Bug]);
-		weaknesses.set(PokeType.Ice, [PokeType.Fire, PokeType.Fighting, PokeType.Rock, PokeType.Steel]);
-		weaknesses.set(PokeType.Fighting, [PokeType.Flying, PokeType.Psychic, PokeType.Fairy]);
-		weaknesses.set(PokeType.Poison, [PokeType.Ground, PokeType.Psychic]);
-		weaknesses.set(PokeType.Ground, [PokeType.Water, PokeType.Grass, PokeType.Ice]);
-		weaknesses.set(PokeType.Flying, [PokeType.Electric, PokeType.Ice, PokeType.Rock]);
-		weaknesses.set(PokeType.Psychic, [PokeType.Bug, PokeType.Ghost, PokeType.Dark]);
-		weaknesses.set(PokeType.Bug, [PokeType.Fire, PokeType.Flying, PokeType.Rock]);
-		weaknesses.set(PokeType.Rock, [PokeType.Water, PokeType.Grass, PokeType.Fighting, PokeType.Ground, PokeType.Steel]);
-		weaknesses.set(PokeType.Ghost, [PokeType.Ghost, PokeType.Dark]);
-		weaknesses.set(PokeType.Dragon, [PokeType.Ice, PokeType.Dragon, PokeType.Fairy]);
-		weaknesses.set(PokeType.Dark, [PokeType.Fighting, PokeType.Bug, PokeType.Fairy]);
-		weaknesses.set(PokeType.Steel, [PokeType.Fire, PokeType.Fighting, PokeType.Ground]);
-		weaknesses.set(PokeType.Fairy, [PokeType.Poison, PokeType.Steel]);
+    static function __init__() {
+        weaknesses.set(PokeType.Normal, [{type: PokeType.Fighting, percentage: 1.0}]);
+        weaknesses.set(PokeType.Fire, [{type: PokeType.Water, percentage: 2.0}, {type: PokeType.Ground, percentage: 1.5}, {type: PokeType.Rock, percentage: 1.5}]);
+        weaknesses.set(PokeType.Water, [{type: PokeType.Electric, percentage: 1.5}, {type: PokeType.Grass, percentage: 0.5}]);
+        weaknesses.set(PokeType.Electric, [{type: PokeType.Ground, percentage: 0.0}]);
+        weaknesses.set(PokeType.Grass, [{type: PokeType.Fire, percentage: 2.0}, {type: PokeType.Ice, percentage: 2.0}, {type: PokeType.Poison, percentage: 1.5}, {type: PokeType.Flying, percentage: 1.5}, {type: PokeType.Bug, percentage: 1.5}]);
+        weaknesses.set(PokeType.Ice, [{type: PokeType.Fire, percentage: 2.0}, {type: PokeType.Fighting, percentage: 2.0}, {type: PokeType.Rock, percentage: 1.5}, {type: PokeType.Steel, percentage: 1.5}]);
+        weaknesses.set(PokeType.Fighting, [{type: PokeType.Flying, percentage: 1.5}, {type: PokeType.Psychic, percentage: 1.5}, {type: PokeType.Fairy, percentage: 1.5}]);
+        weaknesses.set(PokeType.Poison, [{type: PokeType.Ground, percentage: 1.5}, {type: PokeType.Psychic, percentage: 1.5}]);
+        weaknesses.set(PokeType.Ground, [{type: PokeType.Water, percentage: 2.0}, {type: PokeType.Grass, percentage: 2.0}, {type: PokeType.Ice, percentage: 1.5}]);
+        weaknesses.set(PokeType.Flying, [{type: PokeType.Electric, percentage: 2.0}, {type: PokeType.Ice, percentage: 2.0}, {type: PokeType.Rock, percentage: 1.5}]);
+        weaknesses.set(PokeType.Psychic, [{type: PokeType.Bug, percentage: 1.5}, {type: PokeType.Ghost, percentage: 1.5}, {type: PokeType.Dark, percentage: 1.5}]);
+        weaknesses.set(PokeType.Bug, [{type: PokeType.Fire, percentage: 2.0}, {type: PokeType.Flying, percentage: 2.0}, {type: PokeType.Rock, percentage: 1.5}]);
+        weaknesses.set(PokeType.Rock, [{type: PokeType.Water, percentage: 2.0}, {type: PokeType.Grass, percentage: 2.0}, {type: PokeType.Fighting, percentage: 2.0}, {type: PokeType.Ground, percentage: 2.0}, {type: PokeType.Steel, percentage: 1.5}]);
+        weaknesses.set(PokeType.Ghost, [{type: PokeType.Ghost, percentage: 1.5}, {type: PokeType.Dark, percentage: 1.5}]);
+        weaknesses.set(PokeType.Dragon, [{type: PokeType.Ice, percentage: 2.0}, {type: PokeType.Dragon, percentage: 2.0}, {type: PokeType.Fairy, percentage: 2.0}]);
+        weaknesses.set(PokeType.Dark, [{type: PokeType.Fighting, percentage: 1.5}, {type: PokeType.Bug, percentage: 1.5}, {type: PokeType.Fairy, percentage: 1.5}]);
+        weaknesses.set(PokeType.Steel, [{type: PokeType.Fire, percentage: 2.0}, {type: PokeType.Fighting, percentage: 2.0}, {type: PokeType.Ground, percentage: 2.0}]);
+        weaknesses.set(PokeType.Fairy, [{type: PokeType.Poison, percentage: 2.0}, {type: PokeType.Steel, percentage: 2.0}]);
 
-		// Initialize immunities
-		immunities.set(PokeType.Ghost, [PokeType.Normal, PokeType.Fighting]);
-		immunities.set(PokeType.Normal, [PokeType.Ghost]);
-		// Add more immunities as needed
+        immunities.set(PokeType.Ghost, [PokeType.Normal, PokeType.Fighting]);
+        immunities.set(PokeType.Normal, [PokeType.Ghost]);
 
-		// Initialize resistances
-		resistances.set(PokeType.Fire, [PokeType.Grass, PokeType.Ice, PokeType.Bug, PokeType.Steel, PokeType.Fairy]);
-		resistances.set(PokeType.Water, [PokeType.Fire, PokeType.Steel, PokeType.Water, PokeType.Ice]);
-		// Add more resistances as needed
-	} //lazy
+        resistances.set(PokeType.Fire, [{type: PokeType.Grass, percentage: 0.5}, {type: PokeType.Ice, percentage: 0.5}, {type: PokeType.Bug, percentage: 0.5}, {type: PokeType.Steel, percentage: 0.5}, {type: PokeType.Fairy, percentage: 0.5}]);
+        resistances.set(PokeType.Water, [{type: PokeType.Fire, percentage: 0.5}, {type: PokeType.Steel, percentage: 0.5}, {type: PokeType.Water, percentage: 0.5}, {type: PokeType.Ice, percentage: 0.5}]);
+        // Add more resistances as needed
+    }
 
-	public static function isWeakAgainst(type:PokeType, againstType:PokeType):Bool {
-		return weaknesses.exists(type) && weaknesses.get(type).indexOf(againstType) != -1;
-	}
+    public static function isWeakAgainst(type:PokeType, againstType:PokeType):Bool {
+        return weaknesses.exists(type) && weaknesses.get(type).some(function(weakness) return weakness.type == againstType);
+    }
 
-	public static function isImmuneTo(type:PokeType, againstType:PokeType):Bool {
-		return immunities.exists(type) && immunities.get(type).indexOf(againstType) != -1;
-	}
+    public static function isImmuneTo(type:PokeType, againstType:PokeType):Bool {
+        return immunities.exists(type) && immunities.get(type).indexOf(againstType) != -1;
+    }
 
-	public static function isResistantTo(type:PokeType, againstType:PokeType):Bool {
-		return resistances.exists(type) && resistances.get(type).indexOf(againstType) != -1;
-	}
+    public static function isResistantTo(type:PokeType, againstType:PokeType):Bool {
+        return resistances.exists(type) && resistances.get(type).some(function(resistance) return resistance.type == againstType);
+    }
+
+    public static function calculateEffectiveness(moveType:PokeType, pokemonTypes:Array<PokeType>):Float {
+        var effectivenessMultiplier:Float = 1.0;
+    
+        for (pokemonType in pokemonTypes) {
+            if (isImmuneTo(pokemonType, moveType)) {
+                return 0; // Immediate immunity
+            } else if (isWeakAgainst(pokemonType, moveType)) {
+                effectivenessMultiplier *= 2.0; // Weakness doubles effectiveness
+            } else if (isResistantTo(pokemonType, moveType)) {
+                effectivenessMultiplier *= 0.5; // Resistance halves effectiveness
+            }
+            // No change for neutral effectiveness
+        }
+    
+        return effectivenessMultiplier;
+    }
+    
+    public static function getWeaknesses(type:PokeType):Array<{type:PokeType, percentage:Float}> {
+        return weaknesses.get(type);
+    }
+    
+    public static function getImmunities(type:PokeType):Array<PokeType> {
+        return immunities.get(type);
+    }
+    
+    public static function getResistances(type:PokeType):Array<{type:PokeType, percentage:Float}> {
+        return resistances.get(type);
+    }
 }
+
 
 
 
