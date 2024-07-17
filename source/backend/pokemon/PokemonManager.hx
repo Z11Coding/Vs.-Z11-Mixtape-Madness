@@ -72,14 +72,67 @@ typedef Pokemon = {
 }
 
 typedef PokeItems = {
-	var name:String;
-	var effect:String;
+    var name:String;
+    var effect:String;
+    var category:PokemonItemCategory;
+}
+
+enum PokemonItemCategory {
+    Health;
+    Battle;
+    Evolution;
+    Status;
+    Misc;
 }
 
 typedef PokeTrainer = {
-	var name:String;
-	var team:Array<Pokemon>;
-	var items:Array<PokeItems>;
+    var name:String;
+    var team:Team;
+    var items:Array<PokeItems>;
+}
+
+class PokePlayer {
+    public var trainer:PokeTrainer;
+    public var items:Array<PokeItems>;
+    public var saveData:SaveData;
+
+    public function new(trainer:PokeTrainer, items:Array<PokeItems>, saveData:SaveData) {
+        this.trainer = trainer;
+        this.items = items;
+        this.saveData = saveData;
+    }
+}
+
+class SaveData {
+    // Define the properties of the save data here
+}
+
+class SaveManager {
+    public var saveData:SaveData;
+
+    public function new() {
+        saveData = new SaveData();
+    }
+
+    public function saveGame(player:PokePlayer):Void {
+        // Save the game using the player's data and the save data
+    }
+
+    public function loadGame():PokePlayer {
+        // Load the game and return a PokePlayer object with the loaded data
+        return new PokePlayer(/* loaded trainer */, /* loaded items */, saveData);
+    }
+}
+
+typedef Team = {
+    var pokemon:Array<Pokemon>;
+    
+    public function new(pokemon:Array<Pokemon>) {
+        if (pokemon.length > 6) {
+            throw "Team can only have 6 Pokemon";
+        }
+        this.pokemon = pokemon;
+    }
 }
 
 class PokemonManager {
