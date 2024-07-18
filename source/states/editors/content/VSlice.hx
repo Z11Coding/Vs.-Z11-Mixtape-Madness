@@ -253,11 +253,14 @@ class VSlice
 				events: [],
 				bpm: songBpm,
 				needsVoices: true, //There's no value on V-Slice to identify if there are vocals as it checks automatically
+				newVoiceStyle: false,
 				speed: scrollSpeed,
 				offset: 0,
 			
 				player1: metadata.playData.characters.player,
 				player2: metadata.playData.characters.opponent,
+				player4: null,
+				player5: null,
 				gfVersion: metadata.playData.characters.girlfriend,
 				stage: stage,
 				format: 'psych_v1_convert'
