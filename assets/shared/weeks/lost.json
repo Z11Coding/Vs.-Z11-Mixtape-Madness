@@ -1,0 +1,51 @@
+{
+	"storyName": "",
+	"difficulties": "Hard",
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"weekBefore": "tutorial",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"startUnlocked": true,
+	"category": "bonus",
+	"hideStoryMode": true,
+	"songs": [
+		[
+			"Truly Lost",
+			"bf",
+			[
+				0,
+				33,
+				53
+			]
+		],
+		[
+			"EverLost",
+			"bf",
+			[
+				0,
+				0,
+				0
+			]
+		],
+		[
+			"NoWitness",
+			"pico",
+			[
+				180,
+				255,
+				40
+			]
+		]
+	],
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"hiddenUntilUnlocked": false,
+	"weekName": "Forever Lost"
+}

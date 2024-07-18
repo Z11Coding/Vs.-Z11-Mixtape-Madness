@@ -3,14 +3,19 @@
 	"difficulties": "Hard",
 	"hideFreeplay": false,
 	"weekBackground": "",
-	"weekBefore": "tutorial",
 	"freeplayColor": [
 		146,
 		113,
 		253
 	],
+	"weekBefore": "tutorial",
 	"startUnlocked": true,
-	"hideStoryMode": true,
+	"category": "bonus",
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
 	"songs": [
 		[
 			"ULS",
@@ -22,12 +27,7 @@
 			]
 		]
 	],
-	"weekCharacters": [
-		"",
-		"",
-		""
-	],
-	"category": "oneshots",
-	"hiddenUntilUnlocked": false,
-	"weekName": ""
+	"hideStoryMode": true,
+	"weekName": "",
+	"hiddenUntilUnlocked": false
 }
