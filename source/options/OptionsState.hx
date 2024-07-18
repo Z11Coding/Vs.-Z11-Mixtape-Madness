@@ -29,6 +29,8 @@ class OptionsState extends MusicBeatState
 				openSubState(new options.OtherSettingsSubState());
 			case 'Adjust Delay and Combo':
 				LoadingState.loadAndSwitchState(new options.NoteOffsetState());
+			case 'Language':
+				openSubState(new options.LanguageSubState());	
 			case 'GameJolt Login':
 				LoadingState.loadAndSwitchState(new GameJoltLogin());
 		}

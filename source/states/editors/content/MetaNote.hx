@@ -24,7 +24,7 @@ class MetaNote extends Note
 	public function changeNoteData(v:Int)
 	{
 		this.songData[1] = v;
-		this.noteData = v % ChartingState.GRID_COLUMNS_PER_PLAYER;
+		this.noteData = v % ChartingStatePsych.GRID_COLUMNS_PER_PLAYER;
 		
 		if(!PlayState.isPixelStage)
 			loadNoteAnims();
@@ -36,9 +36,9 @@ class MetaNote extends Note
 
 		animation.play(Note.colArray[this.noteData % Note.colArray.length] + 'Scroll');
 		if(width > height)
-			setGraphicSize(ChartingState.GRID_SIZE);
+			setGraphicSize(ChartingStatePsych.GRID_SIZE);
 		else
-			setGraphicSize(0, ChartingState.GRID_SIZE);
+			setGraphicSize(0, ChartingStatePsych.GRID_SIZE);
 
 		updateHitbox();
 	}
@@ -63,7 +63,7 @@ class MetaNote extends Note
 				sustainSprite = new FlxSprite().makeGraphic(1, 1, FlxColor.WHITE);
 				sustainSprite.scrollFactor.x = 0;
 			}
-			sustainSprite.setGraphicSize(8, Math.max(0, (v * ChartingState.GRID_SIZE / stepCrochet * zoom) + ChartingState.GRID_SIZE/2));
+			sustainSprite.setGraphicSize(8, Math.max(0, (v * ChartingStatePsych.GRID_SIZE / stepCrochet * zoom) + ChartingStatePsych.GRID_SIZE/2));
 			sustainSprite.updateHitbox();
 		}
 	}
@@ -85,7 +85,7 @@ class MetaNote extends Note
 		{
 			if(!noteTypeTexts.exists(num))
 			{
-				txt = new FlxText(0, 0, ChartingState.GRID_SIZE, (num > 0) ? Std.string(num) : '?', 16);
+				txt = new FlxText(0, 0, ChartingStatePsych.GRID_SIZE, (num > 0) ? Std.string(num) : '?', 16);
 				txt.autoSize = false;
 				txt.alignment = CENTER;
 				txt.borderStyle = SHADOW;
@@ -137,7 +137,7 @@ class EventMetaNote extends MetaNote
 		//trace('events: $events');
 		
 		loadGraphic(Paths.image('editors/eventIcon'));
-		setGraphicSize(ChartingState.GRID_SIZE);
+		setGraphicSize(ChartingStatePsych.GRID_SIZE);
 		updateHitbox();
 
 		eventText = new FlxText(0, 0, 400, '', 12);
