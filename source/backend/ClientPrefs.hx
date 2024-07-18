@@ -8,12 +8,16 @@ import states.FirstCheckState;
 
 // Add a variable here and it will get automatically saved
 @:structInit class SaveVariables {
+	public var showCrash:Bool = false;
 	public var downScroll:Bool = false;
 	public var silentVol:Bool = true;
 	public var noParticles:Bool = false;
 	public var modcharts:Bool = true;
 	public var musicPreload2:Bool = true;
 	public var graphicsPreload2:Bool = true;
+	public var experimentalCaching:Bool = false;
+	public var saveCache:Bool = false;
+	public var cacheCharts:Bool = false;
 	public var shaders:Bool = true;
 	public var autoPause:Bool = true;
 	public var drain:Bool = true;

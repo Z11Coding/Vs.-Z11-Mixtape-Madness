@@ -203,34 +203,40 @@ class Song
 
 	public static function parseJSON(rawData:String, ?nameForError:String = null, ?convertTo:String = 'mixtape_v1'):SwagSong
 	{
-		var songJson:SwagSong = cast Json.parse(rawData).song;
-		if(convertTo != null && convertTo.length > 0)
-		{
-			var fmt:String = songJson.format;
-			if(fmt == null) fmt = songJson.format = 'unknown';
-
-			switch(convertTo)
+		var songJson:SwagSong;
+		try {
+			songJson = cast Json.parse(rawData).song;
+			if(convertTo != null && convertTo.length > 0)
 			{
-				case 'psych_v1':
-					if(!fmt.startsWith('psych_v1')) //Convert to Psych 1.0 format
-					{
-						trace('converting chart $nameForError with format $fmt to psych_v1 format...');
-						songJson.format = 'psych_v1_convert';
-						convert(songJson);
-					}
-				case 'mixtape_v1':
-					if(!fmt.startsWith('mixtape_v1')) //Convert to Mixtape 1.0 format
-					{
+				var fmt:String = songJson.format;
+				if(fmt == null) fmt = songJson.format = 'unknown';
+
+				switch(convertTo)
+				{
+					case 'psych_v1':
+						if(!fmt.startsWith('psych_v1')) //Convert to Psych 1.0 format
+						{
+							trace('converting chart $nameForError with format $fmt to psych_v1 format...');
+							songJson.format = 'psych_v1_convert';
+							convert(songJson);
+						}
+					case 'mixtape_v1':
+						if(!fmt.startsWith('mixtape_v1')) //Convert to Mixtape 1.0 format
+						{
+							trace('converting chart $nameForError with format $fmt to mixtape_v1 format...');
+							songJson.format = 'mixtape_v1_convert';
+							onLoadJsonMixtape(songJson);
+						}
+					default:
 						trace('converting chart $nameForError with format $fmt to mixtape_v1 format...');
-						songJson.format = 'mixtape_v1_convert';
+						songJson.format = 'mixtape_v1';
 						onLoadJsonMixtape(songJson);
-					}
-				default:
-					trace('converting chart $nameForError with format $fmt to mixtape_v1 format...');
-					songJson.format = 'mixtape_v1';
-					onLoadJsonMixtape(songJson);
-					
+						
+				}
 			}
+		} catch (error:Dynamic) {
+			trace('Failed to parse JSON with default method. Attempting to parse with parseJSONshit...');
+			songJson = parseJSONshit(rawData);
 		}
 		return songJson;
 	}

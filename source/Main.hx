@@ -141,6 +141,8 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
+		Paths.crawlDirectory("assets/data", "json", GlobalResources.jsonFilePaths);
+		// trace(ChanceSelector.selectMultiple([1, 2, 3, {key: "value"}, [()=>4, ()=>5, ()=>6].map(f -> f()), new Map<String, Int>().set("a", 7)], 3, true).map(v -> switch v { case Array(f): f(); case Map(k, v): k + Std.string(v); case {key: k}: k; case _: Std.string(v); }));
 		var mathSolver:MathSolver2 = new MathSolver2();
 		var expression:String = Std.string(Std.random(10000)) + " + " + Std.string(Std.random(10000)) + " - " + Std.string(Std.random(10000)) + " * " + Std.string(Std.random(10000)) + " / " + Std.string(Std.random(10000)) + " & " + Std.string(Std.random(10000)) + " + (8 + 8)";
 		trace("Expression: " + expression);
@@ -318,13 +320,16 @@ class Main extends Sprite
 		Sys.println(errMsg);
 		Sys.println("Crash dump saved in " + Path.normalize(path));
 
-		Application.current.window.alert(errMsg, "Error!");
+		if (ClientPrefs.data.showCrash)
+		{
+			Application.current.window.alert(errMsg, "Error!");
+		}
 		trace("Crash caused in: " + Type.getClassName(Type.getClass(FlxG.state)));
 		// Handle different states
 		switch (Type.getClassName(Type.getClass(FlxG.state)).split(".")[Lambda.count(Type.getClassName(Type.getClass(FlxG.state)).split(".")) - 1])
 		{
 			case "PlayState":
-				PlayState.instance.Crashed = true;
+				PlayState.Crashed = true;
 				// Check if it's a Null Object Reference error
 				if (errType.contains("Null Object Reference"))
 				{
@@ -332,10 +337,15 @@ class Main extends Sprite
 					{
 						FlxG.switchState(new states.StoryMenuState());
 					}
+					else if (PlayState.CacheMode)
+					{
+						FlxG.resetState();
+					}
 					else
 					{
 						FlxG.switchState(new states.FreeplayState());
 					}
+					PlayState.Crashed = false;
 				}
 
 			case "ChartingState":

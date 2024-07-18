@@ -96,29 +96,34 @@ class Paths
 		currentLevel = name.toLowerCase();
 	}
 
-public static function crawlDirectory(directoryPath:String, fileExtension:String, ?targetArray:Array<String>):Array<String> {
-    var result:Array<String> = targetArray != null ? targetArray : [];
-	var recurrsion = 0;
-	var fileCount = 0;
-    for (folder in FileSystem.readDirectory(FileSystem.absolutePath(directoryPath))) {
-        if (FileSystem.isDirectory('$directoryPath/$folder')) {
-			recurrsion++;
-            var subDirectoryResult = crawlDirectory('$directoryPath/$folder', fileExtension, result);
-            if (targetArray == null) {
-                result = result.concat(subDirectoryResult);
-            }
-        } else {
-            if (folder.endsWith(fileExtension)) {
-				fileCount++;
-                result.push(directoryPath+'/'+folder);                    
-            }
-        }
-    }
-	trace('Crawled directory: ${directoryPath}, and found ${fileCount} files with extension ${fileExtension}. Total files found: ${result.length}');
-//	trace('Files found: ${result}');
-	trace('Recursion: $recurrsion');
-    return result;
-}
+	public static function crawlDirectory(directoryPath:String, fileExtension:String, ?targetArray:Array<String> = null):Array<String> {
+		var result:Array<String> = targetArray != null ? targetArray : [];
+		var recursion = 0;
+		var fileCount = 0;
+		try {
+			for (folder in FileSystem.readDirectory(directoryPath)) {
+				var fullPath = directoryPath + '/' + folder; // Construct the full path
+				if (FileSystem.isDirectory(fullPath)) {
+					recursion++;
+					// Do not pass 'result' to the recursive call
+					var subDirectoryResult = crawlDirectory(fullPath, fileExtension);
+					// Concatenate the results after the call returns
+					result = result.concat(subDirectoryResult);
+				} else {
+					if (folder.endsWith(fileExtension)) {
+						fileCount++;
+						result.push(fullPath); // Add the full path to the result
+					}
+				}
+			}
+			trace('Crawled directory: ${directoryPath}, and found ${fileCount} files with extension ${fileExtension}. Total files found: ${result.length}');
+			trace('Recursion: $recursion');
+		} catch (e:Dynamic) {
+			trace('Error crawling directory: $e');
+		}
+		return result;
+	}
+
 
 public static function url(url:String):String {
 	// Basic validation (consider more robust validation/sanitization)

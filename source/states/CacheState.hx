@@ -39,6 +39,7 @@ using StringTools;
 
 class CacheState extends MusicBeatState
 {
+	public var cacheNeeded:Bool = false;
 	public static var bitmapData:Map<String, FlxGraphic>;
 	var images:Array<String> = [];
 	var music:Array<String> = [];
@@ -178,7 +179,7 @@ class CacheState extends MusicBeatState
 			}
 			
 			if(FlxG.save.data.musicPreload2 != null && ClientPrefs.data.musicPreload2 == false
-				&& FlxG.save.data.graphicsPreload2 != null && ClientPrefs.data.graphicsPreload2 == false) {
+				&& FlxG.save.data.graphicsPreload2 != null && ClientPrefs.data.graphicsPreload2 == false && !ClientPrefs.data.cacheCharts) {
 					FlxG.switchState(new What());
 					dontBother = true;
 					allowMusic = false;
@@ -198,14 +199,34 @@ class CacheState extends MusicBeatState
 			#if cpp
 			if (ClientPrefs.data.graphicsPreload2)
 			{
-				Paths.crawlDirectory("assets", ".png", images);
-				Paths.crawlDirectory("mods", ".png", modImages);
-			}
+				var cache:Array<String> = [];
+				cache = cache.concat(Paths.crawlDirectory("assets", ".png", images));
+				cache = cache.concat(Paths.crawlDirectory("mods", ".png", modImages));
+
+				if (ClientPrefs.data.saveCache) {
+					ImageCache.loadCache();
+				}
+
+
+				for (image in cache) {
+					if (ImageCache.exists(image)) {
+						if (images.indexOf(image) != -1) {
+							images.splice(images.indexOf(image), 1);
+						} else if (modImages.indexOf(image) != -1) {
+							modImages.splice(modImages.indexOf(image), 1);
+						}
+					}
+					}
+				}
+				
+					
+				
+			
 
 			if (ClientPrefs.data.musicPreload2)
 			{
 				Paths.crawlDirectory("assets", ".ogg", music);
-				Paths.crawlDirectory("mods", ".png", modMusic);
+				Paths.crawlDirectory("mods", ".ogg", modMusic);
 			}
 			//this took me waaay too long to just delete
 			//nvm I ended up deleting it anyway
@@ -339,8 +360,21 @@ class CacheState extends MusicBeatState
 
 			if(menuBG.alpha == 0){
 				System.gc();
+				if (ClientPrefs.data.saveCache) {
+					ImageCache.saveCache();
+				}
 				FlxG.sound.music.time = 0;
-				FlxG.switchState(newDest);  
+				if (ClientPrefs.data.cacheCharts) {
+					var charts:Array<String> = Paths.crawlDirectory("assets/shared/data", ".json");
+					PlayState.cachingSongs = charts;
+					PlayState.CacheMode = true;
+					trace("Charts: " + charts);
+					trace("Caching charts...");
+					FlxG.switchState(new PlayState());
+				}
+				else {
+					FlxG.switchState(newDest);
+				}
 			}
 
 			if(!gameCached)
@@ -382,7 +416,9 @@ class CacheState extends MusicBeatState
 					loadingWhatMini.screenCenter(X);
 					loadingWhat.screenCenter(XY);
 					if(CoolUtil.exists(images[gfxI])){
-						ImageCache.add(images[gfxI]);
+						if(!ImageCache.exists(images[gfxI])){
+							ImageCache.add(images[gfxI]);
+						}
 					}
 					else{
 						trace("Image: File at " + images[gfxI] + " not found, skipping cache.");
@@ -402,14 +438,15 @@ class CacheState extends MusicBeatState
 					loadingWhatMini.text = modImages[gfxI];
 					loadingWhatMini.screenCenter(X);
 					loadingWhat.screenCenter(XY);
-					for (i in daMods)
-					{
-						for (ii in pathList)
-						{
+					for (i in daMods){
+						for (ii in pathList){
 							loadingWhatMini.text = modImages[modImI];
 							loadingWhatMini.screenCenter(X);
-							if (CoolUtil.exists(Paths.file2(StringTools.replace(modImages[modImI], '.png', ''), '$i/images/$ii', "png", "mods"))) 
-								ImageCache.add(Paths.file2(StringTools.replace(modImages[modImI], '.png', ''), '$i/images/$ii', "png", "mods"));
+							if (CoolUtil.exists(Paths.file2(StringTools.replace(modImages[modImI], '.png', ''), '$i/images/$ii', "png", "mods"))){
+								if(!ImageCache.exists(Paths.file2(StringTools.replace(modImages[modImI], '.png', ''), '$i/images/$ii', "png", "mods"))){
+									ImageCache.add(Paths.file2(StringTools.replace(modImages[modImI], '.png', ''), '$i/images/$ii', "png", "mods"));
+								}
+							}
 						}
 					}
 					modImI++;

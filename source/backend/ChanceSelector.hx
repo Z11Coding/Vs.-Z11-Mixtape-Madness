@@ -292,39 +292,49 @@ class ChanceExtensions {
     
             return selectedOption;
         }
+
+            /**
+     * Selects multiple items from a given array with an option to allow duplicates.
+     * 
+     * @param items The array of items to select from. Can contain any type.
+     * @param count The number of items to select.
+     * @param allowDuplicates Whether to allow the same item to be selected more than once.
+     * @return An array containing the selected items.
+     */
+    public static function selectMultiple<T>(items:Array<T>, count:Int, allowDuplicates:Bool = false):Array<T> {
+        var selectedItems:Array<T> = [];
+        var availableItems:Array<T> = items.copy();
     
-    // public static function chanceAny(input:Dynamic, splitComplexTypes:Bool = false, treatMapsAsChanceMaps:Bool = false, passChanceObjectsFromArray:Bool = true):Dynamic {
-    //     if (splitComplexTypes) {
-    //         if (Std.is(input, Array)) {
-    //             // Handle Array: Split into chance objects
-    //             if (passChanceObjectsFromArray) {
-    //                 return input.map(item -> {
-    //                     if (Std.is(item, Chance)) {
-    //                         return item;
-    //                     } else {
-    //                         return {item: item, chance: 100 / input.length};
-    //                     }
-    //                 });
-    //             } else {
-    //                 return input.map(item -> ChanceSelector.selectOption([{item: item, chance: 100 / input.length}]));
-    //             }
-    //         } else if (Std.is(input, Map)) {
-    //             // Handle Map: Depending on treatMapsAsChanceMaps, split into chance objects or treat as a single object
-    //             if (treatMapsAsChanceMaps) {
-    //                 var mapAsArray:Array<Chance> = [];
-    //                 var mapData:Map = [];
-    //                 for (key in mapData.keys()) {
-    //                     mapData.push({key: key, value: mapData.get(key)});
-    //                 }
-    //                     mapAsArray.push({item: {key: key, value: mapData.get(key)}, chance: 100 / mapData.keys().length});
-    //                 }
-    //                 return ChanceSelector.selectOption(mapAsArray);
-    //             } else {
-    //                 return ChanceSelector.selectOption([{item: input, chance: 100}]);
-    //             }
-    //         }
-            
-    //     }
-
-
+        // Ensure count is not greater than the array length when duplicates are not allowed
+        if (!allowDuplicates && count > availableItems.length) {
+            throw 'Count cannot be greater than the number of unique items when duplicates are not allowed.';
+        }
+    
+        while (selectedItems.length < count) {
+            var selectedItem:T = ChanceSelector.chanceArrays(availableItems); // Use chanceArray to select an item
+    
+            // If duplicates are not allowed, remove the selected item from the pool
+            if (!allowDuplicates) {
+                var index = availableItems.indexOf(selectedItem);
+                if (index != -1) {
+                    availableItems.splice(index, 1);
+                }
+            }
+    
+            selectedItems.push(selectedItem);
+        }
+    
+        return selectedItems;
+    }
+    
+    public static function createMultipleCopies<T>(item:T, count:Int):Array<T> {
+        var copies:Array<T> = [];
+        for (i in 0...count) {
+            // Assuming item is of a basic type or has a clone method
+            // If item is a complex object and has a clone method, use item.clone()
+            // Otherwise, this will just add the same reference for complex types without clone method
+            copies.push(item);
+        }
+        return copies;
+    }
 }
