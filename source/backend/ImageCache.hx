@@ -10,7 +10,7 @@ import flash.utils.ByteArray;
 class ImageCache {
 
     public static var cache:Map<String, FlxGraphic> = new Map<String, FlxGraphic>();
-   // private static var save:FlxSave = new FlxSave(); This was actually useless...
+    //private static var save:FlxSave = new FlxSave(); This was actually useless...
 
     public static function add(path:String):Void {
         try {

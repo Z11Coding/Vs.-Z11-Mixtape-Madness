@@ -43,6 +43,7 @@ class CacheState extends MusicBeatState
 	public static var bitmapData:Map<String, FlxGraphic>;
 	var images:Array<String> = [];
 	var music:Array<String> = [];
+	var json:Array<String> = [];
 	var modImages:Array<String> = [];
 	var modMusic:Array<String> = [];
 
@@ -200,8 +201,8 @@ class CacheState extends MusicBeatState
 			if (ClientPrefs.data.graphicsPreload2)
 			{
 				var cache:Array<String> = [];
-				cache = cache.concat(Paths.crawlDirectory("assets", ".png", images));
-				cache = cache.concat(Paths.crawlDirectory("mods", ".png", modImages));
+				cache = cache.concat(Paths.crawlDirectoryOG("assets", ".png", images));
+				cache = cache.concat(Paths.crawlDirectoryOG("mods", ".png", modImages));
 
 				if (ClientPrefs.data.saveCache) {
 					ImageCache.loadCache();
@@ -216,17 +217,13 @@ class CacheState extends MusicBeatState
 							modImages.splice(modImages.indexOf(image), 1);
 						}
 					}
-					}
 				}
-				
-					
-				
-			
+			}
 
 			if (ClientPrefs.data.musicPreload2)
 			{
-				Paths.crawlDirectory("assets", ".ogg", music);
-				Paths.crawlDirectory("mods", ".ogg", modMusic);
+				Paths.crawlDirectoryOG("assets", ".ogg", music);
+				Paths.crawlDirectoryOG("mods", ".ogg", modMusic);
 			}
 			//this took me waaay too long to just delete
 			//nvm I ended up deleting it anyway
@@ -235,11 +232,10 @@ class CacheState extends MusicBeatState
 			//JSONCache.addToCache(Paths.crawlDirectory("mods", ".json"));
 
 			var jsonCache = function() {
-				var jsonCache:Array<String> = [];
-				Paths.crawlDirectory("assets", ".json", jsonCache);
-				Paths.crawlDirectory("mods", ".json", jsonCache);
+				Paths.crawlDirectory("assets", ".json", json);
+				Paths.crawlDirectory("mods", ".json", json);
 				
-				for (json in jsonCache)
+				for (json in json)
 				{
 					JSONCache.addToCache(json);
 				}
@@ -258,6 +254,7 @@ class CacheState extends MusicBeatState
 			//trace("Files: " + "Images: " + images + "Images(Mod): " + modImages + "Music: " + music + "Music(Mod): " + modMusic);
 			//trace(loadTotal + " files to load");
 			
+			trace(loadTotal);
 			if(loadTotal > 0){
 				loadingBar = new FlxBar(0, 605, LEFT_TO_RIGHT, 600, 24, this, 'currentLoaded', 0, loadTotal);
 				loadingBar.createGradientBar([0xFF333333, 0xFFFFFFFF], [0xFF7233D8, 0xFFD89033]);
@@ -345,7 +342,7 @@ class CacheState extends MusicBeatState
 			loadingBox.height = Std.int(loadingWhat.height);
 			if (currentLoaded == loadTotal) gameCached = true;
 
-			if (!ClientPrefs.data.graphicsPreload2 && !ClientPrefs.data.musicPreload2) gameCached = true;
+			//if (!ClientPrefs.data.graphicsPreload2 && !ClientPrefs.data.musicPreload2) gameCached = true;
 
 			if (loadingWhat.text == "Loading: null") 
 			{

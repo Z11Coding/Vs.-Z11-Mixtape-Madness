@@ -18,7 +18,7 @@ class ChartingGridSprite extends FlxSprite
 		scrollFactor.x = 0;
 		active = false;
 
-		scale.set(ChartingStatePsych.GRID_SIZE, ChartingStatePsych.GRID_SIZE);
+		scale.set(ChartingStatePsych.GRID_SIZE, ChartingStatePsych.DEFAULT_GRID_SIZE);
 		loadGrid(color1, color2);
 		updateHitbox();
 		recalcHeight();
@@ -51,7 +51,7 @@ class ChartingGridSprite extends FlxSprite
 		var initialY:Float = y;
 		for (i in 1...rows)
 		{
-			y += ChartingStatePsych.GRID_SIZE + spacing;
+			y += ChartingStatePsych.DEFAULT_GRID_SIZE + spacing;
 			animation.play((i % 2 == 1) ? 'odd' : 'even', true);
 			super.draw();
 		}
@@ -97,7 +97,7 @@ class ChartingGridSprite extends FlxSprite
 
 	function recalcHeight()
 	{
-		height = ((ChartingStatePsych.GRID_SIZE + spacing) * rows) - spacing;
+		height = ((ChartingStatePsych.DEFAULT_GRID_SIZE + spacing) * rows) - spacing;
 		updateStripes();
 	}
 }

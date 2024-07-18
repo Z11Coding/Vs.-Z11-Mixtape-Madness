@@ -189,11 +189,9 @@ end
 ]]--
 
 function onEvent(name, value1, value2)
-	if stageSwitch then
-		if name == 'change_stage' then
-			makeLuaStage(value1)
-			setProperty('curStage', value1)
-		end
+	if name == 'change_stage' then
+		makeLuaStage(value1)
+		setProperty('curStage', value1)
 	end
 end
 

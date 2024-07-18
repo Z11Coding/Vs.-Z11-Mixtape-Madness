@@ -58,6 +58,7 @@ class ChartingStatePsych extends MusicBeatState implements PsychUIEventHandler.P
 	public static var GRID_COLUMNS_PER_PLAYER = Note.ammo[PlayState.mania];
 	public static var GRID_PLAYERS = 2;
 	public static var GRID_SIZE = 40;
+	public static var DEFAULT_GRID_SIZE = 40;
 
 	public var quantizations:Array<Int> = [
 		4,
@@ -211,7 +212,7 @@ class ChartingStatePsych extends MusicBeatState implements PsychUIEventHandler.P
 		var iconY:Float = 50;
 		if(SHOW_EVENT_COLUMN)
 		{
-			eventIcon = new FlxSprite(0, iconY).loadGraphic(Paths.image('editors/eventIcon'));
+			eventIcon = new FlxSprite(0, iconY).loadGraphic(Paths.image('eventArrow'));
 			eventIcon.antialiasing = ClientPrefs.data.globalAntialiasing;
 			eventIcon.alpha = 0.6;
 			eventIcon.setGraphicSize(30, 30);

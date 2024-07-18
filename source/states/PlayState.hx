@@ -647,20 +647,23 @@ class PlayState extends MusicBeatState
 
 		MemoryUtil.clearMajor();
 
-		if (SONG.song == 'Fangirl Frenzy' && !seenCutscene)
+		if (!CacheMode)
 		{
-			startCallback = fanfrenOpenPrep;	
-			endCallback = endSong;
-		}
-		else if (SONG.song == 'Funky Fanta' && !seenCutscene)
-		{
-			startCallback = ffOpenPrep;
-			endCallback = endSong;
-		}
-		else
-		{
-			startCallback = startCountdown;
-			endCallback = endSong;
+			if (SONG.song == 'Fangirl Frenzy' && !seenCutscene)
+			{
+				startCallback = fanfrenOpenPrep;	
+				endCallback = endSong;
+			}
+			else if (SONG.song == 'Funky Fanta' && !seenCutscene)
+			{
+				startCallback = ffOpenPrep;
+				endCallback = endSong;
+			}
+			else
+			{
+				startCallback = startCountdown;
+				endCallback = endSong;
+			}
 		}
 
 		// for lua
@@ -714,11 +717,11 @@ class PlayState extends MusicBeatState
 			FlxG.resetState();
 		}
 		else if (CacheMode && cachingSongs.length == 0)
-			{
-				// Move to a new What state (because it's fucking called that for some reason-)
-				CacheMode = false;
-				FlxG.switchState(new What());
-			}
+		{
+			// Move to a new What state (because it's fucking called that for some reason-)
+			CacheMode = false;
+			FlxG.switchState(new What());
+		}
 
 		setOnScripts("modManager", modManager);
 		setOnScripts("initPlayfield", initPlayfield);
@@ -864,11 +867,14 @@ class PlayState extends MusicBeatState
 		if (mania > Note.maxMania)
 			mania = Note.defaultMania;
 
-		if (SONG == null)
-			SONG = Song.loadFromJson('tutorial');
+		if (!CacheMode)
+		{
+			if (SONG == null)
+				SONG = Song.loadFromJson('tutorial');
 
-		Conductor.mapBPMChanges(SONG);
-		Conductor.changeBPM(SONG.bpm);
+			Conductor.mapBPMChanges(SONG);
+			Conductor.changeBPM(SONG.bpm);
+		}
 
 		#if DISCORD_ALLOWED
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
@@ -1248,7 +1254,7 @@ class PlayState extends MusicBeatState
 
 		callOnScripts("onPlayfieldCreationPost");
 
-		generateSong(SONG.song);
+		if (!CacheMode) generateSong(SONG.song);
 		// After all characters being loaded, it makes then invisible 0.01s later so that the player won't freeze when you change characters
 		// add(strumLine);
 
@@ -1270,7 +1276,7 @@ class PlayState extends MusicBeatState
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
 
 		FlxG.fixedTimestep = false;
-		moveCameraSection();
+		if (!CacheMode) moveCameraSection();
 
 		if (!playAsGF)
 		{
@@ -1514,10 +1520,13 @@ class PlayState extends MusicBeatState
 			}
 		#end
 
-		startCallback();
-		RecalculateRating();
-		if (AIPlayer.active)
-			RecalculateRatingAI();
+		if (!CacheMode)
+		{
+			startCallback();
+			RecalculateRating();
+			if (AIPlayer.active)
+				RecalculateRatingAI();
+		}
 		add(middlecircle);
 
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
@@ -4298,11 +4307,14 @@ class PlayState extends MusicBeatState
 			if (FlxG.sound.music != null)
 			{
 				FlxG.sound.music.pause();
-				vocals.pause();
-				opponentVocals.pause();
-				gfVocals.pause();
-				for (track in tracks)
-					track.pause();
+				if (vocals != null) vocals.pause();
+				if (opponentVocals != null) opponentVocals.pause();
+				if (gfVocals != null) gfVocals.pause();
+				if (tracks != null)
+				{
+					for (track in tracks)
+						track.pause();
+				}
 			}
 			lostFocus = true;
 			if (gf != null)

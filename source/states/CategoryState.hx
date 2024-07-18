@@ -15,7 +15,7 @@ class CategoryState extends MusicBeatState
 		false, false, false, true
 	];
 
-	public static var loadWeekForce:String = 'Main';
+	public static var loadWeekForce:String = 'Oneshots';
 
 	private static var curSelected:Int = 0;
 

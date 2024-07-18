@@ -13,7 +13,7 @@ class LanguageSubState extends MusicBeatSubstate
 
 		var bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = 0xFFea71fd;
-		bg.antialiasing = ClientPrefs.data.antialiasing;
+		bg.antialiasing = ClientPrefs.data.globalAntialiasing;
 		bg.screenCenter();
 		add(bg);
 		add(grpLanguages);
