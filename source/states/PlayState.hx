@@ -3290,7 +3290,7 @@ class PlayState extends MusicBeatState
 						daNoteData = (prevNoteData + 1) % mania;
 
 					case "Mirror":
-						var midpoint = Math.floor(mania / 2);
+						var midpoint = Math.floor(Note.ammo[mania] / 2) - 1;
 						if (initialNoteData == -1)
 						{
 							initialNoteData = daNoteData;
