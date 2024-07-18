@@ -1,7 +1,5 @@
 beat
 beat2
-fanta
-inmysystem
 save
 duh
 MattMod
@@ -13,6 +11,11 @@ resist
 meaglosist
 resist4
 frenzy
+fanta
+inmysystem
+pbtbm
+lost
+noWitness
 week1-cap
 week2-cap
 week3-cap
