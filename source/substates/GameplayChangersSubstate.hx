@@ -62,7 +62,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		option.displayFormat = '%vX';
 		optionsArray.push(option);
 
-		optionsArray.push(new GameplayOption('Chart Modifier', 'chartModifier', 'string', 'Normal', ["Normal", "Random", "RandomBasic", "RandomComplex", 'Flip', "Pain", "4K Only", "ManiaConverter", "Stairs", "Wave", "Trills", "Ew", "Death", 'What', "Amalgam"]));
+		optionsArray.push(new GameplayOption('Chart Modifier', 'chartModifier', 'string', 'Normal', ["Normal", "Random", "RandomBasic", "RandomComplex", 'Flip', "Pain", "4K Only", "ManiaConverter", "Stairs", "Wave", "Trills", 'Sequential', 'Mirror', 'Skip',  "Amalgam"]));
 
 		var option:GameplayOption = new GameplayOption('Convert Mania', 'convertMania', 'int', 3);
 		option.scrollSpeed = 2;
