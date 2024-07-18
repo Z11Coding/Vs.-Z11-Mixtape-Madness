@@ -1254,7 +1254,19 @@ class PlayState extends MusicBeatState
 
 		callOnScripts("onPlayfieldCreationPost");
 
-		if (!CacheMode) generateSong(SONG.song);
+		if (!CacheMode) {
+			if (chartModifier == "Normal") {
+				if (!songCache.exists(SONG)) {
+					generateSong(SONG.song);
+				} else {
+					trace("Loading song from cache: " + SONG.song);
+					unspawnNotes = songCache.get(SONG);
+				}
+			} else {
+				trace("NO CACHE BECAUSE CUSTOM FUNNY!!!");
+				generateSong(SONG.song);
+			}
+		}
 		// After all characters being loaded, it makes then invisible 0.01s later so that the player won't freeze when you change characters
 		// add(strumLine);
 
