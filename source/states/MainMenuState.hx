@@ -96,9 +96,6 @@ class MainMenuState extends MusicBeatState
 		trace(Sys.environment()["USER"]); // sussy test for a next menu x3
 		#end
 
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
-
 		persistentUpdate = persistentDraw = true;
 
 		FlxG.mouse.visible = true;

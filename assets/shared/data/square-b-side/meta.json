@@ -1,7 +1,8 @@
 {
     "song": {
-        "name": "Square B-Side",
-        "artist": "Original by JDST
-        Remaster by Z11Gaming"
+       "name": "Square (B-Side)",
+        "artist": "JDST, Z11Gaming",
+        "charter":"Z11Gaming",
+        "mod":"Vs. Captain Z"
     }
 }

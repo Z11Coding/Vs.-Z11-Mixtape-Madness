@@ -52,11 +52,13 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
+import backend.MusicBeatChartingState;
+
 @:access(flixel.sound.FlxSound._sound)
 @:access(openfl.media.Sound.__buffer)
 
 
-class ChartingStateOG extends MusicBeatState
+class ChartingStateOG extends MusicBeatChartingState
 {
 	public static var noteTypeList:Array<String> = // Used for backwards compatibility with 0.1 - 0.3.2 charts, though, you should add your hardcoded custom note types here too.
 	[	'',
@@ -865,6 +867,7 @@ class ChartingStateOG extends MusicBeatState
 		stageDropDown.selectedLabel = _song.stage;
 		blockPressWhileScrolling.push(stageDropDown);
 
+		if (Difficulty.list.length <= 0 || Difficulty.list == []) Difficulty.list = Difficulty.defaultList;
 		var difficultyDropDown = new FlxUIDropDownMenu(stageDropDown.x, player1DropDown.y + 40,
 			FlxUIDropDownMenu.makeStrIdLabelArray(Difficulty.list, true), function(difficulty:String)
 		{

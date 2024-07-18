@@ -1,6 +1,8 @@
 {
     "song": {
-        "name": "Split",
-        "artist": "Z11Gaming"
+       "name": "Split",
+        "artist": "Z11Gaming",
+        "charter":"Z11Gaming",
+        "mod":"Vs. Captain Z"
     }
 }

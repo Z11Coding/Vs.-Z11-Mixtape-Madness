@@ -8,4 +8,5 @@ typedef SongMetaSection = {
     var name:String;
     var artist:String;
     var charter:String;
+    var mod:String;
 }
