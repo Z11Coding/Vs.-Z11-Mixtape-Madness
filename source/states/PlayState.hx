@@ -4296,7 +4296,7 @@ class PlayState extends MusicBeatState
 
 	function fanfrenOpenPrep()
 	{
-		ffCutPrep();
+		fanfrenCutPrep();
 		cutsceneHandler.endTime = 13;
 		//FlxG.camera.zoom *= 1.2;
 		boyfriend.alpha = 0.00001;

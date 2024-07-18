@@ -2,28 +2,7 @@
 	"song": {
 		"player1": "literally just rice",
 		"player2": "Zenetta",
-		"events": [
-			[
-				148666.666666667,
-				[
-					[
-						"Toggle Pixel Notes",
-						"",
-						""
-					]
-				]
-			],
-			[
-				234000.000000001,
-				[
-					[
-						"Toggle Pixel Notes",
-						"",
-						""
-					]
-				]
-			]
-		],
+		"events": [],
 		"notes": [
 			{
 				"typeOfSection": 0,
