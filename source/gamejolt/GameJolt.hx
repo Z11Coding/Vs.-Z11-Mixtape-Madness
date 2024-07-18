@@ -1,7 +1,7 @@
 package gamejolt;
 
 // GameJolt things
-import flixel.addons.ui.FlxUIState;
+import flixel.FlxState;
 import haxe.iterators.StringIterator;
 import tentools.api.FlxGameJolt as GJApi;
 
@@ -264,7 +264,7 @@ class GameJoltInfo extends MusicBeatSubstate
     /**
      * Variable to change which state to go to by hitting ESCAPE or the CONTINUE buttons.
      */
-    public static var changeState:FlxUIState = new options.OptionsState();
+    public static var changeState:FlxState = new options.OptionsState();
     /**
     * Inline variable to change the font for the GameJolt API elements.
     * @param font You can change the font by doing **Paths.font([Name of your font file])** or by listing your file path.

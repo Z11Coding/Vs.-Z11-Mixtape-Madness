@@ -93,9 +93,6 @@ class RPGState extends MusicBeatState
 		camMESSAGE.filtersEnabled = true;
 		camfilters.push(shaders.ShadersHandler.chromaticAberration);
 
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
-
 		persistentUpdate = persistentDraw = true;
 
 		var bg:FlxSprite = new FlxSprite(-80);

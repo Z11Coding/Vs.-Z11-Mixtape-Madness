@@ -1,7 +1,8 @@
 {
     "song": {
-        "name": "Test Me",
+       "name": "Test Me",
         "artist": "Z11Gaming",
-        "diff": "Difficulty: Test Worthy"
+        "charter":"Z11Gaming",
+        "mod":"Vs. Captain Z"
     }
 }

@@ -1,3 +1,3 @@
-function onCreate()
-	setProperty('camGame.bgColor', getColorFromHex('FFFFFF'))
+function onCreatePost()
+	setProperty('whiteBG.alpha', 1)
 end

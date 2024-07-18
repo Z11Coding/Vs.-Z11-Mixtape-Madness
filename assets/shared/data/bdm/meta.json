@@ -1,6 +1,8 @@
 {
     "song": {
-        "name": "BDM",
-        "artist": "Z11Gaming"
+        "name":"BDM",
+        "artist":"Z11Gaming",
+        "charter":"Z11Gaming",
+        "mod":"Vs. Captain Z"
     }
 }
