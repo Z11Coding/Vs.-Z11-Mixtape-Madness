@@ -8,6 +8,10 @@ class OtherSettingsSubState extends BaseOptionsMenu
 		title = 'Misc. Settings.';
 		rpcTitle = 'Misc. Settings'; // for Discord Rich Presence
 
+		var option:Option = new Option('Show Crash Dialogue',
+			"If checked, The game will show a dialogue when it crashes.", 'showCrash', 'bool');
+			addOption(option);
+
 		var option:Option = new Option('Cache Graphics', // even tho only one person asked, it here
 			"If checked, The Graphics Will Be Cached.", 'graphicsPreload2', 'bool');
 		addOption(option);

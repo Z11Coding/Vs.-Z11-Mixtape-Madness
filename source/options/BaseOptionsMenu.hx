@@ -107,8 +107,19 @@ class BaseOptionsMenu extends MusicBeatSubstate
 
 	public function addOption(option:Option) {
 		if(optionsArray == null || optionsArray.length < 1) optionsArray = [];
-		optionsArray.push(option);
+		if(optionsArray.indexOf(option) == -1) {
+			optionsArray.push(option);
+		}
 		return option;
+	}
+
+	public function removeOption(option:Option) {
+		if(optionsArray != null && optionsArray.length > 0) {
+			var index:Int = optionsArray.indexOf(option);
+			if(index != -1) {
+				optionsArray.splice(index, 1);
+			}
+		}
 	}
 
 	var nextAccept:Int = 5;
