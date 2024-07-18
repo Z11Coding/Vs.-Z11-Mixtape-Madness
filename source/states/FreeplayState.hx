@@ -786,17 +786,20 @@ class FreeplayState extends MusicBeatState
 		if (curSelected >= songs.length)
 			curSelected = 0;
 			
-		var newColor:Int = songs[curSelected].color;
-		if(newColor != intendedColor) {
-			if(colorTween != null) {
-				colorTween.cancel();
-			}
-			intendedColor = newColor;
-			colorTween = FlxTween.color(bg, 1, bg.color, intendedColor, {
-				onComplete: function(twn:FlxTween) {
-					colorTween = null;
+		if (songs.length >= 0)
+		{
+			var newColor:Int = songs[curSelected].color;
+			if(newColor != intendedColor) {
+				if(colorTween != null) {
+					colorTween.cancel();
 				}
-			});
+				intendedColor = newColor;
+				colorTween = FlxTween.color(bg, 1, bg.color, intendedColor, {
+					onComplete: function(twn:FlxTween) {
+						colorTween = null;
+					}
+				});
+			}
 		}
 
 		// selector.y = (70 * curSelected) + 30;

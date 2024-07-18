@@ -702,7 +702,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 			bgColorStepperR.value = coolColor.red;
 			bgColorStepperG.value = coolColor.green;
 			bgColorStepperB.value = coolColor.blue;
-			updateHealthBar();
+			updateBG();
 		});
 
 		var hideFreeplayCheckbox:PsychUICheckBox = new PsychUICheckBox(10, iconInputText.y + 30, "Hide Week from Freeplay?", 100);

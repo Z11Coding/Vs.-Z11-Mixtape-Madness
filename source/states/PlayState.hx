@@ -709,7 +709,7 @@ class PlayState extends MusicBeatState
 
 			// Store unspawned notes in the map
 			songCache.set(SONG, unspawnNotes);
-			trace("Song cached: " + SONG.song);
+			try {trace("Song cached: " + SONG.song);} catch(e) {}
 			trace("Unspawned notes: " + unspawnNotes.length);
 			trace("Caching next song...");
 
@@ -851,29 +851,32 @@ class PlayState extends MusicBeatState
 		}
 		catch (e)
 		{
-			trace("No metadata for " + SONG.song.toLowerCase());
+			try {trace("No metadata for " + SONG.song.toLowerCase());} catch(e) {trace("No metadata found. No song either apparently.");}
 		}
 
 		persistentUpdate = true;
 		persistentDraw = true;
 
-		if (chartModifier == "4K Only")
-			mania = 3;
-		else if (chartModifier == "ManiaConverter")
-			mania = convertMania;
-		else
-			mania = SONG.mania;
-
-		if (mania > Note.maxMania)
-			mania = Note.defaultMania;
-
-		if (!CacheMode)
+		if (SONG != null)
 		{
-			if (SONG == null)
-				SONG = Song.loadFromJson('tutorial');
+			if (chartModifier == "4K Only")
+				mania = 3;
+			else if (chartModifier == "ManiaConverter")
+				mania = convertMania;
+			else
+				mania = SONG.mania;
 
-			Conductor.mapBPMChanges(SONG);
-			Conductor.changeBPM(SONG.bpm);
+			if (mania > Note.maxMania)
+				mania = Note.defaultMania;
+
+			if (!CacheMode)
+			{
+				if (SONG == null)
+					SONG = Song.loadFromJson('tutorial');
+
+				Conductor.mapBPMChanges(SONG);
+				Conductor.changeBPM(SONG.bpm);
+			}
 		}
 
 		#if DISCORD_ALLOWED
@@ -1257,6 +1260,7 @@ class PlayState extends MusicBeatState
 		if (!CacheMode) {
 			if (chartModifier == "Normal") {
 				if (!songCache.exists(SONG)) {
+					trace("Loading song normally");
 					generateSong(SONG.song);
 				} else {
 					trace("Loading song from cache: " + SONG.song);
@@ -1457,33 +1461,36 @@ class PlayState extends MusicBeatState
 		introStageStuff.visible = false;
 		introStageStuff.cameras = [camCredit];
 
-		if (!playAsGF)
+		if (!CacheMode)
 		{
-			playerField.cameras = [camHUD];
-			dadField.cameras = [camHUD];
-			playfields.cameras = [camHUD];
-			strumLineNotes.cameras = [camHUD];
-			notes.cameras = [camHUD];
-			healthBar.cameras = [camHUD];
-			healthBar2.cameras = [camHUD];
-			iconP1.cameras = [camHUD];
-			iconP2.cameras = [camHUD];
-			if (iconP12 != null)
-				iconP12.cameras = [camHUD];
-			if (dad2 != null)
-				iconP22.cameras = [camHUD];
-			scoreTxt.cameras = [camHUD];
+			if (!playAsGF)
+			{
+				playerField.cameras = [camHUD];
+				dadField.cameras = [camHUD];
+				playfields.cameras = [camHUD];
+				strumLineNotes.cameras = [camHUD];
+				if (notes != null) notes.cameras = [camHUD];
+				healthBar.cameras = [camHUD];
+				healthBar2.cameras = [camHUD];
+				iconP1.cameras = [camHUD];
+				iconP2.cameras = [camHUD];
+				if (iconP12 != null)
+					iconP12.cameras = [camHUD];
+				if (dad2 != null)
+					iconP22.cameras = [camHUD];
+				scoreTxt.cameras = [camHUD];
+			}
+			else
+			{
+				healthBarGF.cameras = [camHUD];
+				if (gf != null)
+					iconGF.cameras = [camHUD];
+				scoreTxt.cameras = [camHUD];
+			}
+			botplayTxt.cameras = [camHUD];
+			timeBar.cameras = [camHUD];
+			timeTxt.cameras = [camHUD];
 		}
-		else
-		{
-			healthBarGF.cameras = [camHUD];
-			if (gf != null)
-				iconGF.cameras = [camHUD];
-			scoreTxt.cameras = [camHUD];
-		}
-		botplayTxt.cameras = [camHUD];
-		timeBar.cameras = [camHUD];
-		timeTxt.cameras = [camHUD];
 
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;
@@ -1532,7 +1539,7 @@ class PlayState extends MusicBeatState
 			}
 		#end
 
-		if (!CacheMode)
+		if (!CacheMode && SONG != null)
 		{
 			startCallback();
 			RecalculateRating();

@@ -49,6 +49,7 @@ class Achievements {
 		createAchievement('mattgod',	            {name: "Max Efficiency 3X", description: "Beat a song at 10x Speed or higher", hidden: true});
 		createAchievement('matt',	                {name: "Max Efficiency 4X", description: "Beat a song at 15X Speed or higher", hidden: true});
 		createAchievement('mattbeyond',	            {name: "Bro what are you even doing anymore", description: "Beat a song at 20X Speed or higher", hidden: true});
+		createAchievement('perfectionist',	        {name: "S for the best", description: "Beat every song with an S Rank or higher"});
 		
 		//dont delete this thing below
 		_originalLength = _sortID + 1;
