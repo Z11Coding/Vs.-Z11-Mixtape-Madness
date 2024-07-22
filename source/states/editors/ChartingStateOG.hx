@@ -975,6 +975,24 @@ class ChartingStateOG extends MusicBeatChartingState
 	var sectionToCopy:Int = 0;
 	var notesCopied:Array<Dynamic>;
 
+	// // Assuming this code is placed within the function where you're setting up your section tab UI
+	
+	// // Starting BPM Numeric Stepper
+	// var bpmTweenStart:FlxUINumericStepper = new FlxUINumericStepper(10, yPos, 60, 100, 300, 1, "Start BPM", 120);
+	// add(bpmTweenStart);
+	
+	// // Ending BPM Numeric Stepper
+	// var bpmTweenEnd:FlxUINumericStepper = new FlxUINumericStepper(10, yPos + 35, 60, 100, 300, 1, "End BPM", 120);
+	// add(bpmTweenEnd);
+	
+	// // Duration Numeric Stepper (for beats or bars)
+	// var bpmTweenDuration:FlxUINumericStepper = new FlxUINumericStepper(10, yPos + 70, 1, 1, 16, 1, "Duration (Beats/Bars)", 4);
+	// add(bpmTweenDuration);
+	
+	// // Beats/Bars Toggle (optional, depending on your design)
+	// var beatsBarsToggle:FlxUICheckBox = new FlxUICheckBox(10, yPos + 105, "Use Bars", null, true);
+	// add(beatsBarsToggle);
+
 	function addSectionUI():Void
 	{
 		var tab_group_section = new FlxUI(null, UI_box);
