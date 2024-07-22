@@ -975,7 +975,7 @@ class ChartingStateOG extends MusicBeatChartingState
 	var sectionToCopy:Int = 0;
 	var notesCopied:Array<Dynamic>;
 
-	// // Assuming this code is placed within the function where you're setting up your section tab UI
+	
 	
 	// // Starting BPM Numeric Stepper
 	// var bpmTweenStart:FlxUINumericStepper = new FlxUINumericStepper(10, yPos, 60, 100, 300, 1, "Start BPM", 120);
