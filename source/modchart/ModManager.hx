@@ -1,22 +1,17 @@
 package modchart;
 // @author Nebula_Zorua
 
-import flixel.tweens.FlxEase.EaseFunction;
-import modchart.Modifier.RenderInfo;
-import flixel.math.FlxPoint;
-import flixel.tweens.FlxEase;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.FlxSprite;
-import flixel.FlxG;
-import math.Vector3;
-import modchart.Modifier.ModifierType;
+import playfields.NoteField;
+import modchart.Modifier;
 import modchart.modifiers.*;
 import modchart.events.*;
-import playfields.NoteField;
+import math.Vector3;
+import flixel.tweens.FlxEase;
+import flixel.math.FlxPoint;
+import flixel.FlxG;
 
 // Weird amalgamation of Schmovin' modifier system, Andromeda modifier system and my own new shit -neb
 // NEW: Now also has some features of mirin (aliases, nodes)
-
 
 /**
  * So, what is a Node?
@@ -31,6 +26,29 @@ typedef Node = {
 }
 
 class ModManager {
+	private var state:PlayState;
+
+	public var timeline:EventTimeline = new EventTimeline();
+
+	var notemodRegister:Map<String, Modifier> = [];
+	var miscmodRegister:Map<String, Modifier> = [];
+
+	public var register:Map<String, Modifier> = [];
+	
+	/** mods that should be executing and will be called by functions like getPos **/ 
+	var activeMods:Array<Array<String>> = [[], []]; 
+	// ^^ maybe this can be seperated into a misc and note one, just so you arent checking misc mods for note shit & vice versa
+	// also so you arent calling shit like getPos on submods etc etc, might be better for optimization to do that
+	var modArray:Array<Modifier> = [];
+	var aliases:Map<String, String> = [];
+	
+	/** maps nodes by their inputs **/ 
+	var nodes:Map<String, Array<Node>> = []; 
+	var nodeArray:Array<Node> = [];
+
+	var touchedMods:Array<Array<String>> = [[], []];
+	var nodeIndex:Int = 0;
+
 	public function new(state:PlayState) {
         this.state=state;
     }
@@ -54,8 +72,7 @@ class ModManager {
 			PathModifier,
 			AccelModifier,
 			PerspectiveModifier,
-			ZoomModifier,
-			ReceptorScrollModifier
+			ZoomModifier
 		];
 		for (mod in quickRegs)
 			quickRegister(Type.createInstance(mod, [this]));
@@ -73,7 +90,7 @@ class ModManager {
 		registerAux("xmod");
 		registerAux("cmod");
 		registerAux("movePastReceptors");
-		for (i in 0...4){
+		for (i in 0...Note.ammo[PlayState.mania]){
 			registerAux("xmod" + i);
 			registerAux("cmod" + i);
 			registerAux("noteSpawnTime" + i);
@@ -91,7 +108,7 @@ class ModManager {
 			setValue(modName, 0, mN);
         } */
 		
-		for (i in 0...4)
+		for (i in 0...Note.ammo[PlayState.mania])
 			setValue("noteSpawnTime" + i, 0, mN);
 		
 		setValue("noteSpawnTime", 0, mN); // when this is <= 0, it defaults to field.spawnTime
@@ -103,7 +120,7 @@ class ModManager {
 		setValue("scale", 1, mN);
 		setValue("scaleX", 1, mN);
 		setValue("scaleY", 1, mN);
-		for (i in 0...4){
+		for (i in 0...Note.ammo[PlayState.mania]){
 			setValue('cmod$i', -1, mN);
 			setValue('xmod$i', 1, mN);
 			setValue('scale${i}', 1, mN);
@@ -115,28 +132,6 @@ class ModManager {
 		setValue("flashG", 1, mN);
 		setValue("flashB", 1, mN);
 	}
-
-
-	private var state:PlayState;
-
-	public var timeline:EventTimeline = new EventTimeline();
-
-	var notemodRegister:Map<String, Modifier> = [];
-	var miscmodRegister:Map<String, Modifier> = [];
-
-	public var register:Map<String, Modifier> = [];
-
-	var activeMods:Array<Array<String>> = [[], []]; // mods that should be executing and will be called by functions like getPos
-	// ^^ maybe this can be seperated into a misc and note one, just so you arent checking misc mods for note shit & vice versa
-	// also so you arent calling shit like getPos on submods etc etc, might be better for optimization to do that
-	var modArray:Array<Modifier> = [];
-	var aliases:Map<String, String> = [];
-
-	var nodes:Map<String, Array<Node>> = []; // maps nodes by their inputs
-	var nodeArray:Array<Node> = [];
-
-	var touchedMods:Array<Array<String>> = [[], []];
-	var nodeIndex:Int = 0;
 
     inline public function quickRegister(mod:Modifier)
         registerMod(mod.getName(), mod);
@@ -197,6 +192,18 @@ class ModManager {
 		modArray.sort((a, b) -> Std.int(a.getOrder() - b.getOrder()));
 
     }
+
+	//I'll get this working at some point
+	/*public function addHScriptModifier(modName:String, ?defaultVal:Float = 0):Null<HScriptModifier>
+	{	
+		var modifier = HScriptModifier.fromName(this, null, modName);
+		if (modifier == null) return null;
+	
+		quickRegister(modifier);
+		setValue(modifier.getName(), defaultVal==null ? 0 : defaultVal);
+		
+		return modifier;
+	}*/
 
     inline public function get(modName:String)
 		return register.get(getActualModName(modName));
@@ -505,8 +512,8 @@ class ModManager {
 			pos = new Vector3();
 		
 		pos.setTo(
-			(Note.swagWidth * 0.5) + getBaseX(data, player, field.field.keyCount),
-			(Note.swagWidth * 0.5) + 50 + diff,
+			Note.halfWidth + getBaseX(data, player, field.field.keyCount),
+			Note.halfWidth + 50 + diff,
 			0
 		);
 
@@ -653,5 +660,4 @@ class ModManager {
 	
 	public function queueEaseFunc(step:Float, endStep:Float, func:EaseFunction, callback:(EaseEvent, Float, Float) -> Void)
 		timeline.addEvent(new EaseEvent(step, endStep, func, callback, this));
-
 }

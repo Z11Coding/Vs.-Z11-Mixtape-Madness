@@ -86,7 +86,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 	public var isPlayer:Bool = false; // if this playfield takes input from the player
 	public var inControl:Bool = true; // if this playfield will take input at all
 	public var AIPlayer:Bool = false; // if this playfield is played by the "AI" instead
-	public var keyCount(default, set):Int = 6; // How many lanes are in this field
+	public var keyCount(default, set):Int = 4; // How many lanes are in this field
 	public var autoPlayed(default, set):Bool = false; // if this playfield should be played automatically (botplay, opponent, etc)
 
     public var x:Float = 0;
@@ -230,6 +230,8 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 			noteQueue[note.column].sort((a, b) -> Std.int(a.strumTime - b.strumTime));
 		}
 
+		//trace(noteQueue[note.column]);
+
 		if (spawnedByData[note.column]!=null)
 			spawnedByData[note.column].push(note);
 		else
@@ -288,6 +290,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 
 	// generates the receptors
 	public function generateStrums(){
+		Note.swagWidth = 160 * 0.7;
 		for(i in 0...keyCount){
 			var babyArrow:StrumNote = new StrumNote(ClientPrefs.data.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X, PlayState.strumLine.y, i, this);
 			babyArrow.downScroll = ClientPrefs.data.downScroll;
@@ -306,8 +309,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 		for (data in 0...strumNotes.length)
 		{
 			var babyArrow:StrumNote = strumNotes[data];
-			babyArrow.alpha = 1;
-			/*if (skip)
+			if (skip)
 				babyArrow.alpha = 1;
 			else
 			{
@@ -315,7 +317,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 				var daY = babyArrow.downScroll ? -10 : 10;
 				babyArrow.offsetY -= daY;
 				FlxTween.tween(babyArrow, {offsetY: babyArrow.offsetY + daY, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (Conductor.crochet / 1000) * data});
-			}*/
+			}
 		}
 	}
 
@@ -387,7 +389,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 				spawnedNotes.remove(daNote);
 				continue;
 			}
-			modManager.updateObject(curDecBeat, daNote, modNumber);
+			//modManager.updateObject(curDecBeat, daNote, modNumber);
 
 			// check for hold inputs
 			if(!daNote.isSustainNote){

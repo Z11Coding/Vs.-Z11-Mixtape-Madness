@@ -19,7 +19,7 @@ class DrunkModifier extends NoteModifier {
 
         if(perc!=0){
             var angle = time * (1 + speed) + data * ((offset * 0.2) + 0.2) + visualDiff * ((period * 10) + 10) / FlxG.height;
-            return perc * (FlxMath.fastCos(angle) * Note.swagWidth * 0.5);
+            return perc * (FlxMath.fastCos(angle) * Note.halfWidth);
         }
         return 0;
     }
@@ -111,7 +111,7 @@ class DrunkModifier extends NoteModifier {
                 var p = props[i];
                 for(prop in p)submods.push('$mod$axe$prop');
                 
-                for(d in 0...4){
+                for(d in 0...Note.ammo[PlayState.mania]){
                     submods.push('$mod$axe$d');
                     for(prop in p)submods.push('$mod$axe$d$prop');
                 }

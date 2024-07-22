@@ -32,7 +32,7 @@ class RotateModifier extends NoteModifier { // this'll be rotateX in ModManager
 
 
 	override function getPos( visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:FlxSprite, field:NoteField){
-		var origin:Vector3 = new Vector3(modMgr.getBaseX(data, player, field.field.keyCount), FlxG.height* 0.5);
+		var origin:Vector3 = new Vector3(modMgr.getBaseX(data, player, Note.ammo[PlayState.mania]), FlxG.height* 0.5);
         if(daOrigin!=null)origin=daOrigin;
 
         var diff = pos.subtract(origin);
@@ -46,7 +46,7 @@ class RotateModifier extends NoteModifier { // this'll be rotateX in ModManager
 		var shid:Array<String> = ['rotateX', 'rotateY', 'rotateZ'];
 
 		var submods:Array<String> = [
-			for (d in 0...4)
+			for (d in 0...Note.ammo[PlayState.mania])
 			{
 				for (s in shid)
 					'$prefix$d$s';

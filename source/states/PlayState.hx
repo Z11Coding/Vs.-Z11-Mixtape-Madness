@@ -2220,7 +2220,7 @@ class PlayState extends MusicBeatState
 			cutDialogue.finishThing = function()
 			{
 				cutDialogue = null;
-				// cutsceneHandler.pauseCutscene = false;
+				cutsceneHandler.pauseCutscene = false;
 			}
 			cutDialogue.nextDialogueThing = startNextDialogue;
 			cutDialogue.skipDialogueThing = skipDialogue;
@@ -2230,7 +2230,7 @@ class PlayState extends MusicBeatState
 		else
 		{
 			FlxG.log.warn('Your dialogue file is badly formatted!');
-			// cutsceneHandler.pauseCutscene = false;
+			cutsceneHandler.pauseCutscene = false;
 		}
 	}
 
@@ -2325,7 +2325,7 @@ class PlayState extends MusicBeatState
 			Conductor.songPosition = -Conductor.crochet * 5;
 			setOnScripts('startedCountdown', true);
 			callOnScripts('onCountdownStarted', null);
-			changeMania(SONG.startMania, isStoryMode || skipArrowStartTween);
+			changeMania(chartModifier != 'ManiaConverter' ? SONG.startMania : convertMania, isStoryMode || skipArrowStartTween);
 
 			var swagCounter:Int = 0;
 

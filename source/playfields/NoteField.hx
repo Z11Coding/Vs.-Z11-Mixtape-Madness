@@ -455,7 +455,7 @@ class NoteField extends FieldBase
 			
 
 
-			for (_ in 0...4)
+			for (_ in 0...Note.ammo[PlayState.mania])
 			{
 				alphas.push(info.alpha);
 				glows.push(info.glow);
@@ -597,19 +597,19 @@ class NoteField extends FieldBase
 
 			vert = modManager.modifyVertex(curDecBeat, vert, idx, sprite, pos, modNumber, sprite.column, this);
 
-			vert.x *= scalePoint.x;
+			/*vert.x *= scalePoint.x;
 			vert.y *= scalePoint.y;
 
 /* 			vert.x *= zoom;
-			vert.y *= zoom; */
+			vert.y *= zoom; 
 			if (sprite.flipX)
 				vert.x *= -1;
 			if (sprite.flipY)
 				vert.y *= -1;
-			quad[idx] = vert;
+			quad[idx] = vert;*/
 		}
 
-		scalePoint.putWeak();
+		//+scalePoint.putWeak();
 
 		try
 		{

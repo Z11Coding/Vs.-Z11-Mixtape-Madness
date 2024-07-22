@@ -35,7 +35,7 @@ class TransformModifier extends NoteModifier { // this'll be transformX in ModMa
     override function getSubmods(){
 		var subMods:Array<String> = ["transformY", "transformZ", "transformX-a", "transformY-a", "transformZ-a"];
 
-        for(i in 0...4){
+        for(i in 0...Note.ammo[PlayState.mania]){
 			subMods.push('transform${i}X');
 			subMods.push('transform${i}Y');
 			subMods.push('transform${i}Z');

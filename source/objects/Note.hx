@@ -355,6 +355,12 @@ class Note extends NoteObject
 	/** The maximum amount of time you can release a hold before it counts as a miss**/
 	public var maxReleaseTime:Float = 0.25;
 
+	@:noCompletion private static function set_swagWidth(val:Float){
+		halfWidth = val * 0.5;
+		return val;
+	}
+	public static var halfWidth(default, null):Float = swagWidth * 0.5;
+
 	public var copyX:Bool = true;
 	public var copyY:Bool = true;
 	public var copyAngle:Bool = true;

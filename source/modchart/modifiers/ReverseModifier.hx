@@ -8,7 +8,6 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import playfields.NoteField;
 import objects.NoteObject.ObjectType;
-
 class ReverseModifier extends NoteModifier 
 {
 	inline function lerp(a:Float, b:Float, c:Float) 
@@ -64,7 +63,7 @@ class ReverseModifier extends NoteModifier
 
 	override function getPos(visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:NoteObject, field:NoteField)
 	{
-		var swagOffset = Note.swagWidth * 0.5 + modMgr.vPadding; // maybe vPadding can be a field variable?
+		var swagOffset = Note.halfWidth + modMgr.vPadding; // maybe vPadding can be a field variable?
 		var reversePerc = getReverseValue(data, player);
 		var shift = lerp(swagOffset, FlxG.height - swagOffset, reversePerc);
 		
@@ -78,7 +77,8 @@ class ReverseModifier extends NoteModifier
 			var n:Note = cast obj;
 			pos.y += n.typeOffsetY;
 		}
-		pos.y += obj.offsetY;
+
+        pos.y += obj.offsetY;
 
 		return pos;
 	}
@@ -86,7 +86,7 @@ class ReverseModifier extends NoteModifier
     override function getSubmods(){
         var subMods:Array<String> = ["cross", "split", "alternate", "centered", "unboundedReverse"];
 
-		for (i in 0...4){
+		for (i in 0...Note.ammo[PlayState.mania]){
             subMods.push('reverse${i}');
         }
 
