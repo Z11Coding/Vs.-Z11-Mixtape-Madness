@@ -859,24 +859,24 @@ class PlayState extends MusicBeatState
 
 		if (SONG != null)
 		{
-			if (chartModifier == "4K Only")
-				mania = 3;
-			else if (chartModifier == "ManiaConverter")
-				mania = convertMania;
-			else
-				mania = SONG.mania;
+		if (chartModifier == "4K Only")
+			mania = 3;
+		else if (chartModifier == "ManiaConverter")
+			mania = convertMania;
+		else
+			mania = SONG.mania;
 
-			if (mania > Note.maxMania)
-				mania = Note.defaultMania;
+		if (mania > Note.maxMania)
+			mania = Note.defaultMania;
 
-			if (!CacheMode)
-			{
-				if (SONG == null)
-					SONG = Song.loadFromJson('tutorial');
+		if (!CacheMode)
+		{
+			if (SONG == null)
+				SONG = Song.loadFromJson('tutorial');
 
-				Conductor.mapBPMChanges(SONG);
-				Conductor.changeBPM(SONG.bpm);
-			}
+			Conductor.mapBPMChanges(SONG);
+			Conductor.changeBPM(SONG.bpm);
+		}
 		}
 
 		#if DISCORD_ALLOWED
@@ -1463,33 +1463,33 @@ class PlayState extends MusicBeatState
 
 		if (!CacheMode)
 		{
-			if (!playAsGF)
-			{
-				playerField.cameras = [camHUD];
-				dadField.cameras = [camHUD];
-				playfields.cameras = [camHUD];
-				strumLineNotes.cameras = [camHUD];
+		if (!playAsGF)
+		{
+			playerField.cameras = [camHUD];
+			dadField.cameras = [camHUD];
+			playfields.cameras = [camHUD];
+			strumLineNotes.cameras = [camHUD];
 				if (notes != null) notes.cameras = [camHUD];
-				healthBar.cameras = [camHUD];
-				healthBar2.cameras = [camHUD];
-				iconP1.cameras = [camHUD];
-				iconP2.cameras = [camHUD];
-				if (iconP12 != null)
-					iconP12.cameras = [camHUD];
-				if (dad2 != null)
-					iconP22.cameras = [camHUD];
-				scoreTxt.cameras = [camHUD];
-			}
-			else
-			{
-				healthBarGF.cameras = [camHUD];
-				if (gf != null)
-					iconGF.cameras = [camHUD];
-				scoreTxt.cameras = [camHUD];
-			}
-			botplayTxt.cameras = [camHUD];
-			timeBar.cameras = [camHUD];
-			timeTxt.cameras = [camHUD];
+			healthBar.cameras = [camHUD];
+			healthBar2.cameras = [camHUD];
+			iconP1.cameras = [camHUD];
+			iconP2.cameras = [camHUD];
+			if (iconP12 != null)
+				iconP12.cameras = [camHUD];
+			if (dad2 != null)
+				iconP22.cameras = [camHUD];
+			scoreTxt.cameras = [camHUD];
+		}
+		else
+		{
+			healthBarGF.cameras = [camHUD];
+			if (gf != null)
+				iconGF.cameras = [camHUD];
+			scoreTxt.cameras = [camHUD];
+		}
+		botplayTxt.cameras = [camHUD];
+		timeBar.cameras = [camHUD];
+		timeTxt.cameras = [camHUD];
 		}
 
 		// if (SONG.song == 'South')
@@ -3293,28 +3293,45 @@ class PlayState extends MusicBeatState
 						prevNoteData = daNoteData;
 						initialNoteData = thisNoteData;
 
-					case "Sequential":
-						daNoteData = (prevNoteData + 1) % mania;
+					// case "Sequential":
+					// 	if (prevNoteData == 0) {
+					// 		daNoteData = 1;
+					// 		direction = 1;
+					// 	} else if (prevNoteData == mania - 1) {
+					// 		daNoteData = mania - 2;
+					// 		direction = -1;
+					// 	} else {
+					// 		daNoteData = prevNoteData + direction;
+					// 	}
+					// 	break;
+								case "Mirror": //Broken
+									var length = mania;
+									var mirroredIndex:Int;
+									var middle = Math.floor(length / 2);
+									if (daNoteData < middle) {
+										mirroredIndex = (middle - daNoteData) + middle - 1;
+									} else if (daNoteData > middle) {
+										mirroredIndex = middle - (daNoteData - middle);
+									} else {
+										mirroredIndex = daNoteData;
+									}
+								daNoteData = mirroredIndex;
+								case "ReverseMirror":
+									var median:Float = (mania + 1) / 2;
+								if (daNoteData <= median) {
+									// For values below the median, mirror downwards
+									daNoteData = Std.int(median - (median - daNoteData) - 1);
+								} else {
+									// For values above the median, mirror upwards
+									daNoteData = Std.int(median + (daNoteData - median) + 1);
+								}
+								daNoteData = Std.int(Math.max(0, Math.min(daNoteData, mania - 1)));
 
-					case "Mirror":
-						var midpoint = Math.floor(Note.ammo[mania] / 2) - 1;
-						if (initialNoteData == -1)
-						{
-							initialNoteData = daNoteData;
-							daNoteData = (daNoteData < midpoint) ? daNoteData + midpoint : daNoteData - midpoint;
-						}
-						else
-						{
-							daNoteData = (prevNoteData < midpoint) ? prevNoteData + 1 : prevNoteData - 1;
-							if (daNoteData >= mania)
-								daNoteData = 0;
-							if (daNoteData < 0)
-								daNoteData = mania - 1;
-						}
-
-					case "Skip":
-						var skipStep = 2; // Define the step size for skipping notes.
-						daNoteData = (prevNoteData + skipStep) % mania;
+case "Skip":
+	var skipStep = 2; // Define the step size for skipping notes.
+	var randomLane = Math.random() < 0.5 ? prevNoteData : (prevNoteData + skipStep) % mania;
+	var randomDuration = Math.random() * 30; // Randomize the duration before switching lanes (in notes).
+	daNoteData = randomLane;
 					case "Flip":
 						if (gottaHitNote)
 						{
