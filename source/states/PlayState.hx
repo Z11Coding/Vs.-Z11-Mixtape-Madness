@@ -4193,7 +4193,7 @@ case "Skip":
 		// Like set_noteType()
 	}
 
-	public function changeMania(newValue:Int, skipStrumFadeOut:Bool = false)
+	public function changeMania(newValue:Int, skipStrumFadeOut:Bool = false, ?modifyNotes = false)
 	{
 		if (chartModifier == '4K Only' || chartModifier == 'maniaConverter')
 			return;
@@ -4223,7 +4223,16 @@ case "Skip":
 
 		for (field in playfields.members)
 		{
+			trace(playfields.members);
 			field.keyCount = Note.ammo[mania];
+			if (modifyNotes)
+			{
+			for (note in allNotes)
+			{
+			field.unqueue(note);
+			field.queue(note);
+			}
+		}
 			field.generateStrums();
 		}
 
@@ -6501,6 +6510,47 @@ case "Skip":
 				if (Math.isNaN(newMania) && newMania < Note.minMania && newMania > Note.maxMania)
 					newMania = 0;
 				changeMania(newMania, skipTween);
+
+				case 'Change Mania (Special)':
+					var newMania:Int = 0;
+					var skipTween:Bool = value2 == "true" ? true : false;
+					var prevNote1:Note = null;
+					var prevNote2:Note = null;
+	
+					if (value1.toLowerCase().trim() == "random") {
+						newMania = FlxG.random.int(0, 8);
+					} else {
+						newMania = Std.parseInt(value1);
+					}
+					if (Math.isNaN(newMania) && newMania < 0 && newMania > 9)
+						newMania = 0;
+					notes.forEach(function(daNote:Note)
+					{
+						daNote.noteData = getNumberFromAnims(daNote.noteData, newMania);
+					});
+					for (i in 0...allNotes.length)
+					{
+						if (allNotes[i].mustPress)
+						{
+							if (!allNotes[i].isSustainNote)
+							{
+								allNotes[i].noteData = getNumberFromAnims(allNotes[i].noteData, newMania);
+								prevNote1 = allNotes[i];
+							}
+							else if (prevNote1 != null && allNotes[i].isSustainNote) allNotes[i].noteData = prevNote1.noteData;
+						}
+						if (!allNotes[i].mustPress)
+						{
+							if (!allNotes[i].isSustainNote)
+							{
+								allNotes[i].noteData = getNumberFromAnims(allNotes[i].noteData, newMania);
+								prevNote2 = allNotes[i];
+							}
+							else if (prevNote2 != null && allNotes[i].isSustainNote) allNotes[i].noteData = prevNote2.noteData;
+						}
+					}
+					changeMania(newMania, skipTween);
+	
 
 			case 'Super Burst':
 				powerup(value1);
