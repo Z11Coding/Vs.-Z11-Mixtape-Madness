@@ -292,7 +292,6 @@ class CategoryState extends MusicBeatState
 
 	function changeSelection(change:Int = 0):Void
 	{
-		FlxG.sound.play(Paths.sound('scrollMenu'), 0.4);
 		curSelected += change;
 		if (curSelected < 0)
 			curSelected = menuItems.length - 1;
