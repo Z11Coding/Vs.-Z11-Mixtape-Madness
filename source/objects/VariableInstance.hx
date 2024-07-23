@@ -42,3 +42,25 @@ class VariableInstance {
         return "UniqueName"; // Simplified for example purposes
     }
 }
+
+// Idea bin
+
+// Inside MacroTools.hx
+package objects;
+
+import haxe.macro.Expr;
+import haxe.macro.Context;
+
+class MacroTools {
+    public static macro function registerVariableWithReflection(name:Expr):Expr {
+        // Macro logic here
+        // pls
+    }
+}
+
+public static function processVariableInstances():Array<Field> {
+    var fields = Context.getBuildFields();
+    // Logic... somewhere
+    return fields;
+}
+
