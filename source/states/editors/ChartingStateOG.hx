@@ -60,6 +60,17 @@ import backend.MusicBeatChartingState;
 
 class ChartingStateOG extends MusicBeatChartingState
 {
+	function onClosing(e:Event):Void {
+		var currentChartState = haxe.Json.stringify({"song": _song}); // Get current chart state as a string
+		var autosavedChartState = FlxG.save.data.autosave; // Assuming this is the autosaved state
+
+		if (currentChartState != autosavedChartState) {
+			e.preventDefault(); // Prevent closing
+			openSubState(new Prompt('This action will clear current progress.\n\nProceed?', 0, function(){Sys.exit(1);}, null,ignoreWarnings));
+		}
+	}
+
+	
 	public static var noteTypeList:Array<String> = // Used for backwards compatibility with 0.1 - 0.3.2 charts, though, you should add your hardcoded custom note types here too.
 	[	'',
 		'Alt Animation',

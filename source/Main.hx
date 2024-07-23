@@ -17,6 +17,7 @@ import backend.MemoryCounter;
 import haxe.ui.Toolkit;
 import backend.ImageCache;
 import backend.JSONCache;
+import openfl.events.NativeProcessExitEvent;
 #if linux
 import lime.graphics.Image;
 #end
@@ -221,6 +222,9 @@ class Main extends Sprite
 		DiscordClient.prepare();
 		#end
 
+		Lib.current.loaderInfo.addEventListener(NativeProcessExitEvent.EXIT, onClosing); // help-
+
+
 		// shader coords fix
 		FlxG.signals.gameResized.add(function(w, h)
 		{
@@ -278,6 +282,12 @@ class Main extends Sprite
 	}
 
 	public static var fpsCounter:FPS;
+
+	public static function onClosing(e:Event):Void
+	{
+		e.preventDefault();
+	trace("Closing...");
+	}
 
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
 	// very cool person for real they don't get enough credit for their work
