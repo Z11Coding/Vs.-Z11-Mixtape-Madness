@@ -1,37 +1,32 @@
 package playfields;
 
+import math.*;
 import flixel.math.FlxMath;
 import flixel.math.FlxAngle;
 import flixel.math.FlxPoint;
 import flixel.math.FlxMatrix;
 import flixel.util.FlxSort;
-import flixel.util.FlxDestroyUtil;
-import flixel.graphics.FlxGraphic;
-import flixel.system.FlxAssets.FlxShader;
-import math.Vector3;
-import math.VectorHelpers;
 import openfl.Vector;
 import openfl.geom.ColorTransform;
-import modchart.ModManager;
+import openfl.display.Shader;
+import flixel.graphics.FlxGraphic;
 import modchart.Modifier.RenderInfo;
-import states.PlayState;
-import backend.MusicBeatState;
-import haxe.ds.Vector as FastVector;
+import modchart.ModManager;
+import flixel.system.FlxAssets.FlxShader;
+import objects.NoteObject;
 
 using StringTools;
 
-@:structInit
-class RenderObject {
-	public var graphic:FlxGraphic;
-	public var shader:FlxShader;
-	public var alphas:Array<Float>;
-	public var glows:Array<Float>;
-	public var uvData:Vector<Float>;
-	public var vertices:Vector<Float>;
-	public var zIndex:Float;
+typedef RenderObject =
+{
+	graphic:FlxGraphic,
+	shader:Shader,
+	alphas:Array<Float>,
+	glows:Array<Float>,
+	uvData:Vector<Float>,
+	vertices:Vector<Float>,
+	zIndex:Float,
 }
-
-final scalePoint = new FlxPoint(1, 1);
 
 class NoteField extends FieldBase
 {
@@ -39,7 +34,6 @@ class NoteField extends FieldBase
 
 	public var holdSubdivisions:Int = Std.int(ClientPrefs.data.holdSubdivs) + 1;
 	public var optimizeHolds = ClientPrefs.data.optimizeHolds;
-	public var defaultShader:FlxShader = new FlxShader();
 
 	public function new(field:PlayField, modManager:ModManager)
 	{
@@ -78,8 +72,6 @@ class NoteField extends FieldBase
 
 	var curDecStep:Float = 0;
 	var curDecBeat:Float = 0;
-
-	final perspectiveArrDontUse:Array<String> = ['perspectiveDONTUSE'];
 
 	/**
 	 * The position of every receptor for a given frame.
@@ -129,8 +121,7 @@ class NoteField extends FieldBase
 		var drawMod = modManager.get("drawDistance");
 		var multAllowed = modManager.get("disableDrawDistMult");
 		var drawDist = drawMod == null ? FlxG.height : drawMod.getValue(modNumber);
-		if (multAllowed == null || multAllowed.getValue(modNumber) == 0)
-			drawDist *= drawDistMod;
+		if (multAllowed == null || multAllowed.getValue(modNumber) == 0)drawDist *= drawDistMod;
 		for (daNote in field.spawnedNotes)
 		{
 			if (!daNote.alive)
@@ -143,7 +134,7 @@ class NoteField extends FieldBase
 				var visPos = -((Conductor.visualPosition - daNote.visualTime) * speed);
 				if (visPos > drawDist)
 					continue;
-				if (daNote.wasGoodHit && daNote.sustainLength > 0)
+				if (daNote.wasGoodHit && daNote.tail.length > 0 && daNote.unhitTail.length > 0)
 				{
 					diff = 0;
 					visPos = 0;
@@ -151,7 +142,7 @@ class NoteField extends FieldBase
 				}
 				if (!daNote.isSustainNote)
 				{
-					var pos = modManager.getPos(visPos, diff, curDecBeat, daNote.column, modNumber, daNote, this, perspectiveArrDontUse,
+					var pos = modManager.getPos(visPos, diff, curDecBeat, daNote.column, modNumber, daNote, this, ['perspectiveDONTUSE'],
 						daNote.vec3Cache); // perspectiveDONTUSE is excluded because its code is done in the modifyVert function
 					notePos.set(daNote, pos);
 					taps.push(daNote);
@@ -163,14 +154,14 @@ class NoteField extends FieldBase
 			}
 		}
 
-		var lookupMap = new haxe.ds.ObjectMap<Dynamic, RenderObject>();
+		var lookupMap:Map<Any, RenderObject> = [];
 
 		// draw the receptors
 		for (obj in field.strumNotes)
 		{
 			if (!obj.alive || !obj.visible)
 				continue;
-			var pos = modManager.getPos(0, 0, curDecBeat, obj.column, modNumber, obj, this, perspectiveArrDontUse, obj.vec3Cache);
+			var pos = modManager.getPos(0, 0, curDecBeat, obj.column, modNumber, obj, this, ['perspectiveDONTUSE'], obj.vec3Cache);
 			strumPositions[obj.column] = pos;
 			var object = drawNote(obj, pos);
 			if (object == null)
@@ -186,11 +177,10 @@ class NoteField extends FieldBase
 		{
 			if (!note.alive || !note.visible)
 				continue;
-			var pos = notePos.get(note);
-			var object = drawNote(note, pos);
+			var object = drawNote(note, notePos.get(note));
 			if (object == null)
 				continue;
-			object.zIndex = pos.z + note.zIndex;
+			object.zIndex = notePos.get(note).z + note.zIndex;
 			lookupMap.set(note, object);
 			drawQueue.push(object);
 		}
@@ -208,13 +198,13 @@ class NoteField extends FieldBase
 			drawQueue.push(object);
 		}
 
+		/* //Maybe dont for now
 		// draw notesplashes
-		//...not right now...
-		/*for (obj in field.grpNoteSplashes.members)
+		for (obj in field.grpNoteSplashes.members)
 		{
 			if (!obj.alive || !obj.visible)
 				continue;
-			var pos = modManager.getPos(0, 0, curDecBeat, obj.column, modNumber, obj, this, perspectiveArrDontUse);
+			var pos = modManager.getPos(0, 0, curDecBeat, obj.column, modNumber, obj, this, ['perspectiveDONTUSE']);
 			var object = drawNote(obj, pos);
 			if (object == null)
 				continue;
@@ -230,7 +220,7 @@ class NoteField extends FieldBase
 				continue;
 			if (!obj.alive || !obj.visible)
 				continue;
-			var pos = modManager.getPos(0, 0, curDecBeat, obj.column, modNumber, obj, this, perspectiveArrDontUse);
+			var pos = modManager.getPos(0, 0, curDecBeat, obj.column, modNumber, obj, this, ['perspectiveDONTUSE']);
 			var object = drawNote(obj, pos);
 			if (object == null)
 				continue;
@@ -239,15 +229,11 @@ class NoteField extends FieldBase
 			drawQueue.push(object);
 		}
 
-		if ((FlxG.state is PlayState))
-		{
-			PlayState.instance.callOnScripts("notefieldPreDraw", [this]);
-			PlayState.instance.setOnScripts("drawQueue", drawQueue);
-			PlayState.instance.setOnScripts("lookupMap", lookupMap);
-		}
-		// lets you do custom rendering in scripts, if needed
+		/*if ((FlxG.state is PlayState))
+			PlayState.instance.callOnScripts("notefieldPreDraw", 
+		["drawQueue" => drawQueue, "lookupMap" => lookupMap]); // lets you do custom rendering in scripts, if needed
 		// one example would be reimplementing Die Batsards' original bullet mechanic
-		// if you need an example on how this all works just look at the tap note drawing portion
+		// if you need an example on how this all works just look at the tap note drawing portion*/
 
 		drawQueue.sort(function(Obj1:RenderObject, Obj2:RenderObject)
 		{
@@ -289,15 +275,11 @@ class NoteField extends FieldBase
 	var matrix:FlxMatrix = new FlxMatrix();
 	override function draw()
 	{
-		if (!active || !exists || !visible)
-			return; // dont draw if visible = false
 		super.draw();
 
-		if ((FlxG.state is PlayState))
-		{
-			PlayState.instance.callOnScripts("notefieldDraw", [this]);  // lets you do custom rendering in scripts, if needed
-			PlayState.instance.setOnScripts("drawQueue", drawQueue);
-		}
+		/*if ((FlxG.state is PlayState))
+			PlayState.instance.callOnHScripts("notefieldDraw",
+				["drawQueue" => drawQueue]); // lets you do custom rendering in scripts, if needed*/
 
 		var glowR = modManager.getValue("flashR", modNumber);
 		var glowG = modManager.getValue("flashG", modNumber);
@@ -310,18 +292,14 @@ class NoteField extends FieldBase
 			{
 				if (object == null)
 					continue;
-				var shader = object.shader;
-				var graphic = object.graphic;
+				var shader:Dynamic = object.shader;
+				var graphic:FlxGraphic = object.graphic;
 				var alphas = object.alphas;
 				var glows = object.glows;
 				var vertices = object.vertices;
 				var uvData = object.uvData;
-				var _indices = new FastVector<Int>(vertices.length);
-				for(i in 0...vertices.length)
-					_indices[i] = i;
-				var indices = new Vector<Int>(vertices.length, false, cast _indices);
-				var transforms:Array<ColorTransform> = []; // todo use fastvector
-				var multAlpha = this.alpha * 1;
+				var indices = new Vector<Int>(vertices.length, false, cast [for (i in 0...vertices.length) i]);
+				var transforms:Array<ColorTransform> = [];
 				for (n in 0... Std.int(vertices.length / 3)){
 					var glow = glows[n];
 					var transfarm:ColorTransform = new ColorTransform();
@@ -329,10 +307,10 @@ class NoteField extends FieldBase
 					transfarm.greenMultiplier = 1 - glow;
 					transfarm.blueMultiplier = 1 - glow;
 					transfarm.redOffset = glowR * glow * 255;
-					transfarm.greenOffset = glowG * glow * 255;
+					transfarm.greenOffset = glowG * glow * 255; 
 					transfarm.blueOffset = glowB * glow * 255;
 
-					transfarm.alphaMultiplier = alphas[n] * multAlpha;
+					transfarm.alphaMultiplier = alphas[n] * this.alpha * 1;
 					transforms.push(transfarm);
 				}
 
@@ -344,55 +322,54 @@ class NoteField extends FieldBase
 							continue;
 						for(shit in transforms)
 							shit.alphaMultiplier *= camera.alpha;
+						
 						getScreenPosition(point, camera);
-						var drawItem = camera.startTrianglesBatch(graphic, shader.bitmap.filter == LINEAR, true, null, true, shader);
-
+						var drawItem = camera.startTrianglesBatch(graphic, shader.bitmap.filter == 4, true, null, true, shader);
 						@:privateAccess
 						{
 							drawItem.addTrianglesColorArray(vertices, indices, uvData, null, point, camera._bounds, transforms);
 						}
 						for (n in 0...transforms.length)
-							transforms[n].alphaMultiplier = alphas[n] * multAlpha;
+							transforms[n].alphaMultiplier = alphas[n];
 					}
 				}
 			}
 		}
 	}
 
-	function getPoints(hold:Note, ?wid:Float, speed:Float, vDiff:Float, diff:Float):Array<Vector3>
+	function getPoints(hold:Note, ?wid:Float, speed:Float, vDiff:Float, diff:Float)
 	{ // stolen from schmovin'
 		if (wid == null)
 			wid = hold.frameWidth * hold.scale.x;
 
 		var p1 = modManager.getPos(-(vDiff) * speed, diff, curDecBeat, hold.column, modNumber, hold, this, []);
 		var z:Float = p1.z;
-		p1.z = 0.0;
-
-		wid /= 2.0;
-		var quad0 = new Vector3(-wid);
-		var quad1 = new Vector3(wid);
-		var scale:Float = z!=0.0 ? z : 1.0;
+		p1.z = 0;
+		var quad = [new Vector3((-wid / 2)), new Vector3((wid / 2))];
+		var scale:Float = 1;
+		if (z != 0)
+			scale = z;
 
 		if (optimizeHolds)
 		{
 			// less accurate, but higher FPS
-			scale = 1.0 / scale;
-			quad0.scaleBy(scale);
-			quad1.scaleBy(scale);
-			return [p1.add(quad0, quad0), p1.add(quad1, quad1), p1];
+			quad[0].scaleBy(1 / scale);
+			quad[1].scaleBy(1 / scale);
+			return [p1.add(quad[0]), p1.add(quad[1]), p1];
 		}
 
 		var p2 = modManager.getPos(-(vDiff + 1) * speed, diff + 1, curDecBeat, hold.column, modNumber, hold, this, []);
 		p2.z = 0;
-
 		var unit = p2.subtract(p1);
 		unit.normalize();
 
-		var w = (quad0.subtract(quad1).length / 2) / scale;
-		var off1 = new Vector3(unit.y * w, 	-unit.x * w,	0.0);
-		var off2 = new Vector3(-off1.x, 	-off1.y,		0.0);
+		var w = (quad[0].subtract(quad[1]).length / 2) / scale;
 
-		return [p1.add(off1, off1), p1.add(off2, off2), p1];
+		var off1 = new Vector3(unit.y, -unit.x);
+		var off2 = new Vector3(-unit.y, unit.x);
+		off1.scaleBy(w);
+		off2.scaleBy(w);
+		return [p1.add(off1), p1.add(off2), p1];
 	}
 
     
@@ -403,6 +380,11 @@ class NoteField extends FieldBase
 			return null;
 		if (hold.scale == null)
 			return null;
+
+		var verts = [];
+		var uv = [];
+		var alphas:Array<Float> = [];
+		var glows:Array<Float> = [];
 
 		var render = false;
 		for (camera in cameras)
@@ -415,45 +397,33 @@ class NoteField extends FieldBase
 		}
 		if (!render)
 			return null;
-
-		var verts:Array<Float> = [];
-		var uv:Array<Float> = [];
-		var alphas:Array<Float> = [];
-		var glows:Array<Float> = [];
-
-		inline function addVert(vert:Float) {
-			verts.push(vert);
-		}
-		inline function addVert2(vert:Float, vert2:Float) {
-			verts.push(vert);
-			verts.push(vert2);
-		}
-
 		var lastMe = null;
 
 		var tWid = hold.frameWidth * hold.scale.x;
-		var bWid = (
+		var bWid = (function()
+		{
 			if (hold.prevNote != null && hold.prevNote.scale != null && hold.prevNote.isSustainNote)
-				hold.prevNote.frameWidth * hold.prevNote.scale.x
+				return hold.prevNote.frameWidth * hold.prevNote.scale.x;
 			else
-				tWid
-		);
+				return tWid;
+		})();
 
-		var basePos = modManager.getPos(0, 0, curDecBeat, hold.column, modNumber, hold, this, perspectiveArrDontUse);
+		var basePos = modManager.getPos(0, 0, curDecBeat, hold.column, modNumber, hold, this, ['perspectiveDONTUSE']);
 
 		var strumDiff = (Conductor.songPosition - hold.strumTime);
 		var visualDiff = (Conductor.visualPosition - hold.visualTime); // TODO: get the start and end visualDiff and interpolate so that changing speeds mid-hold will look better
 		var zIndex:Float = basePos.z;
 		var sv = PlayState.instance.getSV(hold.strumTime).speed;
+		var scalePoint = FlxPoint.weak(1, 1);
 
 		for (sub in 0...holdSubdivisions)
 		{
 			var prog = sub / (holdSubdivisions + 1);
 			var nextProg = (sub + 1) / (holdSubdivisions + 1);
-			var strumSub = (crotchet / holdSubdivisions);
+			var strumSub = crotchet / holdSubdivisions;
 			var strumOff = (strumSub * sub);
+			strumOff *= sv;
 			strumSub *= sv;
-            strumOff *= sv;
 			var scale:Float = 1;
 			var fuck = strumDiff;
 
@@ -478,9 +448,12 @@ class NoteField extends FieldBase
 				glow: 0,
 				scale: scalePoint
 			}, hold, modNumber, hold.column);
-
+			
 			var topWidth = FlxMath.lerp(tWid, bWid, prog) * scalePoint.x;
 			var botWidth = FlxMath.lerp(tWid, bWid, nextProg) * scalePoint.x;
+
+			
+
 
 			for (_ in 0...Note.ammo[PlayState.mania])
 			{
@@ -493,16 +466,9 @@ class NoteField extends FieldBase
 
 			lastMe = bot;
 
-			//var quad:Array<Vector3> = [top[0], top[1], bot[0], bot[1]];
+			var quad:Array<Vector3> = [top[0], top[1], bot[0], bot[1]];
 
-			addVert2(top[0].x, top[0].y);
-			addVert2(top[1].x, top[1].y);
-			addVert2(bot[1].x, bot[1].y);
-			addVert2(top[0].x, top[0].y);
-			addVert2(bot[0].x, bot[0].y);
-			addVert2(bot[1].x, bot[1].y);
-
-			/*verts = verts.concat([
+			verts = verts.concat([
 				quad[0].x, quad[0].y,
 				quad[1].x, quad[1].y,
 				quad[3].x, quad[3].y,
@@ -510,14 +476,14 @@ class NoteField extends FieldBase
 				quad[0].x, quad[0].y,
 				quad[2].x, quad[2].y,
 				quad[3].x, quad[3].y
-			]);*/
-			uv = uv.concat(getUV(hold, false, sub)); // TODO: optimize this
+			]);
+			uv = uv.concat(getUV(hold, false, sub));
 		}
 
 		var vertices = new Vector<Float>(verts.length, false, cast verts);
 		var uvData = new Vector<Float>(uv.length, false, uv);
 
-		var shader = hold.shader != null ? hold.shader : defaultShader;
+		var shader = hold.shader != null ? hold.shader : new FlxShader();
 		if (shader != hold.shader)
 			hold.shader = shader;
 
@@ -539,13 +505,10 @@ class NoteField extends FieldBase
 	{
 		// i cant be bothered
 		// code by 4mbr0s3 2 (Schmovin')
-		var frameRect = sprite.frame.frame;
-		var sourceBitmap = sprite.graphic.bitmap;
-
-		var leftX = frameRect.left / sourceBitmap.width;
-		var topY = frameRect.top / sourceBitmap.height;
-		var rightX = frameRect.right / sourceBitmap.width;
-		var height = frameRect.height / sourceBitmap.height;
+		var leftX = sprite.frame.frame.left / sprite.graphic.bitmap.width;
+		var topY = sprite.frame.frame.top / sprite.graphic.bitmap.height;
+		var rightX = sprite.frame.frame.right / sprite.graphic.bitmap.width;
+		var height = sprite.frame.frame.height / sprite.graphic.bitmap.height;
 
 		if (!flipY)
 			sub = (holdSubdivisions - 1) - sub;
@@ -589,18 +552,16 @@ class NoteField extends FieldBase
 		if (!render)
 			return null;
 
-		var isNote = (sprite is Note);
-		var note:Note = isNote ? cast sprite : null;
-
 		var width = sprite.frameWidth * sprite.scale.x;
 		var height = sprite.frameHeight * sprite.scale.y;
-		scalePoint.set(1, 1);
+		var scalePoint = FlxPoint.weak(1, 1);
 		var diff:Float =0;
 		var visPos:Float = 0;
-		if(isNote) {
-			var speed = modManager.getNoteSpeed(note, modNumber, songSpeed);
-			diff = Conductor.songPosition - note.strumTime;
-			visPos = -((Conductor.visualPosition - note.visualTime) * speed);
+		if((sprite is Note)){
+			var daNote:Note = cast sprite;
+			var speed = modManager.getNoteSpeed(daNote, modNumber, songSpeed);
+			diff = Conductor.songPosition - daNote.strumTime;
+			visPos = -((Conductor.visualPosition - daNote.visualTime) * speed);
 		}
 
 		var info:RenderInfo = modManager.getExtraInfo(visPos, diff, curDecBeat, {
@@ -612,107 +573,111 @@ class NoteField extends FieldBase
 		var alpha = info.alpha;
 		var glow = info.glow;
 
-		final QUAD_SIZE = 4;
-		var quad0 = new Vector3(-width / 2, -height / 2, 0); // top left
-		var quad1 = new Vector3(width / 2, -height / 2, 0); // top right
-		var quad2 = new Vector3(-width / 2, height / 2, 0); // bottom left
-		var quad3 = new Vector3(width / 2, height / 2, 0); // bottom right
+		var quad = [
+			new Vector3(-width / 2, -height / 2, 0), // top left
+			new Vector3(width / 2, -height / 2, 0), // top right
+			new Vector3(-width / 2, height / 2, 0), // bottom left
+			new Vector3(width / 2, height / 2, 0) // bottom right
+		];
 
-		for (idx in 0...QUAD_SIZE)
+		
+		for (idx => vert in quad)
 		{
-			var quad = switch(idx) {
-				case 0: quad0;
-				case 1: quad1;
-				case 2: quad2;
-				case 3: quad3;
-				default: null;
-			};
-			var vert = VectorHelpers.rotateV3(quad, 0, 0, FlxAngle.TO_RAD * sprite.angle);
-			vert.x = vert.x + sprite.offsetX;
-			vert.y = vert.y + sprite.offsetY;
+			var vert = VectorHelpers.rotateV3(vert, 0, 0, FlxAngle.TO_RAD * sprite.angle);
+			vert.x += sprite.offsetX;
+			vert.y += sprite.offsetY;
 
-			if (isNote)
+			if ((sprite is Note))
 			{
-				vert.x = vert.x + note.typeOffsetX;
-				vert.y = vert.y + note.typeOffsetY;
+				var n:Note = cast sprite;
+				vert.x += n.typeOffsetX;
+				vert.y += n.typeOffsetY;
 			}
+        
 
 			vert = modManager.modifyVertex(curDecBeat, vert, idx, sprite, pos, modNumber, sprite.column, this);
 
-			vert.x = vert.x * scalePoint.x;
-			vert.y = vert.y * scalePoint.y;
+			/*vert.x *= scalePoint.x;
+			vert.y *= scalePoint.y;
 
 /* 			vert.x *= zoom;
-			vert.y *= zoom; */
+			vert.y *= zoom; 
 			if (sprite.flipX)
-				vert.x = -vert.x;
+				vert.x *= -1;
 			if (sprite.flipY)
-				vert.y = -vert.x;
-			//quad[idx] = vert;
-			quad.setTo(vert.x, vert.y, vert.z);
+				vert.y *= -1;
+			quad[idx] = vert;*/
 		}
 
-		var frameRect = sprite.frame.frame;
-		var sourceBitmap = sprite.graphic.bitmap;
+		//+scalePoint.putWeak();
 
-		var leftUV = frameRect.left / sourceBitmap.width;
-		var rightUV = frameRect.right / sourceBitmap.width;
-		var topUV = frameRect.top / sourceBitmap.height;
-		var bottomUV = frameRect.bottom / sourceBitmap.height;
-
-		// order should be LT, RT, RB, LT, LB, RB
-		// R is right L is left T is top B is bottom
-		// order matters! so LT is left, top because they're represented as x, y
-		var vertices = new Vector<Float>(12, false, [
-			pos.x + quad0.x, pos.y + quad0.y,
-			pos.x + quad1.x, pos.y + quad1.y,
-			pos.x + quad3.x, pos.y + quad3.y,
-
-			pos.x + quad0.x, pos.y + quad0.y,
-			pos.x + quad2.x, pos.y + quad2.y,
-			pos.x + quad3.x, pos.y + quad3.y
-		]);
-
-		var uvData = new Vector<Float>(12, false, [
-			 leftUV,    topUV,
-			rightUV,    topUV,
-			rightUV, bottomUV,
-
-			 leftUV,    topUV,
-			 leftUV, bottomUV,
-			rightUV, bottomUV,
-		]);
-
-		var shader = sprite.shader != null ? sprite.shader : defaultShader;
-		if (shader != sprite.shader)
-			sprite.shader = shader;
-
-		shader.bitmap.input = sprite.graphic.bitmap;
-		shader.bitmap.filter = sprite.antialiasing ? LINEAR : NEAREST;
-
-		final totalTriangles = Std.int(vertices.length / 3);
-		var alphas = new FastVector<Float>(totalTriangles);
-		var glows = new FastVector<Float>(totalTriangles);
-		for (i in 0...totalTriangles)
+		try
 		{
-			alphas[i] = alpha;
-			glows[i] = glow;
-		}
+			var frameRect = sprite.frame.frame;
+			var sourceBitmap = sprite.graphic.bitmap;
 
-		return {
-			graphic: sprite.graphic,
-			shader: shader,
-			alphas: cast alphas,
-			glows: cast glows,
-			uvData: uvData,
-			vertices: vertices,
-			zIndex: pos.z
+			var leftUV = frameRect.left / sourceBitmap.width;
+			var rightUV = frameRect.right / sourceBitmap.width;
+			var topUV = frameRect.top / sourceBitmap.height;
+			var bottomUV = frameRect.bottom / sourceBitmap.height;
+
+			// order should be LT, RT, RB, LT, LB, RB
+			// R is right L is left T is top B is bottom
+			// order matters! so LT is left, top because they're represented as x, y
+			var vertices = new Vector<Float>(12, false, [
+				pos.x + quad[0].x, pos.y + quad[0].y,
+				pos.x + quad[1].x, pos.y + quad[1].y,
+				pos.x + quad[3].x, pos.y + quad[3].y,
+
+				pos.x + quad[0].x, pos.y + quad[0].y,
+				pos.x + quad[2].x, pos.y + quad[2].y,
+				pos.x + quad[3].x, pos.y + quad[3].y
+			]);
+
+			var uvData = new Vector<Float>(12, false, [
+				leftUV,    topUV,
+				rightUV,    topUV,
+				rightUV, bottomUV,
+
+				leftUV,    topUV,
+				leftUV, bottomUV,
+				rightUV, bottomUV,
+			]);
+
+			var shader = sprite.shader != null ? sprite.shader : new FlxShader();
+			if (shader != sprite.shader)
+				sprite.shader = shader;
+
+			shader.bitmap.input = sprite.graphic.bitmap;
+			shader.bitmap.filter = sprite.antialiasing ? LINEAR : NEAREST;
+
+			return {
+				graphic: sprite.graphic,
+				shader: shader,
+				alphas: [for (i in 0...Std.int(vertices.length / 3))alpha],
+				glows: [for (i in 0...Std.int(vertices.length / 3)) glow],
+				uvData: uvData,
+				vertices: vertices,
+				zIndex: pos.z
+			}
+		}
+		catch(e)
+		{
+			var len:Int = e.message.indexOf('\n') + 1;
+			if(len <= 0) len = e.message.length;
+			#if windows
+			lime.app.Application.current.window.alert('ERROR: ' + e.message.substr(0, len), 'Error Loading!');
+			Sys.exit(0);
+			#else
+			throw 'Error: '+e;
+			#end
+			return null;
 		}
 	}
 
 	override function destroy()
 	{
-		point = FlxDestroyUtil.put(point);
+		point.put();
 		super.destroy();
 	}
 }
