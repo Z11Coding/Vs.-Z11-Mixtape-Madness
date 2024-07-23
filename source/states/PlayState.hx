@@ -651,16 +651,19 @@ class PlayState extends MusicBeatState
 		{
 			if (SONG.song == 'Fangirl Frenzy' && !seenCutscene)
 			{
+				trace('Loaded Fangirl Frenzy Cutscene!');
 				startCallback = fanfrenOpenPrep;	
 				endCallback = endSong;
 			}
 			else if (SONG.song == 'Funky Fanta' && !seenCutscene)
 			{
+				trace('Loaded Funky Fanta Cutscene!');
 				startCallback = ffOpenPrep;
 				endCallback = endSong;
 			}
 			else
 			{
+				trace('Loaded Normal Countdown!');
 				startCallback = startCountdown;
 				endCallback = endSong;
 			}
@@ -1542,6 +1545,7 @@ class PlayState extends MusicBeatState
 		if (!CacheMode && SONG != null)
 		{
 			startCallback();
+			trace('Loading Callback!');
 			RecalculateRating();
 			if (AIPlayer.active)
 				RecalculateRatingAI();
@@ -2300,25 +2304,6 @@ class PlayState extends MusicBeatState
 			modManager.registerDefaultModifiers();
 			callOnScripts('postModifierRegister'); // deprecated
 			callOnScripts('onModifierRegisterPost');
-			/* 
-				for (i in 0...playerStrums.length) {
-					setOnLuas('defaultPlayerStrumX' + i, playerStrums.members[i].x);
-					setOnLuas('defaultPlayerStrumY' + i, playerStrums.members[i].y);
-				}
-				for (i in 0...opponentStrums.length) {
-					setOnLuas('defaultOpponentStrumX' + i, opponentStrums.members[i].x);
-					setOnLuas('defaultOpponentStrumY' + i, opponentStrums.members[i].y);
-					//if(ClientPrefs.middleScroll) opponentStrums.members[i].visible = false;
-				}
-				if (threeLanes)
-				{
-					for (i in 0...opponentStrums2.length) {
-						setOnLuas('defaultOpponent2StrumX' + i, opponentStrums2.members[i].x);
-						setOnLuas('defaultOpponent2StrumY' + i, opponentStrums2.members[i].y);
-						//if(ClientPrefs.middleScroll) opponentStrums2.members[i].visible = false;
-					}
-				}
-			 */
 
 			startedCountdown = true;
 			countActive = true;

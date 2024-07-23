@@ -72,6 +72,7 @@ class ModManager {
 			PathModifier,
 			AccelModifier,
 			PerspectiveModifier,
+			ReceptorScrollModifier,
 			ZoomModifier
 		];
 		for (mod in quickRegs)

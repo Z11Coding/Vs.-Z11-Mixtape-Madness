@@ -256,6 +256,9 @@ class VSlice
 				newVoiceStyle: false,
 				speed: scrollSpeed,
 				offset: 0,
+
+				mania: Note.defaultMania,
+				startMania: Note.defaultMania,
 			
 				player1: metadata.playData.characters.player,
 				player2: metadata.playData.characters.opponent,
@@ -263,12 +266,12 @@ class VSlice
 				player5: null,
 				gfVersion: metadata.playData.characters.girlfriend,
 				stage: stage,
-				format: 'psych_v1_convert'
+				format: 'mixtape_v1_convert'
 			}
 
 			Reflect.setField(swagSong, 'artist', metadata.artist);
 			Reflect.setField(swagSong, 'charter', metadata.charter);
-			Reflect.setField(swagSong, 'generatedBy', 'Psych Engine v${MainMenuState.psychEngineVersion} - Chart Editor V-Slice Importer');
+			Reflect.setField(swagSong, 'generatedBy', 'Mixtape Engine v${MainMenuState.psychEngineVersion} - Chart Editor V-Slice Importer');
 			songDifficulties.set(diff, swagSong);
 		}
 		var pack:PsychPackage = {difficulties: songDifficulties, events: null};
@@ -333,7 +336,7 @@ class VSlice
 		}
 
 		var notes:Array<VSliceNote> = [];
-		var generatedBy:String = 'Psych Engine v${MainMenuState.psychEngineVersion} - Chart Editor V-Slice Exporter';
+		var generatedBy:String = 'Mixtape Engine v${MainMenuState.psychEngineVersion} - Chart Editor V-Slice Exporter';
 		var timeChanges:Array<VSliceTimeChange> = [];
 
 		var time:Float = 0;

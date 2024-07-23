@@ -29,6 +29,8 @@ typedef SwagSong =
 	var stage:String;
 	var format:String;
 
+	var mania:Int;
+	var startMania:Int;
 
 	@:optional var gameOverChar:String;
 	@:optional var gameOverSound:String;
@@ -39,9 +41,6 @@ typedef SwagSong =
 
 	@:optional var arrowSkin:String;
 	@:optional var splashSkin:String;
-
-	@:optional var mania:Int;
-	@:optional var startMania:Int;
 
 	@:optional var extraTracks:Array<String>;
 }
