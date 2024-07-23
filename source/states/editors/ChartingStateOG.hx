@@ -117,7 +117,9 @@ class ChartingStateOG extends MusicBeatChartingState
 		["Constant SV", "Speed changes which don't affect note positions.\n(For example, a speed of 0 stops notes\ninstead of making them go onto the receptors.)\nValue 1: New Speed"],
 		["Mult SV", "Speed changes which don't affect note positions.\n(For example, a speed of 0 stops notes\ninstead of making them go onto the receptors.)\nValue 1: Speed Multiplier"],
 		['Set Property', "Value 1: Variable name\nValue 2: New value"],
+		['Play Sound', "Value 1: Sound file name\nValue 2: Volume (Default: 1), ranges from 0 to 1"],
 		['Change Mania', "Value 1: The new mania value (min: 0; max: 9)"],
+		['Change Mania (Special)', "Value 1: The new mania value (min: 0; max: 9)"],
 		['Super Burst', "Funnie Powerup"],
 		['Burst Dad', "Funnie Dad Burst"],
 		['Burst Boyfriend', "Funnie BF Burst"],
@@ -146,10 +148,8 @@ class ChartingStateOG extends MusicBeatChartingState
 		['Enable or Disable Dad Trail', 'Can be either true or false.\nDon\'t ask what it does, you already know.'],
 		['Enable or Disable BF Trail', 'Can be either true or false.\nDon\'t ask what it does, you already know.'],
 		['Enable or Disable GF Trail', 'Can be either true or false.\nDon\'t ask what it does, you already know.'],
-		['bgGlitch', 'Value 1: Alpha, Value 2: Time'],
 		['window shake', 'Value 1: How Much (Ex: 12,12), Value 2: How Long'],
-		['void anim', 'Value 1: Name of animation. \nCan Be:"succ", "stunned" or "defeat"'],
-		['Chat', 'Be the first to start the conversation!\nValue 1: The text to display in chat\nValue 2: Make the text red, yellow or rainbow\n(EX: false (set true for red), false (set true for yellow), false (set true for rainbow)\nSetting all of them to true wont do anything'],
+
 	];
 
 	var _file:FileReference;

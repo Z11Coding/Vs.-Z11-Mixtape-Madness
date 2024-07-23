@@ -112,6 +112,7 @@ class LanguageSubState extends MusicBeatSubstate
 				FlxTransitionableState.skipNextTransIn = true;
 				FlxTransitionableState.skipNextTransOut = true;
 				MusicBeatState.resetState();
+				MusicBeatState.reopen = false;
 			}
 			else close();
 			FlxG.sound.play(Paths.sound('cancelMenu'));

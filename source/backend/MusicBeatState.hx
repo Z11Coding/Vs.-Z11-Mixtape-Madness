@@ -36,7 +36,7 @@ class MusicBeatState extends FlxState
 		if(!skip) {
 			openSubState(new CustomFadeTransition(0.6, true));
 		}
-		if (reopen)
+		if (reopen && !skip)
 		{
 			reopen = false;
 			openSubState(emptyStickers);

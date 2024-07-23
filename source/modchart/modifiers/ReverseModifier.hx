@@ -24,7 +24,7 @@ class ReverseModifier extends NoteModifier
 		return false;
 
     public function getReverseValue(dir:Int, player:Int){
-        var kNum = 4;
+        var kNum = Note.ammo[PlayState.mania];
         var val:Float = 0;
         if(dir>=kNum * 0.5)
             val += getSubmodValue("split" ,player);
