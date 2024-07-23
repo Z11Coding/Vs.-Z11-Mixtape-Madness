@@ -1263,7 +1263,6 @@ class PlayState extends MusicBeatState
 		if (!CacheMode) {
 			if (chartModifier == "Normal") {
 				if (!songCache.exists(SONG)) {
-					trace("Loading song normally");
 					generateSong(SONG.song);
 				} else {
 					trace("Loading song from cache: " + SONG.song);
@@ -1545,7 +1544,6 @@ class PlayState extends MusicBeatState
 		if (!CacheMode && SONG != null)
 		{
 			startCallback();
-			trace('Loading Callback!');
 			RecalculateRating();
 			if (AIPlayer.active)
 				RecalculateRatingAI();

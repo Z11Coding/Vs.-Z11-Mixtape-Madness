@@ -73,6 +73,8 @@ class NoteField extends FieldBase
 	var curDecStep:Float = 0;
 	var curDecBeat:Float = 0;
 
+	final perspectiveArrDontUse:Array<String> = ['perspectiveDONTUSE'];
+
 	/**
 	 * The position of every receptor for a given frame.
 	 */
@@ -142,7 +144,7 @@ class NoteField extends FieldBase
 				}
 				if (!daNote.isSustainNote)
 				{
-					var pos = modManager.getPos(visPos, diff, curDecBeat, daNote.column, modNumber, daNote, this, ['perspectiveDONTUSE'],
+					var pos = modManager.getPos(visPos, diff, curDecBeat, daNote.column, modNumber, daNote, this, perspectiveArrDontUse,
 						daNote.vec3Cache); // perspectiveDONTUSE is excluded because its code is done in the modifyVert function
 					notePos.set(daNote, pos);
 					taps.push(daNote);
@@ -161,7 +163,7 @@ class NoteField extends FieldBase
 		{
 			if (!obj.alive || !obj.visible)
 				continue;
-			var pos = modManager.getPos(0, 0, curDecBeat, obj.column, modNumber, obj, this, ['perspectiveDONTUSE'], obj.vec3Cache);
+			var pos = modManager.getPos(0, 0, curDecBeat, obj.column, modNumber, obj, this, perspectiveArrDontUse, obj.vec3Cache);
 			strumPositions[obj.column] = pos;
 			var object = drawNote(obj, pos);
 			if (object == null)
@@ -220,7 +222,7 @@ class NoteField extends FieldBase
 				continue;
 			if (!obj.alive || !obj.visible)
 				continue;
-			var pos = modManager.getPos(0, 0, curDecBeat, obj.column, modNumber, obj, this, ['perspectiveDONTUSE']);
+			var pos = modManager.getPos(0, 0, curDecBeat, obj.column, modNumber, obj, this, perspectiveArrDontUse);
 			var object = drawNote(obj, pos);
 			if (object == null)
 				continue;
@@ -408,7 +410,7 @@ class NoteField extends FieldBase
 				return tWid;
 		})();
 
-		var basePos = modManager.getPos(0, 0, curDecBeat, hold.column, modNumber, hold, this, ['perspectiveDONTUSE']);
+		var basePos = modManager.getPos(0, 0, curDecBeat, hold.column, modNumber, hold, this, perspectiveArrDontUse);
 
 		var strumDiff = (Conductor.songPosition - hold.strumTime);
 		var visualDiff = (Conductor.visualPosition - hold.visualTime); // TODO: get the start and end visualDiff and interpolate so that changing speeds mid-hold will look better
@@ -597,19 +599,19 @@ class NoteField extends FieldBase
 
 			vert = modManager.modifyVertex(curDecBeat, vert, idx, sprite, pos, modNumber, sprite.column, this);
 
-			/*vert.x *= scalePoint.x;
+			vert.x *= scalePoint.x;
 			vert.y *= scalePoint.y;
 
-/* 			vert.x *= zoom;
-			vert.y *= zoom; 
+			vert.x *= zoom;
+			vert.y *= zoom;
 			if (sprite.flipX)
 				vert.x *= -1;
 			if (sprite.flipY)
 				vert.y *= -1;
-			quad[idx] = vert;*/
+			quad[idx] = vert;
 		}
 
-		//+scalePoint.putWeak();
+		scalePoint.putWeak();
 
 		try
 		{

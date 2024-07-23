@@ -63,10 +63,15 @@ class FreeplayState extends MusicBeatState
 
 	var songChoices:Array<String> = [];
 	var listChoices:Array<String> = [];
+	var multiSongs:Array<String> = ["resistance", "resistalovania"];
 
 	public static var archipelago:Bool = false;
 
 	public static var curUnlocked:Array<String> = ['Tutorial'];
+	
+	public static var doChange:Bool = false;
+	
+	public static var multisong:Bool = false;
 	
 	var rankTable:Array<String> = [
 		'P-small', 'X-small', 'X--small', 'SS+-small', 'SS-small', 'SS--small', 'S+-small', 'S-small', 'S--small', 'A+-small', 'A-small', 'A--small',
@@ -76,7 +81,7 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
-		curSelected = 0;
+		curSelected = 0; //so it doesn't do weird things. might rework later
 		//Paths.clearStoredMemory();
 		//Paths.clearUnusedMemory();
 		
@@ -190,7 +195,6 @@ class FreeplayState extends MusicBeatState
 		//searchBar.blend = BlendMode.DARKEN;
 		blockPressWhileTypingOn.push(searchBar);
 		FlxG.mouse.visible = true;
-		FlxG.mouse.useSystemCursor = true;
 
 		scoreText = new FlxText(FlxG.width * 0.7, 5, 0, "", 32);
 		scoreText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, RIGHT);
@@ -228,7 +232,7 @@ class FreeplayState extends MusicBeatState
 		missingText.visible = false;
 		add(missingText);
 
-		if(curSelected >= songs.length) curSelected = 0;
+		if(curSelected >= songs.length) curSelected = songs.length;
 		try {
 			bg.color = songs[curSelected].color;
 			intendedColor = bg.color;
@@ -278,7 +282,11 @@ class FreeplayState extends MusicBeatState
 	}
 
 	override function closeSubState() {
-		changeSelection(0, false);
+		if (doChange) 
+		{
+			changeSelection(0, false);
+			doChange = false;
+		}
 		persistentUpdate = true;
 		super.closeSubState();
 	}
@@ -626,8 +634,7 @@ class FreeplayState extends MusicBeatState
 					trace('Couldnt find file');
 				}*/
 				trace(poop);
-				var multisong = false;
-				if (songLowercase == 'resistance')
+				for (i in multiSongs)
 				{
 					if (songLowercase == i)
 					{
