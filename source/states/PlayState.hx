@@ -6549,7 +6549,7 @@ case "Skip":
 							else if (prevNote2 != null && allNotes[i].isSustainNote) allNotes[i].noteData = prevNote2.noteData;
 						}
 					}
-					changeMania(newMania, skipTween);
+					changeMania(newMania, skipTween, true);
 	
 
 			case 'Super Burst':
