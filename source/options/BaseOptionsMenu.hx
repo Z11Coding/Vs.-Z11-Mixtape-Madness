@@ -171,6 +171,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
                 close();
                 FlxG.sound.play(Paths.sound('cancelMenu'));
             }
+			curSelected = 0;
         }
 
         if (nextAccept <= 0) {

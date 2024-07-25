@@ -223,6 +223,10 @@ class Main extends Sprite
 		#end
 
 		Lib.current.loaderInfo.addEventListener(NativeProcessExitEvent.EXIT, onClosing); // help-
+		stage.window.onDropFile.add (function (path:String) {
+			trace ("user dropped file with path: " + path);
+
+		 });
 
 
 		// shader coords fix
