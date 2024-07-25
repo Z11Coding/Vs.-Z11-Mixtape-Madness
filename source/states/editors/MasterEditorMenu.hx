@@ -141,7 +141,7 @@ class MasterEditorMenu extends MusicBeatState
 						options = dialogueChoices;
 						regenMenu();
 					case 'Character Editor':
-						MusicBeatState.switchState(new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
+						FlxG.switchState(new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
 					case 'Stage Editor':
 						MusicBeatState.switchState(new StageEditorState());
 					case 'Week Editor':

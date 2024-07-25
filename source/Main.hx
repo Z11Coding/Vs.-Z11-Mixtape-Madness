@@ -289,8 +289,8 @@ class Main extends Sprite
 
 	public static function onClosing(e:Event):Void
 	{
-		e.preventDefault();
-	trace("Closing...");
+			e.preventDefault();
+		trace("Closing...");
 	}
 
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
