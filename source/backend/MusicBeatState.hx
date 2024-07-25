@@ -46,7 +46,7 @@ class MusicBeatState extends FlxState
 	}
 
 	public static var emptyStickers:StickerSubState = null;
-	public static var reopen:Bool = false;
+	public static var reopen:Bool = true;
 	public function initPsychCamera():PsychCamera
 	{
 		var camera = new PsychCamera();
@@ -215,7 +215,7 @@ class MusicBeatState extends FlxState
 		}
 	}
 
-	public static function switchState(nextState:FlxState = null) {
+	public static function switchState(nextState:FlxState = null, noStick:Bool = false) {
 		if(nextState == null) nextState = FlxG.state;
 		if(nextState == FlxG.state)
 		{
@@ -225,7 +225,7 @@ class MusicBeatState extends FlxState
 		
 
 
-
+		MusicBeatState.reopen = !noStick;
 		if(FlxTransitionableState.skipNextTransIn) {FlxG.switchState(nextState); FlxTransitionableState.skipNextTransIn = false;}
 		else 
 		{
@@ -239,7 +239,8 @@ class MusicBeatState extends FlxState
 						var chance:Float;
 						if (transition == "stickers") {
 							// Assign a random chance between 70% and 100% for "stickers"
-							chance = 70 + Math.random() * 30;
+							if (!noStick) chance = 70 + Math.random() * 30;
+							else chance = 0;
 						} else {
 							// Assign a random chance between 1% and 5% for other transitions
 							chance = 1 + Math.random() * 4;

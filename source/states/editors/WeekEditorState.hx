@@ -762,7 +762,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 			super.update(elapsed);
 			FlxTransitionableState.skipNextTransIn = true;
 			FlxTransitionableState.skipNextTransOut = true;
-			MusicBeatState.switchState(new WeekEditorFreeplayState(WeekEditorState.loadedWeek));
+			MusicBeatState.switchState(new WeekEditorFreeplayState(WeekEditorState.loadedWeek), true);
 			WeekEditorState.loadedWeek = null;
 			return;
 		}
