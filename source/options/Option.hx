@@ -40,6 +40,7 @@ class Option
 		this.variable = variable;
 		this.type = type;
 		this.options = options;
+		this.onChange = onChange;
 
 		if(this.type != 'keybind') this.defaultValue = Reflect.getProperty(ClientPrefs.defaultData, variable);
 		switch(type)
