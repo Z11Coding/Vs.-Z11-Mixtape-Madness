@@ -18,6 +18,7 @@ class CacheSettings extends BaseOptionsMenu
 		var option:Option = new Option('Experimental Caching',
 			"If checked, Experimental Caching Will Be Enabled. Allows saving the Cache to the next session.", 'experimentalCaching', 'bool', null, FlxG.resetState);
 		addOption(option);
+		option.onChange = FlxG.resetState;
 
 		var experimentalCachingEnabled:Bool = ClientPrefs.data.experimentalCaching;
 		var saveCacheOption:Option = new Option('Save Cache',

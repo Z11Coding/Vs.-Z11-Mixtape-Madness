@@ -157,7 +157,7 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 	{
 		super.changeSelection(change);
 		if(noteOptionID < 0) return;
-		boyfriend.visible = (antialiasingOption == curSelected);
+		boyfriend.visible = (antialiasingOption == BaseOptionsMenu.curSelected);
 
 	}
 

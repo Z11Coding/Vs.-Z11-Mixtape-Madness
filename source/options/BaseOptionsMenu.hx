@@ -13,7 +13,7 @@ import backend.InputFormatter;
 class BaseOptionsMenu extends MusicBeatSubstate
 {
 	private var curOption:Option = null;
-	private var curSelected:Int = 0;
+	private static var curSelected:Int = 0;
 	private var optionsArray:Array<Option>;
 
 	private var grpOptions:FlxTypedGroup<Alphabet>;
@@ -69,41 +69,49 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		descText.borderSize = 2.4;
 		add(descText);
 
-		for (i in 0...optionsArray.length)
-		{
-			var optionText:Alphabet = new Alphabet(290, 260, optionsArray[i].name, false);
-			optionText.isMenuItem = true;
-			/*optionText.forceX = 300;
-			optionText.yMult = 90;*/
-			optionText.targetY = i;
-			grpOptions.add(optionText);
+        for (i in 0...optionsArray.length) {
+            var optionText:Alphabet = new Alphabet(290, 260, optionsArray[i].name, false);
+            optionText.isMenuItem = true;
+            optionText.targetY = i;
+            grpOptions.add(optionText);
 
-			if(optionsArray[i].type == 'bool')
-			{
-				var checkbox:CheckboxThingie = new CheckboxThingie(optionText.x - 105, optionText.y, Std.string(optionsArray[i].getValue()) == 'true');
-				checkbox.sprTracker = optionText;
-				checkbox.ID = i;
-				checkboxGroup.add(checkbox);
-			}
-			else
-			{
-				optionText.x -= 80;
-				optionText.startPosition.x -= 80;
-				//optionText.xAdd -= 80;
-				var valueText:AttachedText = new AttachedText('' + optionsArray[i].getValue(), optionText.width + 60);
-				valueText.sprTracker = optionText;
-				valueText.copyAlpha = true;
-				valueText.ID = i;
-				grpTexts.add(valueText);
-				optionsArray[i].child = valueText;
-			}
-			//optionText.snapToPosition(); //Don't ignore me when i ask for not making a fucking pull request to uncomment this line ok
-			updateTextFrom(optionsArray[i]);
-		}
+            if (Std.is(optionsArray[i], ToggleOption)) {
+                var toggleOption = cast(optionsArray[i], ToggleOption);
+                var checkbox:CheckboxThingie = new CheckboxThingie(optionText.x - 105, optionText.y, toggleOption.enabled);
+                checkbox.sprTracker = optionText;
+                checkbox.ID = i;
+                checkboxGroup.add(checkbox);
 
-		changeSelection();
-		reloadCheckboxes();
-	}
+                if (toggleOption.type != 'bool') {
+                    optionText.x -= 80;
+                    optionText.startPosition.x -= 80;
+                    var valueText:AttachedText = new AttachedText('' + toggleOption.getValue(), optionText.width + 60);
+                    valueText.sprTracker = optionText;
+                    valueText.copyAlpha = true;
+                    valueText.ID = i;
+                    grpTexts.add(valueText);
+                    toggleOption.child = valueText;
+                }
+            } else if (optionsArray[i].type == 'bool') {
+                var checkbox:CheckboxThingie = new CheckboxThingie(optionText.x - 105, optionText.y, Std.string(optionsArray[i].getValue()) == 'true');
+                checkbox.sprTracker = optionText;
+                checkbox.ID = i;
+                checkboxGroup.add(checkbox);
+            } else {
+                optionText.x -= 80;
+                optionText.startPosition.x -= 80;
+                var valueText:AttachedText = new AttachedText('' + optionsArray[i].getValue(), optionText.width + 60);
+                valueText.sprTracker = optionText;
+                valueText.copyAlpha = true;
+                valueText.ID = i;
+                grpTexts.add(valueText);
+                optionsArray[i].child = valueText;
+            }
+            updateTextFrom(optionsArray[i]);
+        }
+        changeSelection();
+        reloadCheckboxes();
+    }
 
 	public function addOption(option:Option) {
 		if(optionsArray == null || optionsArray.length < 1) optionsArray = [];
@@ -122,6 +130,15 @@ class BaseOptionsMenu extends MusicBeatSubstate
 		}
 	}
 
+	private function changeOptionValue(option:ToggleOption, direction:Int):Void { // For ToggleOption because I'm stupid- I mean, because it's a special case
+		var newValue:Float = option.getValue() + direction * option.changeValue;
+		if (newValue < option.minValue) newValue = option.minValue;
+		else if (newValue > option.maxValue) newValue = option.maxValue;
+		option.setValue(newValue);
+		option.change();
+		updateTextFrom(option);
+	}
+
 	var nextAccept:Int = 5;
 	var holdTime:Float = 0;
 	var holdValue:Float = 0;
@@ -131,53 +148,73 @@ class BaseOptionsMenu extends MusicBeatSubstate
 	var bindingBlack:FlxSprite;
 	var bindingText:Alphabet;
 	var bindingText2:Alphabet;
-	override function update(elapsed:Float)
-	{
-		super.update(elapsed);
+    override function update(elapsed:Float) {
+        super.update(elapsed);
 
-		if(bindingKey)
-		{
-			bindingKeyUpdate(elapsed);
-			return;
-		}
+        if (bindingKey) {
+            bindingKeyUpdate(elapsed);
+            return;
+        }
 
-		if (controls.UI_UP_P)
-		{
-			changeSelection(-1);
-		}
-		if (controls.UI_DOWN_P)
-		{
-			changeSelection(1);
-		}
+        if (controls.UI_UP_P) {
+            changeSelection(-1);
+        }
+        if (controls.UI_DOWN_P) {
+            changeSelection(1);
+        }
+        if (controls.BACK) {
+            if (title == 'Cache Settings.') {
+                ClientPrefs.saveSettings();
+                FlxG.sound.play(Paths.sound('cancelMenu'));
+                FlxG.switchState(new states.CacheState());
+            } else {
+                close();
+                FlxG.sound.play(Paths.sound('cancelMenu'));
+            }
+        }
 
-		if (controls.BACK) {
-			if (title == 'Cache Settings.')
-			{
-				ClientPrefs.saveSettings();
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-				FlxG.switchState(new states.CacheState());
-			}
-			else
-			{
-				close();
-				FlxG.sound.play(Paths.sound('cancelMenu'));
-			}
-		}
+        if (nextAccept <= 0) {
+            if (Std.is(curOption, ToggleOption)) {
+                var toggleOption = cast(curOption, ToggleOption);
+                if (controls.ACCEPT) {
+                    FlxG.sound.play(Paths.sound('scrollMenu'));
+                    toggleOption.toggle();
+                    reloadCheckboxes();
+                }
+                if (toggleOption.enabled) {
+                    // Handle value change for non-bool types
+					if (curOption.type == 'int' || curOption.type == 'float' || curOption.type == 'percent') {
+						if (controls.UI_LEFT_P) {
+							changeOptionValue(toggleOption, -1);
+						}
+						if (controls.UI_RIGHT_P) {
+							changeOptionValue(toggleOption, 1);
+						}
+					}
+					if (curOption.type == 'string') {
+						var num:Int = curOption.curOption; //lol
+						if(controls.UI_LEFT_P) --num;
+						else num++;
 
-		if(nextAccept <= 0)
-		{
-			if(curOption.type == 'bool')
-			{
-				if(controls.ACCEPT)
-				{
-					FlxG.sound.play(Paths.sound('scrollMenu'));
-					curOption.setValue((curOption.getValue() == true) ? false : true);
-					curOption.change();
-					reloadCheckboxes();
+						if(num < 0)
+							num = curOption.options.length - 1;
+						else if(num >= curOption.options.length)
+							num = 0;
+
+						curOption.curOption = num;
+						curOption.setValue(curOption.options[num]); //lol
+						//trace(curOption.options[num]);
+}
 				}
-			}
-			else
-			{
+						
+            } else if (curOption.type == 'bool') {
+                if (controls.ACCEPT) {
+                    FlxG.sound.play(Paths.sound('scrollMenu'));
+                    curOption.setValue((curOption.getValue() == true) ? false : true);
+                    curOption.change();
+                    reloadCheckboxes();
+                }
+            } else {
 				if(curOption.type == 'keybind')
 				{
 					if(controls.ACCEPT)

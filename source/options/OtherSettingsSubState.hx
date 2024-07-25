@@ -12,6 +12,9 @@ class OtherSettingsSubState extends BaseOptionsMenu
 			"If checked, The game will show a dialogue when it crashes.", 'showCrash', 'bool');
 			addOption(option);
 
+			// var option:ToggleOption = new ToggleOption('Test Togglable', 'A test.', 'testToggle', 'string', ['A', 'B', 'C']);
+			addOption(option);
+
 		var option:Option = new Option('Cache Graphics', // even tho only one person asked, it here
 			"If checked, The Graphics Will Be Cached.", 'graphicsPreload2', 'bool');
 		addOption(option);
