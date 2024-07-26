@@ -1,133 +1,95 @@
 {
 	"animations": [
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"fps": 24,
 			"anim": "idle",
-			"fps": 24,
-			"name": "cassettegirl idle0",
-			"indices": []
+			"indices": [],
+			"name": "cassettegirl idle0"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"fps": 24,
 			"anim": "idle-alt",
-			"fps": 24,
-			"name": "cassettegirl idle alt",
-			"indices": []
+			"indices": [],
+			"name": "cassettegirl idle alt"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"fps": 24,
 			"anim": "singLEFT",
-			"fps": 24,
-			"name": "cassettegirl left0",
-			"indices": []
+			"indices": [],
+			"name": "cassettegirl left0"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"fps": 24,
 			"anim": "singLEFT-alt",
-			"fps": 24,
-			"name": "cassettegirl left alt",
-			"indices": []
+			"indices": [],
+			"name": "cassettegirl left alt"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"fps": 24,
 			"anim": "singDOWN",
-			"fps": 24,
-			"name": "cassettegirl down0",
-			"indices": []
+			"indices": [],
+			"name": "cassettegirl down0"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"fps": 24,
 			"anim": "singDOWN-alt",
-			"fps": 24,
-			"name": "cassettegirl down alt",
-			"indices": []
+			"indices": [],
+			"name": "cassettegirl down alt"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"fps": 24,
 			"anim": "singUP",
-			"fps": 24,
-			"name": "cassettegirl up0",
-			"indices": []
+			"indices": [],
+			"name": "cassettegirl up0"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"fps": 24,
 			"anim": "singUP-alt",
-			"fps": 24,
-			"name": "cassettegirl up alt",
-			"indices": []
+			"indices": [],
+			"name": "cassettegirl up alt"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"fps": 24,
 			"anim": "singRIGHT",
-			"fps": 24,
-			"name": "cassettegirl right0",
-			"indices": []
+			"indices": [],
+			"name": "cassettegirl right0"
 		},
 		{
+			"offsets": [0, 0],
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
-			"anim": "singRIGHT-alt",
 			"fps": 24,
-			"name": "cassettegirl right alt",
-			"indices": []
+			"anim": "singRIGHT-alt",
+			"indices": [],
+			"name": "cassettegirl right alt"
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/cassetteGirl",
-	"position": [
-		0,
-		0
-	],
+	"position": [0, 60],
 	"healthicon": "cg",
 	"flip_x": false,
-	"healthbar_colors": [
-		67,
-		67,
-		175
-	],
-	"camera_position": [
-		0,
-		20
-	],
+	"healthbar_colors": [67, 67, 175],
+	"camera_position": [0, 20],
 	"sing_duration": 4,
-	"scale": 1
+	"scale": 1,
+	"_editor_isPlayer": false
 }
