@@ -82,6 +82,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
                 checkbox.ID = i;
                 checkboxGroup.add(checkbox);
 
+
                 if (toggleOption.type != 'bool') {
                     optionText.x -= 80;
                     optionText.startPosition.x -= 80;
@@ -91,6 +92,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
                     valueText.ID = i;
                     grpTexts.add(valueText);
                     toggleOption.child = valueText;
+					trace('it do');
                 }
             } else if (optionsArray[i].type == 'bool') {
                 var checkbox:CheckboxThingie = new CheckboxThingie(optionText.x - 105, optionText.y, Std.string(optionsArray[i].getValue()) == 'true');

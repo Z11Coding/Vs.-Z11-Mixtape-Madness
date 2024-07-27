@@ -192,17 +192,17 @@ class OtherSettingsSubState extends BaseOptionsMenu
 
 	function onChangeSoundDown()
 	{
-		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound('soundtray/'+ClientPrefs.data.volDown), FlxG.sound.volume);
+		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound('soundtray/'+ClientPrefs.data.volDown), 1);
 	}
 
 	function onChangeSoundUp()
 	{
-		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound('soundtray/'+ClientPrefs.data.volUp), FlxG.sound.volume);
+		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound('soundtray/'+ClientPrefs.data.volUp), 1);
 	}
 
 	function onChangeSoundMax()
 	{
-		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound('soundtray/'+ClientPrefs.data.volMax), FlxG.sound.volume);
+		if (!ClientPrefs.data.silentVol) FlxG.sound.play(Paths.sound('soundtray/'+ClientPrefs.data.volMax), 1);
 	}
 
 	override function destroy()
