@@ -28,6 +28,7 @@ class CategoryState extends MusicBeatState
 	override function create()
 	{
 		if (FlxG.save.data.enableCodes) menuItems.insert(99, 'Codes');
+		FlxTransitionableState.skipNextTransOut = false;
 
 		WeekData.reloadWeekFiles(false);
 		var weeks:Array<WeekData> = [];

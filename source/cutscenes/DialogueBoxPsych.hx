@@ -238,6 +238,28 @@ class DialogueBoxPsych extends FlxSpriteGroup
 				updateBoxOffsets(box);
 				FlxG.sound.music.fadeOut(1, 0);
 
+			} else if(currentText >= dialogueList.dialogue.length && dialogueList.dialogue[currentText - 1] != null && daText.finishedText && dialogueList.dialogue[currentText - 1].skipDis) {
+				dialogueEnded = true;
+				for (i in 0...textBoxTypes.length) {
+					var checkArray:Array<String> = ['', 'center-'];
+					var animName:String = box.animation.curAnim.name;
+					for (j in 0...checkArray.length) {
+						if(animName == checkArray[j] + textBoxTypes[i] || animName == checkArray[j] + textBoxTypes[i] + 'Open') {
+							box.animation.play(checkArray[j] + textBoxTypes[i] + 'Open', true);
+						}
+					}
+				}
+
+				box.animation.curAnim.curFrame = box.animation.curAnim.frames.length - 1;
+				box.animation.curAnim.reverse();
+				if(daText != null)
+				{
+					daText.kill();
+					remove(daText);
+					daText.destroy();
+				}
+				updateBoxOffsets(box);
+				FlxG.sound.music.fadeOut(1, 0);
 			} else if (dialogueList.dialogue[currentText - 1] != null && daText.finishedText && dialogueList.dialogue[currentText - 1].skipDis) {
 				startNextDialog();
 			} else if(daText.finishedText) {

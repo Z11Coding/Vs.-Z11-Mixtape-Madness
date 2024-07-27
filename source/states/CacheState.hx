@@ -169,6 +169,7 @@ class CacheState extends MusicBeatState
 		}
 		else
 		{
+			FlxTransitionableState.skipNextTransOut = false;
 			newDest = new What();
 			//FlxG.sound.play(Paths.music('celebration'));
 			for (folder in Mods.getModDirectories())

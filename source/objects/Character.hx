@@ -109,7 +109,7 @@ class Character extends FlxSprite
 			switch(Paths.formatToSongPath(Song.loadedSongName))
 			{
 				case 'fangirl-frenzy':
-					if (curCharacter == "Zenetta") trace("Load FF"); loadMappedAnimsFF();
+					if (curCharacter == "Zenetta") trace("Load FF"); loadMappedAnimsFF(); //This way it only loads it once
 			}
 		}
 	}
@@ -454,6 +454,17 @@ class Character extends FlxSprite
 
 			if (AnimName == 'singUP' || AnimName == 'singDOWN')
 				danced = !danced;
+		}
+
+		if (Paths.formatToSongPath(Song.loadedSongName) == 'fangirl-frenzy')
+		{
+			switch (curCharacter)
+			{
+				case 'Z11-true-player':
+					if (animation.curAnim.name != 'idle') PlayState.instance.health += 0.023 * ClientPrefs.getGameplaySetting('healthgain', 1);
+				case "Zenetta":
+					if (!animation.curAnim.name.contains('dance')) PlayState.instance.health -= 0.023 * ClientPrefs.getGameplaySetting('healthloss', 1);
+			}
 		}
 	}
 

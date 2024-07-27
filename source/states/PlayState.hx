@@ -5329,8 +5329,7 @@ case "Skip":
 		daStatic.animation.play('static');
 
 		currentSV = getSV(Conductor.songPosition);
-		if (!freezeNotes)
-			Conductor.visualPosition = getVisualPosition();
+		if (!freezeNotes) Conductor.visualPosition = getVisualPosition();
 		FlxG.watch.addQuick("visualPos", Conductor.visualPosition);
 
 		// RESET = Quick Game Over Screen

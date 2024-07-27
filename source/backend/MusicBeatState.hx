@@ -36,7 +36,7 @@ class MusicBeatState extends FlxState
 		if(!skip) {
 			openSubState(new CustomFadeTransition(0.6, true));
 		}
-		if (reopen && !skip)
+		if (reopen)
 		{
 			reopen = false;
 			openSubState(emptyStickers);
@@ -46,7 +46,7 @@ class MusicBeatState extends FlxState
 	}
 
 	public static var emptyStickers:StickerSubState = null;
-	public static var reopen:Bool = true;
+	public static var reopen:Bool = false;
 	public function initPsychCamera():PsychCamera
 	{
 		var camera = new PsychCamera();
