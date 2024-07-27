@@ -72,7 +72,7 @@ class Main extends Sprite
 		#end
 		if (stage != null)
 		{
-			init();
+			backend.Threader.runInThread(init(), 'init');
 		}
 		else
 		{
@@ -227,6 +227,8 @@ class Main extends Sprite
 			trace ("user dropped file with path: " + path);
 
 		 });
+
+
 
 
 		// shader coords fix
