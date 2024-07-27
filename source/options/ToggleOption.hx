@@ -5,7 +5,7 @@ class ToggleOption extends Option {
 
 	public function new(name:String, type:String, defaultValue:Dynamic, changeValue:Dynamic, minValue:Dynamic = null, maxValue:Dynamic = null) {
 		super(name, type, defaultValue, changeValue, minValue, maxValue);
-		this.enabled = true;
+		this.enabled = Reflect.getProperty(ClientPrefs.data, variable) != null ? Reflect.getProperty(ClientPrefs.data, variable).isEnabled : false;
 	}
 
 	public function toggle():Void {
@@ -20,7 +20,9 @@ class ToggleOption extends Option {
 
 	override public function getValue():Dynamic {
 		if (this.enabled) {
-			return Reflect.callMethod(this, Reflect.field(this, "getValue"), []);
+			var value = Reflect.getProperty(ClientPrefs.data, variable).value;
+			if(type == 'keybind') return !Controls.instance.controllerMode ? value.keyboard : value.gamepad;
+			return value;
 		}
 		return null;
 	}

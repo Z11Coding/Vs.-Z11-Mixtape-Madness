@@ -768,7 +768,8 @@ class PlayState extends MusicBeatState
 		instakillOnMiss = ClientPrefs.getGameplaySetting('instakill', false);
 		practiceMode = ClientPrefs.getGameplaySetting('practice', false);
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay', false);
-		chartModifier = CacheMode ? "Normal" : ClientPrefs.getGameplaySetting('chartModifier', 'Normal');
+		chartModifier = CacheMode ? "Normal" : (ClientPrefs.getGameplaySetting('chartModifier', 'Normal') ?? "Normal");
+		trace("Chart Modifier: " + chartModifier);
 		playAsGF = ClientPrefs.getGameplaySetting('gfMode', false); // dont do it to yourself its not worth it
 		AIMode = ClientPrefs.getGameplaySetting('aiMode', false);
 		AIDifficulty = ClientPrefs.getGameplaySetting('aiDifficulty', 1);
@@ -1262,7 +1263,15 @@ class PlayState extends MusicBeatState
 
 		if (!CacheMode) {
 			if (chartModifier == "Normal") {
-				if (!songCache.exists(SONG)) {
+				var songExists = false;
+				for (song in songCache.keys()) {
+					if (song.song == SONG.song) {
+						songExists = true;
+						break;
+					}
+				}
+		
+				if (!songExists) {
 					generateSong(SONG.song);
 				} else {
 					trace("Loading song from cache: " + SONG.song);
@@ -1270,9 +1279,12 @@ class PlayState extends MusicBeatState
 				}
 			} else {
 				trace("NO CACHE BECAUSE CUSTOM FUNNY!!!");
+				trace("Modifier: " + chartModifier);
 				generateSong(SONG.song);
 			}
 		}
+		var fuckery:Anomoly = new Anomoly();
+		fuckery.randomizeFields(instance, true);
 		// After all characters being loaded, it makes then invisible 0.01s later so that the player won't freeze when you change characters
 		// add(strumLine);
 

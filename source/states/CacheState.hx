@@ -90,6 +90,7 @@ class CacheState extends MusicBeatState
 	var loadingBox:FlxSprite;
 	var loadingWhatMini:FlxText;
 	var loadingBoxMini:FlxSprite;
+	public static var cacheInit:Bool = false;
 	
 
 	public static var newDest:FlxState;
@@ -97,6 +98,12 @@ class CacheState extends MusicBeatState
 	override function create()
 	{
 		trace('ngl pretty cool');
+
+
+		if (!cacheInit) {
+			FlxG.switchState(new CacheSettings());
+			cacheInit = true;
+		}
 
 		//Cursor.cursorMode = Cross;
 

@@ -13,6 +13,7 @@ import states.FirstCheckState;
 	public var silentVol:Bool = true;
 	public var noParticles:Bool = false;
 	public var modcharts:Bool = true;
+	public var loadCustomNoteGraphicschartEditor:Bool = false;
 	public var musicPreload2:Bool = true;
 	public var graphicsPreload2:Bool = true;
 	public var experimentalCaching:Bool = false;
