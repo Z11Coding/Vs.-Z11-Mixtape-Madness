@@ -1,6 +1,6 @@
 {
 	"storyName": "My Turn",
-	"difficulties": "normal,hard,pain",
+	"difficulties": "normal",
 	"hideFreeplay": false,
 	"weekBackground": "stage",
 	"freeplayColor": [
