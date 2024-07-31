@@ -60,7 +60,7 @@ class EventFunc {
         lastValue = currentValue; // Always update lastValue
         return false;
     }
-
+    
 
     private inline function execute(): Void {
         trace('Event triggered: ${eventName}');

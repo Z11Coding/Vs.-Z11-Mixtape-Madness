@@ -3029,78 +3029,75 @@ class PlayState extends MusicBeatState
 		}
 	}
 
-	public static function getNumberFromAnims(note:Int, mania:Int):Int
-	{
-		var animMap:Map<String, Int> = new Map<String, Int>();
-		animMap.set("LEFT", 0);
-		animMap.set("DOWN", 1);
-		animMap.set("UP", 2);
-		animMap.set("RIGHT", 3);
+public static function getNumberFromAnims(note:Int, mania:Int):Int {
+    var animMap:Map<String, Int> = new Map<String, Int>();
+    animMap.set("LEFT", 0);
+    animMap.set("DOWN", 1);
+    animMap.set("UP", 2);
+    animMap.set("RIGHT", 3);
 
-		var anims:Array<String> = Note.keysShit.get(mania).get("anims");
-		var animKeys:Array<String> = [
-			for (key in animMap.keys())
-				if (key == "LEFT") "RIGHT" else if (key == "RIGHT") "LEFT" else key
-		];
+    var anims:Array<String> = Note.keysShit.get(mania).get("anims");
+    var animKeys:Array<String> = [
+        for (key in animMap.keys())
+            if (key == "LEFT") "RIGHT" else if (key == "RIGHT") "LEFT" else key
+    ];
 
-		if (mania > 3)
-		{
-			var anim = animKeys[note];
-			var matchingIndices:Array<Int> = [];
-			if (note < animKeys.length)
-			{
-				for (i in 0...anims.length)
-				{
-					if (anims[i] == anim)
-					{
-						matchingIndices.push(i);
-					}
-				}
-				if (matchingIndices.length > 0)
-				{
-					var randomIndex = Std.int(Math.random() * matchingIndices.length);
-					return matchingIndices[randomIndex];
-				}
-				else
-				{
-					var randomIndex = Std.int(Math.random() * anims.length);
-					return randomIndex;
-				}
-			}
-			else
-			{
-				if (matchingIndices.length > 0)
-				{
-					var randomIndex = Std.int(Math.random() * matchingIndices.length);
-					return matchingIndices[randomIndex];
-				}
-				else
-				{
-					var randomIndex = Std.int(Math.random() * anims.length);
-					return randomIndex;
-				}
-			}
-		}
-		else
-		{ // mania == 3
-			var anim = anims[note];
-			if (note < anims.length)
-			{
-				if (animMap.exists(anim))
-				{
-					return animMap.get(anim);
-				}
-				else
-				{
-					throw 'No matching animation found';
-				}
-			}
-			else
-			{
-				return animMap.get(anim);
-			}
-		}
-	}
+    var result:Int;
+
+    if (mania > 3) {
+        var anim = animKeys[note];
+        var matchingIndices:Array<Int> = [];
+        if (note < animKeys.length) {
+            for (i in 0...anims.length) {
+                if (anims[i] == anim) {
+                    matchingIndices.push(i);
+                }
+            }
+            if (matchingIndices.length > 0) {
+                var randomIndex = Std.int(Math.random() * matchingIndices.length);
+                result = matchingIndices[randomIndex];
+            } else {
+                var randomIndex = Std.int(Math.random() * mania);
+                result = randomIndex;
+            }
+        } else {
+            if (matchingIndices.length > 0) {
+                var randomIndex = Std.int(Math.random() * matchingIndices.length);
+                result = matchingIndices[randomIndex];
+            } else {
+                var randomIndex = Std.int(Math.random() * mania);
+                result = randomIndex;
+            }
+        }
+    } else { // mania == 3
+        var anim = anims[note];
+        if (note < anims.length) {
+            if (animMap.exists(anim)) {
+                result = animMap.get(anim);
+            } else {
+                throw 'No matching animation found';
+            }
+        } else {
+            result = animMap.get(anim);
+        }
+    }
+
+    // Ensure result is within bounds
+if (result < 0 || result > mania) {
+	trace("OOB NOtE: " + note + " MANIA: " + mania + " RESULT: " + result);
+    var foundValidAnimation = false;
+    while (!foundValidAnimation) {
+        var randomIndex = Std.int(Math.random() * anims.length);
+        var randomAnim = anims[randomIndex];
+        if (animMap.exists(randomAnim)) {
+            result = animMap.get(randomAnim);
+            foundValidAnimation = true;
+        }
+    }
+}
+
+    return result;
+}
 
 	var debugNum:Int = 0;
 	var stair:Int = 0;
