@@ -41,6 +41,7 @@ abstract DamageType(Int) {
                 return 1.0;
         }
     }
+}
 
 class BULLETPATTERN {
     public var sprite:FlxSprite;
