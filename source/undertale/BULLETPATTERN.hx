@@ -41,14 +41,13 @@ class BULLETPATTERN {
     public var hurtbox:Hurtbox;
     private var actions:Array<Void -> Void>;
     private var currentActionIndex:Int = 0;
-    public final DamageType damageType;
+    public final DamageType:DamageType;
 
     public function new(sprite:FlxSprite, damageModifier:Float) {
         this.sprite = sprite;
         this.damageModifier = damageModifier;
         this.hurtbox = new Hurtbox(sprite);
         this.actions = [];
-        this.
     }
 
     public function update():Void {
@@ -100,17 +99,17 @@ class EventSequence {
             event.hurtbox.checkCollision(soul, DamageType.NORMAL);
         }
     }
+}
+class Hurtbox {
+    public var sprite:FlxSprite;
 
-    class Hurtbox {
-        public var sprite:FlxSprite;
-    
-        public function new(sprite:FlxSprite) {
-            this.sprite = sprite;
-        }
-    
-        public function checkCollision(soul:SOUL, damageType:DamageType):Void {
-            if (sprite.overlaps(soul.getSoulSprite())) {
-                soul.applyDamage(damageType, sprite.damageModifier);
-            }
+    public function new(sprite:FlxSprite) {
+        this.sprite = sprite;
+    }
+
+    public function checkCollision(soul:SOUL, damageType:DamageType):Void {
+        if (sprite.overlaps(soul.getSoulSprite())) {
+            soul.applyDamage(damageType, sprite.damageModifier);
         }
     }
+}

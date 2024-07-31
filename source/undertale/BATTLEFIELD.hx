@@ -222,7 +222,7 @@ class BATTLEFIELD extends MusicBeatState
                             if (menu.members[i] != null)
                             {
                                 menu.members[i].x = -200;
-                                menu.members[i].y = 530;
+                                menu.members[i].y = 480;
                             }
                         }
                         else
@@ -237,13 +237,13 @@ class BATTLEFIELD extends MusicBeatState
                         if (menu.members[i] != null)
                         {
                             menu.members[i].x = -200;
-                            menu.members[i].y = 530;
+                            menu.members[i].y = 480;
                         }
                     case 3:
                         if (menu.members[i] != null)
                         {
                             menu.members[i].x = 300;
-                            menu.members[i].y = 530;
+                            menu.members[i].y = 480;
                         }
                 }
             }
