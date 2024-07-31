@@ -126,7 +126,7 @@ class BATTLEFIELD extends MusicBeatState
 
         boxB = new FlxSprite().loadGraphic(Paths.image('mechanics/ut/ui/boxBorder'));
         box = new FlxSprite().loadGraphic(Paths.image('mechanics/ut/ui/box'));
-        soul = new FlxSprite().loadGraphic(Paths.image('mechanics/ut/soul/soul'));
+        soul = human.sprite;
         boxB.screenCenter();
         box.screenCenter();
         soul.screenCenter();

@@ -26,21 +26,32 @@ import objects.NoteObject;
 import objects.StrumNote;
 import objects.Character;
 import objects.NoteSplash;
+import undertale.BATTLEFIELD;
 
-abstract DamageType(Int) {
+abstract DamageType(Float) {
     public static inline var NORMAL = 0;
     public static inline var KARMA = 1;
+    public static inline var BLUE = 2;
+    public static inline var ORANGE = 3;
 
-    public function new(value:Int) this = value;
+    public function new(value:Float) this = value;
+
+    // Threader.runInThread(() -> {
+    //     trace("DamageType: " + this);
+    // });
 
     public function getDamage(damage:Float = 0):Float {
         switch (this) {
             case NORMAL:
-                return Std.int(damage);
+                return damage;
             case KARMA:
                 return 1.0;
+            case BLUE:
+                return damage; // Damage logic for BLUE can be handled separately
+            case ORANGE:
+                return damage; // Damage logic for ORANGE can be handled separately
         }
-        return null;
+        return 0;
     }
 
     public function getType():String {
@@ -49,8 +60,23 @@ abstract DamageType(Int) {
                 return "NORMAL";
             case KARMA:
                 return "KARMA";
+            case BLUE:
+                return "BLUE";
+            case ORANGE:
+                return "ORANGE";
         }
         return "Unknown";
+    }
+
+    public function shouldApplyDamage(isMoving:Bool):Bool {
+        switch (this) {
+            case BLUE:
+                return !isMoving; // Apply damage if the player is not moving
+            case ORANGE:
+                return isMoving; // Apply damage if the player is moving
+            default:
+                return true; // Apply damage for NORMAL and KARMA
+        }
     }
 }
 
@@ -62,7 +88,7 @@ class BULLETPATTERN {
     private var currentActionIndex:Int = 0;
     public var damageModifier:Float = 1.0;
 
-    public function new(sprite:FlxSprite, damageType:DamageType) {
+    public function new(sprite:FlxSprite, damageType:DamageType, damageModifier:Float = 1.0) {
         this.sprite = sprite;
         this.damageType = damageType;
         this.hurtbox = new Hurtbox(sprite);
@@ -133,8 +159,8 @@ class EventSequence {
         }
     
         public function checkCollision(soul:SOUL, damageType:DamageType):Void {
-            if (sprite.overlaps(soul.instance.getSoulSprite())) { // ????? (This one's your problem, Z.)
-                soul.applyDamage(damageType, damageModifier);
+            if (sprite.overlaps(soul.sprite)) { // ????? (You made this complicated to fix-)
+                soul.applyDamage(damageType, damageType.getDamage());
             }
         }
     }

@@ -18,6 +18,8 @@ class SOUL {
     public var name:String = 'UNKNOWN';
     public var storage:Array<String> = ['Food 1', 'Food 2', 'Food 3'];
     public var LOVE:Int = 1;
+    public var gold:Int = 0;
+    public var sprite:FlxSprite;
     public static var instance:SOUL;
     private var damageCooldown:Float = 0;
     private var cooldownTime:Float = 1.0; // 1 second cooldown
@@ -27,10 +29,12 @@ class SOUL {
         this.type = type;
         this.name = name;
         this.LOVE = LOVE;
+        this.sprite = getSoulSprite();
     }
 
     function getSoulSprite():FlxSprite {
-        return new FlxSprite(0, 0, Paths.image('mechanics/ut/soul${type}'));
+        this.sprite = new FlxSprite(0, 0, Paths.image('mechanics/ut/soul/soul${type}'));
+        return this.sprite;
     }
 
     public function update(elapsed:Float):Void {
