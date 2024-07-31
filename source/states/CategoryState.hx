@@ -217,7 +217,6 @@ class CategoryState extends MusicBeatState
 			loadWeekForce = daSelected.toLowerCase();
 			if (accepted && menuLocks[curSelected])
 			{
-				
 				accepted = false;
 				FlxG.camera.shake(0.005, 0.5);
 				FlxG.sound.play(Paths.sound("badnoise"+FlxG.random.int(1,3)), 1);

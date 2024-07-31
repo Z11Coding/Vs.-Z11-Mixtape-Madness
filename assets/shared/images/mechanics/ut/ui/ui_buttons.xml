@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="ui_buttons.png">
+<SubTexture name="mercy_sel0000" x="0" y="0" width="150" height="82" frameX="0" frameY="0" frameWidth="110" frameHeight="42" />
+<SubTexture name="mercy_idle0000" x="150" y="0" width="150" height="82" frameX="0" frameY="0" frameWidth="110" frameHeight="42" />
+<SubTexture name="item_sel0000" x="0" y="82" width="150" height="82" frameX="0" frameY="0" frameWidth="110" frameHeight="42" />
+<SubTexture name="item_idle0000" x="150" y="82" width="150" height="82" frameX="0" frameY="0" frameWidth="110" frameHeight="42" />
+<SubTexture name="fight_sel0000" x="0" y="164" width="150" height="82" frameX="0" frameY="0" frameWidth="110" frameHeight="42" />
+<SubTexture name="fight_idle0000" x="150" y="164" width="150" height="82" frameX="0" frameY="0" frameWidth="110" frameHeight="42" />
+<SubTexture name="act_sel0000" x="300" y="0" width="150" height="82" frameX="0" frameY="0" frameWidth="110" frameHeight="42" />
+<SubTexture name="act_idle0000" x="300" y="82" width="150" height="82" frameX="0" frameY="0" frameWidth="110" frameHeight="42" />
+</TextureAtlas>
