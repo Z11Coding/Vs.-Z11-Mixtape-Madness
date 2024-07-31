@@ -10,8 +10,7 @@ enum SOULTYPES
     PURPLE;
 }
 
-class SOUL
-{
+class SOUL {
     public var health:Float = 20;
     public var maxHealth:Float = 20;
     public var type:SOULTYPES = RED;
@@ -30,7 +29,7 @@ class SOUL
     }
 
     function getSoulSprite():FlxSprite {
-        return new FlxSprite(0, 0, Paths.image('mechanics/ut/soul'));
+        return new FlxSprite(0, 0, Paths.image('mechanics/ut/soul${type}'));
     }
 
     public function update(elapsed:Float):Void {

@@ -1,7 +1,4 @@
 package undertale;
-
-import flixel.FlxSprite;
-
 import flixel.FlxSprite;
 import flixel.tweens.FlxTween;
 import openfl.display.Shader;
@@ -30,25 +27,33 @@ import objects.StrumNote;
 import objects.Character;
 import objects.NoteSplash;
 
-enum DamageType {
-    NORMAL;
-    KARMA;
-}
+abstract DamageType(Int) {
+    public static inline var NORMAL = 0;
+    public static inline var KARMA = 1;
+
+    public function new(value:Int) this = value;
+
+    public function getDamage(damage:Float = 0):Float {
+        switch (this) {
+            case NORMAL:
+                return Std.int(damage);
+            case KARMA:
+                return 1.0;
+        }
+    }
 
 class BULLETPATTERN {
     public var sprite:FlxSprite;
-    public var damageModifier:Float;
+    public var damageType:DamageType;
     public var hurtbox:Hurtbox;
     private var actions:Array<Void -> Void>;
     private var currentActionIndex:Int = 0;
-    public final DamageType damageType;
 
-    public function new(sprite:FlxSprite, damageModifier:Float) {
+    public function new(sprite:FlxSprite, damageType:DamageType) {
         this.sprite = sprite;
-        this.damageModifier = damageModifier;
+        this.damageType = damageType;
         this.hurtbox = new Hurtbox(sprite);
         this.actions = [];
-        this.
     }
 
     public function update():Void {
@@ -78,6 +83,10 @@ class BULLETPATTERN {
     private function onActionComplete(tween:FlxTween):Void {
         // Move to the next action
         currentActionIndex++;
+    }
+
+    public function applyDamage(soul:SOUL):Void {
+        soul.applyDamage(damageType, damageType.getDamage());
     }
 }
 
