@@ -203,39 +203,48 @@ class BATTLEFIELD extends MusicBeatState
             menu.add(button);
             button.ID = i;
         }
-        if (curMenu != 'main' && curMenu != 'mercy')
+        if (curMenu != 'main')
         {
             for (i in 0...menu.members.length)
             {
                 switch(i%4)
                 {
                     case 0:
-                        menu.members[i].x = -200;
-                        menu.members[i].y = 430;
+                        if (menu.members[i] != null)
+                        {
+                            menu.members[i].x = -200;
+                            menu.members[i].y = 430;
+                            menu.members[i].updateHitbox();
+                        }
                     case 1:
-                        menu.members[i].x = -500;
-                        menu.members[i].y = 430;
+                        if (curMenu == 'mercy')
+                        {
+                            if (menu.members[i] != null)
+                            {
+                                menu.members[i].x = -200;
+                                menu.members[i].y = 530;
+                            }
+                        }
+                        else
+                        {
+                            if (menu.members[i] != null)
+                            {
+                                menu.members[i].x = 100;
+                                menu.members[i].y = 430;
+                            }
+                        }
                     case 2:
-                        menu.members[i].x = -200;
-                        menu.members[i].y = 530;
+                        if (menu.members[i] != null)
+                        {
+                            menu.members[i].x = -200;
+                            menu.members[i].y = 530;
+                        }
                     case 3:
-                        menu.members[i].x = -500;
-                        menu.members[i].y = 530;
-                }
-            }
-        }
-        else if (curMenu != 'main' && curMenu == 'mercy')
-        {
-            for (i in 0...menu.members.length)
-            {
-                switch(i%4)
-                {
-                    case 0:
-                        menu.members[i].x = -200;
-                        menu.members[i].y = 430;
-                    case 1:
-                        menu.members[i].x = -500;
-                        menu.members[i].y = 430;
+                        if (menu.members[i] != null)
+                        {
+                            menu.members[i].x = 300;
+                            menu.members[i].y = 530;
+                        }
                 }
             }
         }
@@ -259,10 +268,18 @@ class BATTLEFIELD extends MusicBeatState
                     curSelectedAct = 0;
                 for (item in menu.members)
                 {
-                    if (item.ID == curSelectedAct) 
+                    if (item != null)
                     {
-                        soul.x = item.x - 11;
-                        soul.y = item.y + 15;
+                        if (item.ID == curSelectedAct) 
+                        {
+                            item.color = 0xFFFFEE00;
+                            soul.x = item.x + 550;
+                            soul.y = item.y + 10;
+                        }
+                        else
+                        {
+                            item.color = 0xFFFFFFFF;
+                        }
                     }
                 }
             case 'item':
@@ -273,10 +290,18 @@ class BATTLEFIELD extends MusicBeatState
                     curSelectedItem = 0;
                 for (item in menu.members)
                 {
-                    if (item.ID == curSelectedItem) 
+                    if (item != null)
                     {
-                        soul.x = item.x - 11;
-                        soul.y = item.y + 15;
+                        if (item.ID == curSelectedItem) 
+                        {
+                            item.color = 0xFFFFEE00;
+                            soul.x = item.x + 550;
+                            soul.y = item.y + 10;
+                        }
+                        else
+                        {
+                            item.color = 0xFFFFFFFF;
+                        }
                     }
                 }
             case 'mercy':
@@ -287,10 +312,18 @@ class BATTLEFIELD extends MusicBeatState
                     curSelectedMercy = 0;
                 for (item in menu.members)
                 {
-                    if (item.ID == curSelectedMercy) 
+                    if (item != null)
                     {
-                        soul.x = item.x - 11;
-                        soul.y = item.y + 15;
+                        if (item.ID == curSelectedMercy) 
+                        {
+                            item.color = 0xFFFFEE00;
+                            soul.x = item.x + 550;
+                            soul.y = item.y + 10;
+                        }
+                        else
+                        {
+                            item.color = 0xFFFFFFFF;
+                        }
                     }
                 }
             default:
