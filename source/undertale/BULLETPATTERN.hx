@@ -40,7 +40,19 @@ abstract DamageType(Int) {
             case KARMA:
                 return 1.0;
         }
+        return null;
     }
+
+    public function getType():String {
+        switch (this) {
+            case NORMAL:
+                return "NORMAL";
+            case KARMA:
+                return "KARMA";
+        }
+        return "Unknown";
+    }
+}
 
 class BULLETPATTERN {
     public var sprite:FlxSprite;
@@ -48,12 +60,14 @@ class BULLETPATTERN {
     public var hurtbox:Hurtbox;
     private var actions:Array<Void -> Void>;
     private var currentActionIndex:Int = 0;
+    public var damageModifier:Float = 1.0;
 
     public function new(sprite:FlxSprite, damageType:DamageType) {
         this.sprite = sprite;
         this.damageType = damageType;
         this.hurtbox = new Hurtbox(sprite);
         this.actions = [];
+        this.damageModifier = damageType.getDamage();
     }
 
     public function update():Void {
@@ -99,16 +113,17 @@ class EventSequence {
         this.soul = soul;
     }
 
-    public function addEvent(event:BULLEtPATTERN):Void {
+    public function addEvent(event:BULLETPATTERN):Void {
         events.push(event);
     }
 
     public function update():Void {
         for (event in events) {
             event.update();
-            event.hurtbox.checkCollision(soul, DamageType.NORMAL);
+            event.hurtbox.checkCollision(soul, event.damageType);
         }
     }
+}
 
     class Hurtbox {
         public var sprite:FlxSprite;
@@ -118,8 +133,8 @@ class EventSequence {
         }
     
         public function checkCollision(soul:SOUL, damageType:DamageType):Void {
-            if (sprite.overlaps(soul.getSoulSprite())) {
-                soul.applyDamage(damageType, sprite.damageModifier);
+            if (sprite.overlaps(soul.instance.getSoulSprite())) { // ????? (This one's your problem, Z.)
+                soul.applyDamage(damageType, damageModifier);
             }
         }
     }

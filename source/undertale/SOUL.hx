@@ -1,6 +1,7 @@
 package undertale;
 
 import flixel.FlxSprite;
+import undertale.BULLETPATTERN;
 
 enum SOULTYPES
 {
@@ -39,9 +40,9 @@ class SOUL {
     }
 
     public function applyDamage(damageType:DamageType, damage:Float):Void {
-        if (damageType == DamageType.KARMA || damageCooldown <= 0) {
+        if (damageType.getType() == "KARMA"  || damageCooldown <= 0) {
             health -= damage;
-            if (damageType != DamageType.KARMA) {
+            if (damageType.getType() != "KARMA") {
                 damageCooldown = cooldownTime;
             }
         }
