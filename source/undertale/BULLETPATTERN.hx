@@ -43,13 +43,13 @@ abstract DamageType(Float) {
     public function getDamage(damage:Float = 0):Float {
         switch (this) {
             case NORMAL:
-                return damage;
+                return 1.0;
             case KARMA:
                 return 1.0;
             case BLUE:
-                return damage; // Damage logic for BLUE can be handled separately
+                return 1.0; // Damage logic for BLUE can be handled separately
             case ORANGE:
-                return damage; // Damage logic for ORANGE can be handled separately
+                return 1.0; // Damage logic for ORANGE can be handled separately
         }
         return 0;
     }
@@ -85,10 +85,13 @@ class BULLETPATTERN {
     public var damageType:DamageType;
     public var hurtbox:Hurtbox;
     private var actions:Array<Void -> Void>;
+
+    @:allow(undertale.BATTLEFIELD)
     private var currentActionIndex:Int = 0;
+
     public var damageModifier:Float = 1.0;
 
-    public function new(sprite:FlxSprite, damageType:DamageType, damageModifier:Float = 1.0) {
+    public function new(sprite:FlxSprite, damageType:DamageType, ?damageModifier:Float = 1.0) {
         this.sprite = sprite;
         this.damageType = damageType;
         this.hurtbox = new Hurtbox(sprite);
@@ -151,16 +154,16 @@ class EventSequence {
     }
 }
 
-    class Hurtbox {
-        public var sprite:FlxSprite;
-    
-        public function new(sprite:FlxSprite) {
-            this.sprite = sprite;
-        }
-    
-        public function checkCollision(soul:SOUL, damageType:DamageType):Void {
-            if (sprite.overlaps(soul.sprite)) { // ????? (You made this complicated to fix-)
-                soul.applyDamage(damageType, damageType.getDamage());
-            }
+class Hurtbox {
+    public var sprite:FlxSprite;
+
+    public function new(sprite:FlxSprite) {
+        this.sprite = sprite;
+    }
+
+    public function checkCollision(soul:SOUL, damageType:DamageType):Void {
+        if (sprite.overlaps(soul.sprite)) { // ????? (You made this complicated to fix-)
+            soul.applyDamage(damageType, damageType.getDamage());
         }
     }
+}

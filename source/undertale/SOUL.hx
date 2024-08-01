@@ -33,7 +33,7 @@ class SOUL {
     }
 
     function getSoulSprite():FlxSprite {
-        this.sprite = new FlxSprite(0, 0, Paths.image('mechanics/ut/soul/soul${type}'));
+        this.sprite = new FlxSprite(0, 0, Paths.image('mechanics/ut/soul/soul'));
         return this.sprite;
     }
 
@@ -45,7 +45,11 @@ class SOUL {
 
     public function applyDamage(damageType:DamageType, damage:Float):Void {
         if (damageType.getType() == "KARMA"  || damageCooldown <= 0) {
-            health -= damage;
+            if (health > 0) 
+            {
+                health -= damage;
+                FlxG.sound.play(Paths.sound('ut/hurtsound'));
+            }
             if (damageType.getType() != "KARMA") {
                 damageCooldown = cooldownTime;
             }

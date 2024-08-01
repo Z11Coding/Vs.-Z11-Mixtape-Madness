@@ -9,6 +9,9 @@ import backend.util.WindowUtil;
 import flixel.input.keyboard.FlxKey;
 import flixel.addons.text.FlxTypeText;
 import flixel.FlxState;
+import undertale.*;
+import undertale.BULLETPATTERN.*;
+import flixel.ui.FlxBar;
 class BATTLEFIELD extends MusicBeatState
 {
     //Basic Stuff
@@ -19,7 +22,7 @@ class BATTLEFIELD extends MusicBeatState
     var human:SOUL;
 
     //Menu Stuff
-    var hp:Bar;
+    var hp:FlxBar;
     var hpTxt:FlxText;
     var healthTxt:FlxText;
     var buttons:FlxTypedGroup<FlxSprite>;
@@ -65,6 +68,7 @@ class BATTLEFIELD extends MusicBeatState
     var rym:Float = 0;
     var canMove:Bool = true;
     var notice:Float = 0;
+    public var health:Float = 0;
 
     //Attack Stuff
     var heavy:Bool = false;
@@ -98,21 +102,26 @@ class BATTLEFIELD extends MusicBeatState
 		Highscore.load();
         #end
         human = new SOUL();
+        health = human.health;
 
         items = human.storage;
+
+        var bg:FlxSprite = new FlxSprite(370, 0).loadGraphic(Paths.image('mechanics/ut/ui/bg'));
+        bg.scrollFactor.set();
+        bg.screenCenter(X);
+        add(bg);
 
         name = new FlxText(250, 600, 0, human.name, 30);
         name.scrollFactor.set();
         name.setFormat(Paths.font("determination-extended.ttf"), 30, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         add(name);
 
-        hp = new Bar(620, name.y - 5, 'hp', function() return human.health, 0, human.maxHealth);
-        hp.leftToRight = false;
-        hp.barWidth = 50;
-        hp.barHeight = 30;
+        hp = new FlxBar(620, name.y - 5, RIGHT_TO_LEFT, 50, 30, this, 'health', 0, human.maxHealth);
         hp.scrollFactor.set();
+        hp.numDivisions = 10000;
         add(hp);
-        hp.setColors(FlxColor.YELLOW, FlxColor.RED);
+        hp.createFilledBar(FlxColor.YELLOW, FlxColor.RED);
+        hp.updateBar();
 
         hpTxt = new FlxText(hp.x - 50, 600, 0, "HP", 30);
         hpTxt.scrollFactor.set();
@@ -165,7 +174,7 @@ class BATTLEFIELD extends MusicBeatState
         }
         buttons.forEach(function(item:FlxSprite)
         {
-            item.x += 285;
+            item.x += 300;
             item.animation.play('idle');
         });
     }
@@ -197,8 +206,8 @@ class BATTLEFIELD extends MusicBeatState
         }
         for (i in 0...options.length)
         {
-            var button:FlxText = new FlxText(-200, 430, FlxG.width, options[i], 40);
-            button.setFormat(Paths.font("determination-extended.ttf"), 40, FlxColor.WHITE, CENTER);
+            var button:FlxText = new FlxText(-200, 430, FlxG.width, options[i], 32);
+            button.setFormat(Paths.font("determination-extended.ttf"), 32, FlxColor.WHITE, CENTER);
             button.scrollFactor.set();
             menu.add(button);
             button.ID = i;
@@ -214,7 +223,6 @@ class BATTLEFIELD extends MusicBeatState
                         {
                             menu.members[i].x = -200;
                             menu.members[i].y = 430;
-                            menu.members[i].updateHitbox();
                         }
                     case 1:
                         if (curMenu == 'mercy')
@@ -347,12 +355,31 @@ class BATTLEFIELD extends MusicBeatState
 
     var allCheck = 0;
     var changeBoxSize:Bool = false;
+    var test:BULLETPATTERN;
     override function update(elapsed:Float) {
-
+        human.update(elapsed);
         underText.update(elapsed);
+        hp.updateBar();
+        health = human.health;
         healthTxt.text = human.health + ' / ' + human.maxHealth;
         if (FlxG.keys.justPressed.B) canMove = false;
         if (FlxG.keys.justPressed.V) canMove = true;
+        if (FlxG.keys.justPressed.I) isBlue = true;
+        if (FlxG.keys.justPressed.O) isBlue = false;
+        if (FlxG.keys.justPressed.F) 
+        {
+            var testSprite:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('mechanics/ut/bullets/boneMini'));
+            testSprite.screenCenter();
+            add(testSprite);
+
+            test = new BULLETPATTERN(testSprite, new undertale.BULLETPATTERN.DamageType(2));
+            test.moveTo(720, 300, 10);
+            test.moveTo(400, 600, 10);
+            test.applyDamage(human);
+            test.damageType.getDamage(5);
+            test.update();
+        }
+        if (test != null) test.hurtbox.checkCollision(human, test.damageType);
         var upP = controls.UI_LEFT_P || controls.UI_UP_P;
 		var downP = controls.UI_RIGHT_P || controls.UI_DOWN_P;
         var enter = controls.ACCEPT;
