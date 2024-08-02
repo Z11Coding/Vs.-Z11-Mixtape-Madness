@@ -22,7 +22,7 @@ class BATTLEFIELD extends MusicBeatState
     var human:SOUL;
 
     //Menu Stuff
-    var hp:FlxBar;
+    var hp:Bar;
     var hpTxt:FlxText;
     var healthTxt:FlxText;
     var buttons:FlxTypedGroup<FlxSprite>;
@@ -116,11 +116,10 @@ class BATTLEFIELD extends MusicBeatState
         name.setFormat(Paths.font("determination-extended.ttf"), 30, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         add(name);
 
-        hp = new FlxBar(620, name.y - 5, RIGHT_TO_LEFT, 50, 30, this, 'health', 0, human.maxHealth);
-        hp.scrollFactor.set();
-        hp.numDivisions = 10000;
+        hp = new Bar(620, name.y - 5, 'hp', function() return health, 0, human.maxHealth);
+        hp.barWidth = 50;
         add(hp);
-        hp.createFilledBar(FlxColor.YELLOW, FlxColor.RED);
+        hp.setColors(FlxColor.YELLOW, FlxColor.RED);
         hp.updateBar();
 
         hpTxt = new FlxText(hp.x - 50, 600, 0, "HP", 30);
@@ -357,7 +356,7 @@ class BATTLEFIELD extends MusicBeatState
     var changeBoxSize:Bool = false;
     var test:BULLETPATTERN;
     override function update(elapsed:Float) {
-        human.update(elapsed);
+        human.update(elapsed, soul);
         underText.update(elapsed);
         hp.updateBar();
         health = human.health;
@@ -370,13 +369,14 @@ class BATTLEFIELD extends MusicBeatState
         {
             var testSprite:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('mechanics/ut/bullets/boneMini'));
             testSprite.screenCenter();
+            testSprite.scale.x = 2;
+            testSprite.scale.y = 2;
             add(testSprite);
 
             test = new BULLETPATTERN(testSprite, new undertale.BULLETPATTERN.DamageType(2));
-            test.moveTo(720, 300, 10);
-            test.moveTo(400, 600, 10);
-            test.applyDamage(human);
-            test.damageType.getDamage(5);
+            test.moveTo(FlxG.random.int(-280, 280), FlxG.random.int(-300, 300), FlxG.random.int(1, 10));
+            test.moveTo(FlxG.random.int(-400, 400), FlxG.random.int(-600, 600), FlxG.random.int(1, 10));
+            test.fadeOut(FlxG.random.int(1, 10));
             test.update();
         }
         if (test != null) test.hurtbox.checkCollision(human, test.damageType);

@@ -119,7 +119,12 @@ class BULLETPATTERN {
 
     public function fadeOut(duration:Float):Void {
         addAction(() -> {
-            FlxTween.tween(sprite, {alpha: 0}, duration, {onComplete: onActionComplete});
+            FlxTween.tween(sprite, {alpha: 0}, duration, {onComplete: function(twn:FlxTween)
+                {
+                    onActionComplete;
+                    update();
+                }
+            });
         });
     }
 

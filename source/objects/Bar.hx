@@ -101,6 +101,14 @@ class Bar extends FlxSpriteGroup
 		// flixel is retarded
 		leftBar.clipRect = leftBar.clipRect;
 		rightBar.clipRect = rightBar.clipRect;
+
+		//so it can also be manually updated
+		if(valueFunction != null)
+		{
+			var value:Null<Float> = FlxMath.remapToRange(FlxMath.bound(valueFunction(), bounds.min, bounds.max), bounds.min, bounds.max, 0, 100);
+			percent = (value != null ? value : 0);
+		}
+		else percent = 0;
 	}
 
 	public function regenerateClips()

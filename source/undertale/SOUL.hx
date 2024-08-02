@@ -37,9 +37,16 @@ class SOUL {
         return this.sprite;
     }
 
-    public function update(elapsed:Float):Void {
+    public function update(elapsed:Float, soul:FlxSprite):Void {
         if (damageCooldown > 0) {
             damageCooldown -= elapsed;
+            switch (damageCooldown%2)
+            {
+                case 0:
+                    soul.color = FlxColor.fromString('#FF0000');
+                case 1:
+                    soul.color = FlxColor.fromString('#8f0000');
+            }
         }
     }
 
