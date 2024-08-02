@@ -118,6 +118,7 @@ class BATTLEFIELD extends MusicBeatState
 
         hp = new Bar(620, name.y - 5, 'hp', function() return health, 0, human.maxHealth);
         hp.barWidth = 50;
+        hp.barHeight = 30;
         add(hp);
         hp.setColors(FlxColor.YELLOW, FlxColor.RED);
         hp.updateBar();
@@ -374,8 +375,8 @@ class BATTLEFIELD extends MusicBeatState
             add(testSprite);
 
             test = new BULLETPATTERN(testSprite, new undertale.BULLETPATTERN.DamageType(2));
-            test.moveTo(FlxG.random.int(-280, 280), FlxG.random.int(-300, 300), FlxG.random.int(1, 10));
-            test.moveTo(FlxG.random.int(-400, 400), FlxG.random.int(-600, 600), FlxG.random.int(1, 10));
+            test.moveTo(FlxG.random.int(-280, 1280), FlxG.random.int(-300, 1300), FlxG.random.int(1, 10));
+            test.moveTo(FlxG.random.int(-400, 1400), FlxG.random.int(-600, 1600), FlxG.random.int(1, 10));
             test.fadeOut(FlxG.random.int(1, 10));
             test.update();
         }
