@@ -30,10 +30,11 @@ class SOUL {
         this.name = name;
         this.LOVE = LOVE;
         this.sprite = getSoulSprite();
+        instance = this;
     }
 
     function getSoulSprite():FlxSprite {
-        this.sprite = new FlxSprite(0, 0, Paths.image('mechanics/ut/soul/soul'));
+        this.sprite = new FlxSprite(0, 0, Paths.image('undertale/soul/soul'));
         return this.sprite;
     }
 
@@ -61,5 +62,48 @@ class SOUL {
                 damageCooldown = cooldownTime;
             }
         }
+    }
+}
+
+enum ACTION
+{
+    HEAL;
+    ITEM;
+}
+class ITEM {
+    public var name:String;
+    public var action:ACTION;
+    public var value:Float;
+    public var flavorText:String = 'This item doesn\'t have flavor text!\nOh, the horror!';
+    public function new(name:String, action:ACTION, ?value:Float = 0, ?flavorText:String = 'This item doesn\'t have flavor text!\nOh, the horror!')
+    {
+        this.name = name;
+        this.action = action;
+        this.value = value;
+        this.flavorText = flavorText;
+    }
+}
+class ITEMS {
+    public static var instance:ITEMS;
+    public var fallback:ITEM = new ITEM('error', HEAL, 0, "If you're reading this...\nyou messed up somewhere!");
+    public var test1:ITEM = new ITEM('test1', HEAL, 10, 'You ate the test1!\nYou healed 10HP and passed the test!');
+    public function new() {
+        instance = this;
+    }
+}
+
+//TODO: make this better
+class Inventory {
+    public static function getItem(item:String) {
+        switch (item)
+        {
+            case 'test1':
+                return new ITEMS().test1;
+            case 'test2':
+                return new ITEMS().test1;
+            case 'test3':
+                return new ITEMS().test1;
+        }
+        return new ITEMS().fallback;
     }
 }

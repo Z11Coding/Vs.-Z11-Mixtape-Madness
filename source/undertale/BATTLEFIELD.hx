@@ -72,8 +72,14 @@ class BATTLEFIELD extends MusicBeatState
 
     //Attack Stuff
     var heavy:Bool = false;
-    public var sfx:Map<String, FlxSound> = new Map<String, FlxSound>();
+    var sfx:Map<String, FlxSound> = new Map<String, FlxSound>();
     var spawned = {};
+
+    public function new(human:SOUL = null) {
+        if (human != null) this.human = human;
+        super();
+    } //For the multi-route thing
+
     override function create() {
         #if UNDERTALE
         FlxG.mouse.visible = false;
@@ -106,7 +112,7 @@ class BATTLEFIELD extends MusicBeatState
 
         items = human.storage;
 
-        var bg:FlxSprite = new FlxSprite(370, 0).loadGraphic(Paths.image('mechanics/ut/ui/bg'));
+        var bg:FlxSprite = new FlxSprite(370, 0).loadGraphic(Paths.image('undertale/ui/bg'));
         bg.scrollFactor.set();
         bg.screenCenter(X);
         add(bg);
@@ -133,8 +139,8 @@ class BATTLEFIELD extends MusicBeatState
         healthTxt.setFormat(Paths.font("determination-extended.ttf"), 25, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         add(healthTxt);
 
-        boxB = new FlxSprite().loadGraphic(Paths.image('mechanics/ut/ui/boxBorder'));
-        box = new FlxSprite().loadGraphic(Paths.image('mechanics/ut/ui/box'));
+        boxB = new FlxSprite().loadGraphic(Paths.image('undertale/ui/boxBorder'));
+        box = new FlxSprite().loadGraphic(Paths.image('undertale/ui/box'));
         soul = human.sprite;
         boxB.screenCenter();
         box.screenCenter();
@@ -162,7 +168,7 @@ class BATTLEFIELD extends MusicBeatState
         for (i in 0...menuItems.length)
         {
             var button:FlxSprite = new FlxSprite(200 * i, 650);
-            button.frames = Paths.getSparrowAtlas('mechanics/ut/ui/ui_buttons');
+            button.frames = Paths.getSparrowAtlas('undertale/ui/ui_buttons');
             button.animation.addByPrefix('idle', menuItems[i].toLowerCase() + '_idle');
             button.animation.addByPrefix('selected', menuItems[i].toLowerCase() + '_sel');
             button.antialiasing = ClientPrefs.data.globalAntialiasing;
@@ -177,6 +183,8 @@ class BATTLEFIELD extends MusicBeatState
             item.x += 300;
             item.animation.play('idle');
         });
+        //Temporary. Gonna have an intro sequence before it plays the music
+        FlxG.sound.playMusic(Paths.music("beatEmDown"), 0.8, true);
     }
 
     var curMenu:String = 'main';
@@ -196,6 +204,9 @@ class BATTLEFIELD extends MusicBeatState
             case 'FIGHT':
                 curMenu = 'fight';
                 //I'll get there
+            case 'nothing':
+                curMenu = 'nothing';
+                options = [];
             default:
                 curMenu = 'main';
                 options = [];
@@ -204,6 +215,7 @@ class BATTLEFIELD extends MusicBeatState
         {
             menu.remove(i);
         }
+
         for (i in 0...options.length)
         {
             var button:FlxText = new FlxText(-200, 430, FlxG.width, options[i], 32);
@@ -212,6 +224,7 @@ class BATTLEFIELD extends MusicBeatState
             menu.add(button);
             button.ID = i;
         }
+
         if (curMenu != 'main')
         {
             for (i in 0...menu.members.length)
@@ -280,13 +293,8 @@ class BATTLEFIELD extends MusicBeatState
                     {
                         if (item.ID == curSelectedAct) 
                         {
-                            item.color = 0xFFFFEE00;
                             soul.x = item.x + 550;
                             soul.y = item.y + 10;
-                        }
-                        else
-                        {
-                            item.color = 0xFFFFFFFF;
                         }
                     }
                 }
@@ -302,13 +310,8 @@ class BATTLEFIELD extends MusicBeatState
                     {
                         if (item.ID == curSelectedItem) 
                         {
-                            item.color = 0xFFFFEE00;
                             soul.x = item.x + 550;
                             soul.y = item.y + 10;
-                        }
-                        else
-                        {
-                            item.color = 0xFFFFFFFF;
                         }
                     }
                 }
@@ -324,13 +327,8 @@ class BATTLEFIELD extends MusicBeatState
                     {
                         if (item.ID == curSelectedMercy) 
                         {
-                            item.color = 0xFFFFEE00;
                             soul.x = item.x + 550;
                             soul.y = item.y + 10;
-                        }
-                        else
-                        {
-                            item.color = 0xFFFFFFFF;
                         }
                     }
                 }
@@ -353,9 +351,27 @@ class BATTLEFIELD extends MusicBeatState
         }
 	}
 
+    function menuAction(thing:String) {
+        switch (curMenu)
+        {
+            case 'act':
+                
+            case 'item':
+                regenMenu('nothing');
+                curMenu = 'attack';
+                underText.alpha = 1;
+                underText.resetText(undertale.SOUL.Inventory.getItem(thing).flavorText);
+                underText.start(0.04, true);
+            case 'mercy':
+                
+        }
+    }
+
     var allCheck = 0;
     var changeBoxSize:Bool = false;
     var test:BULLETPATTERN;
+    var selected:Bool = false;
+    var inMenu:Bool = false;
     override function update(elapsed:Float) {
         human.update(elapsed, soul);
         underText.update(elapsed);
@@ -368,7 +384,7 @@ class BATTLEFIELD extends MusicBeatState
         if (FlxG.keys.justPressed.O) isBlue = false;
         if (FlxG.keys.justPressed.F) 
         {
-            var testSprite:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('mechanics/ut/bullets/boneMini'));
+            var testSprite:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('undertale/bullets/boneMini'));
             testSprite.screenCenter();
             testSprite.scale.x = 2;
             testSprite.scale.y = 2;
@@ -394,16 +410,15 @@ class BATTLEFIELD extends MusicBeatState
                     underText.alpha = 1;
                     underText.resetText('You feel like he\'s mad, yet you can\'t place why.');
                     underText.start(0.04, true);
+                    selected = false;
+                    inMenu = false;
                 }
                 for (item in buttons.members)
                 {
-                    if (item.ID == curSelected && item.animation.curAnim.name == 'idle')
-                    {
-                        changeSelection();
-                    }
+                    if (item.ID == curSelected && item.animation.curAnim.name == 'idle') changeSelection();
                 }
             }
-            else
+            else if (curMenu != 'attack')
             {
                 if (underText.text != '* ') 
                 {
@@ -411,6 +426,12 @@ class BATTLEFIELD extends MusicBeatState
                     underText.resetText('');
                 }
             }
+            else if (curMenu == 'attack' && enter)
+            {
+                canMove = true;
+                curMenu = 'main';
+            }
+            
             if (upP)
             {
                 changeSelection(-1);
@@ -422,9 +443,26 @@ class BATTLEFIELD extends MusicBeatState
             targetW = 800;
             targetH = 200;
             boxX = (1280 / 2) - 25;
-            boxY = (720 / 2) + 75;
-            if (enter) regenMenu(menuItems[curSelected]);
-            if (back) regenMenu('MAIN');
+            boxY = (720 / 2);
+
+            if (!selected)
+            {
+                if (enter && !inMenu) 
+                {
+                    inMenu = true;
+                    regenMenu(menuItems[curSelected]);
+                }
+                else if (enter && inMenu) 
+                {
+                    menuAction(menu.members[curSelected].text);
+                    selected = true;
+                }
+            }
+
+            if (back && !selected)
+            {
+                regenMenu('MAIN');
+            } 
         }
         else
         {
