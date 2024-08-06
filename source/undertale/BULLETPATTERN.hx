@@ -139,6 +139,11 @@ class BULLETPATTERN {
         }, duration);
     }
 
+    public function destroy():Void {
+        sprite.kill();
+        this.hurtbox.delete();
+    }
+
     private function onActionComplete(tween:FlxTween):Void {
         // Move to the next action
         currentActionIndex++;
@@ -167,6 +172,7 @@ class EventSequence {
         for (event in events) {
             event.update();
             event.hurtbox.checkCollision(soul, event.damageType);
+            event.hurtbox.sprite.updateHitbox();
         }
     }
 }
@@ -177,10 +183,21 @@ class Hurtbox {
 
     public function new(sprite:FlxSprite) {
         this.sprite = sprite;
+        this.sprite.width = sprite.width;
+        this.sprite.height = sprite.height;
+        this.sprite.updateHitbox();
+        sprite.updateHitbox();
     }
     public function checkCollision(soul:SOUL, damageType:DamageType):Void {
         if (sprite.overlaps(soul.sprite)) { // ????? (You made this complicated to fix-)
             soul.applyDamage(damageType, damageType.getDamage());
         }
+    }
+    public function destroy():Void {
+        this.sprite.kill();
+        
+    }
+    public function delete():Void {
+        this.destroy();
     }
 }
