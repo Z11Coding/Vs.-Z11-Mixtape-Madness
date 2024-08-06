@@ -87,27 +87,31 @@ class BULLETPATTERN {
     private var actions:Map<Int, {action: Void -> Void, duration: Float}>;
     private var currentActionIndex:Int = 0;
     private var actionTimer:Float = 0;
-
     public var damageModifier:Float = 1.0;
+
 
     public function new(sprite:FlxSprite, damageType:DamageType) {
         this.sprite = sprite;
         this.damageType = damageType;
         this.hurtbox = new Hurtbox(sprite);
-        hurtbox.hurtboxes.set(this, hurtbox);
+        Hurtbox.hurtboxes.set(this, this.hurtbox);
         this.actions = new Map<Int, {action: Void -> Void, duration: Float}>();
     }
 
     public function update():Void {
+        var index:Int = -1;
+        for (i in actions.keys()) {
+            index++;
+        }
         this.hurtbox.sprite.x = this.sprite.x;
         this.hurtbox.sprite.y = this.sprite.y;
         // Execute the current action
-        if (currentActionIndex < actions.length) {
+        if (currentActionIndex < index) {
             var currentAction:{action: Void -> Void, duration: Float} = actions.get(currentActionIndex);
             if (actionTimer == 0) {
                 currentAction.action();
             }
-            actionTimer += e;
+            actionTimer += -1;
             if (actionTimer >= currentAction.duration) {
                 currentActionIndex++;
                 actionTimer = 0;
@@ -116,7 +120,11 @@ class BULLETPATTERN {
     }
 
     public function addAction(action:Void -> Void, duration:Float):Void {
-        actions.set(actions.length, {action: action, duration: duration});
+        var index:Int = -1;
+        for (i in actions.keys()) {
+            index++;
+        }
+        actions.set(index, {action: action, duration: duration});
     }
 
     public function moveTo(x:Float, y:Float, duration:Float):Void {
