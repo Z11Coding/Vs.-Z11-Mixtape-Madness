@@ -182,4 +182,18 @@ class SoundGroup {
         
         return group;
     }
+
+    public static function createGroupFromNameAndFiles(name:String, filePaths:Array<String>):SoundGroup {
+        var group:SoundGroup = new SoundGroup();
+        var counter:Int = 1;
+    
+        for (filePath in filePaths) {
+            var id:String = name + "-" + counter;
+            var layer:SoundLayer = new SoundLayer(id, filePath);
+            group.addLayer(layer);
+            counter++;
+        }
+    
+        return group;
+    }
 }
