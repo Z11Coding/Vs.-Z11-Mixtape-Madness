@@ -11,6 +11,8 @@ import flixel.addons.text.FlxTypeText;
 import flixel.FlxState;
 import undertale.*;
 import undertale.BULLETPATTERN.*;
+import undertale.SOUL.*;
+import undertale.SOUL.ITEM;
 import flixel.ui.FlxBar;
 class BATTLEFIELD extends MusicBeatState
 {
@@ -18,6 +20,7 @@ class BATTLEFIELD extends MusicBeatState
     var box:FlxSprite;
     var boxB:FlxSprite;
     var soul:FlxSprite;
+    var monsterS:FlxSprite;
     var curMode:String = 'menu';
     var human:SOUL;
     var monster:MSOUL;
@@ -111,17 +114,17 @@ class BATTLEFIELD extends MusicBeatState
 
 		Highscore.load();
         #end
-        human = new SOUL();
-        monster = new MSOUL();
+        human = new SOUL(20, 1, 1, RED, 'Frisk', 1);
+        monster = new MSOUL('Z11Tale', 99, 99, 1000000000, 9999, 500, false, true);
 
         health = human.health;
-
         items = human.storage;
 
-        var bg:FlxSprite = new FlxSprite(370, 0).loadGraphic(Paths.image('undertale/ui/bg'));
+        var bg:FlxSprite = new FlxSprite(320, 100).loadGraphic(Paths.image('undertale/ui/bg'));
         bg.setGraphicSize(Std.int(bg.width) * 1.5);
         bg.scrollFactor.set();
         bg.screenCenter(X);
+        bg.x += 30;
         add(bg);
 
         name = new FlxText(250, 600, 0, human.name, 30);
@@ -149,11 +152,16 @@ class BATTLEFIELD extends MusicBeatState
         boxB = new FlxSprite().loadGraphic(Paths.image('undertale/ui/boxBorder'));
         box = new FlxSprite().loadGraphic(Paths.image('undertale/ui/box'));
         soul = human.sprite;
+        monsterS = monster.sprite;
+        monsterS.x = 540;
         boxB.screenCenter();
         box.screenCenter();
         soul.screenCenter();
+        monsterS.scale.x = 0.5;
+	    monsterS.scale.y = 0.5;
         soul.scale.x = 1.8;
 	    soul.scale.y = 1.8;
+        add(monsterS);
         add(boxB);
         add(box);
         add(soul);
@@ -191,7 +199,9 @@ class BATTLEFIELD extends MusicBeatState
             item.animation.play('idle');
         });
         //Temporary. Gonna have an intro sequence before it plays the music
-        FlxG.sound.playMusic(Paths.music("beatEmDown"), 0.8, true);
+        var daSong = 'beatEmDown';
+        if (FlxG.random.bool(25)) daSong = 'beatEmDownGMix';
+        FlxG.sound.playMusic(Paths.music(daSong), 0.8, true);
     }
 
     var curMenu:String = 'main';
@@ -359,10 +369,18 @@ class BATTLEFIELD extends MusicBeatState
 	}
 
     var daSpeed:Float = 0.04;
-    function typeFunc(?text:String = '', ?sound:String = 'monsterfont', speed:Float = 0.04, hide:Bool = false)
+    function typeFunc(?text:String = '', ?sound:String = 'monsterfont', ?speed:Float = 0.04, ?delayBetweenPause:Float = 1, hide:Bool = false)
     {
         daSpeed = speed;
         underText.sounds = [FlxG.sound.load(Paths.sound('ut/$sound'), 0.6)];
+    
+        var splitName:Array<String> = text.split("\n");
+        var trueText:String = splitName[0];
+        for (i in 0...splitName.length)
+        {
+            if (i > 0) trueText += '\n* ' + splitName[i];
+        }
+
         if (hide)
         {
             underText.alpha = 0;
@@ -371,7 +389,7 @@ class BATTLEFIELD extends MusicBeatState
         else
         {
             underText.alpha = 1;
-            underText.resetText(text);
+            underText.resetText(trueText);
             underText.start(speed, true);
         }
     }
@@ -380,21 +398,28 @@ class BATTLEFIELD extends MusicBeatState
     {
         regenMenu('nothing');
         curMenu = 'attack';
-        typeFunc(thing.flavorText, 0.04);
+        typeFunc(thing.flavorText, 0.04, 1);
         FlxG.sound.play(Paths.sound('ut/healsound'), 0.6);
+        if (thing.action == HEAL) human.health += thing.value;
     }
 
     function menuAction(thing:String) {
         switch (curMenu)
         {
             case 'act':
-                
+                switch(thing)
+                {
+                    case 'Check':
+                        regenMenu('nothing');
+                        curMenu = 'attack';
+                        typeFunc('Z11Tale - ATK 99 DEF 99\nSimply want to have fun\nDangerous if provoked, though.', 0.04, 1.5);
+                }
             case 'item':
                 useItem(undertale.SOUL.Inventory.getItem(thing));
             case 'mercy':
                 switch(thing)
                 {
-                    case 'spare':
+                    case 'Spare':
                     {
                         regenMenu('nothing');
                         curMenu = 'attack';
@@ -402,13 +427,14 @@ class BATTLEFIELD extends MusicBeatState
                         {
                             //endBattle(); not quite there yet
                         }
-                        else
-                        {
-                            underText.alpha = 1; 
-                            underText.resetText('You tried to spare the enemy...\nBut their name wasn\'t yellow!');
-                            underText.start(0.04, true);
-                        }
+                        else typeFunc('You tried to spare the enemy...\nBut their name wasn\'t yellow!', 0.04, 1.5);
                     }
+
+                    case 'Flee':
+                        regenMenu('nothing');
+                        curMenu = 'attack';
+                        if (monster.canFlee) typeFunc('Don\'t slow me down...', 0.04, 1.5);
+                        else typeFunc('Can\'t flee from this enemy!', 0.04, 1.5);
                 }
                 
         }
@@ -423,6 +449,7 @@ class BATTLEFIELD extends MusicBeatState
         human.update(elapsed, soul);
         underText.update(elapsed);
         hp.updateBar();
+        if (human.health > human.maxHealth) human.health = human.maxHealth;
         health = human.health;
         healthTxt.text = human.health + ' / ' + human.maxHealth;
         if (FlxG.keys.justPressed.B) canMove = false;
@@ -448,9 +475,9 @@ class BATTLEFIELD extends MusicBeatState
 		var downP = controls.UI_RIGHT_P || controls.UI_DOWN_P;
         var enter = controls.ACCEPT;
         var back = controls.BACK;
-        if (underText.text.charAt(underText.text.length-1) == ".") underText.delay = 2;
+        if (underText.text.charAt(underText.text.length-1) == ".") underText.delay = 3;
         else underText.delay = daSpeed;
-        if (underText.text.charAt(underText.text.length-1) == "\n") underText.delay = 1;
+        if (underText.text.charAt(underText.text.length-1) == "\n") underText.delay = 0.3;
         else underText.delay = daSpeed;
         if (!canMove)
         {

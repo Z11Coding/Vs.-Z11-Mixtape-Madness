@@ -10,6 +10,7 @@ class MSOUL {
     public var atk:Int = 0;
     public var def:Int = 0;
     public var canSpare:Bool = false;
+    public var canFlee:Bool = false;
     public var canHurt:Bool = true; //basically like sans's ability to dodge
     /*
         If i ever decide to expand this feature for some ungodly reason, 
@@ -27,7 +28,7 @@ class MSOUL {
         this.goldToGive = goldToGive;
         this.canSpare = canSpare;
         this.canHurt = canHurt;
-        this.sprite = getMonsterSprite();
+        this.sprite = getMonsterSprite(name);
         this.atk = attack;
         this.def = defense;
         instance = this;
@@ -42,4 +43,6 @@ class MSOUL {
         var mugshot:FlxSprite = new FlxSprite(0, 0, Paths.image('undertale/mugshots/$monster'));
         return mugshot;
     }
+
+    
 }

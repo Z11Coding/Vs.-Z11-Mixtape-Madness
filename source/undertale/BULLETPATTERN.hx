@@ -86,10 +86,9 @@ class BULLETPATTERN {
 
     private var actions:Map<Int, {action: Void -> Void, duration: Float}>;
     private var currentActionIndex:Int = 0;
-    private var actionTimer:Float = 0
-    private var currentActionIndex:Int = 0;
+    private var actionTimer:Float = 0;
 
-    public var damageModifier:Float = 1.0
+    public var damageModifier:Float = 1.0;
 
     public function new(sprite:FlxSprite, damageType:DamageType) {
         this.sprite = sprite;
@@ -99,7 +98,7 @@ class BULLETPATTERN {
         this.actions = new Map<Int, {action: Void -> Void, duration: Float}>();
     }
 
-    public override function update(e:Float):Void {
+    public function update():Void {
         this.hurtbox.sprite.x = this.sprite.x;
         this.hurtbox.sprite.y = this.sprite.y;
         // Execute the current action
@@ -166,19 +165,14 @@ class EventSequence {
 
 class Hurtbox {
     public var sprite:FlxSprite;
+    public static var hurtboxes:Map<BULLETPATTERN, Hurtbox> = new Map<BULLETPATTERN, Hurtbox>();
 
     public function new(sprite:FlxSprite) {
         this.sprite = sprite;
     }
-    class Hurtbox {
-        public var sprite:FlxSprite;
-        public static var hurtboxes:Map<BULLETPATTERN, Hurtbox> = new Map<BulletPattern, Hurtbox>();
-    
-        public function new(sprite:FlxSprite) {
-            this.sprite = sprite;
+    public function checkCollision(soul:SOUL, damageType:DamageType):Void {
+        if (sprite.overlaps(soul.sprite)) { // ????? (You made this complicated to fix-)
+            soul.applyDamage(damageType, damageType.getDamage());
         }
-        public function checkCollision(soul:SOUL, damageType:DamageType):Void {
-            if (sprite.overlaps(soul.sprite)) { // ????? (You made this complicated to fix-)
-                soul.applyDamage(damageType, damageType.getDamage());
     }
 }

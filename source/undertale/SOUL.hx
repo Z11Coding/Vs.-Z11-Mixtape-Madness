@@ -100,7 +100,7 @@ class ITEMS {
 
 //TODO: make this better
 class Inventory {
-    public static function getItem(item:String):ITEMS {
+    public static function getItem(item:String):ITEM {
         switch (item)
         {
             case 'Food 1':
