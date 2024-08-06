@@ -20,6 +20,8 @@ class BATTLEFIELD extends MusicBeatState
     var soul:FlxSprite;
     var curMode:String = 'menu';
     var human:SOUL;
+    var monster:MSOUL;
+    var butNobodyCame:Bool = false;
 
     //Menu Stuff
     var hp:Bar;
@@ -48,9 +50,9 @@ class BATTLEFIELD extends MusicBeatState
 
     //Box Stuff
     var targetW:Float = 450;
-    var targetH:Float = 300;
+    var targetH:Float = 200;
     var boxX:Float = (1280 / 2) - 25;
-    var boxY:Float = (720 / 2);
+    var boxY:Float = (720 / 2) + 75;
     var boxW:Float = 0;
     var boxH:Float = 0;
     var boxA:Float = 1;
@@ -75,8 +77,10 @@ class BATTLEFIELD extends MusicBeatState
     var sfx:Map<String, FlxSound> = new Map<String, FlxSound>();
     var spawned = {};
 
-    public function new(human:SOUL = null) {
+    public function new(human:SOUL = null, monster:MSOUL = null) {
         if (human != null) this.human = human;
+        if (monster != null) this.monster = monster;
+        else butNobodyCame = true;
         super();
     } //For the multi-route thing
 
@@ -108,11 +112,14 @@ class BATTLEFIELD extends MusicBeatState
 		Highscore.load();
         #end
         human = new SOUL();
+        monster = new MSOUL();
+
         health = human.health;
 
         items = human.storage;
 
         var bg:FlxSprite = new FlxSprite(370, 0).loadGraphic(Paths.image('undertale/ui/bg'));
+        bg.setGraphicSize(Std.int(bg.width) * 1.5);
         bg.scrollFactor.set();
         bg.screenCenter(X);
         add(bg);
@@ -151,7 +158,7 @@ class BATTLEFIELD extends MusicBeatState
         add(box);
         add(soul);
 
-        underText = new FlxTypeText(300, 420, Std.int(FlxG.width * 0.6), '', 32);
+        underText = new FlxTypeText(300, 400, Std.int(FlxG.width * 0.6), '', 32);
         underText.font = Paths.font("determination-extended.ttf");
         underText.color = 0xFFFFFFFF;
         underText.prefix = '* '; 
@@ -225,7 +232,7 @@ class BATTLEFIELD extends MusicBeatState
             button.ID = i;
         }
 
-        if (curMenu != 'main')
+        if (curMenu != 'main' || curMenu != 'nothing')
         {
             for (i in 0...menu.members.length)
             {
@@ -351,18 +358,58 @@ class BATTLEFIELD extends MusicBeatState
         }
 	}
 
+    var daSpeed:Float = 0.04;
+    function typeFunc(?text:String = '', ?sound:String = 'monsterfont', speed:Float = 0.04, hide:Bool = false)
+    {
+        daSpeed = speed;
+        underText.sounds = [FlxG.sound.load(Paths.sound('ut/$sound'), 0.6)];
+        if (hide)
+        {
+            underText.alpha = 0;
+            underText.resetText('');
+        }
+        else
+        {
+            underText.alpha = 1;
+            underText.resetText(text);
+            underText.start(speed, true);
+        }
+    }
+
+    function useItem(thing:ITEM)
+    {
+        regenMenu('nothing');
+        curMenu = 'attack';
+        typeFunc(thing.flavorText, 0.04);
+        FlxG.sound.play(Paths.sound('ut/healsound'), 0.6);
+    }
+
     function menuAction(thing:String) {
         switch (curMenu)
         {
             case 'act':
                 
             case 'item':
-                regenMenu('nothing');
-                curMenu = 'attack';
-                underText.alpha = 1;
-                underText.resetText(undertale.SOUL.Inventory.getItem(thing).flavorText);
-                underText.start(0.04, true);
+                useItem(undertale.SOUL.Inventory.getItem(thing));
             case 'mercy':
+                switch(thing)
+                {
+                    case 'spare':
+                    {
+                        regenMenu('nothing');
+                        curMenu = 'attack';
+                        if (monster.canSpare) 
+                        {
+                            //endBattle(); not quite there yet
+                        }
+                        else
+                        {
+                            underText.alpha = 1; 
+                            underText.resetText('You tried to spare the enemy...\nBut their name wasn\'t yellow!');
+                            underText.start(0.04, true);
+                        }
+                    }
+                }
                 
         }
     }
@@ -401,6 +448,10 @@ class BATTLEFIELD extends MusicBeatState
 		var downP = controls.UI_RIGHT_P || controls.UI_DOWN_P;
         var enter = controls.ACCEPT;
         var back = controls.BACK;
+        if (underText.text.charAt(underText.text.length-1) == ".") underText.delay = 2;
+        else underText.delay = daSpeed;
+        if (underText.text.charAt(underText.text.length-1) == "\n") underText.delay = 1;
+        else underText.delay = daSpeed;
         if (!canMove)
         {
             if (curMenu == 'main')
@@ -420,11 +471,7 @@ class BATTLEFIELD extends MusicBeatState
             }
             else if (curMenu != 'attack')
             {
-                if (underText.text != '* ') 
-                {
-                    underText.alpha = 0;
-                    underText.resetText('');
-                }
+                typeFunc(true);
             }
             else if (curMenu == 'attack' && enter)
             {
@@ -440,10 +487,8 @@ class BATTLEFIELD extends MusicBeatState
             {
                 changeSelection(1);
             }
+
             targetW = 800;
-            targetH = 200;
-            boxX = (1280 / 2) - 25;
-            boxY = (720 / 2);
 
             if (!selected)
             {
@@ -454,7 +499,16 @@ class BATTLEFIELD extends MusicBeatState
                 }
                 else if (enter && inMenu) 
                 {
-                    menuAction(menu.members[curSelected].text);
+                    soul.alpha = 0;
+                    switch(curMenu)
+                    {
+                        case 'act':
+                            menuAction(menu.members[curSelectedAct].text);
+                        case 'item':
+                            menuAction(menu.members[curSelectedItem].text);
+                        case 'mercy':
+                            menuAction(menu.members[curSelectedMercy].text);
+                    }
                     selected = true;
                 }
             }
@@ -466,17 +520,11 @@ class BATTLEFIELD extends MusicBeatState
         }
         else
         {
-            if (underText.text != '* ') 
-            {
-                underText.alpha = 0;
-                underText.resetText('');
-            }
+            soul.alpha = 1;
+            typeFunc(true);
             if (!changeBoxSize)
             {
                 targetW = 450;
-                targetH = 300;
-                boxX = (1280 / 2) - 25;
-                boxY = (720 / 2);
             }
             for (item in buttons.members)
             {

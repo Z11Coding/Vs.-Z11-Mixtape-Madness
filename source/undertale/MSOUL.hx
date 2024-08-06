@@ -7,6 +7,8 @@ class MSOUL {
     public var sprite:FlxSprite;
     public var expToGive:Int = 1;
     public var goldToGive:Int = 0;
+    public var atk:Int = 0;
+    public var def:Int = 0;
     public var canSpare:Bool = false;
     public var canHurt:Bool = true; //basically like sans's ability to dodge
     /*
@@ -17,7 +19,7 @@ class MSOUL {
 
     public static var instance:MSOUL;
 
-    public function new(name:String = '???', maxHealth:Float = 1, expToGive:Int = 0, goldToGive:Int = 0, canSpare:Bool = false, canHurt:Bool = true) {
+    public function new(name:String = '???', attack:Int = 0, defense:Int = 0, maxHealth:Float = 1, expToGive:Int = 0, goldToGive:Int = 0, canSpare:Bool = false, canHurt:Bool = true) {
         this.name = name;
         this.health = maxHealth;
         this.maxHealth = maxHealth;
@@ -26,16 +28,18 @@ class MSOUL {
         this.canSpare = canSpare;
         this.canHurt = canHurt;
         this.sprite = getMonsterSprite();
+        this.atk = attack;
+        this.def = defense;
         instance = this;
     }
 
-    function getMonsterSprite(monster:FlxSprite = 'test', isBattle:Bool = true):FlxSprite {
-        this.sprite = new FlxSprite(0, 0, Paths.image('undertale/monster/${if isBattle 'battle/' else 'overworld/'}$monster'));
+    function getMonsterSprite(monster:String = 'test', isBattle:Bool = true):FlxSprite {
+        this.sprite = new FlxSprite(0, 0, Paths.image('undertale/monster/${if (isBattle) 'battle/' else 'overworld/'}$monster'));
         return this.sprite;
     }
 
-    function getMugshotSprite(monster:FlxSprite = 'test'):FlxSprite {
-        this.sprite = new FlxSprite(0, 0, Paths.image('undertale/mugshots/$monster'));
-        return this.sprite;
+    function getMugshotSprite(monster:String = 'test'):FlxSprite {
+        var mugshot:FlxSprite = new FlxSprite(0, 0, Paths.image('undertale/mugshots/$monster'));
+        return mugshot;
     }
 }

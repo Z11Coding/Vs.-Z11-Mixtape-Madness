@@ -113,7 +113,12 @@ class BULLETPATTERN {
 
     public function moveTo(x:Float, y:Float, duration:Float):Void {
         addAction(() -> {
-            FlxTween.tween(sprite, {x: x, y: y}, duration, {onComplete: onActionComplete});
+            FlxTween.tween(sprite, {x: x, y: y}, duration, {onComplete: function(twn:FlxTween)
+                {
+                    onActionComplete;
+                    update();
+                }
+            });
         });
     }
 

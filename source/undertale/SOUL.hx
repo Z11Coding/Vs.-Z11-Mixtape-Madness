@@ -19,16 +19,20 @@ class SOUL {
     public var storage:Array<String> = ['Food 1', 'Food 2', 'Food 3'];
     public var LOVE:Int = 1;
     public var gold:Int = 0;
+    public var atk:Int = 1;
+    public var def:Int = 0;
     public var sprite:FlxSprite;
     public static var instance:SOUL;
     private var damageCooldown:Float = 0;
     private var cooldownTime:Float = 1.0; // 1 second cooldown
 
-    public function new(health:Float = 20, type:SOULTYPES = RED, name:String = 'UNKNOWN', LOVE:Int = 1) {
+    public function new(health:Float = 20, attack:Int = 0, defense:Int = 0, type:SOULTYPES = RED, name:String = 'UNKNOWN', LOVE:Int = 1) {
         this.health = health;
         this.type = type;
         this.name = name;
         this.LOVE = LOVE;
+        this.atk = attack;
+        this.def = defense;
         this.sprite = getSoulSprite();
         instance = this;
     }
@@ -86,7 +90,9 @@ class ITEM {
 class ITEMS {
     public static var instance:ITEMS;
     public var fallback:ITEM = new ITEM('error', HEAL, 0, "If you're reading this...\nyou messed up somewhere!");
-    public var test1:ITEM = new ITEM('test1', HEAL, 10, 'You ate the test1!\nYou healed 10HP and passed the test!');
+    public var test1:ITEM = new ITEM('Food 1', HEAL, 10, 'You ate the Food 1!\nYou healed 10HP and passed the test!');
+    public var test2:ITEM = new ITEM('Food 2', HEAL, 20, 'You ate the Food 2!\nSpicy!\nYou healed 20HP');
+    public var test3:ITEM = new ITEM('Food 3', HEAL, 1, 'You ate the Food 3!\nEw. it\'s cold...\nYou healed 1HP anyway, though...');
     public function new() {
         instance = this;
     }
@@ -94,15 +100,15 @@ class ITEMS {
 
 //TODO: make this better
 class Inventory {
-    public static function getItem(item:String) {
+    public static function getItem(item:String):ITEMS {
         switch (item)
         {
-            case 'test1':
+            case 'Food 1':
                 return new ITEMS().test1;
-            case 'test2':
-                return new ITEMS().test1;
-            case 'test3':
-                return new ITEMS().test1;
+            case 'Food 2':
+                return new ITEMS().test2;
+            case 'Food 3':
+                return new ITEMS().test3;
         }
         return new ITEMS().fallback;
     }
