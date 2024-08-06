@@ -83,22 +83,15 @@ class BULLETPATTERN {
     public var sprite:FlxSprite;
     public var damageType:DamageType;
     public var hurtbox:Hurtbox;
-<<<<<<< Updated upstream
-    private var actions:Array<Void -> Void>;
 
-    @:allow(undertale.BATTLEFIELD)
-    private var currentActionIndex:Int = 0;
-
-    public var damageModifier:Float = 1.0;
-
-    public function new(sprite:FlxSprite, damageType:DamageType, ?damageModifier:Float = 1.0) {
-=======
     private var actions:Map<Int, {action: Void -> Void, duration: Float}>;
     private var currentActionIndex:Int = 0;
-    private var actionTimer:Float = 0;
+    private var actionTimer:Float = 0
+    private var currentActionIndex:Int = 0;
+
+    public var damageModifier:Float = 1.0
 
     public function new(sprite:FlxSprite, damageType:DamageType) {
->>>>>>> Stashed changes
         this.sprite = sprite;
         this.damageType = damageType;
         this.hurtbox = new Hurtbox(sprite);
@@ -144,60 +137,6 @@ class BULLETPATTERN {
         currentActionIndex++;
         actionTimer = 0;
     }
-}
-    public function addAction(action:Void -> Void, duration:Float):Void {
-        actions.set(actions.length, action);
-        actionDuration = duration;
-    }
-
-    public function moveTo(x:Float, y:Float, duration:Float):Void {
-        addAction(() -> {
-            FlxTween.tween(sprite, {x: x, y: y}, duration, {onComplete: onActionComplete});
-        }, duration);
-    }
-
-    public function fadeOut(duration:Float):Void {
-        addAction(() -> {
-            FlxTween.tween(sprite, {alpha: 0}, duration, {onComplete: onActionComplete});
-        }, duration);
-    }
-
-    private function onActionComplete(tween:FlxTween):Void {
-        // Move to the next action
-        currentActionIndex++;
-        actionTimer = 0;
-    }
-
-    public function addAction(action:Void -> Void):Void {
-        actions.push(action);
-    }
-
-    public function moveTo(x:Float, y:Float, duration:Float):Void {
-        addAction(() -> {
-            FlxTween.tween(sprite, {x: x, y: y}, duration, {onComplete: function(twn:FlxTween)
-                {
-                    onActionComplete;
-                    update();
-                }
-            });
-        });
-    }
-
-    public function fadeOut(duration:Float):Void {
-        addAction(() -> {
-            FlxTween.tween(sprite, {alpha: 0}, duration, {onComplete: function(twn:FlxTween)
-                {
-                    onActionComplete;
-                    update();
-                }
-            });
-        });
-    }
-
-    private function onActionComplete(tween:FlxTween):Void {
-        // Move to the next action
-        currentActionIndex++;
-    }
 
     public function applyDamage(soul:SOUL):Void {
         soul.applyDamage(damageType, damageType.getDamage());
@@ -225,25 +164,21 @@ class EventSequence {
     }
 }
 
-<<<<<<< Updated upstream
 class Hurtbox {
     public var sprite:FlxSprite;
 
     public function new(sprite:FlxSprite) {
         this.sprite = sprite;
     }
-
-    public function checkCollision(soul:SOUL, damageType:DamageType):Void {
-        if (sprite.overlaps(soul.sprite)) { // ????? (You made this complicated to fix-)
-            soul.applyDamage(damageType, damageType.getDamage());
-=======
     class Hurtbox {
         public var sprite:FlxSprite;
         public static var hurtboxes:Map<BULLETPATTERN, Hurtbox> = new Map<BulletPattern, Hurtbox>();
     
         public function new(sprite:FlxSprite) {
             this.sprite = sprite;
->>>>>>> Stashed changes
         }
+        public function checkCollision(soul:SOUL, damageType:DamageType):Void {
+            if (sprite.overlaps(soul.sprite)) { // ????? (You made this complicated to fix-)
+                soul.applyDamage(damageType, damageType.getDamage());
     }
 }

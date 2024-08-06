@@ -97,6 +97,7 @@ using HoldableVariable;
 using DataStorage;
 using backend.FNFC;
 using backend.modules.EventFunc;
+using backend.modules.Number;
 
 using StringTools;
 using backend.ChanceSelector;
