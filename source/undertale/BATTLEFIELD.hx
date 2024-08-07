@@ -10,8 +10,9 @@ import flixel.input.keyboard.FlxKey;
 import flixel.addons.text.FlxTypeText;
 import flixel.FlxState;
 import undertale.*;
-import undertale.BULLETPATTERN.*;
-import undertale.SOUL.*;
+import undertale.BULLETPATTERN;
+import undertale.BULLETPATTERN.EventSequence;
+import undertale.SOUL;
 import undertale.SOUL.ITEM;
 import flixel.ui.FlxBar;
 class BATTLEFIELD extends MusicBeatState
@@ -28,6 +29,7 @@ class BATTLEFIELD extends MusicBeatState
 
     //Menu Stuff
     var hp:Bar;
+    var enemyHP:Bar;
     var hpTxt:FlxText;
     var healthTxt:FlxText;
     var buttons:FlxTypedGroup<FlxSprite>;
@@ -74,11 +76,14 @@ class BATTLEFIELD extends MusicBeatState
     var canMove:Bool = true;
     var notice:Float = 0;
     public var health:Float = 0;
+    public var enemyHealth:Float = 0;
 
     //Attack Stuff
     var heavy:Bool = false;
     var sfx:Map<String, FlxSound> = new Map<String, FlxSound>();
-    var spawned = {};
+    var battleThing:FlxSprite;
+    var target:FlxSprite;
+    var slash:FlxSprite;
 
     public function new(human:SOUL = null, monster:MSOUL = null) {
         if (human != null) this.human = human;
@@ -114,13 +119,15 @@ class BATTLEFIELD extends MusicBeatState
 
 		Highscore.load();
         #end
-        human = new SOUL(20, 1, 1, RED, 'Frisk', 1);
-        monster = new MSOUL('Z11Tale', 99, 99, 1000000000, 9999, 500, false, true);
-
+        human = new SOUL(20, 99, 1, RED, 'Frisk', 1);
+        monster = new MSOUL('Z11Tale', 99, 99, 100000, 9999, 500, false, true);
+        monster.health = 100000;
         health = human.health;
         items = human.storage;
 
-        var bg:FlxSprite = new FlxSprite(320, 100).loadGraphic(Paths.image('undertale/ui/bg'));
+        enemyHealth = monster.health;
+
+        var bg:FlxSprite = new FlxSprite(310, 100).loadGraphic(Paths.image('undertale/ui/bg'));
         bg.setGraphicSize(Std.int(bg.width) * 1.5);
         bg.scrollFactor.set();
         bg.screenCenter(X);
@@ -153,7 +160,8 @@ class BATTLEFIELD extends MusicBeatState
         box = new FlxSprite().loadGraphic(Paths.image('undertale/ui/box'));
         soul = human.sprite;
         monsterS = monster.sprite;
-        monsterS.x = 540;
+        monsterS.x = 430;
+        monsterS.y = -100;
         boxB.screenCenter();
         box.screenCenter();
         soul.screenCenter();
@@ -165,6 +173,33 @@ class BATTLEFIELD extends MusicBeatState
         add(boxB);
         add(box);
         add(soul);
+
+        enemyHP = new Bar(monsterS.x - 50, monsterS.y + 300, 'hp', function() return enemyHealth, 0, monster.maxHealth);
+        enemyHP.barWidth = Std.int(monster.maxHealth);
+        enemyHP.barHeight = 30;
+        add(enemyHP);
+        enemyHP.setColors(FlxColor.fromString('#00FF00'), FlxColor.fromString('#FF0000'));
+        enemyHP.updateBar();
+
+        battleThing = new FlxSprite(395, 425).loadGraphic(Paths.image('undertale/ui/spr_target_0')); 
+        battleThing.scale.x = 1.4;
+	    battleThing.scale.y = 1.4;
+        add(battleThing);
+
+        target = new FlxSprite(240, 425);
+        target.frames = Paths.getSparrowAtlas('undertale/ui/target');
+        target.animation.addByPrefix('strike', "targetFlash", 10, true);
+        target.scale.x = 1.4;
+	    target.scale.y = 1.4;
+        add(target);
+
+        slash = new FlxSprite(395, 425);
+        slash.frames = Paths.getSparrowAtlas('undertale/ui/slash');
+        slash.animation.addByPrefix('attack', "Slash", 10);
+        //slash.scale.x = 1.4;
+	    //slash.scale.y = 1.4;
+        add(slash);
+
 
         underText = new FlxTypeText(300, 400, Std.int(FlxG.width * 0.6), '', 32);
         underText.font = Paths.font("determination-extended.ttf");
@@ -200,8 +235,57 @@ class BATTLEFIELD extends MusicBeatState
         });
         //Temporary. Gonna have an intro sequence before it plays the music
         var daSong = 'beatEmDown';
-        if (FlxG.random.bool(25)) daSong = 'beatEmDownGMix';
+        if (FlxG.random.bool(1)) daSong = 'beatEmDownGMix';
         FlxG.sound.playMusic(Paths.music(daSong), 0.8, true);
+
+        test2 = new EventSequence(human);
+    }
+
+    function doAttack(lod:Int) {
+        trace(lod);
+        attacked = true;
+        FlxG.sound.play(Paths.sound('ut/slice'));
+
+        target.animation.play('strike', true);
+        slash.animation.play('attack', true);
+        var damageRange:String = 'bad';
+        if (lod <= 0 && lod >= 90)
+        {
+            if (lod <= 0 && lod >= 24 || lod <= 55 && lod >= 90)
+            {
+                damageRange = 'bad';
+            }
+            else if (lod <= 25 && lod >= 34 || lod <= 45 && lod >= 54)
+            {
+                damageRange = 'good';
+            }
+            else if (lod <= 35 && lod >= 44)
+            {
+                damageRange = 'perfect';
+            }
+        }
+        else damageRange = 'bad';
+
+        new FlxTimer().start(1, function(tmr:FlxTimer)
+        {
+            enemyHP.visible = true;
+            FlxG.sound.play(Paths.sound('ut/hitsound'));
+            monster.health -= DamageCalculator.getDamage(damageRange, human, monster); //dont ask why i did it this way.
+            new FlxTimer().start(3, function(tmr:FlxTimer)
+            {
+                enemyHP.visible = false;
+                FlxTween.tween(battleThing, {alpha: 0}, 0.5);
+                FlxTween.tween(target, {alpha: 0}, 0.5);
+                FlxTween.tween(battleThing.scale, {x: 0.8, y:1}, 0.5, {onComplete: function(twn:FlxTween) { 
+                    target.x = 240;
+                    attacked = false;
+                    damageArea = 0;
+                }});
+                canMove = true;
+                curMenu = 'main';
+            }
+            );
+        });
     }
 
     var curMenu:String = 'main';
@@ -220,6 +304,8 @@ class BATTLEFIELD extends MusicBeatState
                 options = mercy;
             case 'FIGHT':
                 curMenu = 'fight';
+                options = [];
+                selected = true;
                 //I'll get there
             case 'nothing':
                 curMenu = 'nothing';
@@ -443,15 +529,24 @@ class BATTLEFIELD extends MusicBeatState
     var allCheck = 0;
     var changeBoxSize:Bool = false;
     var test:BULLETPATTERN;
+    var test2:EventSequence;
     var selected:Bool = false;
     var inMenu:Bool = false;
+    var measureAtk:Bool = false;
+    var attacked:Bool = false;
+    var damageArea:Int = 0;
     override function update(elapsed:Float) {
         human.update(elapsed, soul);
         underText.update(elapsed);
         hp.updateBar();
+        enemyHP.updateBar();
         if (human.health > human.maxHealth) human.health = human.maxHealth;
         health = human.health;
         healthTxt.text = human.health + ' / ' + human.maxHealth;
+
+        var mult:Float = FlxMath.lerp(enemyHealth, monster.health, ((monster.health / enemyHealth) * (elapsed * 8)));
+        enemyHealth = mult;
+
         if (FlxG.keys.justPressed.B) canMove = false;
         if (FlxG.keys.justPressed.V) canMove = true;
         if (FlxG.keys.justPressed.I) isBlue = true;
@@ -464,13 +559,14 @@ class BATTLEFIELD extends MusicBeatState
             testSprite.scale.y = 2;
             add(testSprite);
 
-            test = new BULLETPATTERN(testSprite, new undertale.BULLETPATTERN.DamageType(2));
+            var test = new BULLETPATTERN(testSprite, new undertale.BULLETPATTERN.DamageType(2));
             test.moveTo(FlxG.random.int(-280, 1280), FlxG.random.int(-300, 1300), FlxG.random.int(1, 10));
             test.moveTo(FlxG.random.int(-400, 1400), FlxG.random.int(-600, 1600), FlxG.random.int(1, 10));
             test.fadeOut(FlxG.random.int(1, 10));
-            test.update();
+            test2.addEvent(test);
+
         }
-        if (test != null) test.hurtbox.checkCollision(human, test.damageType);
+        if (test2 != null) test2.update();
         var upP = controls.UI_LEFT_P || controls.UI_UP_P;
 		var downP = controls.UI_RIGHT_P || controls.UI_DOWN_P;
         var enter = controls.ACCEPT;
@@ -506,13 +602,21 @@ class BATTLEFIELD extends MusicBeatState
                 curMenu = 'main';
             }
             
-            if (upP)
+            if (curMenu != 'fight')
             {
-                changeSelection(-1);
+                if (upP)
+                {
+                    changeSelection(-1);
+                }
+                if (downP)
+                {
+                    changeSelection(1);
+                }
             }
-            if (downP)
+            else
             {
-                changeSelection(1);
+                soul.alpha = 0;
+                for (item in buttons.members) item.animation.play('idle');
             }
 
             targetW = 800;
@@ -535,8 +639,9 @@ class BATTLEFIELD extends MusicBeatState
                             menuAction(menu.members[curSelectedItem].text);
                         case 'mercy':
                             menuAction(menu.members[curSelectedMercy].text);
+                            
+                        selected = true;
                     }
-                    selected = true;
                 }
             }
 
@@ -544,6 +649,28 @@ class BATTLEFIELD extends MusicBeatState
             {
                 regenMenu('MAIN');
             } 
+
+            if (curMenu == 'fight')
+            {
+                if (!attacked)
+                {
+                    if (target.x == 240)
+                    {                        
+                        FlxTween.tween(battleThing, {alpha: 1}, 1);
+                        FlxTween.tween(battleThing.scale, {x: 1.4, y:1.4}, 1);
+                    }
+
+                    if (target.x > 240)
+                    {
+                        damageArea++;
+                        if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.Z)
+                        {
+                            doAttack(damageArea);
+                        }
+                    }
+                    target.x += 10;
+                }
+            }
         }
         else
         {
