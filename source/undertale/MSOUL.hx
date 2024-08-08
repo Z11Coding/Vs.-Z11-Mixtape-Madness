@@ -22,7 +22,6 @@ class MSOUL {
 
     public function new(name:String = '???', attack:Int = 0, defense:Int = 0, maxHealth:Float = 1, expToGive:Int = 0, goldToGive:Int = 0, canSpare:Bool = false, canHurt:Bool = true) {
         this.name = name;
-        this.health = maxHealth;
         this.maxHealth = maxHealth;
         this.expToGive = expToGive;
         this.goldToGive = goldToGive;
