@@ -26,6 +26,64 @@ class SoundLayer {
 	}
 }
 
+// class SoundVariant extends SoundLayer {
+//     public var variants:Array<SoundLayer>;
+//     public var currentVariantIndex:Int;
+//     public var switchMode:SwitchMode;
+//     public var chance:Chance<SoundLayer>;
+//     public var onSwitch:Dynamic->Void;
+
+//     public function new(id:String, soundPaths:Array<String>, switchMode:SwitchMode, onSwitch:Dynamic->Void) {
+//         super(id, soundPaths[0]);
+//         this.variants = [];
+//         for (path in soundPaths) {
+//             this.variants.push(new SoundLayer(id, path));
+//         }
+//         this.currentVariantIndex = 0;
+//         this.switchMode = switchMode;
+//         this.onSwitch = onSwitch;
+//         if (switchMode == SwitchMode.Chance) {
+//             this.chance = new Chance<SoundLayer>(this.variants);
+//         }
+//     }
+
+//     override public function play():Void {
+//         this.variants[currentVariantIndex].play();
+//     }
+
+//     override public function stop():Void {
+//         this.variants[currentVariantIndex].stop();
+//     }
+
+//     override public function setVolume(volume:Float):Void {
+//         for (variant in variants) {
+//             variant.setVolume(volume);
+//         }
+//     }
+
+//     public function switchVariant(index:Int):Void {
+//         if (index >= 0 && index < variants.length) {
+//             this.currentVariantIndex = index;
+//             this.onSwitch(this.variants[index]);
+//         }
+//     }
+
+//     public function autoSwitch():Void {
+//         switch (this.switchMode) {
+//             case Loop:
+//                 // Do nothing, keep the same variant
+//             case Progressive:
+//                 this.currentVariantIndex = (this.currentVariantIndex + 1) % this.variants.length;
+//             case Random:
+//                 this.currentVariantIndex = Std.random(this.variants.length);
+//             case Chance:
+//                 var selectedVariant = this.chance.selectOption();
+//                 this.currentVariantIndex = this.variants.indexOf(selectedVariant);
+//         }
+//         this.onSwitch(this.variants[this.currentVariantIndex]);
+//     }
+// }
+
 // Manages multiple sound layers
 class SoundGroup {
     public var layers:Array<SoundLayer> = [];

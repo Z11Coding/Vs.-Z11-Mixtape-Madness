@@ -1,5 +1,6 @@
 package undertale;
 
+import shaders.ShadersHandler;
 import objects.Bar;
 import backend.Highscore;
 import backend.Achievements;
@@ -165,6 +166,16 @@ class BATTLEFIELD extends MusicBeatState
         add(boxB);
         add(box);
         add(soul);
+                // testing nonsense
+                var overlayColor:Array<Float> = [1.0, 0.0, 0.0, 1.0]; 
+                var satinColor:Array<Float> = [0.0, 1.0, 0.0, 1.0]; 
+                var innerShadowColor:Array<Float> = [0.0, 0.0, 1.0, 1.0]; 
+                var innerShadowAngle:Float = 45.0; 
+                var innerShadowDistance:Float = 10.0; 
+        
+                // a-
+                shaders.ShadersHandler.applyRTXShader(monsterS, overlayColor, satinColor, innerShadowColor, innerShadowAngle, innerShadowDistance);
+                monsterS.shader = new shaders.Shaders.RTX();
 
         underText = new FlxTypeText(300, 400, Std.int(FlxG.width * 0.6), '', 32);
         underText.font = Paths.font("determination-extended.ttf");

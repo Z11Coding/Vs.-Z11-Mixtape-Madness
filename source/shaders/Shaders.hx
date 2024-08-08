@@ -37,6 +37,186 @@ class BuildingEffect
 	}
 }
 
+typedef RTXSlider = {
+    var name:String;
+    var min:Float;
+    var max:Float;
+    var value:Float;
+    var step:Float;
+    var color:String;
+};
+
+class RTX extends FlxShader {
+    @:glFragmentSource('
+    #pragma header
+
+    //https://github.com/jamieowen/glsl-blend !!!!
+
+    float blendOverlay(float base, float blend) {
+        return base < 0.5 ? (2.0 * base * blend) : (1.0 - 2.0 * (1.0 - base) * (1.0 - blend));
+    }
+
+    vec3 blendOverlay(vec3 base, vec3 blend) {
+        return vec3(blendOverlay(base.r, blend.r), blendOverlay(base.g, blend.g), blendOverlay(base.b, blend.b));
+    }
+
+    vec3 blendOverlay(vec3 base, vec3 blend, float opacity) {
+        return (blendOverlay(base, blend) * opacity + base * (1.0 - opacity));
+    }
+
+    float blendColorDodge(float base, float blend) {
+        return (blend == 1.0) ? blend : min(base / (1.0 - blend), 1.0);
+    }
+
+    vec3 blendColorDodge(vec3 base, vec3 blend) {
+        return vec3(blendColorDodge(base.r, blend.r), blendColorDodge(base.g, blend.g), blendColorDodge(base.b, blend.b));
+    }
+
+    vec3 blendColorDodge(vec3 base, vec3 blend, float opacity) {
+        return (blendColorDodge(base, blend) * opacity + base * (1.0 - opacity));
+    }
+
+    float blendLighten(float base, float blend) {
+        return max(blend, base);
+    }
+
+    vec3 blendLighten(vec3 base, vec3 blend) {
+        return vec3(blendLighten(base.r, blend.r), blendLighten(base.g, blend.g), blendLighten(base.b, blend.b));
+    }
+
+    vec3 blendLighten(vec3 base, vec3 blend, float opacity) {
+        return (blendLighten(base, blend) * opacity + base * (1.0 - opacity));
+    }
+
+    vec3 blendMultiply(vec3 base, vec3 blend) {
+        return base * blend;
+    }
+
+    vec3 blendMultiply(vec3 base, vec3 blend, float opacity) {
+        return (blendMultiply(base, blend) * opacity + base * (1.0 - opacity));
+    }
+
+    float inv(float val) {
+        return (0.0 - val) + 1.0;
+    }
+
+    // Shader by TheZoroForce240
+
+    uniform vec4 overlayColor;
+    uniform vec4 satinColor; // not proper satin but yea still works
+    uniform vec4 innerShadowColor;
+    uniform float innerShadowAngle;
+    uniform float innerShadowDistance;
+
+    float SAMPLEDIST = 5.0;
+
+    void main() {
+        vec2 uv = openfl_TextureCoordv.xy;
+        vec4 spritecolor = flixel_texture2D(bitmap, uv);
+        vec2 resFactor = 1.0 / openfl_TextureSize.xy;
+
+        spritecolor.rgb = blendMultiply(spritecolor.rgb, satinColor.rgb, satinColor.a); // apply satin (but no blur)
+
+        // inner shadow
+        float offsetX = cos(innerShadowAngle);
+        float offsetY = sin(innerShadowAngle);
+        vec2 distMult = (innerShadowDistance * resFactor) / SAMPLEDIST;
+        for (int i = 0; i < SAMPLEDIST; i++) // sample nearby pixels to see if theyre transparent, multiply blend by inverse alpha to brighten the edge pixels
+        {
+            // make sure to use texture2D instead of flixel_texture2D so alpha doesnt effect it
+            vec4 col = texture2D(bitmap, uv + vec2(offsetX * (distMult.x * i), offsetY * (distMult.y * i)));
+            spritecolor.rgb = blendColorDodge(spritecolor.rgb, innerShadowColor.rgb, innerShadowColor.a * inv(col.a)); // mult by the inverse alpha so it blends from the outside
+        }
+
+        spritecolor.rgb = blendLighten(spritecolor.rgb, overlayColor.rgb, overlayColor.a); // apply overlay
+
+        gl_FragColor = spritecolor * spritecolor.a;
+    }')
+
+    public var sliders:Array<RTXSlider>;
+
+    public function new() {
+        super();
+        this.sliders = [
+            { name: 'overlayR', min: 0, max: 1, value: 0.5, step: 0.01, color: "0xFFFF0000" },
+            { name: 'overlayG', min: 0, max: 1, value: 0.5, step: 0.01, color: "0xFF00FF00" },
+            { name: 'overlayB', min: 0, max: 1, value: 0.5, step: 0.01, color: "0xFF0000FF" },
+            { name: 'overlayA', min: 0, max: 1, value: 0.5, step: 0.01, color: "0xFFAAAAAA" },
+            { name: 'satinR', min: 0, max: 1, value: 0.5, step: 0.01, color: "0xFFFF0000" },
+            { name: 'satinG', min: 0, max: 1, value: 0.5, step: 0.01, color: "0xFF00FF00" },
+            { name: 'satinB', min: 0, max: 1, value: 0.5, step: 0.01, color: "0xFF0000FF" },
+            { name: 'satinA', min: 0, max: 1, value: 0.5, step: 0.01, color: "0xFFAAAAAA" },
+            { name: 'innerR', min: 0, max: 1, value: 0.5, step: 0.01, color: "0xFFFF0000" },
+            { name: 'innerG', min: 0, max: 1, value: 0.5, step: 0.01, color: "0xFF00FF00" },
+            { name: 'innerB', min: 0, max: 1, value: 0.5, step: 0.01, color: "0xFF0000FF" },
+            { name: 'innerA', min: 0, max: 1, value: 0.5, step: 0.01, color: "0xFFAAAAAA" },
+            { name: 'innerAngle', min: 0, max: 360, value: 0, step: 1, color: "0xFFAAAAAA" },
+            { name: 'innerDistance', min: 0, max: 50, value: 20, step: 1, color: "0xFFCCCCCC" }
+        ];
+		updateShader();		
+    }
+
+	public function updateSlider(name:String, ?min:Float, ?max:Float, ?value:Float, ?step:Float, ?color:String):Void {
+        for (slider in sliders) {
+            if (slider.name == name) {
+                if (min != null) slider.min = min;
+                if (max != null) slider.max = max;
+                if (value != null) slider.value = value;
+                if (step != null) slider.step = step;
+                if (color != null) slider.color = color;
+                break;
+            }
+        }
+		updateShader();
+    }
+
+    public function setOverlayColor(color:Array<Float>):Void {
+        this.data.overlayColor.value = color;
+    }
+
+    public function setSatinColor(color:Array<Float>):Void {
+        this.data.satinColor.value = color;
+    }
+
+    public function setInnerShadowColor(color:Array<Float>):Void {
+        this.data.innerShadowColor.value = color;
+    }
+
+    public function setInnerShadowAngle(angle:Float):Void {
+        this.data.innerShadowAngle.value = [angle];
+    }
+
+    public function setInnerShadowDistance(distance:Float):Void {
+        this.data.innerShadowDistance.value = [distance];
+    }
+
+    public function updateShader():Void {
+        var overlayColor:Array<Float> = [sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value];
+        var satinColor:Array<Float> = [sliders[4].value, sliders[5].value, sliders[6].value, sliders[7].value];
+        var innerShadowColor:Array<Float> = [sliders[8].value, sliders[9].value, sliders[10].value, sliders[11].value];
+        var innerShadowAngle:Float = sliders[12].value;
+        var innerShadowDistance:Float = sliders[13].value;
+
+        setOverlayColor(overlayColor);
+        setSatinColor(satinColor);
+        setInnerShadowColor(innerShadowColor);
+        setInnerShadowAngle(innerShadowAngle);
+        setInnerShadowDistance(innerShadowDistance);
+    }
+}
+
+class Light {
+    public var color:Array<Float>;
+    public var brightness:Float;
+    public var alpha:Float;
+
+    public function new(color:Array<Float>, brightness:Float, alpha:Float) {
+        this.color = color;
+        this.brightness = brightness;
+        this.alpha = alpha;
+    }
+}
+
 class BuildingShader extends FlxShader
 {
 	@:glFragmentSource('
