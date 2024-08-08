@@ -1,5 +1,9 @@
 package shaders;
 
+import flixel.system.FlxAssets.FlxShader;
+import flixel.system.FlxAssets.*;
+import openfl.display.Bitmap;
+import openfl.display.GraphicsShader;
 import openfl.display.Shader;
 import openfl.filters.ShaderFilter;
 import shaders.Shaders;
@@ -11,6 +15,32 @@ class ShadersHandler
 	public static var visualizer:ShaderFilter = new ShaderFilter(new shaders.VisualizerShader());
 	public static var heatwaveShader:ShaderFilter = new ShaderFilter(new shaders.HeatwaveShader().shader);
 	public static var rainShader:ShaderFilter = new ShaderFilter(new RainShader());
+    // public static var rtxShader:RTX = new RTX();
+
+    public static function applyRTXShader(sprite:FlxSprite, overlayColor:Array<Float>, satinColor:Array<Float>, innerShadowColor:Array<Float>, innerShadowAngle:Float, innerShadowDistance:Float):Void {
+        var rtxShader = new RTX();
+		rtxShader.setOverlayColor(overlayColor);
+        rtxShader.setSatinColor(satinColor);
+        rtxShader.setInnerShadowColor(innerShadowColor);
+        rtxShader.setInnerShadowAngle(innerShadowAngle);
+        rtxShader.setInnerShadowDistance(innerShadowDistance);
+		var rect = new openfl.geom.Rectangle(0, 0, sprite.graphic.bitmap.width, sprite.graphic.bitmap.height);
+		var spriteShader = new GraphicsShader(sprite.graphic.bitmap.encode(rect, new openfl.display.PNGEncoderOptions(true)));
+		sprite.shader = rtxShader;
+    }
+
+    public static function createLight(color:Array<Float>, brightness:Float, alpha:Float):Light {
+        return new Light(color, brightness, alpha);
+    }
+
+    public static function applyLightToSprite(sprite:FlxSprite, light:Light):Void {
+		var rtxShader = new RTX();
+        var overlayColor = [light.color[0] * light.brightness, light.color[1] * light.brightness, light.color[2] * light.brightness, light.alpha];
+        rtxShader.setOverlayColor(overlayColor);
+		var rect = new openfl.geom.Rectangle(0, 0, sprite.graphic.bitmap.width, sprite.graphic.bitmap.height);
+		var spriteShader = new GraphicsShader(sprite.graphic.bitmap.encode(rect, new openfl.display.PNGEncoderOptions(true)));
+		sprite.shader = rtxShader;
+    }
 
 	public static function setChrome(chromeOffset:Float):Void
 	{
