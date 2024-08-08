@@ -122,9 +122,10 @@ class BATTLEFIELD extends MusicBeatState
 
 		Highscore.load();
         #end
-        human = new SOUL(RED, 'CHARA', 20);
+        human = new SOUL(RED, 'Frisk', 1);
         trace(human.atk);
-        monster = new MSOUL('Z11Tale', 4, 1, 100000, 9999, 500, false, true);
+        monster = new MSOUL('Z11Tale', 4, 1, 100, 9999, 500, false, true);
+        monster.health = 100;
         health = human.health;
         items = human.storage;
         trace(monster.health);
@@ -190,11 +191,7 @@ class BATTLEFIELD extends MusicBeatState
         shaders.ShadersHandler.applyRTXShader(monsterS, overlayColor, satinColor, innerShadowColor, innerShadowAngle, innerShadowDistance);
         //monsterS.shader = new shaders.Shaders.RTX();
 
-<<<<<<< Updated upstream
-        enemyHP = new Bar(monsterS.x - 100, monsterS.y + 130, 'bosshp', function() return enemyHealth, 0, monster.maxHealth);
-=======
         enemyHP = new Bar(monsterS.x - 100, monsterS.y + 130, 'bosshp', function() return (enemyHealth / enemyMaxHealth) * 100, 0, 100);
->>>>>>> Stashed changes
         enemyHP.barWidth = 700;
         enemyHP.barHeight = 25;
         add(enemyHP);
@@ -511,7 +508,7 @@ class BATTLEFIELD extends MusicBeatState
         curMenu = 'attack';
         typeFunc(thing.flavorText, 0.04, 1);
         FlxG.sound.play(Paths.sound('ut/healsound'), 0.6);
-        if (thing.action == HEAL) human.health += thing.value;
+        // if (thing.action == HEAL) human.health += thing.value;
     }
 
     function menuAction(thing:String) {
