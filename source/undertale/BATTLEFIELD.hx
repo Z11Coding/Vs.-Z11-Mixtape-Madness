@@ -86,6 +86,7 @@ class BATTLEFIELD extends MusicBeatState
     var battleThing:FlxSprite;
     var target:FlxSprite;
     var slash:FlxSprite;
+	var enemyMaxHealth:Float;
 
     public function new(human:SOUL = null, monster:MSOUL = null) {
         if (human != null) this.human = human;
@@ -129,6 +130,7 @@ class BATTLEFIELD extends MusicBeatState
         trace(monster.health);
 
         enemyHealth = monster.health;
+        enemyMaxHealth = monster.maxHealth;
 
         var bg:FlxSprite = new FlxSprite(310, 100).loadGraphic(Paths.image('undertale/ui/bg'));
         bg.setGraphicSize(Std.int(bg.width) * 1.5);
@@ -188,7 +190,11 @@ class BATTLEFIELD extends MusicBeatState
         shaders.ShadersHandler.applyRTXShader(monsterS, overlayColor, satinColor, innerShadowColor, innerShadowAngle, innerShadowDistance);
         //monsterS.shader = new shaders.Shaders.RTX();
 
+<<<<<<< Updated upstream
         enemyHP = new Bar(monsterS.x - 100, monsterS.y + 130, 'bosshp', function() return enemyHealth, 0, monster.maxHealth);
+=======
+        enemyHP = new Bar(monsterS.x - 100, monsterS.y + 130, 'bosshp', function() return (enemyHealth / enemyMaxHealth) * 100, 0, 100);
+>>>>>>> Stashed changes
         enemyHP.barWidth = 700;
         enemyHP.barHeight = 25;
         add(enemyHP);
@@ -520,7 +526,7 @@ class BATTLEFIELD extends MusicBeatState
                         typeFunc('Z11Tale - ATK 99 DEF 99\nSimply want to have fun\nDangerous if provoked, though.', 0.04, 1.5);
                 }
             case 'item':
-                useItem(undertale.SOUL.Inventory.getItem(thing));
+                useItem(undertale.SOUL.ITEMS.instance.useItem(thing));
             case 'mercy':
                 switch(thing)
                 {
@@ -565,6 +571,7 @@ class BATTLEFIELD extends MusicBeatState
         healthTxt.text = human.health + ' / ' + human.maxHealth;
 
         enemyHealth = monster.health;
+        enemyMaxHealth = monster.maxHealth;
 
         if (FlxG.keys.justPressed.B) canMove = false;
         if (FlxG.keys.justPressed.V) canMove = true;

@@ -16,11 +16,15 @@ class SOUL {
     public var maxHealth:Float = 20;
     public var type:SOULTYPES = RED;
     public var name:String = 'UNKNOWN';
-    public var storage:Array<String> = ['Food 1', 'Food 2', 'Food 3'];
+    public var storage:Array<String>;
+   @:isVar public var weapon(get, set):ITEM;
+   @:isVar public var armor(get, set):ITEM;
     public var LOVE:Int = 1;
     public var gold:Int = 0;
     public var atk:Int = 1;
+    public var addAtk:Int = 0;
     public var def:Int = 0;
+    public var addDef:Int = 0;
     public var sprite:FlxSprite;
     public static var instance:SOUL;
     private var damageCooldown:Float = 0;
@@ -31,6 +35,10 @@ class SOUL {
         this.name = name;
         this.LOVE = LOVE;
         this.sprite = getSoulSprite();
+        this.storage = [];
+        for (item in new ITEMS().items.keys()) {
+            this.storage.push(item);
+        }
         instance = this;
         setStats(LOVE);
     }
@@ -81,12 +89,48 @@ class SOUL {
             }
         }
     }
+
+    public function get_weapon():ITEM {
+        return weapon;
+    }
+
+    private function set_weapon(value:ITEM):ITEM {
+        switch (ITEMS.getItemType(value.action)) {
+            case ITEMTYPE.WEAPON(_):
+                weapon = value;
+            default:
+                throw "Invalid item type for weapon. Expected ITEMTYPE.WEAPON.";
+        }
+        return value;
+    }
+
+    public function get_armor():ITEM {
+        return armor;
+    }
+    
+    private function set_armor(value:ITEM):ITEM {
+        switch (ITEMS.getItemType(value.action)) {
+            case ITEMTYPE.ARMOR(_):
+                armor = value;
+            default:
+                throw "Invalid item type for armor. Expected ITEMTYPE.ARMOR.";
+        }
+        return value;
+    }
+}
+
+enum ITEMTYPE
+{
+    FOOD(?action:Void -> Void);
+    WEAPON(?action:Void -> Void);
+    ARMOR(?action:Void -> Void);
+    KEY(?action:Void -> Void);
 }
 
 enum ACTION
 {
     HEAL;
-    ITEM;
+    ITEM(type:ITEMTYPE);
 }
 class ITEM {
     public var name:String;
@@ -103,27 +147,105 @@ class ITEM {
 }
 class ITEMS {
     public static var instance:ITEMS;
-    public var fallback:ITEM = new ITEM('error', HEAL, 0, "If you're reading this...\nyou messed up somewhere!");
-    public var test1:ITEM = new ITEM('Food 1', HEAL, 10, 'You ate the Food 1!\nYou healed 10HP and passed the test!');
-    public var test2:ITEM = new ITEM('Food 2', HEAL, 20, 'You ate the Food 2!\nSpicy!\nYou healed 20HP');
-    public var test3:ITEM = new ITEM('Food 3', HEAL, 1, 'You ate the Food 3!\nEw. it\'s cold...\nYou healed 1HP anyway, though...');
+    public var items:Map<String, ITEM>;
+
     public function new() {
         instance = this;
+        items = new Map<String, ITEM>();
+        items.set('Stick', new ITEM('Stick', ACTION.ITEM(ITEMTYPE.WEAPON(() -> null)), 0, 'You equipped the Stick!\nYou feel a little more powerful...'));
+        items.set('Bandage', new ITEM('Bandage', ACTION.ITEM(ITEMTYPE.ARMOR(() -> null)), 0, 'You applied the Bandage!\nYou feel a little better...'));
+        items.set('error', new ITEM('error', HEAL, 0, "If you're reading this...\nyou messed up somewhere!"));
+        items.set('Food 1', new ITEM('Food 1', HEAL, 10, 'You ate the Food 1!\nYou healed 10HP and passed the test!'));
+        items.set('Food 2', new ITEM('Food 2', HEAL, 20, 'You ate the Food 2!\nSpicy!\nYou healed 20HP'));
+        items.set('Food 3', new ITEM('Food 3', HEAL, 1, 'You ate the Food 3!\nEw. it\'s cold...\nYou healed 1HP anyway, though...'));
     }
-}
+    public static function getItemByName(name:String):ITEM {
+        return instance.items.get(name);
+    }
 
-//TODO: make this better
-class Inventory {
-    public static function getItem(item:String):ITEM {
-        switch (item)
-        {
-            case 'Food 1':
-                return new ITEMS().test1;
-            case 'Food 2':
-                return new ITEMS().test2;
-            case 'Food 3':
-                return new ITEMS().test3;
+    
+    public static function getItemType(action:ACTION):ITEMTYPE {
+        switch (action) {
+            case ITEM(itemType):
+                return itemType;
+            default:
+                throw "Unknown action type.";
         }
-        return new ITEMS().fallback;
+    }
+
+    public static function isWeapon(action:ACTION):Bool {
+        switch (getItemType(action)) {
+            case ITEMTYPE.WEAPON(_):
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public static function isArmor(action:ACTION):Bool {
+        switch (getItemType(action)) {
+            case ITEMTYPE.ARMOR(_):
+                return true;
+            default:
+                return false;
+        }
+    }
+
+
+
+    public function heal(value:Float):Void {
+        SOUL.instance.health += Std.int(value);
+        if (SOUL.instance.health > SOUL.instance.maxHealth) {
+            SOUL.instance.health = SOUL.instance.maxHealth;
+        }
+    }
+
+    public function useItem(itemName:String):ITEM {
+        var item:ITEM = ITEMS.getItemByName(itemName);
+        if (item != null) {
+            SOUL.instance.storage.remove(itemName);
+            // Perform the action associated with the item
+            switch (item.action) {
+                case HEAL:
+                    heal(item.value);
+                case ITEM(ITEMTYPE.WEAPON(action)):
+                    if (action != null) {
+                        action();
+                    }
+                    SOUL.instance.atk -= Std.int(SOUL.instance.addAtk);
+                    SOUL.instance.addAtk += Std.int(item.value);
+                    SOUL.instance.atk += Std.int(SOUL.instance.addAtk);
+
+                case ITEM(ITEMTYPE.ARMOR(action)):
+                    if (action != null) {
+                        action();
+                    }
+                    SOUL.instance.def -= Std.int(SOUL.instance.addDef);
+                    SOUL.instance.addDef += Std.int(item.value);
+                    SOUL.instance.def += Std.int(SOUL.instance.addDef);
+
+                case ITEM(ITEMTYPE.KEY(action)):
+                    // Nothing to do here
+                case ITEM(ITEMTYPE.FOOD(action)):
+                    heal(item.value);
+                    if (action != null) {
+                        action();
+                    }
+            }
+        }
+        return item;
+    }
+
+    function checkItemType(itemType:ITEMTYPE):String {
+        switch (itemType) {
+            case FOOD(_):
+                return "This is a FOOD item.";
+            case WEAPON(_):
+                return "This is a WEAPON item.";
+            case ARMOR(_):
+                return "This is an ARMOR item.";
+            case KEY(_):
+                return "This is a KEY item.";
+        }
     }
 }
