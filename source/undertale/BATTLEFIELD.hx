@@ -32,6 +32,7 @@ class BATTLEFIELD extends MusicBeatState
     var enemyHP:Bar;
     var hpTxt:FlxText;
     var healthTxt:FlxText;
+    var damageTxt:FlxText;
     var buttons:FlxTypedGroup<FlxSprite>;
     var menu:FlxTypedGroup<FlxText>;
     var name:FlxText;
@@ -119,11 +120,13 @@ class BATTLEFIELD extends MusicBeatState
 
 		Highscore.load();
         #end
-        human = new SOUL(20, 99, 1, RED, 'Frisk', 1);
-        monster = new MSOUL('Z11Tale', 99, 99, 100000, 9999, 500, false, true);
-        monster.health = 100000;
+        human = new SOUL(RED, 'Frisk', 1);
+        trace(human.atk);
+        monster = new MSOUL('Z11Tale', 4, 1, 100, 9999, 500, false, true);
+        monster.health = 100;
         health = human.health;
         items = human.storage;
+        trace(monster.health);
 
         enemyHealth = monster.health;
 
@@ -161,12 +164,12 @@ class BATTLEFIELD extends MusicBeatState
         soul = human.sprite;
         monsterS = monster.sprite;
         monsterS.x = 430;
-        monsterS.y = -100;
+        monsterS.y = -80;
         boxB.screenCenter();
         box.screenCenter();
         soul.screenCenter();
-        monsterS.scale.x = 0.5;
-	    monsterS.scale.y = 0.5;
+        monsterS.scale.x = 0.4;
+	    monsterS.scale.y = 0.4;
         soul.scale.x = 1.8;
 	    soul.scale.y = 1.8;
         add(monsterS);
@@ -174,28 +177,39 @@ class BATTLEFIELD extends MusicBeatState
         add(box);
         add(soul);
 
-        enemyHP = new Bar(monsterS.x - 50, monsterS.y + 300, 'hp', function() return enemyHealth, 0, monster.maxHealth);
-        enemyHP.barWidth = Std.int(monster.maxHealth);
-        enemyHP.barHeight = 30;
+        enemyHP = new Bar(monsterS.x - 100, monsterS.y + 130, 'bosshp', function() return enemyHealth, 0, 100);
+        enemyHP.barWidth = 700;
+        enemyHP.barHeight = 25;
         add(enemyHP);
         enemyHP.setColors(FlxColor.fromString('#00FF00'), FlxColor.fromString('#FF0000'));
         enemyHP.updateBar();
+        enemyHP.alpha = 0;
+
+        damageTxt = new FlxText(enemyHP.x + 300, enemyHP.y - 100, 0, "99", 30);
+        damageTxt.scrollFactor.set();
+        damageTxt.setFormat(Paths.font("hachicro.ttf"), 25, FlxColor.RED, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        damageTxt.alignment = FlxTextAlign.CENTER;
+        damageTxt.size = 40;
+        add(damageTxt);
+        damageTxt.alpha = 0;
 
         battleThing = new FlxSprite(395, 425).loadGraphic(Paths.image('undertale/ui/spr_target_0')); 
         battleThing.scale.x = 1.4;
 	    battleThing.scale.y = 1.4;
         add(battleThing);
+        battleThing.alpha = 0;
 
         target = new FlxSprite(240, 425);
         target.frames = Paths.getSparrowAtlas('undertale/ui/target');
-        target.animation.addByPrefix('strike', "targetFlash", 10, true);
+        target.animation.addByPrefix('strike', "targetFlash", 1, true);
         target.scale.x = 1.4;
 	    target.scale.y = 1.4;
         add(target);
+        target.alpha = 0;
 
         slash = new FlxSprite(395, 425);
         slash.frames = Paths.getSparrowAtlas('undertale/ui/slash');
-        slash.animation.addByPrefix('attack', "Slash", 10);
+        slash.animation.addByPrefix('attack', "Slash", 1);
         //slash.scale.x = 1.4;
 	    //slash.scale.y = 1.4;
         add(slash);
@@ -248,38 +262,32 @@ class BATTLEFIELD extends MusicBeatState
 
         target.animation.play('strike', true);
         slash.animation.play('attack', true);
-        var damageRange:String = 'bad';
-        if (lod <= 0 && lod >= 90)
-        {
-            if (lod <= 0 && lod >= 24 || lod <= 55 && lod >= 90)
-            {
-                damageRange = 'bad';
-            }
-            else if (lod <= 25 && lod >= 34 || lod <= 45 && lod >= 54)
-            {
-                damageRange = 'good';
-            }
-            else if (lod <= 35 && lod >= 44)
-            {
-                damageRange = 'perfect';
-            }
-        }
-        else damageRange = 'bad';
 
         new FlxTimer().start(1, function(tmr:FlxTimer)
         {
-            enemyHP.visible = true;
+            enemyHP.alpha = 1;
+            damageTxt.alpha = 1;
+            FlxTween.tween(damageTxt, {y: enemyHP.y - 40}, 1.5, {ease: FlxEase.bounceOut});
             FlxG.sound.play(Paths.sound('ut/hitsound'));
-            monster.health -= DamageCalculator.getDamage(damageRange, human, monster); //dont ask why i did it this way.
-            new FlxTimer().start(3, function(tmr:FlxTimer)
+            damageTxt.text = ''+(monster.health -= DamageCalculator.getDamage(lod, human, monster));
+            FlxTween.num(monster.health, (monster.health -= DamageCalculator.getDamage(lod, human, monster)), 1.5, {ease: FlxEase.expoInOut}, function(num)
             {
-                enemyHP.visible = false;
+                monster.health = num;
+                //trace('tweened to: '+monster.health);
+            });
+            //monster.health -= DamageCalculator.getDamage(lod, human, monster); //dont ask why i did it this way.
+            trace(monster.health);
+            new FlxTimer().start(2, function(tmr:FlxTimer)
+            {
+                enemyHP.alpha = 0;
+                damageTxt.alpha = 0;
                 FlxTween.tween(battleThing, {alpha: 0}, 0.5);
                 FlxTween.tween(target, {alpha: 0}, 0.5);
                 FlxTween.tween(battleThing.scale, {x: 0.8, y:1}, 0.5, {onComplete: function(twn:FlxTween) { 
                     target.x = 240;
                     attacked = false;
                     damageArea = 0;
+                    damageTxt.y = enemyHP.y - 100;
                 }});
                 canMove = true;
                 curMenu = 'main';
@@ -541,16 +549,17 @@ class BATTLEFIELD extends MusicBeatState
         hp.updateBar();
         enemyHP.updateBar();
         if (human.health > human.maxHealth) human.health = human.maxHealth;
+        if (monster.health < 0) monster.health = 0;
         health = human.health;
         healthTxt.text = human.health + ' / ' + human.maxHealth;
 
-        var mult:Float = FlxMath.lerp(enemyHealth, monster.health, ((monster.health / enemyHealth) * (elapsed * 8)));
-        enemyHealth = mult;
+        enemyHealth = monster.health;
 
         if (FlxG.keys.justPressed.B) canMove = false;
         if (FlxG.keys.justPressed.V) canMove = true;
         if (FlxG.keys.justPressed.I) isBlue = true;
         if (FlxG.keys.justPressed.O) isBlue = false;
+        if (FlxG.keys.justPressed.Q) human.health--;
         if (FlxG.keys.justPressed.F) 
         {
             var testSprite:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('undertale/bullets/boneMini'));
@@ -655,18 +664,23 @@ class BATTLEFIELD extends MusicBeatState
                 if (!attacked)
                 {
                     if (target.x == 240)
-                    {                        
-                        FlxTween.tween(battleThing, {alpha: 1}, 1);
-                        FlxTween.tween(battleThing.scale, {x: 1.4, y:1.4}, 1);
+                    {           
+                        FlxTween.tween(target, {alpha: 1}, 0.5);             
+                        FlxTween.tween(battleThing, {alpha: 1}, 0.5);
+                        FlxTween.tween(battleThing.scale, {x: 1.4, y:1.4}, 0.5);
                     }
 
-                    if (target.x > 240)
+                    if (target.x > 240 && damageArea < 90)
                     {
                         damageArea++;
                         if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.Z)
                         {
                             doAttack(damageArea);
                         }
+                    }
+                    else if (damageArea == 90)
+                    {
+                        doAttack(damageArea);
                     }
                     target.x += 10;
                 }

@@ -26,15 +26,28 @@ class SOUL {
     private var damageCooldown:Float = 0;
     private var cooldownTime:Float = 1.0; // 1 second cooldown
 
-    public function new(health:Float = 20, attack:Int = 0, defense:Int = 0, type:SOULTYPES = RED, name:String = 'UNKNOWN', LOVE:Int = 1) {
-        this.health = health;
+    public function new(type:SOULTYPES = RED, name:String = 'UNKNOWN', LOVE:Int = 1) {
         this.type = type;
         this.name = name;
         this.LOVE = LOVE;
-        this.atk = attack;
-        this.def = defense;
         this.sprite = getSoulSprite();
         instance = this;
+        setStats(LOVE);
+    }
+
+    function setStats(LOVE:Int) {
+        if (LOVE < 20)
+        {
+            this.health = Std.int(16 + (4 * LOVE));
+            this.atk = Std.int(-2 + (2 * LOVE)+1);
+            this.def = Std.int((LOVE - 1) / 4);
+        }
+        else
+        {
+            this.health = 99;
+            this.atk = 38;
+            this.def = 4;
+        }
     }
 
     function getSoulSprite():FlxSprite {

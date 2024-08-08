@@ -14,8 +14,8 @@ class Bar extends FlxSpriteGroup
 	public var barCenter(default, null):Float = 0;
 
 	// you might need to change this if you want to use a custom bar
-	public var barWidth(default, set):Int = 1;
-	public var barHeight(default, set):Int = 1;
+	public var barWidth(default, set):Float = 1;
+	public var barHeight(default, set):Float = 1;
 	public var barOffset:FlxPoint = new FlxPoint(3, 3);
 
 	public function new(x:Float, y:Float, image:String = 'healthBar', valueFunction:Void->Float = null, boundX:Float = 0, boundY:Float = 1)
@@ -145,14 +145,14 @@ class Bar extends FlxSpriteGroup
 		return value;
 	}
 
-	private function set_barWidth(value:Int)
+	private function set_barWidth(value:Float)
 	{
 		barWidth = value;
 		regenerateClips();
 		return value;
 	}
 
-	private function set_barHeight(value:Int)
+	private function set_barHeight(value:Float)
 	{
 		barHeight = value;
 		regenerateClips();
