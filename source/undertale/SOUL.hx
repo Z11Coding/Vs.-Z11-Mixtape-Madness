@@ -47,6 +47,7 @@ class SOUL {
             this.health = 99;
             this.atk = 38;
             this.def = 4;
+            this.LOVE = 20;
         }
     }
 

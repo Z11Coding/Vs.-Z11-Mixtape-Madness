@@ -25,7 +25,7 @@ class DamageCalculator {
         }
         else if (rating == 41)
         {
-            initalDamage *= FlxG.random.float(3, 4.9);
+            initalDamage *= FlxG.random.float(3, 10);
             trace('CRIT!');
         }
         initalDamage -= mSoul.def;

@@ -121,10 +121,9 @@ class BATTLEFIELD extends MusicBeatState
 
 		Highscore.load();
         #end
-        human = new SOUL(RED, 'Frisk', 1);
+        human = new SOUL(RED, 'CHARA', 20);
         trace(human.atk);
-        monster = new MSOUL('Z11Tale', 4, 1, 100, 9999, 500, false, true);
-        monster.health = 100;
+        monster = new MSOUL('Z11Tale', 4, 1, 100000, 9999, 500, false, true);
         health = human.health;
         items = human.storage;
         trace(monster.health);
@@ -189,7 +188,7 @@ class BATTLEFIELD extends MusicBeatState
         shaders.ShadersHandler.applyRTXShader(monsterS, overlayColor, satinColor, innerShadowColor, innerShadowAngle, innerShadowDistance);
         //monsterS.shader = new shaders.Shaders.RTX();
 
-        enemyHP = new Bar(monsterS.x - 100, monsterS.y + 130, 'bosshp', function() return enemyHealth, 0, 100);
+        enemyHP = new Bar(monsterS.x - 100, monsterS.y + 130, 'bosshp', function() return enemyHealth, 0, monster.maxHealth);
         enemyHP.barWidth = 700;
         enemyHP.barHeight = 25;
         add(enemyHP);
