@@ -106,7 +106,6 @@ class FormattedFlxTypeText extends FlxTypeText {
                 if (endTag != -1) {
                     var tag = _finalText.substring(i + 1, endTag);
                     var parts = tag.split(":");
-                    formattingLocations.set(reactText.length, function():Void {
                         switch (parts[0]) {
                             case 'slow':
                                 var slowSpeed = parseFloat(parts[1]);
