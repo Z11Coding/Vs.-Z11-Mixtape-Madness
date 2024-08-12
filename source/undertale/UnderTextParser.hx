@@ -21,6 +21,13 @@ class UnderTextParser extends FlxTypeText {
     override public function update(elapsed:Float):Void {
         if (_waiting || paused) return;
 
+        for (index in _formattingLocations.keys()) {
+            if (_length == index) {
+                var value:Void->Void = _formattingLocations.get(index);
+                value();
+            }
+        }
+
         delay = speed;
 
         if (pauseDuration > 0) {
