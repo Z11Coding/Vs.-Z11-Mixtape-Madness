@@ -125,11 +125,11 @@ class FormattedFlxTypeText extends FlxTypeText {
                                 var pauseDuration = parseFloat(parts[1]);
                                 if (!Math.isNaN(pauseDuration)) {
                                     formattingLocations.set(i, function() {
-                                        pauseDuration = pauseDuration;
+                                        pauseDuration = this.pauseDuration;
                                     });
                                 }
                             default:
-                                speed = speed;
+                                speed = this.speed;
                         }
                     i = endTag + 1;
                 }
