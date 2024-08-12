@@ -3,7 +3,7 @@ package undertale;
 import flixel.addons.text.FlxTypeText;
 import flixel.FlxG;
 
-class FormattedFlxTypeText extends FlxTypeText {
+class UnderTextParser extends FlxTypeText {
     private var speed:Float;
     private var defaultSpeed:Float;
     private var pauseDuration:Float;
@@ -20,6 +20,13 @@ class FormattedFlxTypeText extends FlxTypeText {
 
     override public function update(elapsed:Float):Void {
         if (_waiting || paused) return;
+
+        for (index in _formattingLocations.keys()) {
+            if (_length == index) {
+                var value:Void->Void = _formattingLocations.get(index);
+                value();
+            }
+        }
 
         delay = speed;
 
