@@ -91,13 +91,13 @@ class MusicBeatState extends FlxState
 			}
 		}
 
-		if (Controls.L.keyJustPressed && Controls.CTRL.keyJustPressed && Controls.SHIFT.keyJustPressed)
-		{
-			if (SaveState.savedStates.get("lastState") != null)
-				FlxG.switchState(SaveState.loadState("lastState"));
-			else 
-			SaveState.saveState("lastState", FlxG.state);
-		}
+		// if (Controls.L.keyJustPressed && Controls.CTRL.keyJustPressed && Controls.SHIFT.keyJustPressed)
+		// {
+		// 	if (SaveState.savedStates.get("lastState") != null)
+		// 		FlxG.switchState(SaveState.loadState("lastState"));
+		// 	else 
+		// 	SaveState.saveState("lastState", FlxG.state);
+		// }
 
 		if(FlxG.save.data != null) FlxG.save.data.fullscreen = FlxG.fullscreen;
 		
