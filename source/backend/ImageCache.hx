@@ -87,7 +87,7 @@ class ImageCache {
             var cacheJson:String = Json.stringify(cacheData); // Never trace this, OR WAIT FOREVER
 
             FlxG.save.data.ImageCache = cacheJson;
-            FlxG.save.flush();
+            FlxG.save.flush();  
         }
     
         // Function to load and deserialize the cache

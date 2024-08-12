@@ -229,28 +229,28 @@ class TransitionState {
     static function meltEffect(screenCopy:BitmapData, ?options:Dynamic):Void {
         var pixels = screenCopy;
         var duration:Float = Reflect.hasField(options, "duration") ? options.duration : FlxG.random.float(1, 3);
-        // var meltTween = FlxTween.num(0, FlxG.height, duration, {
-        //     onUpdate: function(tween:FlxTween) {
-        //         var value = tween.value;
-        //         for (y in 0...FlxG.height) {
-        //             for (x in 0...FlxG.width) {
-        //                 var pixel = pixels.getPixel32(x, y);
-        //                 if (pixel != FlxColor.TRANSPARENT) {
-        //                     var newY = y + Std.int(Math.random() * value);
-        //                     if (newY < FlxG.height) {
-        //                         screenCopy.setPixel(x, newY, pixel);
-        //                         screenCopy.setPixel(x, y, FlxColor.TRANSPARENT);
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //         FlxG.camera.buffer.draw(screenCopy);
-        //     },
-        //     onComplete: function(tween:FlxTween) {
-        //         trace("Post-switch melt complete.");
-        //         screenCopy.dispose(); // Clean up memory for screenCopy
-        //     }
-        // });
+        var meltTween = FlxTween.num(0, FlxG.height, duration, {
+            onUpdate: function(tween:FlxTween) {
+                var value = tween.percent;
+                for (y in 0...FlxG.height) {
+                    for (x in 0...FlxG.width) {
+                        var pixel = pixels.getPixel32(x, y);
+                        if (pixel != FlxColor.TRANSPARENT) {
+                            var newY = y + Std.int(Math.random() * value);
+                            if (newY < FlxG.height) {
+                                screenCopy.setPixel(x, newY, pixel);
+                                screenCopy.setPixel(x, y, FlxColor.TRANSPARENT);
+                            }
+                        }
+                    }
+                }
+                FlxG.camera.buffer.draw(screenCopy);
+            },
+            onComplete: function(tween:FlxTween) {
+                trace("Post-switch melt complete.");
+                screenCopy.dispose(); // Clean up memory for screenCopy
+            }
+        });
     }
 
     function getTargetState(state:FlxState) {
