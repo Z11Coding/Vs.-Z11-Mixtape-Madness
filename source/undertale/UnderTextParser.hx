@@ -3,7 +3,7 @@ package undertale;
 import flixel.addons.text.FlxTypeText;
 import flixel.FlxG;
 
-class FormattedFlxTypeText extends FlxTypeText {
+class UnderTextParser extends FlxTypeText {
     private var speed:Float;
     private var defaultSpeed:Float;
     private var pauseDuration:Float;
@@ -108,28 +108,27 @@ class FormattedFlxTypeText extends FlxTypeText {
                     var parts = tag.split(":");
                         switch (parts[0]) {
                             case 'slow':
-                                var slowSpeed = parseFloat(parts[1]);
+                                var slowSpeed = Std.parseFloat(parts[1]);
                                 if (!Math.isNaN(slowSpeed)) {
                                     formattingLocations.set(i, function() {
                                         speed = defaultSpeed + slowSpeed;
                                     });
                                 }
                             case 'fast':
-                                var fastSpeed = parseFloat(parts[1]);
+                                var fastSpeed = Std.parseFloat(parts[1]);
                                 if (!Math.isNaN(fastSpeed)) {
                                     formattingLocations.set(i, function() {
                                         speed = defaultSpeed - fastSpeed;
                                     });
                                 }
                             case 'pause':
-                                var pauseDuration = parseFloat(parts[1]);
+                                var pauseDuration = Std.parseFloat(parts[1]);
                                 if (!Math.isNaN(pauseDuration)) {
                                     formattingLocations.set(i, function() {
                                         pauseDuration = this.pauseDuration;
                                     });
                                 }
                             default:
-                                speed = this.speed;
                         }
                     i = endTag + 1;
                 }

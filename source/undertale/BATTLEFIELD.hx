@@ -8,7 +8,6 @@ import objects.TypedAlphabet;
 import cutscenes.DialogueBox;
 import backend.util.WindowUtil;
 import flixel.input.keyboard.FlxKey;
-import flixel.addons.text.FlxTypeText;
 import flixel.FlxState;
 import undertale.*;
 import undertale.BULLETPATTERN;
@@ -44,8 +43,8 @@ class BATTLEFIELD extends MusicBeatState
     var menu:FlxTypedGroup<FlxText>;
     var bulletGroup:FlxTypedGroup<FlxSprite>;
     var name:FlxText;
-    var underText:FlxTypeText;
-    var monsterText:FlxTypeText;
+    var underText:UnderTextParser;
+    var monsterText:UnderTextParser;
     var dialogueCamera:FlxCamera;
     var options:Array<String> = [];
     var items:Array<String>;
@@ -96,7 +95,6 @@ class BATTLEFIELD extends MusicBeatState
     var slash:FlxSprite;
 	var enemyMaxHealth:Float;
     public var turnCounter:Int = 0;
-    public var progress:Int = 0;
 
     public function new(?human:SOUL = null, ?monster:MSOUL = null, isGenocide:Bool = true) {
         this.isGenocide = isGenocide;
@@ -139,10 +137,10 @@ class BATTLEFIELD extends MusicBeatState
         {
             human = new SOUL(RED, 'Chara', 20);
             monster = new MSOUL('Z11Tale', 4, 1, 100000, 9999, 500, false, true, isGenocide);
-            monster.initFlavorText = 'Battle against the truly determined...\nLet\'s see how much he\'ll take before he breaks...';
+            monster.initFlavorText = 'Battle against the truly determined...\n[slow:2]Let\'s see how much he\'ll take before he breaks...';
             monster.flavorTextList = [
                 'You feel like you\'ve done this before somewhere...', 
-                'Z11Tale asks his blasters what they want for dinner\nThey\'re still deciding',
+                'Z11Tale asks his blasters what they want for dinner\n[pause:slow]They\'re still deciding',
                 'Smells like DETERMINATION',
                 'Z11Tale rubs his sword\nit shimmers in multiple different colors in response',
                 'Z11Tale reminds himself of your sins\nHis grip on his sword tightens',
@@ -280,7 +278,7 @@ class BATTLEFIELD extends MusicBeatState
         slash.alpha = 0;
 
 
-        underText = new FlxTypeText(300, 400, Std.int(FlxG.width * 0.6), '', 32);
+        underText = new UnderTextParser(300, 400, Std.int(FlxG.width * 0.6), '', 32);
         underText.font = Paths.font("determination-extended.ttf");
         underText.color = 0xFFFFFFFF;
         underText.prefix = '* '; 
@@ -323,10 +321,10 @@ class BATTLEFIELD extends MusicBeatState
         speechBubble.scale.x = 1.4;
 	    speechBubble.scale.y = 1.4;
         add(speechBubble);
-        speechBubble.alpha = 1;
+        speechBubble.alpha = 0;
 
 
-        monsterText = new FlxTypeText(300, 400, Std.int(speechBubble.width), '', 32);
+        monsterText = new UnderTextParser(300, 400, Std.int(speechBubble.width), '', 32);
         monsterText.font = Paths.font("determination-extended.ttf");
         monsterText.color = 0xFF000000;
         monsterText.sounds = [FlxG.sound.load(Paths.sound('ut/monsterfont'), 0.6)];
@@ -367,7 +365,6 @@ class BATTLEFIELD extends MusicBeatState
         FlxG.sound.playMusic(Paths.music(daSong), 0.8, true);
 
         sequence = new EventSequence(human);
-        speechFunc('rightshort', 'this is a test. don\'t worry about it.', 'Z11', 20);
     }
 
     //I love stealing functions
@@ -376,7 +373,7 @@ class BATTLEFIELD extends MusicBeatState
 		bubbleOffset[name] = [x, y, width, addx];
 	}
 
-    function speechFunc(box:String, text:String = '', sound:String = 'monsterfont', size:Int = 30, speed:Float = 0.04)
+    function speechFunc(box:String = 'right', ?text:String = '', ?sound:String = 'monsterfont', ?size:Int = 30, ?speed:Float = 0.04)
     {
         speechBubble.updateHitbox();
         speechBubble.animation.play(box, true);
@@ -394,11 +391,13 @@ class BATTLEFIELD extends MusicBeatState
         monsterText.sounds = [FlxG.sound.load(Paths.sound('ut/$sound'), 0.6)];
         if (box == 'empty')
         {
+            speechBubble.alpha = 0;
             monsterText.alpha = 0;
             monsterText.resetText('');
         }
         else
         {
+            speechBubble.alpha = 1;
             monsterText.alpha = 1;
             monsterText.resetText(text);
             monsterText.start(speed, true);
@@ -414,7 +413,7 @@ class BATTLEFIELD extends MusicBeatState
         slash.animation.play('attack');
         slash.alpha = 1;
 
-        new FlxTimer().start(0.7, function(tmr:FlxTimer)
+        new FlxTimer().start(0.6, function(tmr:FlxTimer)
         {
             slash.animation.play('wait', true);
             slash.alpha = 0;
@@ -434,7 +433,6 @@ class BATTLEFIELD extends MusicBeatState
                 //trace('tweened to: '+monster.health);
             });
             //monster.health -= DamageCalculator.getDamage(lod, human, monster); //dont ask why i did it this way.
-            trace(monster.health);
             new FlxTimer().start(2, function(tmr:FlxTimer)
             {
                 enemyHP.alpha = 0;
@@ -448,9 +446,9 @@ class BATTLEFIELD extends MusicBeatState
                     damageTxt.y = enemyHP.y - 100;
                     target.animation.play('wait', true);
                 }});
-                canMove = true;
-                curMenu = 'main';
-                setAttack('test 1');
+                if (isGenocide) monster.progress++;
+                curMenu = 'monDialogue';
+                speechFunc('right', 'hehehehe.\nbones.', 'Z11', 20);
             });
         });
     }
@@ -647,31 +645,6 @@ class BATTLEFIELD extends MusicBeatState
         }
     }
 
-    function typeFuncMonster(?text:String = '', ?sound:String = 'monsterfont', ?speed:Float = 0.04, ?delayBetweenPause:Float = 1, hide:Bool = false)
-    {
-        daSpeed = speed;
-        monsterText.sounds = [FlxG.sound.load(Paths.sound('ut/$sound'), 0.6)];
-    
-        var splitName:Array<String> = text.split("\n");
-        var trueText:String = splitName[0];
-        for (i in 0...splitName.length)
-        {
-            if (i > 0) trueText += '\n* ' + splitName[i];
-        }
-
-        if (hide)
-        {
-            monsterText.alpha = 0;
-            monsterText.resetText('');
-        }
-        else
-        {
-            monsterText.alpha = 1;
-            monsterText.resetText(trueText);
-            monsterText.start(speed, true);
-        }
-    }
-
     function useItem(thing:ITEM)
     {
         regenMenu('nothing');
@@ -682,6 +655,7 @@ class BATTLEFIELD extends MusicBeatState
     }
 
     function menuAction(thing:String) {
+        //if (!isGenocide) monster.progress++; //ill attach this to something later
         switch (curMenu)
         {
             case 'act':
@@ -753,6 +727,8 @@ class BATTLEFIELD extends MusicBeatState
     var sequence:EventSequence;
     var curAttack:String;
     var curTime:Float = 0;
+    var dialTriggered:Bool = false;
+    var allowUIDialogue:Bool = true;
     override function update(elapsed:Float) {
         //I love manually updating EVERYTHING!!!!
         target.animation.update(elapsed);
@@ -764,6 +740,7 @@ class BATTLEFIELD extends MusicBeatState
         monsterText.update(elapsed);
         hp.updateBar();
         enemyHP.updateBar();
+
         if (human.health > human.maxHealth) human.health = human.maxHealth;
         if (monster.health < 0) monster.health = 0;
         health = human.health;
@@ -840,13 +817,23 @@ class BATTLEFIELD extends MusicBeatState
         else underText.delay = daSpeed;
         if (underText.text.charAt(underText.text.length-1) == "\n") underText.delay = 0.3;
         else underText.delay = daSpeed;
+
+        if (monsterText.text.charAt(underText.text.length-1) == ".") underText.delay = 3;
+        else monsterText.delay = daSpeed;
+        if (monsterText.text.charAt(underText.text.length-1) == "@") 
+        {
+            StringTools.replace(monsterText.text, '@', '\n');
+            monsterText.delay = 0.3;
+        }
+        else monsterText.delay = daSpeed;
         if (!canMove)
         {
             if (curMenu == 'main')
             {
+                allowUIDialogue = true;
                 if (underText.alpha == 0) 
                 {
-                    typeFunc((if (progress == 0) monster.initFlavorText else monster.flavorTextList[FlxG.random.int(0, monster.flavorTextList.length)]));
+                    typeFunc((if (monster.progress == 0) monster.initFlavorText else monster.flavorTextList[FlxG.random.int(0, monster.flavorTextList.length)]));
                     selected = false;
                     inMenu = false;
                 }
@@ -855,19 +842,32 @@ class BATTLEFIELD extends MusicBeatState
                     if (item.ID == curSelected && item.animation.curAnim.name == 'idle') changeSelection();
                 }
             }
-            else if (curMenu != 'attack')
+
+
+            if (!allowUIDialogue) typeFunc(true);
+            
+            if (curMenu == 'attack' && enter)
             {
-                typeFunc(true);
+                trace('Pressed enter!');
+                curMenu = 'monDialogue';
             }
-            else if (curMenu == 'attack' && enter)
+            
+            if (curMenu == 'monDialogue' && !dialTriggered)
             {
-                setAttack('test 1');
+                speechFunc('right', 'hehehehe.\nbones.', 'Z11', 20);
+                dialTriggered = true; //Safety my beloved
+            }
+            else if (curMenu == 'monDialogue' && enter)
+            {
+                speechFunc('empty');
                 canMove = true;
+                setAttack('test 1');
                 curMenu = 'main';
             }
             
-            if (curMenu != 'fight')
+            if (curMenu != 'fight' || curMenu != 'monDialogue' || curMenu != 'attack')
             {
+                allowUIDialogue = false;
                 if (upP)
                 {
                     changeSelection(-1);
