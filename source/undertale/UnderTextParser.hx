@@ -69,88 +69,136 @@ class UnderTextParser extends FlxTypeText {
         super.update(elapsed);
     }
 
-    private function handleFormattingTags(text:String):Map<Int, Void->Void> {
+    private function processText(text:String):String {
         var formattingLocations:Map<Int, Void->Void> = new Map<Int, Void->Void>();
-        var i:Int = 0;
-        while (i < text.length) {
-            if (text.charAt(i) == '[') {
-                var endTag:Int = text.indexOf(']', i);
-                if (endTag != -1) {
-                    var tag:String = text.substring(i + 1, endTag);
-                    var parts:Array<String> = tag.split(":");
-                    switch (parts[0]) {
-                        case 'slow':
-                            var slowSpeed:Float = Std.parseFloat(parts[1]);
-                            if (!Math.isNaN(slowSpeed)) {
-                                formattingLocations.set(i, function() {
-                                    speed = defaultSpeed + slowSpeed;
-                                });
-                            }
-                        case 'fast':
-                            var fastSpeed:Float = Std.parseFloat(parts[1]);
-                            if (!Math.isNaN(fastSpeed)) {
-                                formattingLocations.set(i, function() {
-                                    speed = defaultSpeed - fastSpeed;
-                                });
-                            }
-                        case 'pause':
-                            var pauseDuration:Float = Std.parseFloat(parts[1]);
-                            if (!Math.isNaN(pauseDuration)) {
-                                formattingLocations.set(i, function() {
-                                    pauseDuration = this.pauseDuration;
-                                });
-                            }
-                        default:
-                            trace("Unknown tag: " + parts[0]);
-                    }
-                    i = endTag + 1;
-                    continue;
-                }
-            }
-            i++;
-        }
-        return formattingLocations;
-    }
-    
-    private function removeFormattingTags(text:String):String {
         var result:String = "";
         var i:Int = 0;
         var offset:Int = 0; // to keep track of the offset caused by tag removal
+    
         while (i < text.length) {
             if (text.charAt(i) == '[') {
                 var endTag:Int = text.indexOf(']', i);
                 if (endTag != -1) {
-                    var tagLength:Int = endTag - i + 1;
-                    var tagIndex:Int = i - offset; // adjust the index based on the offset
-                    _formattingLocations.remove(tagIndex); // remove the old index
-                    i = endTag + 1;
-                    offset += tagLength; // update the offset
-                    continue;
+                    var tag:String = text.substring(i, endTag + 1);
+                    var splitResult = PatternSplitter.splitWithPattern(tag);
+                    if (splitResult.brackets == '[]') {
+                        var parts:Array<String> = splitResult.partsArray;
+                        switch (parts[0]) {
+                            case 'slow':
+                                var slowSpeed:Float = Std.parseFloat(parts[2]);
+                                if (!Math.isNaN(slowSpeed)) {
+                                    formattingLocations.set(result.length, function() {
+                                        speed = defaultSpeed + slowSpeed;
+                                    });
+                                }
+                            case 'fast':
+                                var fastSpeed:Float = Std.parseFloat(parts[2]);
+                                if (!Math.isNaN(fastSpeed)) {
+                                    formattingLocations.set(result.length, function() {
+                                        speed = defaultSpeed - fastSpeed;
+                                    });
+                                }
+                            case 'pause':
+                                var pauseDuration:Float = Std.parseFloat(parts[2]);
+                                if (!Math.isNaN(pauseDuration)) {
+                                    formattingLocations.set(result.length, function() {
+                                        pauseDuration = this.pauseDuration;
+                                    });
+                                }
+                            case 'reset':
+                                formattingLocations.set(result.length, function() {
+                                    speed = defaultSpeed;
+                                    pauseDuration = 0;
+                                });
+                            default:
+                                trace("Unknown tag: " + parts[0]);
+                        }
+                        i = endTag + 1;
+                        continue;
+                    }
                 }
             }
             result += text.charAt(i);
             i++;
         }
     
-        // update the remaining indices in _formattingLocations
+        // Update the remaining indices in formattingLocations
         var updatedLocations:Map<Int, Void->Void> = new Map<Int, Void->Void>();
-        for (index in _formattingLocations.keys()) {
+        for (index in formattingLocations.keys()) {
             var newIndex:Int = index - offset;
-            var value:Void->Void = _formattingLocations.get(index);
+            var value:Void->Void = formattingLocations.get(index);
             updatedLocations.set(newIndex, value);
         }
-        _formattingLocations = updatedLocations;
+        formattingLocations = updatedLocations;
     
+        _formattingLocations = formattingLocations;
         return result;
     }
-    
-    // Example usage
-    private function processText(text:String):String {
-        _formattingLocations = handleFormattingTags(text);
-        return removeFormattingTags(text);
+
+    public override function resetText(text:String):Void {
+        _finalText = processText(text);
+        super.resetText(_finalText);
     }
 
     private function reactFunction():Void {
         // Code to react when typedText reaches the specified location
     }
 }
+
+class PatternSplitter {
+    public static function splitWithPattern(input:String):Dynamic {
+        var partsArray:Array<String> = [];
+        var brackets:String = '';
+
+        // Regular expression to match the pattern [tag:value]
+        var pattern:EReg = ~/^\[(\w+):(\d+(\.\d+)?)\]$/;
+
+        if (pattern.match(input)) {
+            var tag:String = pattern.matched(1);
+            var value:String = pattern.matched(2);
+
+            partsArray.push(tag);
+            partsArray.push(':');
+            partsArray.push(value);
+
+            brackets = '[]';
+        }
+
+        return { partsArray: partsArray, brackets: brackets };
+    }
+}
+
+// class PatternSplitter {
+//     public static function splitWithPattern(input:String, brackets:Array<String>, splits:Array<String>):Dynamic {
+//         var partsArray:Array<String> = [];
+//         var bracketStr:String = brackets.join('');
+
+//         // Find the start and end positions of the pattern using the brackets
+//         var startBracket:String = brackets[0];
+//         var endBracket:String = brackets[1];
+//         var startPos:Int = input.indexOf(startBracket);
+//         var endPos:Int = input.indexOf(endBracket, startPos + 1);
+
+//         if (startPos != -1 && endPos != -1) {
+//             // Extract the content inside the brackets
+//             var content:String = input.substring(startPos + 1, endPos);
+
+//             // Split the content using the provided splits
+//             var splitPattern:String = splits.join('|');
+//             var parts:Array<String> = content.split(new EReg(splitPattern, 'g'));
+
+//             // Add the parts to partsArray
+//             for (part in parts) {
+//                 partsArray.push(part);
+//             }
+
+//             // Add the splits to partsArray
+//             for (split in splits) {
+//                 partsArray.push(split);
+//             }
+//         }
+
+//         return { partsArray: partsArray, brackets: bracketStr };
+//     }
+// }
+

@@ -631,7 +631,7 @@ class BATTLEFIELD extends MusicBeatState
         {
             if (i > 0) trueText += '\n* ' + splitName[i];
         }
-
+    
         if (hide)
         {
             underText.alpha = 0;

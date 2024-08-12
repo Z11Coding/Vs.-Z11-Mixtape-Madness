@@ -167,6 +167,7 @@ class Main extends Sprite
 		}
 
 		MemoryUtil.init();
+		WindowUtils.init();
 		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
@@ -183,6 +184,10 @@ class Main extends Sprite
 
 		ClientPrefs.loadPrefs();
 		AudioSwitchFix.init();
+		WindowUtils.onClosing = function()
+			{
+				handleStateBasedClosing();
+			}
 		FlxG.signals.preStateSwitch.add(onStateSwitch);
 		FlxGraphic.defaultPersist = false;
 		#if !mobile
@@ -294,6 +299,27 @@ class Main extends Sprite
 			e.preventDefault();
 		trace("Closing...");
 	}
+
+		public static inline function closeGame():Void
+		{
+
+				WindowUtils.preventClosing = false;
+				Lib.application.window.close();
+
+				closeGame();
+			
+		}
+
+
+	public static inline function handleStateBasedClosing() {
+        switch (Type.getClassName(Type.getClass(FlxG.state)).split(".")[Lambda.count(Type.getClassName(Type.getClass(FlxG.state)).split(".")) - 1]) {
+
+            default:
+                // Default behavior: close the window
+			TransitionState.transitionState(ExitState);
+        }
+		WindowUtils.resetClosing();
+    }
 
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
 	// very cool person for real they don't get enough credit for their work
