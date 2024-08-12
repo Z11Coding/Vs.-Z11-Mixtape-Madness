@@ -17,6 +17,8 @@ class SOUL {
     public var type:SOULTYPES = RED;
     public var name:String = 'UNKNOWN';
     public var storage:Array<String>;
+    public var curWeapon:String = 'Stick';
+    public var curArmor:String = 'Bandage';
    @:isVar public var weapon(get, set):ITEM;
    @:isVar public var armor(get, set):ITEM;
     public var LOVE:Int = 1;
@@ -30,12 +32,14 @@ class SOUL {
     private var damageCooldown:Float = 0;
     private var cooldownTime:Float = 1.0; // 1 second cooldown
 
-    public function new(type:SOULTYPES = RED, name:String = 'UNKNOWN', LOVE:Int = 1) {
+    public function new(type:SOULTYPES = RED, name:String = 'UNKNOWN', LOVE:Int = 1, daWeapon:String = 'Stick', daArmor:String = 'Bandage') {
         this.type = type;
         this.name = name;
         this.LOVE = LOVE;
         this.sprite = getSoulSprite();
         this.storage = [];
+        this.curWeapon = daWeapon;
+        this.curArmor = daArmor;
         for (item in new ITEMS().items.keys()) {
             this.storage.push(item);
         }
@@ -44,18 +48,24 @@ class SOUL {
     }
 
     function setStats(LOVE:Int) {
-        if (LOVE < 20)
+        if (LOVE <= 19)
         {
             this.health = Std.int(16 + (4 * LOVE));
+            this.maxHealth = Std.int(16 + (4 * LOVE));
             this.atk = Std.int(-2 + (2 * LOVE)+1);
             this.def = Std.int((LOVE - 1) / 4);
+            ITEMS.instance.useItem(curWeapon);
+            ITEMS.instance.useItem(curArmor);
         }
         else
         {
             this.health = 99;
+            this.maxHealth = 99;
             this.atk = 38;
             this.def = 4;
             this.LOVE = 20;
+            ITEMS.instance.useItem(curWeapon);
+            ITEMS.instance.useItem(curArmor);
         }
     }
 
@@ -154,6 +164,8 @@ class ITEMS {
         items = new Map<String, ITEM>();
         items.set('Stick', new ITEM('Stick', ACTION.ITEM(ITEMTYPE.WEAPON(() -> null)), 0, 'You equipped the Stick!\nYou feel a little more powerful...'));
         items.set('Bandage', new ITEM('Bandage', ACTION.ITEM(ITEMTYPE.ARMOR(() -> null)), 0, 'You applied the Bandage!\nYou feel a little better...'));
+        items.set('Real Knife', new ITEM('Real Knife', ACTION.ITEM(ITEMTYPE.WEAPON(() -> null)), 99, 'You equipped the Real Knife.\nHere we are!'));
+        items.set('The Locket', new ITEM('The Locket', ACTION.ITEM(ITEMTYPE.ARMOR(() -> null)), 99, 'You applied The Locket.\nYou can feel it beating.'));
         items.set('error', new ITEM('error', HEAL, 0, "If you're reading this...\nyou messed up somewhere!"));
         items.set('Food 1', new ITEM('Food 1', HEAL, 10, 'You ate the Food 1!\nYou healed 10HP and passed the test!'));
         items.set('Food 2', new ITEM('Food 2', HEAL, 20, 'You ate the Food 2!\nSpicy!\nYou healed 20HP'));

@@ -1,9 +1,12 @@
-<?xml version='1.0' encoding='utf-8'?>
-<TextureAtlas imagePath="slash.png">
-<SubTexture name="Slash0000" x="0" y="0" width="46" height="48" frameX="-11" frameY="-5" frameWidth="26" frameHeight="110" />
-<SubTexture name="Slash0001" x="46" y="0" width="46" height="64" frameX="-9" frameY="-9" frameWidth="26" frameHeight="110" />
-<SubTexture name="Slash0002" x="0" y="64" width="48" height="84" frameX="-7" frameY="-21" frameWidth="26" frameHeight="110" />
-<SubTexture name="Slash0003" x="48" y="64" width="50" height="106" frameX="-7" frameY="-29" frameWidth="26" frameHeight="110" />
-<SubTexture name="Slash0004" x="0" y="170" width="56" height="74" frameX="-7" frameY="-63" frameWidth="26" frameHeight="110" />
-<SubTexture name="Slash0005" x="56" y="170" width="56" height="54" frameX="-9" frameY="-87" frameWidth="26" frameHeight="110" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="slash.png" width="40" height="168">
+  <SubTexture name="spr_slice0000" x="20" y="110"  width="6" height="8" frameX="-11" frameY="-5" frameWidth="26" frameHeight="110"/>
+  <SubTexture name="spr_slice0001" x="20" y="78"  width="6" height="24" frameX="-9" frameY="-9" frameWidth="26" frameHeight="110"/>
+  <SubTexture name="spr_slice0002" x="4" y="78"  width="8" height="44" frameX="-7" frameY="-21" frameWidth="26" frameHeight="110"/>
+  <SubTexture name="spr_slice0003" x="4" y="4"  width="10" height="66" frameX="-7" frameY="-29" frameWidth="26" frameHeight="110"/>
+  <SubTexture name="spr_slice0004" x="4" y="130"  width="16" height="34" frameX="-7" frameY="-63" frameWidth="26" frameHeight="110"/>
+  <SubTexture name="spr_slice0005" x="22" y="4" width="14" height="16" rotated="true"  frameX="-9" frameY="-87" frameWidth="26" frameHeight="110"/>
 </TextureAtlas>

@@ -133,15 +133,17 @@ class BULLETPATTERN {
         }, duration);
     }
 
+    public function setTo(x:Float, y:Float, duration:Float, complete:Bool):Void {
+        addAction(() -> {
+            sprite.x = x;
+            sprite.y = y;
+            if (complete) onActionComplete;
+        }, duration);
+    }
+
     public function fadeOut(duration:Float):Void {
         addAction(() -> {
-            FlxTween.tween(sprite, {alpha: 0}, duration, {onComplete: 
-                function(twn:FlxTween)
-                {
-                    onActionComplete;
-                    sprite.destroy();
-                }
-            });
+            FlxTween.tween(sprite, {alpha: 0}, duration, {onComplete: onActionComplete});
         }, duration);
     }
 
@@ -176,9 +178,12 @@ class EventSequence {
 
     public function update():Void {
         for (event in events) {
-            event.update();
-            event.hurtbox.checkCollision(soul, event.damageType);
-            event.hurtbox.sprite.updateHitbox();
+            if (event != null && event.hurtbox != null && event.hurtbox.sprite != null)
+            {
+                event.update();
+                event.hurtbox.checkCollision(soul, event.damageType);
+                event.hurtbox.sprite.updateHitbox();
+            }
         }
     }
 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="SpechBubbles.png" width="1256" height="526">
+  <SubTexture name="leftwide" x="4" y="4"  width="237" height="104" frameX="-0" frameY="-0" frameWidth="237" frameHeight="104"/>
+  <SubTexture name="rightwide" x="249" y="4"  width="237" height="104" frameX="-0" frameY="-0" frameWidth="237" frameHeight="104"/>
+  <SubTexture name="rightlarge" x="494" y="4" width="216" height="210" rotated="true"  frameX="-0" frameY="-0" frameWidth="210" frameHeight="216"/>
+  <SubTexture name="leftlarge" x="4" y="116" width="216" height="198" rotated="true"  frameX="-8" frameY="-6" frameWidth="214" frameHeight="227"/>
+  <SubTexture name="rightlong" x="228" y="116" width="216" height="105" rotated="true"  frameX="-0" frameY="-0" frameWidth="105" frameHeight="216"/>
+  <SubTexture name="spr_blcontiny_0" x="452" y="116" width="33" height="87" rotated="true"  frameX="-0" frameY="-0" frameWidth="87" frameHeight="33"/>
+  <SubTexture name="toptiny" x="452" y="211" width="32" height="70" rotated="true"  frameX="-0" frameY="-0" frameWidth="70" frameHeight="32"/>
+  <SubTexture name="leftlargeminus" x="228" y="229"  width="200" height="200" frameX="-0" frameY="-0" frameWidth="200" frameHeight="200"/>
+  <SubTexture name="empty" x="436" y="229"  width="1" height="1" frameX="-0" frameY="-0" frameWidth="1" frameHeight="1"/>
+  <SubTexture name="rightlargeminus" x="4" y="322"  width="200" height="200" frameX="-0" frameY="-0" frameWidth="200" frameHeight="200"/>
+  <SubTexture name="bottom" x="718" y="4"  width="174" height="105" frameX="-0" frameY="-0" frameWidth="174" frameHeight="105"/>
+  <SubTexture name="top" x="900" y="4"  width="174" height="105" frameX="-0" frameY="-0" frameWidth="174" frameHeight="105"/>
+  <SubTexture name="leftwideminus" x="1082" y="4"  width="170" height="108" frameX="-0" frameY="-0" frameWidth="170" frameHeight="108"/>
+  <SubTexture name="rightwideminus" x="718" y="117"  width="170" height="108" frameX="-0" frameY="-0" frameWidth="170" frameHeight="108"/>
+  <SubTexture name="left" x="896" y="117" width="108" height="99" rotated="true"  frameX="-0" frameY="-0" frameWidth="99" frameHeight="108"/>
+  <SubTexture name="leftshort" x="1012" y="117" width="61" height="99" rotated="true"  frameX="-0" frameY="-0" frameWidth="99" frameHeight="61"/>
+  <SubTexture name="right" x="492" y="222" width="108" height="99" rotated="true"  frameX="-0" frameY="-0" frameWidth="99" frameHeight="108"/>
+  <SubTexture name="rightshort" x="608" y="222"  width="99" height="66" frameX="-0" frameY="-0" frameWidth="99" frameHeight="66"/>
+</TextureAtlas>

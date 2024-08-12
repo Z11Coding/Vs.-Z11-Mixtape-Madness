@@ -425,13 +425,13 @@ function onCreate()
 		boxX = 1280 / 2;
 	end
 
-	makeLuaSprite('box', 'mechanics/ut/box', boxX, boxY);
+	makeLuaSprite('box', 'mechanics/ut/ui/box', boxX, boxY);
 	setProperty('box.offset.x', 50);
 	setProperty('box.offset.y', 50);
 	setProperty('box.antialiasing', false);
 	setObjectCamera('box', 'camHUD');
 
-	makeLuaSprite('boxB', 'mechanics/ut/boxBorder', boxX, boxY);
+	makeLuaSprite('boxB', 'mechanics/ut/ui/boxBorder', boxX, boxY);
 	setProperty('boxB.offset.x', 50);
 	setProperty('boxB.offset.y', 50);
 	setProperty('boxB.antialiasing', false);
@@ -440,7 +440,7 @@ function onCreate()
 	addLuaSprite('boxB', false);
 	addLuaSprite('box', false);
 
-	makeLuaSprite('p', 'mechanics/ut/soul', boxX, boxY);
+	makeLuaSprite('p', 'mechanics/ut/soul/soul', boxX, boxY);
 	setProperty('p.offset.x', 8);
 	setProperty('p.offset.y', 8);
 	setProperty('p.scale.x', 2);
