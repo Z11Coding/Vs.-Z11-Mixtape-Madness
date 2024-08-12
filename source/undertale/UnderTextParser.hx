@@ -80,21 +80,21 @@ class UnderTextParser extends FlxTypeText {
                     var parts:Array<String> = tag.split(":");
                     switch (parts[0]) {
                         case 'slow':
-                            var slowSpeed:Float = parseFloat(parts[1]);
+                            var slowSpeed:Float = Std.parseFloat(parts[1]);
                             if (!Math.isNaN(slowSpeed)) {
                                 formattingLocations.set(i, function() {
                                     speed = defaultSpeed + slowSpeed;
                                 });
                             }
                         case 'fast':
-                            var fastSpeed:Float = parseFloat(parts[1]);
+                            var fastSpeed:Float = Std.parseFloat(parts[1]);
                             if (!Math.isNaN(fastSpeed)) {
                                 formattingLocations.set(i, function() {
                                     speed = defaultSpeed - fastSpeed;
                                 });
                             }
                         case 'pause':
-                            var pauseDuration:Float = parseFloat(parts[1]);
+                            var pauseDuration:Float = Std.parseFloat(parts[1]);
                             if (!Math.isNaN(pauseDuration)) {
                                 formattingLocations.set(i, function() {
                                     pauseDuration = this.pauseDuration;
