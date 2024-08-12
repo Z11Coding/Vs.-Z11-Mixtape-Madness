@@ -15,6 +15,7 @@ class MSOUL {
     public var isGenocide:Bool = false; //toggles the alt sprite for genocide (ONLY TOGGLE THIS IF SAID SPRITE EXISTS)
     public var flavorTextList:Array<String> = ['Hi :)'];
     public var initFlavorText:String = 'Hi :)';
+    public var progress:Int = 0;
     /*
         If i ever decide to expand this feature for some ungodly reason, 
         this allows regualr monsters to work seperately from boss ones.
