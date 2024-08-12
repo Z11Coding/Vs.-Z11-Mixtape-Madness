@@ -1,5 +1,8 @@
-<?xml version='1.0' encoding='utf-8'?>
-<TextureAtlas imagePath="target.png">
-<SubTexture name="targetFlash0000" x="0" y="0" width="54" height="168" frameX="0" frameY="0" frameWidth="14" frameHeight="128" />
-<SubTexture name="targetFlash0001" x="54" y="0" width="54" height="168" frameX="0" frameY="0" frameWidth="14" frameHeight="128" />
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="target.png" width="22" height="272">
+  <SubTexture name="spr_targetchoice0000" x="4" y="4"  width="14" height="128" frameX="-0" frameY="-0" frameWidth="14" frameHeight="128"/>
+  <SubTexture name="spr_targetchoice0001" x="4" y="140"  width="14" height="128" frameX="-0" frameY="-0" frameWidth="14" frameHeight="128"/>
 </TextureAtlas>
