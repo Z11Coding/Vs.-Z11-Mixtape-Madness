@@ -137,7 +137,7 @@ class BATTLEFIELD extends MusicBeatState
         {
             human = new SOUL(RED, 'Chara', 20);
             monster = new MSOUL('Z11Tale', 4, 1, 100000, 9999, 500, false, true, isGenocide);
-            monster.initFlavorText = 'Battle against the truly determined...\n[slow:2]Let\'s see how much he\'ll take before he breaks...';
+            monster.initFlavorText = 'Battle against the truly determined[slow:2]...[fast:2]\n[pause:1]Let\'s see how much he\'ll take before he breaks...';
             monster.flavorTextList = [
                 'You feel like you\'ve done this before somewhere...', 
                 'Z11Tale asks his blasters what they want for dinner\n[pause:slow]They\'re still deciding',
