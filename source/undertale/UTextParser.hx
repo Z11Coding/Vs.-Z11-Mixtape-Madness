@@ -131,7 +131,6 @@ class FormattedFlxTypeText extends FlxTypeText {
                             default:
                                 speed = speed;
                         }
-                    };
                     i = endTag + 1;
                 }
             }
