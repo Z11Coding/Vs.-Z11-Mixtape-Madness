@@ -1,11 +1,12 @@
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type;
+using haxe.macro.ExprTools;
 using backend.ChanceSelector;
 
 class EnumRandomizer {
     public static macro function randomizeEnum(enumType:Expr):Expr {
-        var t = Context.getType(enumType);
+        var t = Context.getType(enumType.toString());
         switch (t) {
             case TEnum(enumDef, params):
                 var fields = enumDef.get().constructs;
@@ -14,6 +15,7 @@ class EnumRandomizer {
                 return randomizeField(fieldType);
             default:
                 Context.error("Provided type is not an enum", enumType.pos);
+                return macro null;
         }
     }
 
@@ -26,6 +28,7 @@ class EnumRandomizer {
                 return macro $v{randomArgs};
             case TInst(c, params):
                 Context.error("Cannot randomize typedef or object", Context.currentPos());
+                return macro null;
             default:
                 return macro $v{Math.random()};
         }
@@ -40,6 +43,7 @@ class EnumRandomizer {
             default:
                 return macro $v{Math.random()};
         }
+        return null;
     }
 
     public static macro function randomizeEnumConstant(enumType:Expr):Expr {
@@ -53,6 +57,10 @@ class EnumRandomizer {
                 return macro chanceArray($v{fieldArray});
             default:
                 Context.error("Provided type is not an enum", enumType.pos);
+        }
+        return null{
+            expr: enumType,
+            pos: enumType.pos
         }
     }
 }
