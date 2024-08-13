@@ -18,7 +18,7 @@ class UnderTextParser extends FlxTypeText {
     }
 
     override public function update(elapsed:Float):Void {
-        if (_waiting || paused) return;
+        //if (_waiting || paused) return;
 
         for (index in _formattingLocations.keys()) {
             if (_length == index) {
@@ -27,7 +27,7 @@ class UnderTextParser extends FlxTypeText {
             }
         }
 
-        delay = speed;
+        delay = speed;  
 
         if (pauseDuration > 0) {
             pauseDuration -= elapsed;
@@ -48,7 +48,7 @@ class UnderTextParser extends FlxTypeText {
             _timer += elapsed;
         }
 
-        if (_typing || _erasing) {
+        if ((_typing || _erasing) && !paused) {
             if (_typing && _timer >= speed) {
                 _length += Std.int(_timer / speed);
                 if (_length > _finalText.length) _length = _finalText.length;
@@ -95,14 +95,16 @@ class UnderTextParser extends FlxTypeText {
                                 var fastSpeed:Float = Std.parseFloat(parts[2]);
                                 if (!Math.isNaN(fastSpeed)) {
                                     formattingLocations.set(result.length, function() {
-                                        speed = defaultSpeed - fastSpeed;
+                                        if ((defaultSpeed - fastSpeed) > 0) speed = defaultSpeed - fastSpeed;
+                                        else trace('Your speed is too fast!');
                                     });
                                 }
                             case 'pause':
-                                var pauseDuration:Float = Std.parseFloat(parts[2]);
-                                if (!Math.isNaN(pauseDuration)) {
+                                var pDuration:Float = Std.parseFloat(parts[2]);
+                                if (!Math.isNaN(pDuration)) {
                                     formattingLocations.set(result.length, function() {
-                                        pauseDuration = this.pauseDuration;
+                                        pauseDuration = pDuration;
+                                        _length++;
                                     });
                                 }
                             case 'reset':
