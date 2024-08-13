@@ -454,7 +454,7 @@ class BATTLEFIELD extends MusicBeatState
     }
 
     var curMenu:String = 'main';
-    function regenMenu(option:String)
+    function regenMenu(option:String, ?curPage:Int)
     {
         switch (option)
         {
@@ -479,19 +479,20 @@ class BATTLEFIELD extends MusicBeatState
                 curMenu = 'main';
                 options = [];
         }
+
         for (i in menu.members)
         {
             menu.remove(i);
         }
 
-        for (i in 0...options.length)
+        for (i in 0...
+            )
         {
             var button:FlxText = new FlxText(-200, 430, FlxG.width, options[i], 32);
             button.setFormat(Paths.font("determination-extended.ttf"), 32, FlxColor.WHITE, CENTER);
             button.scrollFactor.set();
             menu.add(button);
             button.ID = i;
-            if (button.ID > 3) button.alpha = 0;
         }
 
         if (curMenu != 'main' || curMenu != 'nothing')
@@ -532,7 +533,7 @@ class BATTLEFIELD extends MusicBeatState
                     case 3:
                         if (menu.members[i] != null)
                         {
-                            menu.members[i].x = 300;
+                            menu.members[i].x = 100;
                             menu.members[i].y = 480;
                         }
                 }
