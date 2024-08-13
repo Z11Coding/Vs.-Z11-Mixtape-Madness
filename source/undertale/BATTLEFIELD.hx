@@ -127,6 +127,7 @@ class BATTLEFIELD extends MusicBeatState
 		FlxG.save.bind('Mixtape' #if (flixel < "5.0.0"), 'Z11Gaming' #end);
 		ClientPrefs.loadPrefs();
 		ClientPrefs.reloadVolumeKeys();
+        Language.reloadPhrases();
 
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
 
@@ -454,7 +455,7 @@ class BATTLEFIELD extends MusicBeatState
     }
 
     var curMenu:String = 'main';
-    function regenMenu(option:String, ?curPage:Int)
+    function regenMenu(option:String)
     {
         switch (option)
         {
@@ -648,6 +649,7 @@ class BATTLEFIELD extends MusicBeatState
 
     function useItem(thing:ITEM)
     {
+        allowUIDialogue = true;
         regenMenu('nothing');
         curMenu = 'attack';
         typeFunc(thing.flavorText, 0.04, 1);
@@ -730,6 +732,9 @@ class BATTLEFIELD extends MusicBeatState
     var curTime:Float = 0;
     var dialTriggered:Bool = false;
     var allowUIDialogue:Bool = true;
+
+    var pageMin:Int = 0;
+    var pageMax:Int = 3;
     override function update(elapsed:Float) {
         //I love manually updating EVERYTHING!!!!
         target.animation.update(elapsed);
@@ -844,6 +849,29 @@ class BATTLEFIELD extends MusicBeatState
                 }
             }
 
+            if (curMenu == 'item')
+            {
+                //Extremely jank but it works
+                if (curSelectedItem <= 3)
+                {
+                    pageMin = 0;
+                    pageMax = 3;
+                }
+                else if (curSelectedItem <= 7)
+                {
+                    pageMin = 4;
+                    pageMax = 7;
+                }
+                for (i in 0...menu.members.length)
+                {
+                    if (menu.members[i] != null)
+                    {
+                        if (menu.members[i].ID == curSelectedItem) menu.members[i].alpha = 1;
+                        else if (menu.members[i].ID >= pageMin && menu.members[i].ID <= pageMax) menu.members[i].alpha = 0.5;
+                        else menu.members[i].alpha = 0;
+                    }
+                }
+            }
 
             if (!allowUIDialogue) typeFunc(true);
             
@@ -855,6 +883,7 @@ class BATTLEFIELD extends MusicBeatState
             
             if (curMenu == 'monDialogue' && !dialTriggered)
             {
+                allowUIDialogue = false;
                 speechFunc('right', 'hehehehe.\nbones.', 'Z11', 20);
                 dialTriggered = true; //Safety my beloved
             }
@@ -868,7 +897,6 @@ class BATTLEFIELD extends MusicBeatState
             
             if (curMenu != 'fight' || curMenu != 'monDialogue' || curMenu != 'attack')
             {
-                allowUIDialogue = false;
                 if (upP)
                 {
                     changeSelection(-1);
@@ -890,6 +918,7 @@ class BATTLEFIELD extends MusicBeatState
             {
                 if (enter && !inMenu) 
                 {
+                    allowUIDialogue = false;
                     inMenu = true;
                     regenMenu(menuItems[curSelected]);
                 }

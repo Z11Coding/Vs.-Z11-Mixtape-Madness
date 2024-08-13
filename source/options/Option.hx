@@ -33,10 +33,12 @@ class Option
 	public var defaultKeys:Keybind = null; //Only used in keybind type
 	public var keys:Keybind = null; //Only used in keybind type
 
-	public function new(name:String, description:String = '', variable:String, type:String = 'bool', ?options:Array<String> = null, ?onChange:Void->Void = null)
+	public function new(name:String, description:String = '', variable:String, type:OptionType = BOOL, ?options:Array<String> = null, ?translation:String = null)
 	{
-		this.name = name;
-		this.description = description;
+		_name = name;
+		_translationKey = translation != null ? translation : _name;
+		this.name = Language.getPhrase('setting_$_translationKey', name);
+		this.description =  Language.getPhrase('description_$_translationKey', description);
 		this.variable = variable;
 		this.type = type;
 		this.options = options;
@@ -113,17 +115,19 @@ class Option
 		return Reflect.setProperty(ClientPrefs.data, variable, value);
 	}
 
+	var _name:String = null;
+	var _text:String = null;
+	var _translationKey:String = null;
 	private function get_text()
-	{
-		if(child != null) {
-			return child.text;
-		}
-		return null;
-	}
+		return _text;
+
 	private function set_text(newValue:String = '')
 	{
-		if(child != null) {
-			child.text = newValue;
+		if(child != null)
+		{
+			_text = newValue;
+			child.text = Language.getPhrase('setting_$_translationKey-${getValue()}', _text);
+			return _text;
 		}
 		return null;
 	}

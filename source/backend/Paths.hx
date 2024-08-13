@@ -370,7 +370,6 @@ public static function crawlDirectoryAlt(directoryPath:String, fileExtension:Str
 	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
 	static public function image(key:String, ?library:String = null, ?allowGPU:Bool = false):FlxGraphic
 	{
-		key = Language.getFileTranslation('images/$key');
 		if(ImageCache.exists(getPath('images/$key.png', IMAGE, library)) && !allowGPU){
             //trace(key + " is in the cache");
             return ImageCache.get(getPath('images/$key.png', IMAGE, library));
