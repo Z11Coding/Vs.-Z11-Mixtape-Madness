@@ -178,6 +178,26 @@ class TransitionState {
         });
     }
 
+    // static function slideWindow(x:Float, y:Float, duration:Float, targetState:Class<FlxState>, onComplete:Dynamic, ?args:Array<Dynamic>):Void {
+    //     var screenWidth:Float = FlxG.width * FlxG.camera.zoom;
+    //     var screenHeight:Float = FlxG.height * FlxG.camera.zoom;
+    //     var windowWidth:Float = Lib.current.stage.stageWidth;
+    //     var windowHeight:Float = Lib.current.stage.stageHeight;
+    //     var targetX:Float = (windowWidth - screenWidth) / 2 + x;
+    //     var targetY:Float = (windowHeight - screenHeight) / 2 + y;
+        
+    //     FlxTween.tween(Lib.current.stage, { x: targetX, y: targetY }, duration, {
+    //         onComplete: function(_) {
+    //             switchState(targetState, onComplete, args);
+    //             FlxTween.tween(Lib.current.stage, { x: 0, y: 0 }, duration, {
+    //                 onComplete: function(_) {
+    //                     trace("Slide back complete.");
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }
+
     static function postSwitchTransition(options:Dynamic = null):Void {
         trace("Post-switch transition started.");
         if (options == null) {
