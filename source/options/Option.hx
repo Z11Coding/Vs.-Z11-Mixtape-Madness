@@ -33,7 +33,7 @@ class Option
 	public var defaultKeys:Keybind = null; //Only used in keybind type
 	public var keys:Keybind = null; //Only used in keybind type
 
-	public function new(name:String, description:String = '', variable:String, type:OptionType = BOOL, ?options:Array<String> = null, ?translation:String = null)
+	public function new(name:String, description:String = '', variable:String, type:String = 'bool', ?options:Array<String> = null, ?onChange:Void->Void = null, ?translation:String = null)
 	{
 		_name = name;
 		_translationKey = translation != null ? translation : _name;
