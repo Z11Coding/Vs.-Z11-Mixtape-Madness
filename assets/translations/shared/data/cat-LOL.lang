@@ -1,0 +1,234 @@
+LOLCAT (Kingdom of Cats)
+
+// Gameplay
+score_text: "cool: {1} | ew: {2} | baby: {3}"
+score_text_instakill: "cool: {1} | baby: {2}"
+botplay: "Automático"
+
+rating_you_suck: "bad kitteh!!"
+rating_shit: "ewwwwww"
+rating_bad: "eww"
+rating_bruh: "ew"
+rating_meh: "Meh"
+rating_nice: "cool cat"
+rating_good: "good kitteh"
+rating_great: "kitteh go meow good"
+rating_sick: "epic kitteh"
+rating_perfect: "the bes"
+
+// Pause Menu
+pause_resume: "do game"
+pause_restart_song: "redo game"
+pause_leave_charting_mode: "unchart kitteh"
+pause_skip_time: "jump"
+pause_end_song: "stoppppp"
+pause_change_difficulty: "different thing"
+pause_toggle_practice_mode: "become bad"
+pause_toggle_botplay: "autokitty"
+pause_options: "choose"
+pause_exit_to_menu: "go away"
+pause_back: "eeeeee"
+practice_mode: "bad at game"
+charting_mode: "making game"
+blueballed: "dieded ;-; : {1}"
+
+// Main Menu
+images/mainmenu/menu_story_mode: "images/mainmenu/menu_story_mode"
+images/mainmenu/menu_freeplay: "images/mainmenu/menu_freeplay"
+images/mainmenu/menu_credits: "images/mainmenu/menu_credits"
+
+// Story Mode
+images/Menu_Tracks: ""
+week_score: "coolness: {1}"
+
+storyname_week5: "wha"
+storyname_week6: "simulate kitteh!!! ft. moawling"
+
+// Freeplay
+personal_best: "best thingie: {1} ({2}%)"
+freeplay_tip: "hit da SPACE to her cool thing / CTRL does god thig / RESET da world of do"
+
+musicplayer_playing: "cool: {1}"
+musicplayer_paused: "cool: {1} (nu)"
+musicplayer_tip: "SPACE for nu / ESCAPE to go away / R to do it again!!!"
+
+// Mods Menu
+no_mods_installed: "NO KITtEH...\n NO KITTEH IN SIGht!!!!"
+no_mods_found: "No kitteh."
+mod_restart: "???"
+reload_button: "do"
+enable_all_button: "all kitteh"
+disable_all_button: "nu kitteh"
+
+// Reset Score/Achievement
+reset_score: "reset teh fun on"
+reset_achievement: "undo teh: "
+yes: "yeye!!!"
+no: "nu"
+
+
+
+// Options
+options_note_colors: "colorful arrows"
+options_controls: "do thin"
+options_adjust_delay_and_combo: "Ajustar Atraso e Combo"
+options_gameplay: "plaaaaaay thingie"
+options_visuals: "lookie lookie"
+options_graphics: "super cool lookie"
+options_language: "wut u say"
+
+graphics_menu: "seeing things"
+visuals_menu: "lookie at thingie"
+gameplay_menu: "messing weith funky beats or somethin idk"
+
+// Note Colors Menu
+note_colors_tip: "???"
+note_colors_hold_tip: "???"
+note_colors_shift: "Shift"
+note_colors_lb: "???"
+
+// Adjust Delay and Combo Menu
+delay_beat_hit: "bop!"
+delay_current_offset: "offthing: {1} ms";
+combo_rating_offset: "Off the thing:"
+combo_numbers_offset: "Off numb#:"
+combo_offset: "combo king offy";
+note_delay: "more off thingie";
+switch_on_accept: "(Accept the consequences.)"
+switch_on_start: "(S?)"
+
+// Controls Menu
+keygroup_notes: "arrow thing"
+keygroup_ui: "stupid"
+keygroup_volume: "noise"
+keygroup_debug: "god"
+
+key_note_left: "<-"
+key_note_down: "not up"
+key_note_up: "^"
+key_note_right: "->"
+key_ui_left: "<-"
+key_ui_down: "not up (eb)"
+key_ui_up: "^^"
+key_ui_right: "->"
+key_reset: "nu"
+key_accept: "do"
+key_back: "undo"
+key_pause: "stoooop"
+key_volume_mute: "no noise"
+key_volume_up: "^^^"
+key_volume_down: "unloud"
+key_debug_1: "clicker 1"
+key_debug_2: "clicker 2"
+
+controls_rebinding: "write da thing {1}"
+controls_rebinding2: "make thingie\ndo a thingie "
+reset_to_default_keys: "undo kitteh behavior"
+
+// Gameplay Changers
+setting_scroll_type: "moveit"
+setting_scroll_type-multiplicative: "incredibly"
+setting_scroll_type-constant: "stay kitteh"
+setting_scroll_speed: "speedy cat"
+setting_playback_rate: "play speedie"
+setting_health_gain_multiplier: "healthy katt"
+setting_health_loss_multiplier: "die"
+setting_instakill_on_miss: "ded on bad kiteh"
+setting_practice_mode: "do good"
+setting_botplay: "auto-catplay"
+
+// Graphics Settings
+setting_low_quality: "Baixa Qualidade"
+description_low_quality: "Se marcado, desativa alguns elementos do fundo,\ndiminui tempo de carregamento e melhora a performance."
+setting_anti-aliasing: "Anti-Aliasing"
+description_anti-aliasing: "Se desmarcado, o anti-aliasing é desativado, aumenta a performance ao custo dos gráficos ficarem menos suaves."
+setting_shaders: "Shaders"
+description_shaders: "Se desmarcado, desativa as shaders.\nElas são usadas para alguns efeitos especiais, e também são intensas para CPUs fracas."
+setting_gpu_caching: "Caching na GPU"
+description_gpu_caching: "Se marcado, permite que a GPU seja usada para armazenar texturas, reduzindo uso da memória RAM.\nNão ligue isso se sua Placa de Vídeo é ruim."
+setting_framerate: "Taxa de Atualização"
+description_framerate: "Também chamado de "Framerate", preciso explicar?"
+
+// Visuals Settings
+setting_note_skins: "Estilo de Notas"
+setting_note_skins-default: "Padrão"
+setting_note_skins-future: "Futurista"
+setting_note_skins-chip: "Ficha"
+description_note_skins: "Escolha o seu estilo de Notas favorito."
+setting_note_splashes: "Impacto das Notas"
+setting_note_splashes-psych: "Psych"
+setting_note_splashes-diamond: "Diamond"
+setting_note_splashes-electric: "Elétrico"
+setting_note_splashes-sparkles: "Brilho"
+setting_note_splashes-vanilla: "Original"
+description_note_skins: "Escolha o seu estilo de Impacto das Notas favorito."
+setting_note_splash_opacity: "Opacidade do Impacto"
+description_note_splash_opacity: "O quão transparente os Impactos das Notas devem ser."
+setting_hide_hud: "Esconder HUD"
+description_hide_hud: "Se marcado, a maioria dos elementos da UI ficarão ocultos."
+setting_time_bar: "Barra de Tempo:"
+setting_time_bar-time_left: "Tempo Restante"
+setting_time_bar-time_elapsed: "Tempo Decorrido"
+setting_time_bar-song_name: "Nome da Música"
+setting_time_bar-disabled: "Desativada"
+description_time_bar: "O que a Barra de Tempo deve mostrar?"
+setting_flashing_lights: "Luzes Piscantes"
+description_flashing_lights: "Desmarque isso se você é sensível a luzes que piscam!"
+setting_camera_zooms: "Zoom da Câmera"
+description_camera_zooms: "Se desmarcado, a câmera não dará zoom nas batidas da música."
+setting_score_text_grow_on_hit: "Pontuação Cresce ao Acertar"
+description_score_text_grow_on_hit: "Se desmarcado, desativa o texto da pontuação crescendo\nquando você acerta uma nota."
+setting_health_bar_opacity: "Opacidade da Barra de Vida"
+description_health_bar_opacity: "O quão transparente a Barra de Vida e os ícones devem ser."
+setting_fps_counter: "Contador de FPS"
+description_fps_counter: "Se desmarcado, esconde o contador no canto superior esquerdo da tela."
+setting_pause_screen_song: "Música de Pausa:"
+setting_pause_screen_song-none: "Nenhuma"
+setting_pause_screen_song-breakfast: "Breakfast"
+setting_pause_screen_song-tea_time: "Tea Time"
+description_pause_screen_song: "Que música prefere para a tela de pausa?"
+setting_check_for_updates: "Procurar por Atualizações"
+description_check_for_updates: "Em builds oficiais da Psych Engine, marque esta caixa para\avisar sobre atualizações ao iniciar o jogo."
+setting_discord_rich_presence: "Discord Rich Presence"
+description_discord_rich_presence: "Desmarque esta caixa para evitar leaks acidentais do seu Mod,\nIsso irá esconder o que você está jogando para os outros."
+setting_combo_stacking: "Acúmulo de Combo"
+description_combo_stacking: "Se desmarcado, classificações e números de combo não irão acumular\nao acertar uma nota, isso torna o jogo mais legível."
+
+// Gameplay Settings
+setting_downscroll: "Downscroll"
+description_downscroll: "Se marcado, as notas irão de cima pra baixo, contrário do padrão."
+setting_middlescroll: "Middlescroll"
+description_middlescroll: "Se marcado, as suas notas e as do oponente ficarão centralizadas."
+setting_opponent_notes: "Notas do Oponente"
+description_opponent_notes: "Se desmarcado, as notas do oponente serão ocultadas."
+setting_ghost_tapping: "Ghost Tapping"
+description_ghost_tapping: "Se marcado, você não irá receber penalidades por apertar botões enquanto não há notas para apertar."
+setting_auto_pause: "Pausa Automática"
+description_auto_pause: "Se marcado, a janela é automaticamente pausada se não estiver em foco."
+setting_disable_reset_button: "Desativar Botão de Reset"
+description_disable_reset_button: "Se marcado, apertar Reset não irá matar o jogador."
+setting_hitsound_volume: "Volume do Som de Acerto"
+description_hitsound_volume: "As notas fazem um som de "Tick!" quando você as apertam"
+setting_rating_offset: "Offset de Acerto"
+description_rating_offset: "Adianta/atrasa o tempo de acertar, valores altos farão com que você acerte mais cedo/tarde."
+setting_sick_hit_window: "Janela de Acerto "Sick!""
+description_sick_hit_window: "Muda o tempo máximo para acertar uma classificação de "Sick!" em milisegundos."
+setting_good_hit_window: "Janela de Acerto "Good""
+description_good_hit_window: "Muda o tempo máximo para acertar uma classificação de "Good" em milisegundos."
+setting_bad_hit_window: "Janela de Acerto "Bad""
+description_bad_hit_window: "Muda o tempo máximo para acertar uma classificação de "Bad" em milisegundos."
+setting_safe_frames: "Safe Frames"
+description_safe_frames: "Ajusta quanto tempo a mais ou a menos você terá\npara acertar uma nota mais cedo ou mais tarde."
+setting_sustains_as_one_note: "Notas Longas Fundidas"
+description_sustains_as_one_note: "Se marcado, notas longas não poderão ser acertadas se a principal não for acertada,\nalém de contar como um único erro."
+
+// Loading Screen
+now_loading: "Carregando{1}"
+
+// Difficulties
+difficulty_easy: "Fácil"
+difficulty_normal: "Normal"
+difficulty_hard: "Difícil"
+
+images/menudifficulties/easy: "images/pt-BR/menudifficulties/easy"
+images/menudifficulties/hard: "images/pt-BR/menudifficulties/hard"
