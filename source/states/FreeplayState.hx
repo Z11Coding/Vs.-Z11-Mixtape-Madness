@@ -584,7 +584,7 @@ class FreeplayState extends MusicBeatState
 							var loadedVocals = Paths.voices(PlayState.SONG.song, (playerVocals != null && playerVocals.length > 0) ? playerVocals : 'Player');
 							if(loadedVocals == null) loadedVocals = Paths.voices(PlayState.SONG.song);
 							
-							if(loadedVocals != null && loadedVocals.length > 0)
+							if(loadedVocals != null)
 							{
 								vocals.loadEmbedded(loadedVocals);
 								FlxG.sound.list.add(vocals);
