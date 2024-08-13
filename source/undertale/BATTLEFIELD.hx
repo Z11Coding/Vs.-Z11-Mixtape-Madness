@@ -137,10 +137,10 @@ class BATTLEFIELD extends MusicBeatState
         {
             human = new SOUL(RED, 'Chara', 20);
             monster = new MSOUL('Z11Tale', 4, 1, 100000, 9999, 500, false, true, isGenocide);
-            monster.initFlavorText = 'Battle against the truly determined[slow:2]...[fast:2]\n[pause:1]Let\'s see how much he\'ll take before he breaks...';
+            monster.initFlavorText = 'Battle against the truly determined...[pause:1]\nLet\'s see how much he\'ll take before he breaks...';
             monster.flavorTextList = [
                 'You feel like you\'ve done this before somewhere...', 
-                'Z11Tale asks his blasters what they want for dinner\n[pause:slow]They\'re still deciding',
+                'Z11Tale asks his blasters what they want for dinner\n[pause:5]They\'re still deciding',
                 'Smells like DETERMINATION',
                 'Z11Tale rubs his sword\nit shimmers in multiple different colors in response',
                 'Z11Tale reminds himself of your sins\nHis grip on his sword tightens',
@@ -454,7 +454,7 @@ class BATTLEFIELD extends MusicBeatState
     }
 
     var curMenu:String = 'main';
-    function regenMenu(option:String)
+    function regenMenu(option:String, ?curPage:Int)
     {
         switch (option)
         {
@@ -479,6 +479,7 @@ class BATTLEFIELD extends MusicBeatState
                 curMenu = 'main';
                 options = [];
         }
+
         for (i in menu.members)
         {
             menu.remove(i);
@@ -531,7 +532,7 @@ class BATTLEFIELD extends MusicBeatState
                     case 3:
                         if (menu.members[i] != null)
                         {
-                            menu.members[i].x = 300;
+                            menu.members[i].x = 100;
                             menu.members[i].y = 480;
                         }
                 }

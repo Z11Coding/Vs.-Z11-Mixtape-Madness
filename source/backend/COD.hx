@@ -3,7 +3,7 @@ package;
 import flixel.FlxG;
 
 
-class Lang
+class COD
 {
     public static var deathVar:String;
     public static var missDeath:String;
