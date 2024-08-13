@@ -3154,7 +3154,7 @@ if (result < 0 || result > mania) {
 				if (((dad.vocalsFile == null || dad.vocalsFile.length < 1) && dad.vocalsFile != 'gf')
 					&& ((boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) && boyfriend.vocalsFile != 'gf'))
 				{
-					var gfVoc = Paths.voices(songData.song, (gf.vocalsFile == null || gf.vocalsFile.length < 1) ? 'gf' : dad.vocalsFile);
+					var gfVoc = Paths.voices(songData.song, (gf.vocalsFile == null || gf.vocalsFile.length < 1) ? 'gf' : gf.vocalsFile);
 					if (gfVoc != null)
 					{
 						gfVocals.loadEmbedded(gfVoc != null ? gfVoc : Paths.music('empty'));
