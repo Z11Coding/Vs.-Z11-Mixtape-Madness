@@ -485,8 +485,7 @@ class BATTLEFIELD extends MusicBeatState
             menu.remove(i);
         }
 
-        for (i in 0...
-            )
+        for (i in 0...options.length)
         {
             var button:FlxText = new FlxText(-200, 430, FlxG.width, options[i], 32);
             button.setFormat(Paths.font("determination-extended.ttf"), 32, FlxColor.WHITE, CENTER);
