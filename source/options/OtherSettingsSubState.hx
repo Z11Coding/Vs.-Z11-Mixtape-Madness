@@ -88,7 +88,7 @@ class OtherSettingsSubState extends BaseOptionsMenu
 
 		var option:Option = new Option(
 			'Max Volume Sound', 
-			"The sound that plays when you change the volume.", 
+			"The sound that plays when you reach max volume.", 
 			'volMax', 
 			'string', 
 			[
@@ -134,7 +134,7 @@ class OtherSettingsSubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
-		var option:Option = new Option('Break the sticker audio',
+		var option:Option = new Option('Break The Sticker Audio',
 			"Literally just locks the sound to a funny bug I found.",
 			'audioBreak',
 			'bool');

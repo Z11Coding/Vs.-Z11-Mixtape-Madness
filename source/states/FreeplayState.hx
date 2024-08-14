@@ -11,7 +11,7 @@ import states.editors.ChartingStateOG;
 
 import flixel.addons.ui.FlxUIInputText;
 
-import substates.GameplayChangersSubstate;
+import options.GameplayChangersSubstate;
 import substates.ResetScoreSubState;
 import flixel.addons.transition.FlxTransitionableState;
 

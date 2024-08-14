@@ -60,7 +60,8 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 
 			hudSkins.insert(0, ClientPrefs.defaultData.uiSkin); //Default skin always comes first
 			var option:Option = new Option(
-			'Judgement Skin:', "What should your judgements look like?", 
+			'Judgement Skin', 
+			"What should your judgements look like?", 
 			'uiSkin', 
 			'string',
 			hudSkins);
