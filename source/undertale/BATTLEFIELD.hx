@@ -854,17 +854,12 @@ class BATTLEFIELD extends MusicBeatState
 
             if (curMenu == 'item')
             {
-                //Extremely jank but it works
-                if (curSelectedItem <= 3)
-                {
-                    pageMin = 0;
-                    pageMax = 3;
-                }
-                else if (curSelectedItem <= 7)
-                {
-                    pageMin = 4;
-                    pageMax = 7;
-                }
+                var itemsPerPage:Int = 4;
+                var numPages:Int = Math.ceil(items.length / itemsPerPage);
+                var currentPage:Int = Math.floor(curSelectedItem / itemsPerPage);
+                pageMin = currentPage * itemsPerPage;
+                pageMax = Std.int(Math.min(pageMin + itemsPerPage - 1, items.length - 1));
+                
                 for (i in 0...menu.members.length)
                 {
                     if (menu.members[i] != null)
