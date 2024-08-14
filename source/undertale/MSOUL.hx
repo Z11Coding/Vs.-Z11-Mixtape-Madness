@@ -50,22 +50,58 @@ class MSOUL {
     }
     
 }
-class DialogueHandeler {
-    public static function getMonsterDialogue(monster:MSOUL, isGenocide:Bool):Array<Array<Array<String>>>
-    {
+
+typedef DialogueLine = {
+    var animation: SpeechBubbleAnimation;
+    var speaker: String;
+    var text: String;
+}
+
+enum SpeechBubbleAnimation {
+    LeftWide;
+    RightWide;
+    RightLarge;
+    LeftLarge;
+    RightLong;
+    LeftLargeMinus;
+    Empty;
+    RightLargeMinus;
+    LeftWideMinus;
+    RightWideMinus;
+    Left;
+    LeftShort;
+    Right;
+    RightShort;
+}
+class DialogueHandler {
+    public static function getMonsterDialogue(monster:MSOUL, isGenocide:Bool):Array<Array<Array<String>>> {
         var dialogueArray:Array<Array<Array<String>>> = null;
-        switch (monster.name)
-        {
+        switch (monster.name) {
             case 'Z11Tale':
-                if (isGenocide)
-                {
-                    dialogueArray = [
-                        [["right", "Z11", "[setspeed:0.05]So, [pause:0.5]you're that guy i've heard about so much."], ["right", "Z11", "Kinda crazy to think i'd find any other humans down here..."], ["right", "Z11", "[slow:0.2]...It's a shame that human was you..."]],
-                        [["right", "Z11", "[setspeed:0.05]What? [pause:1]did you seriously expect me to just let Asgore walk out here in Sans's place?"], ["right", "Z11", "Just to be killed by you? [pause:1][slow:0.2]Not happening."]],
-                        [["right", "Z11", "[setspeed:0.05]Besides,[pause:0.5] knowing Asgore,[pause:0.5] you'd probably kill him in one shot,[pause:0.5]wouldn't you?"], ["right", "Z11", "I mean,[pause:0.5] You LOVE is at 20! there's no way anyone but me could survive a hit from you now."]],
+                if (isGenocide) {
+                    var dialogues:Array<Array<DialogueLine>> = [
+                        [
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[setspeed:0.05]So, [pause:0.5]you're that guy I've heard about so much." },
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "Kinda crazy to think I'd find any other humans down here..." },
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[slow:0.2]...It's a shame that human was you..." }
+                        ],
+                        [
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[setspeed:0.05]What? [pause:1]Did you seriously expect me to just let Asgore walk out here in Sans's place?" },
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "Just to be killed by you? [pause:1][slow:0.2]Not happening." }
+                        ],
+                        [
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[setspeed:0.05]Besides,[pause:0.5] knowing Asgore,[pause:0.5] you'd probably kill him in one shot,[pause:0.5]wouldn't you?" },
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "I mean,[pause:0.5] your LOVE is at 20! There's no way anyone but me could survive a hit from you now." }
+                        ]
                     ];
+
+                    // Convert the dialogues to the original format
+                    dialogueArray = dialogues.map(function(dialogue) {
+                        return dialogue.map(function(line) {
+                            return [Type.enumConstructor(line.animation).toLowerCase(), line.speaker, line.text];
+                        });
+                    });
                 }
-                
         }
         return dialogueArray;
     }

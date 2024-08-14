@@ -14,7 +14,7 @@ import undertale.BULLETPATTERN;
 import undertale.BULLETPATTERN.EventSequence;
 import undertale.SOUL;
 import undertale.SOUL.ITEM;
-import undertale.MSOUL.DialogueHandeler;
+import undertale.MSOUL.DialogueHandler;
 import flixel.ui.FlxBar;
 class BATTLEFIELD extends MusicBeatState
 {
@@ -367,7 +367,7 @@ class BATTLEFIELD extends MusicBeatState
 
         sequence = new EventSequence(human);
 
-        dialogue = DialogueHandeler.getMonsterDialogue(monster, isGenocide);
+        dialogue = DialogueHandler.getMonsterDialogue(monster, isGenocide);
     }
 
     //I love stealing functions
