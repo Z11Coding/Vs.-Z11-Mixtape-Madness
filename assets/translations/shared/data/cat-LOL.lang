@@ -71,11 +71,12 @@ no: "nu"
 // Options
 options_note_colors: "colorful arrows"
 options_controls: "do thin"
-options_adjust_delay_and_combo: "Ajustar Atraso e Combo"
+options_adjust_delay_and_combo: "lmiCAte an recordz"
 options_gameplay: "plaaaaaay thingie"
 options_visuals: "lookie lookie"
 options_graphics: "super cool lookie"
 options_language: "wut u say"
+options_misc: "sumFin eLs idk"
 
 graphics_menu: "seeing things"
 visuals_menu: "lookie at thingie"
