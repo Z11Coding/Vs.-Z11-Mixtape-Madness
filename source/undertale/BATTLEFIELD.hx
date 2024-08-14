@@ -367,7 +367,7 @@ class BATTLEFIELD extends MusicBeatState
 
         sequence = new EventSequence(human);
 
-        dialogue = DialogueHandler.getMonsterDialogue(monster, isGenocide);
+        dialogue = DialogueHandler.getMonsterDialogue(monster, isGenocide, human);
     }
 
     //I love stealing functions
@@ -892,7 +892,7 @@ class BATTLEFIELD extends MusicBeatState
                 dialTriggered = true; //Safety my beloved
                 dialProgress++;
             }
-            else if (curMenu == 'monDialogue' && enter && dialogue[monster.progress][dialProgress+1] != null)
+            else if (curMenu == 'monDialogue' && enter && dialogue[monster.progress][dialProgress] != null)
             {
                 speechFunc(dialogue[monster.progress][dialProgress][0], dialogue[monster.progress][dialProgress][2], dialogue[monster.progress][dialProgress][1], 20);
                 dialProgress++;

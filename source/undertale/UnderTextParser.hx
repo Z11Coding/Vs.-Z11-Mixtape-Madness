@@ -115,6 +115,21 @@ class UnderTextParser extends FlxTypeText {
                                         _length++;
                                     });
                                 }
+                            case 'sfx':
+                                var daSound:String = parts[2];
+                                if (daSound != '') {
+                                    formattingLocations.set(result.length, function() {
+                                        FlxG.sound.play(Paths.sound(daSound));
+                                    });
+                                }
+                            case 'username':
+                                var backup:String = parts[2];
+                                if (backup != '') {
+                                    formattingLocations.set(result.length, function() {
+                                        if (ClientPrefs.data.username) result += Sys.environment()["USERNAME"];
+                                        else result += backup;
+                                    });
+                                }
                             case 'reset':
                                 formattingLocations.set(result.length, function() {
                                     speed = defaultSpeed;
