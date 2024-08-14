@@ -162,14 +162,14 @@ class ITEMS {
     public function new() {
         instance = this;
         items = new Map<String, ITEM>();
-        items.set('Stick', new ITEM('Stick', ACTION.ITEM(ITEMTYPE.WEAPON(() -> null)), 0, 'You equipped the Stick!\nYou feel a little more powerful...'));
-        items.set('Bandage', new ITEM('Bandage', ACTION.ITEM(ITEMTYPE.ARMOR(() -> null)), 0, 'You applied the Bandage!\nYou feel a little better...'));
-        items.set('Real Knife', new ITEM('Real Knife', ACTION.ITEM(ITEMTYPE.WEAPON(() -> null)), 99, 'You equipped the Real Knife.\nHere we are!'));
-        items.set('The Locket', new ITEM('The Locket', ACTION.ITEM(ITEMTYPE.ARMOR(() -> null)), 99, 'You applied The Locket.\nYou can feel it beating.'));
-        items.set('error', new ITEM('error', HEAL, 0, "If you're reading this...\nyou messed up somewhere!"));
-        items.set('Food 1', new ITEM('Food 1', HEAL, 10, 'You ate the Food 1!\nYou healed 10HP and passed the test!'));
-        items.set('Food 2', new ITEM('Food 2', HEAL, 20, 'You ate the Food 2!\nSpicy!\nYou healed 20HP'));
-        items.set('Food 3', new ITEM('Food 3', HEAL, 1, 'You ate the Food 3!\nEw. it\'s cold...\nYou healed 1HP anyway, though...'));
+        items.set('Stick', new ITEM('Stick', ACTION.ITEM(ITEMTYPE.WEAPON(() -> null)), 0, '[setspeed:0.05]You equipped the Stick![pause:0.5]\nYou feel a little more powerful...'));
+        items.set('Bandage', new ITEM('Bandage', ACTION.ITEM(ITEMTYPE.ARMOR(() -> null)), 0, '[setspeed:0.05]You applied the Bandage![pause:0.5]\nYou feel a little better...'));
+        items.set('Real Knife', new ITEM('Real Knife', ACTION.ITEM(ITEMTYPE.WEAPON(() -> null)), 99, '[setspeed:0.05]You equipped the Real Knife.[pause:0.5]\nHere we are!'));
+        items.set('The Locket', new ITEM('The Locket', ACTION.ITEM(ITEMTYPE.ARMOR(() -> null)), 99, '[setspeed:0.05]You applied The Locket.[pause:0.5]\nYou can feel it beating.'));
+        items.set('error', new ITEM('error', HEAL, 0, "[setspeed:0.05]If you're reading this...[pause:0.5]\nyou messed up somewhere!"));
+        items.set('Food 1', new ITEM('Food 1', HEAL, 10, '[setspeed:0.05]You ate the Food 1![pause:0.5]\nYou healed 10HP and passed the test!'));
+        items.set('Food 2', new ITEM('Food 2', HEAL, 20, '[setspeed:0.05]You ate the Food 2![pause:0.5]\nSpicy![pause:0.5]\nYou healed 20HP'));
+        items.set('Food 3', new ITEM('Food 3', HEAL, 1, '[setspeed:0.05]You ate the Food 3![pause:0.5]\nEw. [pause:0.1]it\'s cold...[pause:0.5]\nYou healed 1HP anyway, though...'));
     }
     public static function getItemByName(name:String):ITEM {
         return instance.items.get(name);

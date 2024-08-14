@@ -14,6 +14,7 @@ import undertale.BULLETPATTERN;
 import undertale.BULLETPATTERN.EventSequence;
 import undertale.SOUL;
 import undertale.SOUL.ITEM;
+import undertale.MSOUL.DialogueHandeler;
 import flixel.ui.FlxBar;
 class BATTLEFIELD extends MusicBeatState
 {
@@ -30,6 +31,7 @@ class BATTLEFIELD extends MusicBeatState
     public var isGenocide:Bool = true;
     public static var instance:BATTLEFIELD;
     public var bubbleOffset:Map<String, Array<Dynamic>>;
+    public var dialogue:Array<Array<Array<String>>>;
 
 
     //Menu Stuff
@@ -138,37 +140,35 @@ class BATTLEFIELD extends MusicBeatState
         {
             human = new SOUL(RED, 'Chara', 20);
             monster = new MSOUL('Z11Tale', 4, 1, 100000, 9999, 500, false, true, isGenocide);
-            monster.initFlavorText = 'Battle against the truly determined...[pause:1]\nLet\'s see how much he\'ll take before he breaks...';
+            monster.initFlavorText = '[setspeed:0.05]Battle against the truly determined...[pause:1][slow:0.4]\nLet\'s see how much he\'ll take before he breaks...';
             monster.flavorTextList = [
-                'You feel like you\'ve done this before somewhere...', 
-                'Z11Tale asks his blasters what they want for dinner\n[pause:5]They\'re still deciding',
-                'Smells like DETERMINATION',
-                'Z11Tale rubs his sword\nit shimmers in multiple different colors in response',
-                'Z11Tale reminds himself of your sins\nHis grip on his sword tightens',
-                'Z11Tale\'s soul glimmers within him\nYou wonder how many monsters died to make him this strong...',
-                'DETERMINATION'
+                '[setspeed:0.05]You feel like you\'ve done this before somewhere...', 
+                '[setspeed:0.05]Z11Tale asks his blasters what they want for dinner[pause:2]\nThey\'re still deciding',
+                '[setspeed:0.05]Smells like DETERMINATION',
+                '[setspeed:0.05]Z11Tale rubs his sword[pause:0.5]\nit shimmers in multiple different colors in response',
+                '[setspeed:0.05]Z11Tale reminds himself of your sins[pause:0.5]\nHis grip on his sword tightens',
+                '[setspeed:0.05]Z11Tale\'s soul glimmers within him[pause:1]\nYou wonder how many monsters died to make him this strong...',
+                '[setspeed:0.05]DETERMINATION'
             ];
         }
         else
         {
             human = new SOUL(RED, 'Frisk', 1);
             monster = new MSOUL('Z11Tale', 4, 1, 100, 9999, 500, false, true, isGenocide);
-            monster.initFlavorText = 'Z11Tale prepares for a fun battle.';
+            monster.initFlavorText = '[setspeed:0.05]Z11Tale prepares for a fun battle.';
             monster.flavorTextList = [
-                'Z11Tale eyes someone behind him.\nHe seems annoyed by them.', 
-                'Z11Tale does a series of backflips.\n(He\'s not actually, he just put that there to look cool)',
-                'Z11Tale turns around to yell at someone behind him tto quit cheering\nYou can hear a faint "awww" in the distance.',
-                'You ask if Z11Tale isn\'t human\nHe shows you his soul which was, indeed, human.',
-                'Z11Tale starts thinking about grillby\'s.\nZ11tale is hungry now.',
-                'Z11Tale\'s bops to the song with intense enjoyment.',
-                'You start to wonder how long Z11Tale\'s been down here.\nThe thought makes your head hurt.'
+                '[setspeed:0.05]Z11Tale eyes someone behind him.[pause:0.5]\nHe seems annoyed by them.', 
+                '[setspeed:0.05]Z11Tale does a series of backflips.[pause:0.5]\n(He\'s not actually, he just put that there to look cool)',
+                '[setspeed:0.05]Z11Tale turns around to yell at someone behind him to quit cheering[pause:0.5]\nYou can hear a faint "awww" in the distance.',
+                '[setspeed:0.05]You ask if Z11Tale isn\'t human[pause:0.5]\nHe shows you his soul which was, indeed, human.',
+                '[setspeed:0.05]Z11Tale starts thinking about grillby\'s.[pause:0.5]\nZ11tale is hungry now.',
+                '[setspeed:0.05]Z11Tale\'s bops to the song with intense enjoyment.',
+                '[setspeed:0.05]You start to wonder how long Z11Tale\'s been down here.[pause:0.5]\nThe thought makes your head hurt.'
             ];
         }
-        trace(human.atk);
         health = human.health;
         items = human.storage;
-        trace(monster.health);
-
+        
         enemyHealth = monster.health;
         enemyMaxHealth = monster.maxHealth;
 
@@ -220,8 +220,8 @@ class BATTLEFIELD extends MusicBeatState
         soul.screenCenter();
         monsterS.scale.x = 0.2;
 	    monsterS.scale.y = 0.2;
-        soul.scale.x = 1.8;
-	    soul.scale.y = 1.8;
+        soul.scale.x = 1.5;
+	    soul.scale.y = 1.5;
         add(monsterS);
         add(boxB);
         add(box);
@@ -366,6 +366,8 @@ class BATTLEFIELD extends MusicBeatState
         FlxG.sound.playMusic(Paths.music(daSong), 0.8, true);
 
         sequence = new EventSequence(human);
+
+        dialogue = DialogueHandeler.getMonsterDialogue(monster, isGenocide);
     }
 
     //I love stealing functions
@@ -431,9 +433,9 @@ class BATTLEFIELD extends MusicBeatState
             FlxTween.num(monster.health, (monster.health -= DamageCalculator.getDamage(lod, human, monster)), 1.5, {ease: FlxEase.expoInOut}, function(num)
             {
                 monster.health = num;
-                //trace('tweened to: '+monster.health);
             });
-            //monster.health -= DamageCalculator.getDamage(lod, human, monster); //dont ask why i did it this way.
+            dialProgress = 0;
+            dialTriggered = false;
             new FlxTimer().start(2, function(tmr:FlxTimer)
             {
                 enemyHP.alpha = 0;
@@ -449,7 +451,6 @@ class BATTLEFIELD extends MusicBeatState
                 }});
                 if (isGenocide) monster.progress++;
                 curMenu = 'monDialogue';
-                speechFunc('right', 'hehehehe.\nbones.', 'Z11', 20);
             });
         });
     }
@@ -735,6 +736,8 @@ class BATTLEFIELD extends MusicBeatState
 
     var pageMin:Int = 0;
     var pageMax:Int = 3;
+
+    var dialProgress:Int = 0;
     override function update(elapsed:Float) {
         //I love manually updating EVERYTHING!!!!
         target.animation.update(elapsed);
@@ -839,7 +842,7 @@ class BATTLEFIELD extends MusicBeatState
                 allowUIDialogue = true;
                 if (underText.alpha == 0) 
                 {
-                    typeFunc((if (monster.progress == 0) monster.initFlavorText else monster.flavorTextList[FlxG.random.int(0, monster.flavorTextList.length)]));
+                    typeFunc((if (monster.progress == -1) monster.initFlavorText else monster.flavorTextList[FlxG.random.int(0, monster.flavorTextList.length-1)]));
                     selected = false;
                     inMenu = false;
                 }
@@ -877,15 +880,22 @@ class BATTLEFIELD extends MusicBeatState
             
             if (curMenu == 'attack' && enter)
             {
-                trace('Pressed enter!');
                 curMenu = 'monDialogue';
+                dialProgress = 0;
+                dialTriggered = false;
             }
             
-            if (curMenu == 'monDialogue' && !dialTriggered)
+            if (curMenu == 'monDialogue' && !dialTriggered && dialProgress < (dialogue[monster.progress][dialProgress].length-1))
             {
                 allowUIDialogue = false;
-                speechFunc('right', 'hehehehe.\nbones.', 'Z11', 20);
+                speechFunc(dialogue[monster.progress][dialProgress][0], dialogue[monster.progress][dialProgress][2], dialogue[monster.progress][dialProgress][1], 20);
                 dialTriggered = true; //Safety my beloved
+                dialProgress++;
+            }
+            else if (curMenu == 'monDialogue' && enter && dialogue[monster.progress][dialProgress+1] != null)
+            {
+                speechFunc(dialogue[monster.progress][dialProgress][0], dialogue[monster.progress][dialProgress][2], dialogue[monster.progress][dialProgress][1], 20);
+                dialProgress++;
             }
             else if (curMenu == 'monDialogue' && enter)
             {

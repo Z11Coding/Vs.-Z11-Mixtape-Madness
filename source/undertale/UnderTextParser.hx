@@ -1,6 +1,7 @@
 package undertale;
 
 import flixel.addons.text.FlxTypeText;
+import flixel.input.keyboard.FlxKey;
 import flixel.FlxG;
 
 class UnderTextParser extends FlxTypeText {
@@ -99,6 +100,13 @@ class UnderTextParser extends FlxTypeText {
                                         else trace('Your speed is too fast!');
                                     });
                                 }
+                            case 'setspeed':
+                                var setSpeed:Float = Std.parseFloat(parts[2]);
+                                if (!Math.isNaN(setSpeed)) {
+                                    formattingLocations.set(result.length, function() {
+                                        speed = setSpeed;
+                                    });
+                                }
                             case 'pause':
                                 var pDuration:Float = Std.parseFloat(parts[2]);
                                 if (!Math.isNaN(pDuration)) {
@@ -169,38 +177,3 @@ class PatternSplitter {
         return { partsArray: partsArray, brackets: brackets };
     }
 }
-
-// class PatternSplitter {
-//     public static function splitWithPattern(input:String, brackets:Array<String>, splits:Array<String>):Dynamic {
-//         var partsArray:Array<String> = [];
-//         var bracketStr:String = brackets.join('');
-
-//         // Find the start and end positions of the pattern using the brackets
-//         var startBracket:String = brackets[0];
-//         var endBracket:String = brackets[1];
-//         var startPos:Int = input.indexOf(startBracket);
-//         var endPos:Int = input.indexOf(endBracket, startPos + 1);
-
-//         if (startPos != -1 && endPos != -1) {
-//             // Extract the content inside the brackets
-//             var content:String = input.substring(startPos + 1, endPos);
-
-//             // Split the content using the provided splits
-//             var splitPattern:String = splits.join('|');
-//             var parts:Array<String> = content.split(new EReg(splitPattern, 'g'));
-
-//             // Add the parts to partsArray
-//             for (part in parts) {
-//                 partsArray.push(part);
-//             }
-
-//             // Add the splits to partsArray
-//             for (split in splits) {
-//                 partsArray.push(split);
-//             }
-//         }
-
-//         return { partsArray: partsArray, brackets: bracketStr };
-//     }
-// }
-
