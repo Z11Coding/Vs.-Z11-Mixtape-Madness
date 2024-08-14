@@ -12,6 +12,7 @@ import flixel.FlxState;
 import undertale.*;
 import undertale.BULLETPATTERN;
 import undertale.BULLETPATTERN.EventSequence;
+import undertale.BULLETPATTERN.Blaster;
 import undertale.SOUL;
 import undertale.SOUL.ITEM;
 import undertale.MSOUL.DialogueHandler;
@@ -795,11 +796,8 @@ class BATTLEFIELD extends MusicBeatState
             case 'test 2':
                 if (curTime % 20 == 0)
                 {
-                    var test = new BULLETPATTERN(testSprite, new undertale.BULLETPATTERN.DamageType(2));
-                    test.moveTo(FlxG.random.int(-280, 1280), FlxG.random.int(-300, 1300), FlxG.random.int(1, 10));
-                    test.moveTo(FlxG.random.int(-400, 1400), FlxG.random.int(-600, 1600), FlxG.random.int(1, 10));
-                    test.fadeOut(FlxG.random.int(1, 10));
-                    sequence.addEvent(test);
+                    var blaster = new Blaster(0, 0, 660, 300, 0, 90);
+                    
                 }
             default:
                 sequence.events = [];

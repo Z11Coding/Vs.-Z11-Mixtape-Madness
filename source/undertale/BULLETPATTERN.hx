@@ -236,7 +236,7 @@ class Blaster {
     public var dorotation:Float;
     public var builderspd:Float;
     public var holdfire:Float;
-    public function new(x:Float, y:Float, x2:Float, y2:Float, angle:Float, startangle:Float, sound:String, fire_sound:String, ?sprite_prefix:String = null, ?beam_sprite:String = null)
+    public function new(x:Float, y:Float, x2:Float, y2:Float, angle:Float, startangle:Float, ?sound:String = null, ?fire_sound:String = null, ?sprite_prefix:String = null, ?beam_sprite:String = null)
     {
         this.sprite_prefix = sprite_prefix;
         if (sprite_prefix == null) this.sprite_prefix = "undertale/bullets/blasters/blaster";
@@ -280,5 +280,5 @@ class Blaster {
         return image;
     }
 
-    
+
 }
