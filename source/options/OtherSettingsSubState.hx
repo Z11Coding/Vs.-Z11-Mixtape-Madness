@@ -169,6 +169,8 @@ class OtherSettingsSubState extends BaseOptionsMenu
 				indeed = 8;
 			case 'Late Night Jersey':
 				indeed = 9;
+			case 'Silly Little Sample Song':
+				indeed = 10;
 		}
 		/*
 		if (controls.UI_RIGHT_P)
