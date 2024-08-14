@@ -376,34 +376,36 @@ class BATTLEFIELD extends MusicBeatState
 		bubbleOffset[name] = [x, y, width, addx];
 	}
 
+    var prevBox:String;
+    var daOffset:Array<Dynamic> = [];
     function speechFunc(box:String = 'right', ?text:String = '', ?sound:String = 'monsterfont', ?size:Int = 30, ?speed:Float = 0.04)
     {
-        speechBubble.updateHitbox();
-        speechBubble.animation.play(box, true);
-        var daOffset:Array<Dynamic> = [];
-        if (bubbleOffset.exists(box))
+        if (box != 'empty')
         {
-            daOffset = bubbleOffset.get(box);
-            speechBubble.offset.set(daOffset[0], daOffset[1]);
-        }
-        monsterText.x = speechBubble.x - daOffset[0] - daOffset[3];
-        monsterText.y = speechBubble.y - daOffset[1];
-        monsterText.fieldWidth = daOffset[2];
-        monsterText.size = size;
-        monsterText.updateHitbox();
-        monsterText.sounds = [FlxG.sound.load(Paths.sound('ut/$sound'), 0.6)];
-        if (box == 'empty')
-        {
-            speechBubble.alpha = 0;
-            monsterText.alpha = 0;
-            monsterText.resetText('');
-        }
-        else
-        {
+            speechBubble.updateHitbox();
+            speechBubble.animation.play(box, true);
+            if (bubbleOffset.exists(box))
+            {
+                daOffset = bubbleOffset.get(box);
+                speechBubble.offset.set(daOffset[0], daOffset[1]);
+            }
+            monsterText.x = speechBubble.x - daOffset[0] - daOffset[3];
+            monsterText.y = speechBubble.y - daOffset[1];
+            monsterText.fieldWidth = daOffset[2];
+            monsterText.size = size;
+            monsterText.updateHitbox();
+            monsterText.sounds = [FlxG.sound.load(Paths.sound('ut/$sound'), 0.6)];
+
             speechBubble.alpha = 1;
             monsterText.alpha = 1;
             monsterText.resetText(text);
             monsterText.start(speed, true);
+        }
+        else
+        {
+            speechBubble.alpha = 0;
+            monsterText.alpha = 0;
+            monsterText.resetText('');
         }
     }
 
@@ -709,6 +711,11 @@ class BATTLEFIELD extends MusicBeatState
                 attackTimer = 1;
                 interTimer = 12;
                 triggered = false;
+            case 'test 2':
+                curAttack = 'test 2';
+                attackTimer = 1;
+                interTimer = 12;
+                triggered = false;
             default: //DONT TOUCH
                 curAttack = '';
                 attackTimer = -1;
@@ -772,13 +779,22 @@ class BATTLEFIELD extends MusicBeatState
                 if (curTime % 20 == 0)
                 {
                     var test:BULLETPATTERN;
-                    var testSprite:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('undertale/bullets/boneMini'));
+                    var testSprite:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('undertale/bullets/bones/boneMini'));
                     testSprite.screenCenter();
                     testSprite.y += 200;
                     testSprite.scale.x = FlxG.random.float(1,2);
                     testSprite.scale.y = FlxG.random.float(1,2);
                     bulletGroup.add(testSprite);
 
+                    var test = new BULLETPATTERN(testSprite, new undertale.BULLETPATTERN.DamageType(2));
+                    test.moveTo(FlxG.random.int(-280, 1280), FlxG.random.int(-300, 1300), FlxG.random.int(1, 10));
+                    test.moveTo(FlxG.random.int(-400, 1400), FlxG.random.int(-600, 1600), FlxG.random.int(1, 10));
+                    test.fadeOut(FlxG.random.int(1, 10));
+                    sequence.addEvent(test);
+                }
+            case 'test 2':
+                if (curTime % 20 == 0)
+                {
                     var test = new BULLETPATTERN(testSprite, new undertale.BULLETPATTERN.DamageType(2));
                     test.moveTo(FlxG.random.int(-280, 1280), FlxG.random.int(-300, 1300), FlxG.random.int(1, 10));
                     test.moveTo(FlxG.random.int(-400, 1400), FlxG.random.int(-600, 1600), FlxG.random.int(1, 10));
@@ -829,12 +845,6 @@ class BATTLEFIELD extends MusicBeatState
 
         if (monsterText.text.charAt(underText.text.length-1) == ".") underText.delay = 3;
         else monsterText.delay = daSpeed;
-        if (monsterText.text.charAt(underText.text.length-1) == "@") 
-        {
-            StringTools.replace(monsterText.text, '@', '\n');
-            monsterText.delay = 0.3;
-        }
-        else monsterText.delay = daSpeed;
         if (!canMove)
         {
             if (curMenu == 'main')
@@ -880,17 +890,24 @@ class BATTLEFIELD extends MusicBeatState
                 dialTriggered = false;
             }
             
-            if (curMenu == 'monDialogue' && !dialTriggered && dialProgress < (dialogue[monster.progress][dialProgress].length-1))
+            if (curMenu == 'monDialogue' && !dialTriggered && dialProgress != -1 && dialProgress < (dialogue[monster.progress][dialProgress].length-1))
             {
                 allowUIDialogue = false;
                 speechFunc(dialogue[monster.progress][dialProgress][0], dialogue[monster.progress][dialProgress][2], dialogue[monster.progress][dialProgress][1], 20);
                 dialTriggered = true; //Safety my beloved
                 dialProgress++;
             }
-            else if (curMenu == 'monDialogue' && enter && dialogue[monster.progress][dialProgress] != null)
+            else if (curMenu == 'monDialogue' && enter && dialProgress != -1 && dialogue[monster.progress][dialProgress] != null)
             {
                 speechFunc(dialogue[monster.progress][dialProgress][0], dialogue[monster.progress][dialProgress][2], dialogue[monster.progress][dialProgress][1], 20);
                 dialProgress++;
+            }
+            else if (curMenu == 'monDialogue'&& dialProgress != -1)
+            {
+                speechFunc('empty');
+                canMove = true;
+                setAttack('test 1');
+                curMenu = 'main';
             }
             else if (curMenu == 'monDialogue' && enter)
             {

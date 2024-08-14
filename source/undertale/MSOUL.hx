@@ -81,25 +81,25 @@ class DialogueHandler {
                 if (isGenocide) {
                     var dialogues:Array<Array<DialogueLine>> = [
                         [
-                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[setspeed:0.05]So, [pause:0.5]you're that guy I've heard about so much." },
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]So, [pause:0.5]you're that guy I've heard about so much." },
                             { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "Kinda crazy to think I'd find any other humans down here..." },
                             { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[slow:0.2]...It's a shame that human was you..." }
                         ],
                         [
-                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[setspeed:0.05]What? [pause:1]Did you seriously expect me to just let Asgore walk out here in Sans's place?" },
-                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "Just to be killed by you? [pause:1][slow:0.2]Not happening." }
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]What? [pause:1]Did you seriously expect me to just let Asgore walk out here in Sans's place?" },
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "Just to be killed by you?[slow:0.2] [pause:3]Not happening." }
                         ],
                         [
-                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[setspeed:0.05]Besides,[pause:0.5] knowing Asgore,[pause:0.5] you'd probably kill him in one shot,[pause:0.5]wouldn't you?" },
-                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "I mean,[pause:0.5] your LOVE is at 20! There's no way anyone but me could survive a hit from you now." }
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]Besides,[pause:0.5] knowing Asgore,[pause:0.5] you'd probably kill him in one shot, [pause:0.5]wouldn't you?" },
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "I mean,[pause:0.5] your LOVE is at 20! [pause:1]There's no way anyone but me could survive a hit from you now." }
                         ],
                         [
                             { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]Sans, [pause:0.5]Papyrus, [pause:0.5]Toriel, [pause:0.5]Undyne, [pause:0.5]Mettaton, [pause:0.5]Heck, [pause:0.2]You even managed to find Alphys and the rest of the evacuated monsters."},
                             { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]Ruthless, [pause:0.5]Yet through. [pause:0.5]if you weren't killing my friends, [pause:0.5]i'd probably be impressed..." }
                         ],
                         [
-                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]Don't get me wrong, [pause:0.5]though. [pause:0.5]I'm NOT congratulating you, [pause:0.5]Nor am I prasing you. [pause:0.5][set:0.5]I hate every bit of you that still lives."},
-                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]But, seeing as the monsters haven't beaten you yet, I'd thought I should give my two cents on the subject." }
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]Don't get me wrong, [pause:0.5]though. [pause:0.5]I'm NOT congratulating you, [pause:0.5]Nor am I prasing you.[pause:1] [set:0.5]I hate every bit of you that still lives."},
+                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]But, [pause:0.5]seeing as the monsters haven't beaten you yet, [pause:0.5]I'd thought I should give my two cents on the subject." }
                         ],
                         [
                             { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]Oh, [pause:0.5]by the way, [pause:0.5]you've probabbly noticed the blasters behind me."},
@@ -107,8 +107,8 @@ class DialogueHandler {
                         ],
                         [
                             { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]I can see it, [pause:0.5]you know? [pause:1]Or should I say, [pause:0.5]I can see HER, [pause:0.5]you know."},
-                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]That's the only reason I haven't gone all-out on you yet. [pause:0.5]Because there's a chance that the kind person I remember is still in there."},
-                            { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]But first, [pause:0.5]I'm going to make a point. [pause:1]A bit of [pause:0.5]persuasion, [pause:0.5]if you will."},
+                            { animation: SpeechBubbleAnimation.RightLarge, speaker: "Z11", text: "[set:0.05]That's the only reason I haven't gone all-out on you yet. [pause:0.5]Because there's a chance that the kind person I remember is still in there."},
+                            { animation: SpeechBubbleAnimation.RightShort, speaker: "Z11", text: "[set:0.05]But first, [pause:0.5]I'm going to make a point. [pause:1]A bit of [pause:0.5]persuasion, [pause:0.5]if you will."},
                         ],
                         [
                             { animation: SpeechBubbleAnimation.Right, speaker: "Z11", text: "[set:0.05]Just a bit more [pause:0.5]\"convincing\"[pause:0.5]should do the trick."},

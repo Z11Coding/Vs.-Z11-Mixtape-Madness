@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Created with Free texture packer v0.6.7 http://free-tex-packer.com
+-->
+<TextureAtlas imagePath="blaster.png" width="51" height="390">
+<SubTexture name="wait0000" x="4" y="199"  width="42" height="57" frameX="-0" frameY="-0" frameWidth="42" frameHeight="57"/>
+<SubTexture name="blast0000" x="4" y="264"  width="40" height="57" frameX="-0" frameY="-0" frameWidth="40" frameHeight="57"/>
+<SubTexture name="blast0001" x="4" y="329"  width="38" height="57" frameX="-0" frameY="-0" frameWidth="38" frameHeight="57"/>
+<SubTexture name="blast0002" x="4" y="4"  width="43" height="57" frameX="-0" frameY="-0" frameWidth="43" frameHeight="57"/>
+<SubTexture name="blast0003" x="4" y="134"  width="43" height="57" frameX="-0" frameY="-0" frameWidth="43" frameHeight="57"/>
+<SubTexture name="blast0004" x="4" y="69"  width="43" height="57" frameX="-0" frameY="-0" frameWidth="43" frameHeight="57"/>
+</TextureAtlas>

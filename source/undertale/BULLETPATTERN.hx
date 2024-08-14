@@ -212,3 +212,73 @@ class Hurtbox {
         this.destroy();
     }
 }
+
+
+class Blaster {
+    public var x:Float;
+    public var y:Float;
+    public var x2:Float;
+    public var y2:Float;
+    public var angle:Float;
+    public var startangle:Float;
+    public var sound:String;
+    public var fire_sound:String;
+    public var sprite_prefix:String;
+    public var beam_sprite:String;
+    public var sprite:FlxSprite;
+    public var beam:FlxSprite;
+    public var updatetimer:Float;
+    public var rotation:Float;
+    public var xscale:Float;
+    public var yscale:Float;
+    public var shootdelay:Float;
+    public var speed:Float;
+    public var dorotation:Float;
+    public var builderspd:Float;
+    public var holdfire:Float;
+    public function new(x:Float, y:Float, x2:Float, y2:Float, angle:Float, startangle:Float, sound:String, fire_sound:String, ?sprite_prefix:String = null, ?beam_sprite:String = null)
+    {
+        this.sprite_prefix = sprite_prefix;
+        if (sprite_prefix == null) this.sprite_prefix = "undertale/bullets/blasters/blaster";
+        this.beam_sprite = beam_sprite;
+        if (beam_sprite == null) this.beam_sprite = "undertale/bullets/blasters/beam";
+        this.sprite = createSprite(sprite_prefix);
+        this.sprite.scale.x = 2;
+        this.sprite.scale.y = 2;
+        this.sprite.x = x;
+        this.sprite.y = y;
+        this.rotation = 0;
+        this.updatetimer = 0;
+        this.x = x;
+        this.y = y;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.xscale = 1;
+        this.yscale = 1;
+        this.shootdelay = 40;
+        this.speed = 40;
+        this.angle = angle % 360;
+        this.dorotation = 0;
+        this.builderspd = 0;
+        this.holdfire = 0;
+        this.sound = sound;
+        this.fire_sound = fire_sound;
+        if (sound == null) this.sound = "ut/gasterintro";
+        if (fire_sound == null) this.fire_sound = "ut/gasterfire";
+        if (startangle != null && startangle != 0)
+        {
+            this.dorotation = startangle;
+            this.sprite.angle = startangle;
+        }
+        if (this.sound != null) FlxG.sound.play(Paths.sound(this.sound));
+        
+        if (this.angle >= 180) this.angle = this.angle-360;
+    } 
+
+    function createSprite(image:String):FlxSprite {
+        var image:FlxSprite = new FlxSprite().loadGraphic(Paths.image('undertale/bullets/blasters/$image'));
+        return image;
+    }
+
+    
+}
