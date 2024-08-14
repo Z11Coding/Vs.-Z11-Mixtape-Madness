@@ -313,6 +313,8 @@ class Main extends Sprite
 
 	public static inline function handleStateBasedClosing() {
         switch (Type.getClassName(Type.getClass(FlxG.state)).split(".")[Lambda.count(Type.getClassName(Type.getClass(FlxG.state)).split(".")) - 1]) {
+			case "ChartingStateOG":
+				// new Prompt("Are you sure you want to exit? Your progress will not be saved.", function (result:Bool) {
 
             default:
                 // Default behavior: close the window
