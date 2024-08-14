@@ -11,7 +11,7 @@ typedef ModsList = {
 class Mods
 {
 	static public var currentModDirectory:String = '';
-	public static var ignoreModFolders:Array<String> = [
+	public static final ignoreModFolders:Array<String> = [
 		'characters',
 		'custom_events',
 		'custom_notetypes',
@@ -26,9 +26,7 @@ class Mods
 		'weeks',
 		'fonts',
 		'scripts',
-		'achievements',
-		'FreeplayState',
-		'MainMenuState'
+		'achievements'
 	];
 
 	private static var globalMods:Array<String> = [];
@@ -64,7 +62,7 @@ class Mods
 		return list;
 	}
 	
-	inline public static function mergeAllTextsNamed(path:String, defaultDirectory:String = null, allowDuplicates:Bool = false)
+	inline public static function mergeAllTextsNamed(path:String, ?defaultDirectory:String = null, allowDuplicates:Bool = false)
 	{
 		if(defaultDirectory == null) defaultDirectory = Paths.getSharedPath();
 		defaultDirectory = defaultDirectory.trim();

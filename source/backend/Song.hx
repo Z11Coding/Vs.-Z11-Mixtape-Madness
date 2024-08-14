@@ -192,6 +192,13 @@ class Song
 		#end
 			rawData = Assets.getText(_lastPath);
 
+		#if MODS_ALLOWED
+		var moddyFile:String = Paths.modsJson(formattedFolder + '/' + formattedSong);
+		if(FileSystem.exists(moddyFile)) {
+			rawData = File.getContent(moddyFile);
+		}
+		#end
+
 		return rawData != null ? parseJSON(rawData, jsonInput) : null;
 	}
 

@@ -701,9 +701,6 @@ class FreeplayState extends MusicBeatState
 					PlayState.storyDifficulty = curDifficulty;
 
 					trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
-					if(colorTween != null) {
-						colorTween.cancel();
-					}
 				}
 				catch(e:Dynamic)
 				{
@@ -721,6 +718,7 @@ class FreeplayState extends MusicBeatState
 					super.update(elapsed);
 					return;
 				}
+				
 				if (FlxG.keys.pressed.SHIFT){
 					TransitionState.transitionState(ChartingStateOG, {transitionType: "stickers"});
 				} else if (multisong) {

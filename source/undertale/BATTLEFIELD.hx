@@ -140,30 +140,30 @@ class BATTLEFIELD extends MusicBeatState
         {
             human = new SOUL(RED, 'Chara', 20);
             monster = new MSOUL('Z11Tale', 4, 1, 100000, 9999, 500, false, true, isGenocide);
-            monster.initFlavorText = '[setspeed:0.05]Battle against the truly determined...[pause:1][slow:0.4]\nLet\'s see how much he\'ll take before he breaks...';
+            monster.initFlavorText = '[set:0.05]Battle against the truly determined...[pause:1][slow:0.4]\nLet\'s see how much he\'ll take before he breaks...';
             monster.flavorTextList = [
-                '[setspeed:0.05]You feel like you\'ve done this before somewhere...', 
-                '[setspeed:0.05]Z11Tale asks his blasters what they want for dinner[pause:2]\nThey\'re still deciding',
-                '[setspeed:0.05]Smells like DETERMINATION',
-                '[setspeed:0.05]Z11Tale rubs his sword[pause:0.5]\nit shimmers in multiple different colors in response',
-                '[setspeed:0.05]Z11Tale reminds himself of your sins[pause:0.5]\nHis grip on his sword tightens',
-                '[setspeed:0.05]Z11Tale\'s soul glimmers within him[pause:1]\nYou wonder how many monsters died to make him this strong...',
-                '[setspeed:0.05]DETERMINATION'
+                '[set:0.05]You feel like you\'ve done this before somewhere...', 
+                '[set:0.05]Z11Tale asks his blasters what they want for dinner[pause:2]\nThey\'re still deciding',
+                '[set:0.05]Smells like DETERMINATION',
+                '[set:0.05]Z11Tale rubs his sword[pause:0.5]\nit shimmers in multiple different colors in response',
+                '[set:0.05]Z11Tale reminds himself of your sins[pause:0.5]\nHis grip on his sword tightens',
+                '[set:0.05]Z11Tale\'s soul glimmers within him[pause:1]\nYou wonder how many monsters died to make him this strong...',
+                '[set:0.05]DETERMINATION'
             ];
         }
         else
         {
             human = new SOUL(RED, 'Frisk', 1);
             monster = new MSOUL('Z11Tale', 4, 1, 100, 9999, 500, false, true, isGenocide);
-            monster.initFlavorText = '[setspeed:0.05]Z11Tale prepares for a fun battle.';
+            monster.initFlavorText = '[set:0.05]Z11Tale prepares for a fun battle.';
             monster.flavorTextList = [
-                '[setspeed:0.05]Z11Tale eyes someone behind him.[pause:0.5]\nHe seems annoyed by them.', 
-                '[setspeed:0.05]Z11Tale does a series of backflips.[pause:0.5]\n(He\'s not actually, he just put that there to look cool)',
-                '[setspeed:0.05]Z11Tale turns around to yell at someone behind him to quit cheering[pause:0.5]\nYou can hear a faint "awww" in the distance.',
-                '[setspeed:0.05]You ask if Z11Tale isn\'t human[pause:0.5]\nHe shows you his soul which was, indeed, human.',
-                '[setspeed:0.05]Z11Tale starts thinking about grillby\'s.[pause:0.5]\nZ11tale is hungry now.',
-                '[setspeed:0.05]Z11Tale\'s bops to the song with intense enjoyment.',
-                '[setspeed:0.05]You start to wonder how long Z11Tale\'s been down here.[pause:0.5]\nThe thought makes your head hurt.'
+                '[set:0.05]Z11Tale eyes someone behind him.[pause:0.5]\nHe seems annoyed by them.', 
+                '[set:0.05]Z11Tale does a series of backflips.[pause:0.5]\n(He\'s not actually, he just put that there to look cool)',
+                '[set:0.05]Z11Tale turns around to yell at someone behind him to quit cheering[pause:0.5]\nYou can hear a faint "awww" in the distance.',
+                '[set:0.05]You ask if Z11Tale isn\'t human[pause:0.5]\nHe shows you his soul which was, indeed, human.',
+                '[set:0.05]Z11Tale starts thinking about grillby\'s.[pause:0.5]\nZ11tale is hungry now.',
+                '[set:0.05]Z11Tale\'s bops to the song with intense enjoyment.',
+                '[set:0.05]You start to wonder how long Z11Tale\'s been down here.[pause:0.5]\nThe thought makes your head hurt.'
             ];
         }
         health = human.health;

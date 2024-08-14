@@ -586,11 +586,10 @@ public static function crawlDirectoryAlt(directoryPath:String, fileExtension:Str
 	}
 
 	inline static public function formatToSongPath(path:String) {
-		var invalidChars = ~/[~&\\;:<>#]/;
-		var hideChars = ~/[.,'"%?!]/;
+		final invalidChars = ~/[~&;:<>#\s]/g;
+		final hideChars = ~/[.,'"%?!]/g;
 
-		var path = invalidChars.split(path.replace(' ', '-')).join("-");
-		return hideChars.split(path).join("").toLowerCase();
+		return hideChars.replace(invalidChars.replace(path, '-'), '').trim().toLowerCase();
 	}
 
 	public static var currentTrackedSounds:Map<String, Sound> = [];

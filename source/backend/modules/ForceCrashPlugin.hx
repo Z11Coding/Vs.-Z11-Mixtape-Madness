@@ -26,7 +26,7 @@ class ForceCrashPlugin extends FlxBasic
     if (FlxG.keys.pressed.CONTROL && FlxG.keys.pressed.SHIFT && FlxG.keys.pressed.L)
     {
       // TODO: Make this message 87% funnier.
-      throw "DEBUG: Crashing the game via debug keybind!";
+      throw "You Shouldn't Have Done That.";
       Sys.exit(1); //Makes sure the came closes
     }
   }

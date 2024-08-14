@@ -100,7 +100,7 @@ class UnderTextParser extends FlxTypeText {
                                         else trace('Your speed is too fast!');
                                     });
                                 }
-                            case 'setspeed':
+                            case 'set':
                                 var setSpeed:Float = Std.parseFloat(parts[2]);
                                 if (!Math.isNaN(setSpeed)) {
                                     formattingLocations.set(result.length, function() {
