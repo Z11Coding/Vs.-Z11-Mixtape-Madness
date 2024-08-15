@@ -787,7 +787,7 @@ class BATTLEFIELD extends MusicBeatState
                     testSprite.scale.y = FlxG.random.float(1,2);
                     bulletGroup.add(testSprite);
 
-                    var test = new BULLETPATTERN(testSprite, new undertale.BULLETPATTERN.DamageType(2));
+                    var test = new BULLETPATTERN(testSprite, new undertale.BULLETPATTERN.DamageType(0));
                     test.moveTo(FlxG.random.int(-280, 1280), FlxG.random.int(-300, 1300), FlxG.random.int(1, 10));
                     test.moveTo(FlxG.random.int(-400, 1400), FlxG.random.int(-600, 1600), FlxG.random.int(1, 10));
                     test.fadeOut(FlxG.random.int(1, 10));
@@ -796,7 +796,7 @@ class BATTLEFIELD extends MusicBeatState
             case 'test 2':
                 if (curTime % 20 == 0)
                 {
-                    var blaster = new Blaster(0, 0, 660, 300, 0, 90);
+                    var blaster = new Blaster(0, 0, 660, 300, 0, 90, 'ut/gasterintro', 'ut/gasterfire', 'blaster', 'beam');
                     
                 }
             default:
@@ -830,7 +830,7 @@ class BATTLEFIELD extends MusicBeatState
         if (FlxG.keys.justPressed.Q) human.health--;
         if (FlxG.keys.justPressed.F) 
         {
-            setAttack('test 1');
+            setAttack('test 2');
         }
         var upP = controls.UI_LEFT_P || controls.UI_UP_P;
 		var downP = controls.UI_RIGHT_P || controls.UI_DOWN_P;
@@ -900,18 +900,18 @@ class BATTLEFIELD extends MusicBeatState
                 speechFunc(dialogue[monster.progress][dialProgress][0], dialogue[monster.progress][dialProgress][2], dialogue[monster.progress][dialProgress][1], 20);
                 dialProgress++;
             }
-            else if (curMenu == 'monDialogue'&& dialProgress != -1)
+            else if (curMenu == 'monDialogue' && dialProgress != -1)
             {
                 speechFunc('empty');
                 canMove = true;
-                setAttack('test 1');
+                setAttack('test 2');
                 curMenu = 'main';
             }
             else if (curMenu == 'monDialogue' && enter)
             {
                 speechFunc('empty');
                 canMove = true;
-                setAttack('test 1');
+                setAttack('test 2');
                 curMenu = 'main';
             }
             
