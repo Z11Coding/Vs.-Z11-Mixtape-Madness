@@ -9,6 +9,9 @@ class UnderTextParser extends FlxTypeText {
     private var defaultSpeed:Float;
     private var pauseDuration:Float;
     private var _formattingLocations:Map<Int, Void->Void>;
+    public var isTyping:Bool = false;
+    public var autoskip:Bool = false;
+    public var nextMenu:String = '';
 
     public function new(X:Float, Y:Float, Width:Int, Text:String, Size:Int = 8, EmbeddedFont:Bool = true, Speed:Float = 0.05) {
         super(X, Y, Width, "", Size, EmbeddedFont);
@@ -18,6 +21,11 @@ class UnderTextParser extends FlxTypeText {
         this.pauseDuration = 0;
     }
 
+    public function doSkip()
+    {
+        skip();
+    }
+
     override public function update(elapsed:Float):Void {
         //if (_waiting || paused) return;
 
@@ -25,6 +33,14 @@ class UnderTextParser extends FlxTypeText {
             if (_length == index) {
                 var value:Void->Void = _formattingLocations.get(index);
                 value();
+            }
+        }
+
+        for (sound in sounds)
+        {
+            if (sound != null && sound.playing && _finalText.charAt(_length) == ' ')
+            {
+                sound.pause();
             }
         }
 
@@ -48,6 +64,8 @@ class UnderTextParser extends FlxTypeText {
         if (_length > 0 && _erasing) {
             _timer += elapsed;
         }
+
+        isTyping = _typing;
 
         if ((_typing || _erasing) && !paused) {
             if (_typing && _timer >= speed) {
@@ -75,6 +93,8 @@ class UnderTextParser extends FlxTypeText {
         var result:String = "";
         var i:Int = 0;
         var offset:Int = 0; // to keep track of the offset caused by tag removal
+        nextMenu = '';
+        autoskip = false;
     
         while (i < text.length) {
             if (text.charAt(i) == '[') {
@@ -130,11 +150,68 @@ class UnderTextParser extends FlxTypeText {
                                         else result += backup;
                                     });
                                 }
+                            case 'color':
+                                var daColor:String = parts[2];
+                                if (daColor != '') {
+                                    formattingLocations.set(result.length, function() {
+                                        color = FlxColor.fromString('#$daColor');
+                                    });
+                                }
+                            case 'pitch':
+                                var daPitch:Float = Std.parseFloat(parts[2]);
+                                if (!Math.isNaN(daPitch)) {
+                                    formattingLocations.set(result.length, function() {
+                                        FlxG.sound.music.pitch = daPitch;
+                                    });
+                                }
+                            case 'tpitch':
+                                var daPitch:Float = Std.parseFloat(parts[2]);
+                                if (!Math.isNaN(daPitch)) {
+                                    formattingLocations.set(result.length, function() {
+                                        FlxTween.num(FlxG.sound.music.pitch, daPitch, 2, {ease: FlxEase.expoOut}, function(num)
+                                        {
+                                            FlxG.sound.music.pitch = num;
+                                        });
+                                    });
+                                }
+                            case 'mpause':
+                                formattingLocations.set(result.length, function() {
+                                    FlxG.sound.music.pause();
+                                });
+                            case 'mplay':
+                                formattingLocations.set(result.length, function() {
+                                    FlxG.sound.music.play();
+                                });
+                            case 'playS':
+                                var daSong:String = parts[2];
+                                if (daSong != '') {
+                                    formattingLocations.set(result.length, function() {
+                                        FlxG.sound.playMusic(Paths.music(daSong));
+                                    });
+                                }
+                            case 'instant':
+                                var daPitch:Float = Std.parseFloat(parts[2]);
+                                if (!Math.isNaN(daPitch)) {
+                                    formattingLocations.set(result.length, function() {
+                                        skip();
+                                    });
+                                }
+                            case 'next':
+                                formattingLocations.set(result.length, function() {
+                                    autoskip = true;
+                                });
                             case 'reset':
                                 formattingLocations.set(result.length, function() {
                                     speed = defaultSpeed;
                                     pauseDuration = 0;
                                 });
+                            case 'nextmenu':
+                                var daMenu:String = parts[2];
+                                if (daMenu != '') {
+                                    formattingLocations.set(result.length, function() {
+                                        nextMenu = daMenu;
+                                    });
+                                }
                             default:
                                 trace("Unknown tag: " + parts[0]);
                         }
@@ -176,11 +253,14 @@ class PatternSplitter {
         var brackets:String = '';
 
         // Regular expression to match the pattern [tag:value]
-        var pattern:EReg = ~/^\[(\w+):(\d+(\.\d+)?)\]$/;
+        var pattern:EReg = ~/^\[(\w+):(\w+(\.\w+)?)\]$/;
 
         if (pattern.match(input)) {
             var tag:String = pattern.matched(1);
             var value:String = pattern.matched(2);
+
+            trace(tag);
+            trace(value);
 
             partsArray.push(tag);
             partsArray.push(':');

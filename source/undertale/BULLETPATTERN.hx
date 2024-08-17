@@ -226,7 +226,7 @@ class Blaster {
     public var sprite_prefix:String;
     public var beam_sprite:String;
     public var sprite:FlxSprite;
-    public var beam:FlxSprite;
+    public var beam:Beam;
     public var updatetimer:Float;
     public var rotation:Float;
     public var xscale:Float;
@@ -239,9 +239,9 @@ class Blaster {
     public function new(x:Float, y:Float, x2:Float, y2:Float, angle:Float, startangle:Float, ?sound:String = null, ?fire_sound:String = null, ?sprite_prefix:String = null, ?beam_sprite:String = null)
     {
         this.sprite_prefix = sprite_prefix;
-        if (sprite_prefix == null) this.sprite_prefix = "undertale/bullets/blasters/blaster";
+        if (sprite_prefix == null) this.sprite_prefix = "blaster";
         this.beam_sprite = beam_sprite;
-        if (beam_sprite == null) this.beam_sprite = "undertale/bullets/blasters/beam";
+        if (beam_sprite == null) this.beam_sprite = "beam";
         this.sprite = createSprite(sprite_prefix);
         this.sprite.scale.x = 2;
         this.sprite.scale.y = 2;
@@ -279,6 +279,12 @@ class Blaster {
         var image:FlxSprite = new FlxSprite().loadGraphic(Paths.image('undertale/bullets/blasters/$image'));
         return image;
     }
+}
 
-
+class Beam {
+    public var sprite:FlxSprite;
+    public var yscale:Float;
+    public var xscale:Float;
+    public var x:Float;
+    public var y:Float;
 }
