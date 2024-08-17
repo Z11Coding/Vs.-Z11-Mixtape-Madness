@@ -188,6 +188,7 @@ function onStepHit()
 end
 
 function onUpdate()
+    setProperty('gfGroup.alpha', 0)
     if speen then
         setValue('localrotateY', getValue('localrotateY', whospeen) + 0.5, whospeen)
     end
