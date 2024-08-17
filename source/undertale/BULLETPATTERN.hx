@@ -265,7 +265,7 @@ class Blaster {
         this.fire_sound = fire_sound;
         if (sound == null) this.sound = "ut/gasterintro";
         if (fire_sound == null) this.fire_sound = "ut/gasterfire";
-        if (startangle != null && startangle != 0)
+        if (startangle != -1 && startangle != 0)
         {
             this.dorotation = startangle;
             this.sprite.angle = startangle;

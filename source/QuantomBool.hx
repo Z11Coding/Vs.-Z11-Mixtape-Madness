@@ -23,3 +23,9 @@ class QuantumBool {
 		return Math.random() < this.probability;
 	}
 }
+
+enum QuantumBoolState {
+	true,
+	false,
+	deci
+}

@@ -142,6 +142,7 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
+		backend.CppAPI.darkMode();
 		Paths.crawlDirectory("assets/data", "json", GlobalResources.jsonFilePaths);
 		// trace(ChanceSelector.selectMultiple([1, 2, 3, {key: "value"}, [()=>4, ()=>5, ()=>6].map(f -> f()), new Map<String, Int>().set("a", 7)], 3, true).map(v -> switch v { case Array(f): f(); case Map(k, v): k + Std.string(v); case {key: k}: k; case _: Std.string(v); }));
 		var mathSolver:MathSolver2 = new MathSolver2();
