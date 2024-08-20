@@ -1,3 +1,5 @@
+package backend.window;
+
 import openfl.Lib;
 
 class WindowUtils {

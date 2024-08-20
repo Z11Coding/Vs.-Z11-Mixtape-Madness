@@ -1,7 +1,4 @@
 class BoolConcepts {
-
-}
-
     // Boolable: Converts various types into a boolean based on their value
     abstract Boolable(Bool) {
         @:from static public function fromInt(value:Int):Boolable {
@@ -62,3 +59,4 @@ class BoolConcepts {
 	// 		return cast this + other;
 	// 	}
 	}
+}

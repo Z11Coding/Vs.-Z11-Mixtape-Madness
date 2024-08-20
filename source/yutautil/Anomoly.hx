@@ -1,4 +1,4 @@
-package;
+package yutautil;
 
 import flixel.FlxG;
 import flixel.FlxState;

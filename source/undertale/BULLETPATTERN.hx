@@ -85,7 +85,7 @@ class BULLETPATTERN {
     public var hurtbox:Hurtbox;
 
     private var actions:Map<Int, {action: Void -> Void, duration: Float}>;
-    private var currentActionIndex:Int = 0;
+    public var currentActionIndex:Int = 0;
     private var actionTimer:Float = 0;
     public var damageModifier:Float = 1.0;
 

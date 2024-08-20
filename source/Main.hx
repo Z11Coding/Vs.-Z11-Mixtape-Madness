@@ -34,6 +34,7 @@ import sys.io.Process;
 import gamejolt.GameJolt;
 import gamejolt.GameJolt.GJToastManager;
 
+import backend.window.WindowUtils;
 class Main extends Sprite
 {
 	var game = {

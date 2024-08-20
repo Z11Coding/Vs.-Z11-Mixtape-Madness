@@ -25,7 +25,7 @@ class MonsterConfig {
 if (isGenocide) {
     human = new SOUL(RED, 'Chara', 20);
     
-    var monsterConfig = new MonsterConfig('Z11Tale', 4, 1, 100000, 9999, 500, false, true);
+    var monsterConfig = new MonsterConfig('Z11Tale', 4, 1, 1000000, 9999, 500, false, true);
     monster = new MSOUL(monsterConfig.name, monsterConfig.level, monsterConfig.attack, monsterConfig.defense, monsterConfig.health, monsterConfig.speed, monsterConfig.isBoss, monsterConfig.isGenocide);
     
     monster.initFlavorText = '[setspeed:0.05]Battle against the truly determined...[pause:1][slow:0.4]\nLet\'s see how much he\'ll take before he breaks...';
