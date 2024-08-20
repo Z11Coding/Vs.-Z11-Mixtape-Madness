@@ -302,10 +302,10 @@ class Blaster extends BULLETPATTERN {
 
     function createBeam() {
         this.sprite.animation.play('fire', true);
-        this.beam.x = this.x; 
-        this.beam.y = this.y;
+        this.beam.x = this.sprite.x; 
+        this.beam.y = this.sprite.y;
         this.beam.angle = this.angle;
-        this.beam.scale.x = 20000;
+        this.beam.scale.x = 1;
         this.beam.scale.y = 20000;
         this.hurtbox = new Hurtbox(this.beam);
         Hurtbox.hurtboxes.set(this, this.hurtbox);
