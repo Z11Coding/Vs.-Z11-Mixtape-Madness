@@ -57,6 +57,7 @@ class MathSolver2 {
                     case Sub: return l - r;
                     case Mul: return l * r;
                     case Div: return l / r;
+                    case Pow: return Math.pow(l, r);
                     default: throw "Unsupported operator";
                 }
             default:
@@ -106,6 +107,8 @@ class Parser {
                     stack.push({ expr: EBinop(Mul, stack.pop(), parseToken(tokens.shift())) });
                 case "/":
                     stack.push({ expr: EBinop(Div, stack.pop(), parseToken(tokens.shift())) });
+                case "^":
+                    stack.push({ expr: EBinop(Pow, stack.pop(), parseToken(tokens.shift())) });
                 default:
                     stack.push(parseToken(token));
             }
@@ -122,7 +125,7 @@ class Parser {
 enum Expr {
     EConst(exp: String);
     EBinop(e: Binop, o: Dynamic, d: Dynamic);
-    ECustom(exp: String, o: Dynamic, d:Dynamic);
+    ECustom(exp: String, o: Dynamic, d: Dynamic);
 }
 
 enum Binop {
@@ -130,6 +133,7 @@ enum Binop {
     Sub;
     Mul;
     Div;
+    Pow;
 }
 
 // Example usage

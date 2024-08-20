@@ -289,18 +289,19 @@ class Blaster extends BULLETPATTERN {
 
     function createBeam():Void {
         this.beam = new FlxSprite().loadGraphic(Paths.image('undertale/bullets/blasters/' + this.beam_sprite));
-        this.beam.animation.add("open", [0, 1, 2, 3], 12, false);
-        this.beam.animation.play("open");
         this.beam.setPosition(this.sprite.x, this.sprite.y);
         this.beam.scale.set(2, 2);
+        this.beam.angle = this.sprite.angle;
         this.hurtbox = new Hurtbox(this.beam);
         Hurtbox.hurtboxes.set(this, this.hurtbox);
+        
     }
 
     override public function update():Void {
         super.update();
         // Additional update logic for Blaster if needed
     }
+}
 
 class Beam {
     public var sprite:FlxSprite;
