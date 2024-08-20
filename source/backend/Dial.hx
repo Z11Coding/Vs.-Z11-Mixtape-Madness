@@ -27,8 +27,8 @@ class Dial<T> {
         this.currentIndex = (this.currentIndex + 1) % this.values.length;
     }
 
-    public static function fromEnum<E:Enum<Unknown<0>>>(enumType:Enum<Unknown<0>>):Dial<E> {
-        var values:Array<E> = Type.allEnums(enumType);
+    public static function fromEnum<E:Enum<Any>>(enumType:Enum<Any>):Dial<E> {
+        var values:Array<E> = cast(Type.allEnums(enumType));
         return new Dial<E>(values);
     }
 }

@@ -3,14 +3,14 @@ import haxe.macro.Expr;
 
 class CompileTracer {
 	public static macro function traceCompileProcess():Array<Field> {
-		var classes = Context.getType(); // Get all types available in the current compilation context
+		var classes = Context.getAllModuleTypes(); // Get all types available in the current compilation context
 		for (cls in classes) {
 			switch cls {
 				case TClassDecl(c):
 					trace('Compiling class: ' + c.pack.join(".") + "." + c.name);
 				case TEnumDecl(e):
 					trace('Compiling enum: ' + e.pack.join(".") + "." + e.name);
-				case TAbstractDecl(a):
+				case TAbstract(a):
 					trace('Compiling abstract: ' + a.pack.join(".") + "." + a.name);
 				case TTypeDecl(t):
 					trace('Compiling typedef: ' + t.pack.join(".") + "." + t.name);

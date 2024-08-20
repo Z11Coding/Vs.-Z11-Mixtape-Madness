@@ -1,5 +1,6 @@
 package undertale;
 
+import openfl.utils.ObjectPool;
 import flixel.addons.text.FlxTypeText;
 import flixel.input.keyboard.FlxKey;
 import flixel.FlxG;

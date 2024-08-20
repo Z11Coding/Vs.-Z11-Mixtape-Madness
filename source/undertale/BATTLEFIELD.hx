@@ -788,7 +788,7 @@ class BATTLEFIELD extends MusicBeatState
                     testSprite.scale.y = FlxG.random.float(1,2);
                     bulletGroup.add(testSprite);
 
-                    var test = new BULLETPATTERN(testSprite, new undertale.BULLETPATTERN.DamageType(0));
+                    var test = new BULLETPATTERN(testSprite, new undertale.BULLETPATTERN.DamageType(1));
                     test.moveTo(FlxG.random.int(-280, 1280), FlxG.random.int(-300, 1300), FlxG.random.int(1, 10));
                     test.moveTo(FlxG.random.int(-400, 1400), FlxG.random.int(-600, 1600), FlxG.random.int(1, 10));
                     test.fadeOut(FlxG.random.int(1, 10));

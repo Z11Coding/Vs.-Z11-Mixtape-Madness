@@ -29,10 +29,11 @@ import objects.NoteSplash;
 import undertale.BATTLEFIELD;
 
 abstract DamageType(Float) {
-    public static inline var NORMAL = 0;
-    public static inline var KARMA = 1;
-    public static inline var BLUE = 2;
-    public static inline var ORANGE = 3;
+    public static inline var NONE = 0;
+    public static inline var NORMAL = 1;
+    public static inline var KARMA = 2;
+    public static inline var BLUE = 3;
+    public static inline var ORANGE = 4;
 
     public function new(value:Float) this = value;
 
@@ -42,6 +43,8 @@ abstract DamageType(Float) {
 
     public function getDamage(damage:Float = 0):Float {
         switch (this) {
+            case NONE:
+                return 0.0;
             case NORMAL:
                 return 1.0;
             case KARMA:
@@ -56,6 +59,8 @@ abstract DamageType(Float) {
 
     public function getType():String {
         switch (this) {
+            case NONE:
+                return "NONE";
             case NORMAL:
                 return "NORMAL";
             case KARMA:
@@ -70,6 +75,8 @@ abstract DamageType(Float) {
 
     public function shouldApplyDamage(isMoving:Bool):Bool {
         switch (this) {
+            case NONE:
+                return false; // Do not apply damage for NONE
             case BLUE:
                 return !isMoving; // Apply damage if the player is not moving
             case ORANGE:
@@ -214,7 +221,7 @@ class Hurtbox {
 }
 
 
-class Blaster {
+class Blaster extends BULLETPATTERN {
     public var x:Float;
     public var y:Float;
     public var x2:Float;
@@ -225,8 +232,7 @@ class Blaster {
     public var fire_sound:String;
     public var sprite_prefix:String;
     public var beam_sprite:String;
-    public var sprite:FlxSprite;
-    public var beam:Beam;
+    public var beam:FlxSprite;
     public var updatetimer:Float;
     public var rotation:Float;
     public var xscale:Float;
@@ -236,23 +242,17 @@ class Blaster {
     public var dorotation:Float;
     public var builderspd:Float;
     public var holdfire:Float;
-    public function new(x:Float, y:Float, x2:Float, y2:Float, angle:Float, startangle:Float, ?sound:String = null, ?fire_sound:String = null, ?sprite_prefix:String = null, ?beam_sprite:String = null)
-    {
-        this.sprite_prefix = sprite_prefix;
-        if (sprite_prefix == null) this.sprite_prefix = "blaster";
-        this.beam_sprite = beam_sprite;
-        if (beam_sprite == null) this.beam_sprite = "beam";
-        this.sprite = createSprite(sprite_prefix);
-        this.sprite.scale.x = 2;
-        this.sprite.scale.y = 2;
-        this.sprite.x = x;
-        this.sprite.y = y;
+
+    public function new(x:Float, y:Float, angle:Float, startangle:Float, ?sound:String = null, ?fire_sound:String = null, ?sprite_prefix:String = null, ?beam_sprite:String = null) {
+        super(createSprite(sprite_prefix), new DamageType(DamageType.NONE));
+
+        this.sprite_prefix = sprite_prefix != null ? sprite_prefix : "blaster";
+        this.beam_sprite = beam_sprite != null ? beam_sprite : "beam";
+        this.sprite.scale.set(2, 2);
         this.rotation = 0;
         this.updatetimer = 0;
         this.x = x;
         this.y = y;
-        this.x2 = x2;
-        this.y2 = y2;
         this.xscale = 1;
         this.yscale = 1;
         this.shootdelay = 40;
@@ -261,25 +261,46 @@ class Blaster {
         this.dorotation = 0;
         this.builderspd = 0;
         this.holdfire = 0;
-        this.sound = sound;
-        this.fire_sound = fire_sound;
-        if (sound == null) this.sound = "ut/gasterintro";
-        if (fire_sound == null) this.fire_sound = "ut/gasterfire";
-        if (startangle != -1 && startangle != 0)
-        {
+        this.sound = sound != null ? sound : "ut/gasterintro";
+        this.fire_sound = fire_sound != null ? fire_sound : "ut/gasterfire";
+        
+        if (startangle != -1 && startangle != 0) {
             this.dorotation = startangle;
             this.sprite.angle = startangle;
         }
-        if (this.sound != null) FlxG.sound.play(Paths.sound(this.sound));
         
-        if (this.angle >= 180) this.angle = this.angle-360;
-    } 
+        if (this.sound != null) FlxG.sound.play(Paths.sound(this.sound));
+        if (this.angle >= 180) this.angle -= 360;
+
+        // Calculate temporary x and y values based on rotation
+        var tempX:Float = Math.cos(rotation * Math.PI / 180) * FlxG.width;
+        var tempY:Float = Math.sin(rotation * Math.PI / 180) * FlxG.height;
+
+        // Move to the intended position
+        moveTo(tempX, tempY, 1.0); // Adjust duration as needed
+
+        // Add action to create the beam sprite
+        addAction(() -> createBeam(), 1.0); // Adjust duration as needed
+    }
 
     function createSprite(image:String):FlxSprite {
-        var image:FlxSprite = new FlxSprite().loadGraphic(Paths.image('undertale/bullets/blasters/$image'));
-        return image;
+        return new FlxSprite().loadGraphic(Paths.image('undertale/bullets/blasters/' + image));
     }
-}
+
+    function createBeam():Void {
+        this.beam = new FlxSprite().loadGraphic(Paths.image('undertale/bullets/blasters/' + this.beam_sprite));
+        this.beam.animation.add("open", [0, 1, 2, 3], 12, false);
+        this.beam.animation.play("open");
+        this.beam.setPosition(this.sprite.x, this.sprite.y);
+        this.beam.scale.set(2, 2);
+        this.hurtbox = new Hurtbox(this.beam);
+        Hurtbox.hurtboxes.set(this, this.hurtbox);
+    }
+
+    override public function update():Void {
+        super.update();
+        // Additional update logic for Blaster if needed
+    }
 
 class Beam {
     public var sprite:FlxSprite;
