@@ -41,6 +41,7 @@ import haxe.macro.Expr;
                 // Recursively transform expressions
                 return Context.transform(expr, transform);
         }
+        return null; // Should never happen
     }
 
     static function wrapInFunction(expr:Expr):Expr {
