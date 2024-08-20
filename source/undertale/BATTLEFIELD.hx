@@ -384,6 +384,7 @@ class BATTLEFIELD extends MusicBeatState
         monsterText.updateHitbox();
         if (box != 'empty')
         {
+            allowUIDialogue = false;
             speechBubble.updateHitbox();
             speechBubble.animation.play(box, true);
             if (bubbleOffset.exists(box))
@@ -640,11 +641,13 @@ class BATTLEFIELD extends MusicBeatState
     
         if (hide)
         {
+            allowUIDialogue = false;
             underText.alpha = 0;
             underText.resetText('');
         }
         else
         {
+            allowUIDialogue = true;
             underText.alpha = 1;
             underText.resetText(trueText);
             underText.start(speed, true);
@@ -653,7 +656,6 @@ class BATTLEFIELD extends MusicBeatState
 
     function useItem(thing:ITEM)
     {
-        allowUIDialogue = true;
         regenMenu('nothing');
         curMenu = 'attack';
         typeFunc(thing.flavorText, 0.04, 1);
@@ -780,7 +782,6 @@ class BATTLEFIELD extends MusicBeatState
             case 'test 1':
                 if (curTime % 20 == 0)
                 {
-                    var test:BULLETPATTERN;
                     var testSprite:FlxSprite = new FlxSprite(0, 0).loadGraphic(Paths.image('undertale/bullets/bones/boneMini'));
                     testSprite.screenCenter();
                     testSprite.y += 200;
@@ -831,7 +832,7 @@ class BATTLEFIELD extends MusicBeatState
         if (FlxG.keys.justPressed.Q) human.health--;
         if (FlxG.keys.justPressed.F) 
         {
-            setAttack('test 2');
+            setAttack('test 1');
         }
         var upP = controls.UI_LEFT_P || controls.UI_UP_P;
 		var downP = controls.UI_RIGHT_P || controls.UI_DOWN_P;
@@ -848,7 +849,6 @@ class BATTLEFIELD extends MusicBeatState
         {
             if (curMenu == 'main')
             {
-                allowUIDialogue = true;
                 if (underText.alpha == 0) 
                 {
                     typeFunc((if (monster.progress == -1) monster.initFlavorText else monster.flavorTextList[FlxG.random.int(0, monster.flavorTextList.length-1)]));
@@ -891,7 +891,6 @@ class BATTLEFIELD extends MusicBeatState
             
             if (curMenu == 'monDialogue' && !dialTriggered && dialProgress != -1 && dialProgress < (dialogue[monster.progress][dialProgress].length-1))
             {
-                allowUIDialogue = false;
                 speechFunc(dialogue[monster.progress][dialProgress][0], dialogue[monster.progress][dialProgress][2], dialogue[monster.progress][dialProgress][1], 20);
                 dialTriggered = true; //Safety my beloved
                 dialProgress++;

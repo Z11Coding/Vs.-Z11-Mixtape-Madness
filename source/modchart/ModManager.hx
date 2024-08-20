@@ -9,6 +9,7 @@ import math.Vector3;
 import flixel.tweens.FlxEase;
 import flixel.math.FlxPoint;
 import flixel.FlxG;
+import flixel.FlxState;
 
 // Weird amalgamation of Schmovin' modifier system, Andromeda modifier system and my own new shit -neb
 // NEW: Now also has some features of mirin (aliases, nodes)
@@ -26,7 +27,7 @@ typedef Node = {
 }
 
 class ModManager {
-	private var state:PlayState;
+	private var state:FlxState;
 
 	public var timeline:EventTimeline = new EventTimeline();
 
@@ -49,7 +50,7 @@ class ModManager {
 	var touchedMods:Array<Array<String>> = [[], []];
 	var nodeIndex:Int = 0;
 
-	public function new(state:PlayState) {
+	public function new(state:FlxState) {
         this.state=state;
     }
 
@@ -227,14 +228,14 @@ class ModManager {
 	inline public function getTargetValue(modName:String, player:Int)
 		return !register.exists(getActualModName(modName)) ? 0 : get(modName).getTargetValue(player);
     
-	public function getCMod(data:Int, player:Int, ?defaultSpeed:Float){
+	public function getCMod(data:Int, player:Int, ?defaultSpeed:Float):Float{
 		var daSpeed = getValue('cmod${data}', player);
 		if (daSpeed < 0){
 			daSpeed = getValue('cmod', player);
 
 			if (daSpeed < 0){
 				if (defaultSpeed == null)
-					return state.songSpeed;
+					return 3;
 				else
 					return defaultSpeed;
 			}

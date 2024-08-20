@@ -525,7 +525,7 @@ class Note extends NoteObject
 		y -= 2000;
 		this.strumTime = strumTime;
 		if(!inEditor) this.strumTime += ClientPrefs.data.noteOffset;
-		if(!inEditor) visualTime = PlayState.instance.getNoteInitialTime(this.strumTime);
+		if(!inEditor) visualTime = createdFrom.getNoteInitialTime(this.strumTime);
 
 		if (isSustainNote && prevNote != null) {
 			parentNote = prevNote;

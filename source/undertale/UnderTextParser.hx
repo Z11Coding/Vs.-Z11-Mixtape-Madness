@@ -191,12 +191,9 @@ class UnderTextParser extends FlxTypeText {
                                     });
                                 }
                             case 'instant':
-                                var daPitch:Float = Std.parseFloat(parts[2]);
-                                if (!Math.isNaN(daPitch)) {
-                                    formattingLocations.set(result.length, function() {
-                                        skip();
-                                    });
-                                }
+                                formattingLocations.set(result.length, function() {
+                                    skip();
+                                });
                             case 'next':
                                 formattingLocations.set(result.length, function() {
                                     autoskip = true;

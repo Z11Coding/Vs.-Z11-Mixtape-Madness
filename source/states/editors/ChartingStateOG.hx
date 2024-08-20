@@ -788,6 +788,7 @@ class ChartingStateOG extends MusicBeatChartingState
 			}
 		}
 		#end
+		characters.insert(0, null);
 		tempArray = [];
 
 		var player1DropDown = new FlxUIDropDownMenu(10, stepperSpeed.y + 45, FlxUIDropDownMenu.makeStrIdLabelArray(characters, true), function(character:String)

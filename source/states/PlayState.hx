@@ -66,6 +66,8 @@ import backend.AIPlayer;
 import objects.NoteObject.ObjectType;
 import shaders.ShadersHandler;
 
+import yutautil.Anomoly;
+
 /**
  * This is where all the Gameplay stuff happens and is managed
  *
@@ -7947,7 +7949,7 @@ case "Skip":
 		// trace('released: ' + controlArray);
 	}
 
-	private function getKeyFromEvent(key:FlxKey):Int
+	public function getKeyFromEvent(key:FlxKey):Int
 	{
 		// var tempKeys:Array<Dynamic> = backend.Keybinds.fill();
 		if (key != NONE)
