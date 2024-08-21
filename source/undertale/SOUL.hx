@@ -88,7 +88,7 @@ class SOUL {
     }
 
     public function applyDamage(damageType:DamageType, damage:Float):Void {
-        if (damageType.getType() == "KARMA"  || damageCooldown <= 0) {
+        if (damageType.getType() != "NONE" && (damageType.getType() == "KARMA" || damageCooldown <= 0)) {
             if (health > 0) 
             {
                 health -= damage;

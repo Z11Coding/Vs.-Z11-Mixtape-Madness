@@ -798,8 +798,10 @@ class BATTLEFIELD extends MusicBeatState
             case 'test 2':
                 if (curTime % 20 == 0)
                 {
-                    var blaster = new Blaster(0, 0, 660, 300, 0, 90, 'ut/gasterintro', 'ut/gasterfire', 'blaster', 'beam');
-                    
+                    var blaster = new Blaster(960, 400, 90, 270, 'ut/gasterintro', 'ut/gasterfire', 'blaster', 'beam');
+                    bulletGroup.add(blaster.sprite);
+                    bulletGroup.add(blaster.beam);
+                    sequence.addEvent(blaster);
                 }
             default:
                 sequence.events = [];
@@ -832,7 +834,7 @@ class BATTLEFIELD extends MusicBeatState
         if (FlxG.keys.justPressed.Q) human.health--;
         if (FlxG.keys.justPressed.F) 
         {
-            setAttack('test 1');
+            setAttack('test 2');
         }
         var upP = controls.UI_LEFT_P || controls.UI_UP_P;
 		var downP = controls.UI_RIGHT_P || controls.UI_DOWN_P;
@@ -915,7 +917,7 @@ class BATTLEFIELD extends MusicBeatState
             {
                 speechFunc('empty');
                 canMove = true;
-                setAttack('test 1');
+                setAttack('test 2');
                 curMenu = 'main';
             }
             
