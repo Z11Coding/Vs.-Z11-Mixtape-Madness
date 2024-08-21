@@ -116,12 +116,12 @@ class BULLETPATTERN {
         if (currentActionIndex < index) {
             var currentAction:{action: Void -> Void, duration: Float} = actions.get(currentActionIndex);
             if (actionTimer == 0) {
+                actionTimer = actions.get(currentActionIndex + 1).duration;
                 currentAction.action();
             }
             actionTimer += -1;
             if (actionTimer >= currentAction.duration) {
                 currentActionIndex++;
-                actionTimer = 0;
             }
         }
     }
@@ -294,7 +294,7 @@ class Blaster extends BULLETPATTERN {
         this.beam.angle = this.sprite.angle;
         this.hurtbox = new Hurtbox(this.beam);
         Hurtbox.hurtboxes.set(this, this.hurtbox);
-        
+
     }
 
     override public function update():Void {
