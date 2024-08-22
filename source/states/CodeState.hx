@@ -279,6 +279,12 @@ class CodeState extends MusicBeatState
 		}
 	}*/
 
+	// public static function doCode(code:String):Void
+	// {
+	// 	codeInput.text = code;
+	// 	checkCode();
+	// }
+
 	function checkCode():Void
 	{
 		FlxTween.tween(blackscreen, {alpha: 1}, 1, {ease: FlxEase.expoIn});

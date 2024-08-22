@@ -115,7 +115,7 @@ class BULLETPATTERN {
         // Execute the current action
         if (currentActionIndex < index) {
             var currentAction:{action: Void -> Void, duration: Float} = actions.get(currentActionIndex);
-            if (actionTimer == 0) {
+            if (actionTimer == 0 && actions.get(currentActionIndex + 1) != null) {
                 actionTimer = actions.get(currentActionIndex + 1).duration;
                 currentAction.action();
             }
