@@ -121,7 +121,7 @@ class BULLETPATTERN {
             actionTimer += -1;
             if (actionTimer >= currentAction.duration) {
                 currentActionIndex++;
-                actionTimer = 0;
+                actionTimer = currentAction.duration;
             }
         }
     }
@@ -249,8 +249,9 @@ class Blaster extends BULLETPATTERN {
         this.sprite = new FlxSprite();
         this.sprite.frames = Paths.getSparrowAtlas('undertale/bullets/blasters/'+sprite_prefix);
         this.sprite.animation.addByPrefix('wait', 'wait', 10, false);
-        this.sprite.animation.addByPrefix('fire', 'blast', 10, true);
+        this.sprite.animation.addByPrefix('fire', 'blast', 30, true);
         this.beam = new FlxSprite().loadGraphic(Paths.image('undertale/bullets/blasters/' + beam_sprite));
+        this.beam.alpha = 1;
         
         super(this.sprite, new DamageType(DamageType.NONE));
         this.sprite.scale.x = 2;
@@ -279,7 +280,7 @@ class Blaster extends BULLETPATTERN {
         if (this.angle >= 180) this.angle -= 360;
 
         //Force it to enter the hold state
-        this.sprite.animation.play('wait');
+        this.sprite.animation.play('fire');
 
         // Calculate temporary x and y values based on rotation
         var tempX:Float = Math.cos(rotation * Math.PI / 180) * FlxG.width;
@@ -293,7 +294,7 @@ class Blaster extends BULLETPATTERN {
             this.angle = num;
         });
         // Add action to create the beam sprite
-        addAction(() -> createBeam(), 3.0); // Adjust duration as needed
+        //addAction(() -> createBeam(), 1.0); // Adjust duration as needed
     }
 
     function createSprite(image:String):FlxSprite {
@@ -302,19 +303,26 @@ class Blaster extends BULLETPATTERN {
 
     function createBeam() {
         this.sprite.animation.play('fire', true);
-        this.beam.x = this.sprite.x; 
-        this.beam.y = this.sprite.y;
+        this.beam.setPosition(this.sprite.x-1200, this.sprite.y+30);
+        this.beam.alpha = 1;
         this.beam.angle = this.angle;
         this.beam.scale.x = 1;
-        this.beam.scale.y = 20000;
+        this.beam.scale.y = 1;
         this.hurtbox = new Hurtbox(this.beam);
         Hurtbox.hurtboxes.set(this, this.hurtbox);
-        trace('created Beam!');
+        FlxTween.tween(this.beam, {alpha:0}, 1, {startDelay: holdfire, onStart: function(tw)
+        {
+            moveTo(this.beam.x + 1000, this.beam.y, 1); // Adjust duration as needed
+        }});
+        FlxG.sound.play(Paths.sound(this.fire_sound));
+        trace('blast');
     }
 
     override public function update():Void {
         super.update();
         this.sprite.angle = this.angle;
+        this.updatetimer++;
+        if (this.updatetimer == this.shootdelay) createBeam();
         // Additional update logic for Blaster if needed
     }
 }

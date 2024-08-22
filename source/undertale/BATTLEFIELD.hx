@@ -799,6 +799,7 @@ class BATTLEFIELD extends MusicBeatState
                 if (curTime % 20 == 0)
                 {
                     var blaster = new Blaster(960, 400, 90, 270, 'ut/gasterintro', 'ut/gasterfire', 'blaster', 'beam');
+                    blaster.holdfire = 2;
                     bulletGroup.add(blaster.sprite);
                     bulletGroup.add(blaster.beam);
                     sequence.addEvent(blaster);
