@@ -18,6 +18,7 @@ import haxe.ui.Toolkit;
 import backend.ImageCache;
 import backend.JSONCache;
 import openfl.events.NativeProcessExitEvent;
+import psychlua.*;
 #if linux
 import lime.graphics.Image;
 #end
@@ -170,6 +171,8 @@ class Main extends Sprite
 
 		MemoryUtil.init();
 		WindowUtils.init();
+		var commandPrompt = new CommandPrompt();
+        backend.Threader.runInThread(commandPrompt.start());
 		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
@@ -188,7 +191,10 @@ class Main extends Sprite
 		AudioSwitchFix.init();
 		WindowUtils.onClosing = function()
 			{
+				commandPrompt.active = false;
+				commandPrompt = null;
 				handleStateBasedClosing();
+
 			}
 		FlxG.signals.preStateSwitch.add(onStateSwitch);
 		FlxGraphic.defaultPersist = false;
@@ -304,6 +310,9 @@ class Main extends Sprite
 
 		public static inline function closeGame():Void
 		{
+			// if (Main.commandPrompt != null)
+			// 	commandPrompt.remove();
+
 
 				WindowUtils.preventClosing = false;
 				Lib.application.window.close();
@@ -404,7 +413,7 @@ class Main extends Sprite
 
 			case "FreeplayState", "StoryModeState":
 				// Switch back to MainMenuState
-				FlxG.switchState(new states.MainMenuState());
+				FlxG.switchState(new states.CategoryState());
 
 			case "MainMenuState":
 				// Go back to TitleState
@@ -448,6 +457,14 @@ class Main extends Sprite
 					Sys.exit(1);
 				}
 				trace("Recommended to recompile the game to fix the issue.");
+
+				case "ExitState":
+				{
+					// Show an error dialog and close the game
+					Application.current.window.alert("Somehow, a crash occurred during the exiting process. Forcing exit.", "???");
+					trace("Performing Emergency Exit.");
+					Main.closeGame();
+				}
 
 			default:
 				// For other states, reset to MainMenuState
@@ -571,3 +588,209 @@ class GlobalResources
 {
 	public static var jsonFilePaths:Array<String> = [];
 }
+typedef Boolean = Bool;
+class CommandPrompt {
+
+    private var state:String;
+    private var variables:Map<String, Dynamic>;
+	public var active:Boolean = true; //I thought it'd be funny to add this.
+
+    public function new() {
+        this.state = "default";
+        this.variables = new Map();
+    }
+
+    public function start():Void {
+        print("Commands activated.");
+
+        while (true) {
+            // print("\nInput enabled.");
+			if (!active) {
+				print("Commands disabled.\nTO re-enable, restart the game.");
+				break;
+			}
+            var input:String = Sys.stdin().readLine();
+
+            if (input == "$exit") {
+                print("Exiting...");
+				Main.closeGame();
+				print("Killing CommandHook...");	
+                break;
+            }
+
+            this.executeCommand(input);
+        }
+    }
+	// public function remove()
+	// {this = null;}
+
+	private function executeCommand(input:String):Void {
+		var parts = input.split(" ");
+		var command = parts[0];
+		var args = parts.slice(1);
+
+		switch (command) {
+			case "switchState":
+				if (args.length == 1) {
+					this.switchState(args[0]);
+				} else {
+					print("Error: switchState requires exactly one argument.");
+				}
+			case "varChange":
+				if (args.length == 2) {
+					this.varChange(args[0], args[1]);
+				} else {
+					print("Error: varChange requires exactly two arguments.");
+				}
+			case "secretCode":
+				if (args.length == 1) {
+					this.secretCode(args[0]);
+				} else {
+					print("Error: secretCode requires exactly one argument.");
+				}
+			case "exit":
+				this.active = false;
+				print("Exiting game...");
+				if (args.length == 0) {
+					this.switchState("ExitState");
+				} else if (args.length == 1 && args[1] == "forced") {
+					Main.closeGame();
+					print("Game closed.");
+				} else {
+					print("Warning: exit command only accepts 'forced' as an argument. Closing game...");
+					this.switchState("ExitState");
+				}
+			case "resetState":
+				if (args.length == 0) {
+					this.switchState("TitleState");
+				} else {
+					print("Error: resetState does not accept any arguments.");
+				}
+			default:
+				if (args.length == 2 && args[1] == '=')
+				{varChange(args[0], args[2]);}
+				else
+				print("Error: Unknown command.");
+		}
+	}
+
+	private function switchState(newState:String):Void {
+		var stateType:Class<Dynamic> = Type.resolveClass(newState);
+		if (stateType != null) {
+			FlxG.switchState(Type.createInstance(stateType, []));
+			print("State switched to: " + newState);
+		} else {
+			print("Error: Invalid state name.");
+		}
+	}
+
+	private function varChange(varName:String, newValue:String):Void {
+		var split:Array<String> = varName.split('.');
+		if (split.length == 0) {
+			print("Error: Invalid variable name.");
+			return;
+		}
+	
+		var context:String = split[0];
+		var remaining:Array<String> = split.slice(1);
+	
+		switch (context) {
+			case "class":
+				if (remaining.length >= 2) {
+					var className:String = remaining[0];
+					var variable:String = remaining.slice(1).join('.');
+					this.setPropertyFromClass(className, variable, newValue);
+				} else {
+					print("Error: Invalid class variable name.");
+				}
+			case "group":
+				if (remaining.length >= 3) {
+					var groupName:String = remaining[0];
+					var index:Int = Std.parseInt(remaining[1]);
+					var variable:String = remaining.slice(2).join('.');
+					this.setPropertyFromGroup(groupName, index, variable, newValue);
+				} else {
+					print("Error: Invalid group variable name.");
+				}
+			case "state":
+				if (remaining.length >= 1) {
+					var variable:String = remaining.join('.');
+					this.setPropertyFromState(variable, newValue);
+				} else {
+					print("Error: Invalid state variable name.");
+				}
+			default:
+				print("Error: Unknown context.");
+		}
+	}
+	
+	private function setPropertyFromClass(className:String, variable:String, value:Dynamic):Void {
+		var myClass:Dynamic = Type.resolveClass(className);
+		if (myClass == null) {
+			print("Error: Class " + className + " not found.");
+			return;
+		}
+	
+		var split:Array<String> = variable.split('.');
+		if (split.length > 1) {
+			var obj:Dynamic = Reflect.field(myClass, split[0]);
+			for (i in 1...split.length-1)
+				obj = Reflect.field(obj, split[i]);
+	
+			Reflect.setProperty(obj, split[split.length-1], value);
+		} else {
+			Reflect.setProperty(myClass, variable, value);
+		}
+		print("Variable " + variable + " in class " + className + " changed to: " + value);
+	}
+	private function setPropertyFromGroup(groupName:String, index:Int, variable:String, value:Dynamic):Void {
+		var realObject:Dynamic = Reflect.field(LuaUtils.getTargetInstance(), groupName);
+	
+		if (Std.isOfType(realObject, FlxTypedGroup)) {
+			LuaUtils.setGroupStuff(realObject.members[index], variable, value);
+			print("Variable " + variable + " in group " + groupName + " at index " + index + " changed to: " + value);
+		} else {
+			var leArray:Dynamic = realObject[index];
+			if (leArray != null) {
+				if (Type.typeof(variable) == Type.ValueType.TInt) {
+					leArray = value;
+				} else {
+					LuaUtils.setGroupStuff(leArray, variable, value);
+				}
+				print("Variable " + variable + " in group " + groupName + " at index " + index + " changed to: " + value);
+			} else {
+				print("Error: Object #" + index + " from group " + groupName + " doesn't exist!");
+			}
+		}
+	}
+	
+	private function setPropertyFromState(variable:String, value:Dynamic):Void {
+		var currentState = FlxG.state;
+		if (currentState != null) {
+			var split:Array<String> = variable.split('.');
+			if (split.length > 1) {
+				var obj:Dynamic = Reflect.field(currentState, split[0]);
+				for (i in 1...split.length-1)
+					obj = Reflect.field(obj, split[i]);
+	
+				Reflect.setProperty(obj, split[split.length-1], value);
+			} else {
+				Reflect.setProperty(currentState, variable, value);
+			}
+			print("Variable " + variable + " in state changed to: " + value);
+		} else {
+			print("Error: No active state.");
+		}
+	}
+
+    private function secretCode(code:String):Void {
+		
+        print("Secret code entered: " + code);
+		print("Not yet implemented.");
+    }
+
+    private function print(message:String):Void {
+        Sys.stdout().writeString(message + "\n");
+    }
+}
+
