@@ -37,7 +37,12 @@ class MainMenuState extends MusicBeatState
 	var allowMouse:Bool = true; //Turn this off to block mouse movement in menus
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
-	var optionShit:Array<String> = ['freeplay', 'mods', 'socials', 'credits'];
+	var optionShit:Array<String> = [
+		'story_mode',
+		'freeplay',
+		#if MODS_ALLOWED 'mods', #end
+		'credits'
+	];
 	public var iconBG:FlxSprite;
 	var leftItem:FlxSprite;
 	var rightItem:FlxSprite;
@@ -167,8 +172,8 @@ class MainMenuState extends MusicBeatState
 			logoBl.updateHitbox();
 			add(logoBl);
 			FlxTween.tween(logoBl, {
-				y: logoBl.y + 150,
-				x: logoBl.x + 150,
+				y: logoBl.y + 300,
+				x: logoBl.x + 50,
 				angle: -4,
 				alpha: 1
 			}, 1.4, {ease: FlxEase.expoInOut});
@@ -218,7 +223,7 @@ class MainMenuState extends MusicBeatState
 			iconBG.updateHitbox();
 			iconBG.screenCenter();
 			iconBG.antialiasing = ClientPrefs.data.globalAntialiasing;
-			add(iconBG);
+			//add(iconBG);
 
 			switch (FlxG.random.int(1, 15))
 			{
@@ -299,20 +304,11 @@ class MainMenuState extends MusicBeatState
 			// icon = new HealthIcon('bf');
 			// icon.setGraphicSize(Std.int(icon.width * 2));
 			icon.antialiasing = ClientPrefs.data.globalAntialiasing;
-			icon.x = 70;
-			icon.y = FlxG.height - 180;
+			icon.x = FlxG.width - 70;
+			icon.y = 180;
 			icon.scrollFactor.set();
 			icon.updateHitbox();
-			add(icon);
-
-			charHitbox = new FlxExtendedSprite(icon.x - 50, icon.y - 40);
-			charHitbox.loadGraphic(Paths.image('mainmenu/Main_Checker'));
-			charHitbox.enableMouseClicks(true, false, 255);
-			charHitbox.scrollFactor.set();
-			charHitbox.updateHitbox();
-			charHitbox.alpha = 0;
-			add(charHitbox);
-			charHitbox.clickable = true;
+			//add(icon);
 		}
 
 		// NG.core.calls.event.logEvent('swag').send();
@@ -495,6 +491,7 @@ class MainMenuState extends MusicBeatState
 						angle: 4
 					}, 0.5, {ease: FlxEase.quadOut});
 					FlxTween.tween(icon, {x: icon.x - 20, y: icon.y + 20}, 0.5, {ease: FlxEase.quadOut});
+					FlxTween.tween(iconBG, {x: iconBG.x - 20, y: iconBG.y + 20}, 0.5, {ease: FlxEase.quadOut});
 				}
 			}
 
@@ -529,7 +526,10 @@ class MainMenuState extends MusicBeatState
 					}
 
 					// Main Menu Select Animations
-					//FlxTween.tween(FlxG.camera, {zoom: 5}, 0.8, {ease: FlxEase.expoIn});
+					FlxTween.tween(FlxG.camera, {zoom: 5}, 0.8, {ease: FlxEase.expoIn, onComplete: function(twn:FlxTween)
+					{
+						FlxG.camera.zoom = 1;
+					}});
 					FlxTween.tween(bg, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
 					FlxTween.tween(bgdiferent, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
 					if (!ClientPrefs.data.lowQuality)
@@ -547,6 +547,11 @@ class MainMenuState extends MusicBeatState
 					new FlxTimer().start(0.2, function(tmr:FlxTimer)
 					{
 						hideit(0.6);
+					});
+
+					new FlxTimer().start(1, function(tmr:FlxTimer)
+					{
+						goToState(option);
 					});
 
 					menuItems.forEach(function(spr:FlxSprite)
@@ -573,7 +578,7 @@ class MainMenuState extends MusicBeatState
 
 							new FlxTimer().start(1, function(tmr:FlxTimer)
 							{
-								goToState();
+								goToState(option);
 							});
 						}
 					});
@@ -593,21 +598,11 @@ class MainMenuState extends MusicBeatState
 
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
-
-		if (!selectedSomethin)
-		{
-			menuItems.forEach(function(spr:FlxSprite)
-			{
-				spr.screenCenter(X);
-				spr.x += 240;
-			});
-		}
 	}
 
-	function goToState()
+	function goToState(daChoice:String)
 	{
-		var daChoice:String = optionShit[curSelected];
-
+		trace(daChoice);
 		switch (daChoice)
 		{
 			case 'story_mode':

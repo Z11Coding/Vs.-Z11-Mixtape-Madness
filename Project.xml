@@ -63,7 +63,7 @@
 	<define name="loadBenchmark" if="MULTICORE_LOADING"/>
 	<define name="VIDEOS_ALLOWED" if="windows || linux || android" unless="32bits"/>
 	<define name="SHOW_LOADING_SCREEN" />
-	<define name="UNDERTALE"/>
+	<!-- define name="UNDERTALE"/ -->
 
 	<section if="officialBuild">
 		<define name="TITLE_SCREEN_EASTER_EGG"/>

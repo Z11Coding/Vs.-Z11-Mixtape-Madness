@@ -34,6 +34,7 @@ import sys.io.File;
 #end
 import sys.io.Process;
 import backend.JSONCache;
+import objects.VideoSprite;
 
 using StringTools;
 
@@ -44,8 +45,11 @@ class CacheState extends MusicBeatState
 	var images:Array<String> = [];
 	var music:Array<String> = [];
 	var json:Array<String> = [];
+	var videos:Array<String> = [];
 	var modImages:Array<String> = [];
 	var modMusic:Array<String> = [];
+	var modVideos:Array<String> = [];
+	
 
 	var boolshit = true;
 	var daMods:Array<String> = [];
@@ -68,6 +72,8 @@ class CacheState extends MusicBeatState
 	var startCachingSoundsAndMusicMods:Bool = false;
 	var songsCached:Bool;
 	var graphicsCached:Bool;
+	var startCachingVideos:Bool;
+	var startCachingVideoMods:Bool;
     var startCachingGraphics:Bool = false;
 	var musicCached:Bool;
 	var modImagesCached:Bool;
@@ -78,6 +84,8 @@ class CacheState extends MusicBeatState
 	var gfxI:Int = 0;
 	var sNmI:Int = 0;
 	var sNmmI:Int = 0;
+	var gfxV:Int = 0;
+	var gfxMV:Int = 0;
 	public var percentLabel:FlxText;
 	var filesDone = 0;
 	var totalFiles = 0;
@@ -233,11 +241,12 @@ class CacheState extends MusicBeatState
 				Paths.crawlDirectoryOG("assets", ".ogg", music);
 				Paths.crawlDirectoryOG("mods", ".ogg", modMusic);
 			}
-			//this took me waaay too long to just delete
-			//nvm I ended up deleting it anyway
 
-			//JSONCache.addToCache(Paths.crawlDirectory("assets/shared", ".json"));
-			//JSONCache.addToCache(Paths.crawlDirectory("mods", ".json"));
+			if (ClientPrefs.data.videoPreload2)
+			{
+				Paths.crawlDirectoryOG("assets", ".mp4", videos);
+				Paths.crawlDirectoryOG("mods", ".mp4", modVideos);
+			}
 
 			var jsonCache = function() {
 				Paths.crawlDirectory("assets", ".json", json);
@@ -258,7 +267,7 @@ class CacheState extends MusicBeatState
 			#end
 
 
-			loadTotal = images.length + modImages.length + music.length + modMusic.length;
+			loadTotal = images.length + modImages.length + music.length + modMusic.length + videos.length + modVideos.length;
 			//trace("Files: " + "Images: " + images + "Images(Mod): " + modImages + "Music: " + music + "Music(Mod): " + modMusic);
 			//trace(loadTotal + " files to load");
 			
@@ -437,6 +446,7 @@ class CacheState extends MusicBeatState
 				if(modImI >= modImages.length){
 					trace("Mod Graphics cached");
 					startCachingModImages = false;
+					startCachingVideos = true;
 					modImagesCached = true;
 				}
 				else{
@@ -455,6 +465,52 @@ class CacheState extends MusicBeatState
 						}
 					}
 					modImI++;
+					currentLoaded++;
+				}
+			}
+
+			if(startCachingVideos){
+				if(gfxV >= videos.length){
+					trace("Videos cached");
+					startCachingVideos = false;
+					startCachingVideoMods = true;
+					graphicsCached = true;
+				}
+				else{
+					loadingWhatMini.text = videos[gfxV];
+					loadingWhatMini.screenCenter(X);
+					loadingWhat.screenCenter(XY);
+					if(CoolUtil.exists(videos[gfxV])){
+						preloadVideo(videos[gfxV]);
+					}
+					else{
+						trace("Video: File at " + videos[gfxV] + " not found, skipping cache.");
+					}
+					gfxV++;
+					currentLoaded++;
+				}
+			}
+
+			if(startCachingVideoMods){
+				if(gfxMV >= modVideos.length){
+					trace("Mod Videos cached");
+					startCachingVideoMods = false;
+				}
+				else{
+					for (i in daMods){
+						for (ii in pathList){
+							loadingWhatMini.text = modVideos[gfxMV];
+							loadingWhatMini.screenCenter(X);
+							loadingWhat.screenCenter(XY);
+							if (CoolUtil.exists(Paths.file2(StringTools.replace(modVideos[gfxMV], '.mp4', ''), '$i/images/$ii', "mp4", "mods"))){
+								preloadVideo(Paths.file2(StringTools.replace(modVideos[gfxMV], '.mp4', ''), '$i/images/$ii', "mp4", "mods"));
+							}
+							else{
+								trace("Video: File at " + modVideos[gfxMV] + " not found, skipping cache.");
+							}
+						}
+					}
+					gfxMV++;
 					currentLoaded++;
 				}
 			}
@@ -525,6 +581,39 @@ class CacheState extends MusicBeatState
 		}
 		
 		super.update(elapsed);
+	}
+
+	public var videoCutscene:VideoSprite = null;
+	function preloadVideo(name:String)
+	{
+		#if VIDEOS_ALLOWED
+		var foundFile:Bool = false;
+		var fileName:String = Paths.video(name);
+		#if sys
+		if (FileSystem.exists(fileName))
+		#else
+		if (OpenFlAssets.exists(fileName))
+		#end
+		foundFile = true;
+
+		if (foundFile)
+		{
+			var cutscene:VideoSprite = new VideoSprite(fileName, true, true, false);
+			add(cutscene);
+			return cutscene;
+		}
+		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+		else
+			trace("Video not found: " + fileName);
+		#else
+		else
+			trace("Video not found: " + fileName);
+		#end
+		#else
+		FlxG.log.warn('Platform not supported!');
+		startAndEnd();
+		#end
+		return null;
 	}
 
 	function cache()

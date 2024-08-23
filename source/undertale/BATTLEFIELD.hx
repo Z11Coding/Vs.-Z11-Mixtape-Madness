@@ -798,11 +798,12 @@ class BATTLEFIELD extends MusicBeatState
             case 'test 2':
                 if (curTime % 20 == 0)
                 {
-                    var blaster = new Blaster(960, 400, 90, 270, 'ut/gasterintro', 'ut/gasterfire', 'blaster', 'beam');
-                    blaster.holdfire = 2;
+                    var blaster = new Blaster(960, 400 /*+ FlxG.random.int(-100, 100)*/, 90, 270, 'ut/gasterintro', 'ut/gasterfire', 'blaster', 'beam');
+                    blaster.holdfire = 50;
                     bulletGroup.add(blaster.sprite);
                     bulletGroup.add(blaster.beam);
                     sequence.addEvent(blaster);
+                    sequence.addEvent(blaster.beambp);
                 }
             default:
                 sequence.events = [];

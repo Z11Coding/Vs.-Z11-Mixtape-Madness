@@ -243,6 +243,7 @@ class Blaster extends BULLETPATTERN {
     public var dorotation:Float;
     public var builderspd:Float;
     public var holdfire:Float;
+    public var beambp:BULLETPATTERN;
 
     public function new(x:Float, y:Float, angle:Float, startangle:Float, ?sound:String = null, ?fire_sound:String = null, ?sprite_prefix:String = null, ?beam_sprite:String = null) {
         this.sprite_prefix = sprite_prefix != null ? sprite_prefix : "blaster";
@@ -271,6 +272,7 @@ class Blaster extends BULLETPATTERN {
         this.holdfire = 0;
         this.sound = sound != null ? sound : "ut/gasterintro";
         this.fire_sound = fire_sound != null ? fire_sound : "ut/gasterfire";
+
         
         if (startangle != -1 && startangle != 0) {
             this.angle = startangle;
@@ -295,7 +297,7 @@ class Blaster extends BULLETPATTERN {
             this.angle = num;
         });
         // Add action to create the beam sprite
-        //addAction(() -> createBeam(), 1.0); // Adjust duration as needed
+        addAction(() -> createBeam(), 3.0); // Adjust duration as needed
     }
 
     function createSprite(image:String):FlxSprite {
@@ -304,13 +306,7 @@ class Blaster extends BULLETPATTERN {
 
     function createBeam() {
         this.sprite.animation.play('fire', true);
-        this.beam.setPosition(this.sprite.x-1200, this.sprite.y+30);
         this.beam.alpha = 1;
-        this.beam.angle = this.angle;
-        this.beam.scale.x = 1;
-        this.beam.scale.y = 1;
-        this.hurtbox = new Hurtbox(this.beam);
-        Hurtbox.hurtboxes.set(this, this.hurtbox);
         FlxTween.tween(this.beam, {alpha:0}, 1, {startDelay: holdfire, onStart: function(tw)
         {
             moveTo(this.beam.x + 1000, this.beam.y, 1); // Adjust duration as needed
@@ -321,6 +317,10 @@ class Blaster extends BULLETPATTERN {
 
     override public function update():Void {
         super.update();
+        this.beam.angle = this.angle - 90;
+        this.beam.x = this.sprite.x - 1200;
+        this.beam.y = this.sprite.y;
+        this.beam.scale.y = this.sprite.scale.y;
         this.sprite.angle = this.angle;
         this.updatetimer++;
         if (this.updatetimer == this.shootdelay) createBeam();

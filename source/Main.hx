@@ -190,12 +190,12 @@ class Main extends Sprite
 		ClientPrefs.loadPrefs();
 		AudioSwitchFix.init();
 		WindowUtils.onClosing = function()
-			{
-				commandPrompt.active = false;
-				commandPrompt = null;
-				handleStateBasedClosing();
+		{
+			if (commandPrompt != null) commandPrompt.active = false;
+			commandPrompt = null;
+			handleStateBasedClosing();
 
-			}
+		}
 		FlxG.signals.preStateSwitch.add(onStateSwitch);
 		FlxGraphic.defaultPersist = false;
 		#if !mobile

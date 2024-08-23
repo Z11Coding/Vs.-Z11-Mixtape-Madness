@@ -110,7 +110,7 @@ class StrumNote extends NoteObject
 			rgbShader.enabled = false;
 			if(PlayState.SONG != null && PlayState.SONG.disableNoteRGB) useRGBShader = false;
 			var arr:Array<FlxColor> = ClientPrefs.data.arrowRGBExtra[Note.gfxIndex[PlayState.mania][leData]];
-			if(PlayState.isPixelStage) arr = ClientPrefs.data.arrowRGBPixelExtra[Note.gfxIndex[PlayState.mania][leData]];
+			if(PlayState.instance != null && PlayState.isPixelStage) arr = ClientPrefs.data.arrowRGBPixelExtra[Note.gfxIndex[PlayState.mania][leData]];
 			if(leData <= PlayState.mania)
 			{
 				@:bypassAccessor

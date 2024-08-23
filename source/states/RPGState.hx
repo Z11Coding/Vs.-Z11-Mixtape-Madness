@@ -602,8 +602,6 @@ class RPGState extends MusicBeatState
 
 		if (dialogueFile.dialogue.length > 0)
 		{
-			CoolUtil.precacheSound('dialogue');
-			CoolUtil.precacheSound('dialogueClose');
 			psychDialogue = new DialogueBoxPsych(dialogueFile, song);
 			psychDialogue.scrollFactor.set();
 			psychDialogue.finishThing = function()

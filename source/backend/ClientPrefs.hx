@@ -46,6 +46,7 @@ import states.FirstCheckState;
 	public var gotit:Bool = false;
 	public var noteOffset:Int = 0;
 	public var progression:Int = 0;
+	public var videoPreload2:Bool = true;
 	public var arrowHSV:Array<Array<Int>> = [
 		[0, 0, 0], [0, 0, 0], 
 		[0, 0, 0], [0, 0, 0], 
@@ -99,6 +100,7 @@ import states.FirstCheckState;
 	public var hitsoundVolume:Float = 0;
 	public var pauseMusic:String = 'Tea Time';
 	public var uiSkin:String = 'Mixtape Engine';
+	public var noteSkin:String = 'Default';
 	public var pauseBPM:Int = 105;
 	public var antimash:Bool = true;
 	public var convertEK:Bool = true;

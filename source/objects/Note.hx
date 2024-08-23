@@ -402,6 +402,7 @@ class Note extends NoteObject
 	public var rgbShader:RGBShaderReference;
 	public static var globalRgbShaders:Array<RGBPalette> = [];
 	public static var SUSTAIN_SIZE:Int = 44;
+	public static var defaultNoteSkin(default, never):String = 'noteSkins/normalNOTE';
 
 	//AI Stuff
 	public var AIStrumTime:Float = 0;
@@ -631,28 +632,39 @@ class Note extends NoteObject
 
 	var lastNoteOffsetXForPixelAutoAdjusting:Float = 0;
 	var lastNoteScaleToo:Float = 1;
+	var _lastNoteOffX:Float = 0;
+	static var _lastValidChecked:String; //optimization
 	public var originalHeightForCalcs:Float = 6;
 	public var correctionOffset:Float = 0; //dont mess with this
-	public function reloadNote(?prefix:String = '', ?texture:String = '', ?suffix:String = '') {
-		if(prefix == null) prefix = '';
+	public function reloadNote(texture:String = '', postfix:String = '') {
 		if(texture == null) texture = '';
-		if(suffix == null) suffix = '';
+		if(postfix == null) postfix = '';
 
-		var animName:String = animation.curAnim != null ? animation.curAnim.name : null;
-		var lastScaleY:Float = scale.y;
-
-		var skin:String = texture;
-		if(texture.length < 1){
-			skin = PlayState.SONG.arrowSkin;
+		var skin:String = texture + postfix;
+		if(texture.length < 1)
+		{
+			skin = PlayState.SONG != null ? PlayState.SONG.arrowSkin : null;
 			if(skin == null || skin.length < 1)
-				skin = 'NOTE';
-			if (!Paths.doesImageAssetExist(Paths.modsImages('noteskins/'+PlayState.SONG.arrowSkin)) || !Paths.doesImageAssetExist(Paths.getPath('images/noteskins/'+PlayState.SONG.arrowSkin+'.png')))
-				skin = 'NOTE';
+				skin = defaultNoteSkin + postfix;
+		}
+		else rgbShader.enabled = false;
+
+		var animName:String = null;
+		if(animation.curAnim != null) {
+			animName = animation.curAnim.name;
 		}
 
-		var arraySkin:Array<String> = skin.split('/');
-		arraySkin[arraySkin.length-1] = prefix + arraySkin[arraySkin.length-1] + suffix; // add prefix and suffix to the texture file
-		var blahblah:String = arraySkin.join('/');
+		var skinPixel:String = skin;
+		var lastScaleY:Float = scale.y;
+		var skinPostfix:String = getNoteSkinPostfix();
+		var customSkin:String = skin + skinPostfix;
+		var path:String = PlayState.isPixelStage ? 'pixelUI/' : 'noteskins/';
+		if(customSkin == _lastValidChecked || Paths.fileExists('images/' + path + customSkin + '.png', IMAGE))
+		{
+			skin = customSkin;
+			_lastValidChecked = customSkin;
+		}
+		else skinPostfix = '';
 
 		defaultWidth = 157;
 		defaultHeight = 154;
@@ -661,17 +673,17 @@ class Note extends NoteObject
 		{
 			if (isSustainNote)
 			{
-				loadGraphic(Paths.image('pixelUI/noteskins/' + blahblah + 'ENDS'));
+				loadGraphic(Paths.image('pixelUI/noteskins/' + skinPixel + 'ENDS' + skinPostfix));
 				width = width / 18;
 				height = height / 2;
-				loadGraphic(Paths.image('pixelUI/noteskins/' + blahblah + 'ENDS'), true, Math.floor(width), Math.floor(height));
+				loadGraphic(Paths.image('pixelUI/noteskins/' + skinPixel + 'ENDS' + skinPostfix), true, Math.floor(width), Math.floor(height));
 			}
 			else
 			{
-				loadGraphic(Paths.image('pixelUI/noteskins/' + blahblah));
+				loadGraphic(Paths.image('pixelUI/noteskins/' + skinPixel + skinPostfix));
 				width = width / 18;
 				height = height / 5;
-				loadGraphic(Paths.image('pixelUI/noteskins/' + blahblah), true, Math.floor(width), Math.floor(height));
+				loadGraphic(Paths.image('pixelUI/noteskins/' + skinPixel + skinPostfix), true, Math.floor(width), Math.floor(height));
 			}
 			defaultWidth = width;
 			setGraphicSize(Std.int(width * PlayState.daPixelZoom * Note.pixelScales[mania]));
@@ -680,7 +692,7 @@ class Note extends NoteObject
 		}
 		else
 		{
-			frames = Paths.getSparrowAtlas('noteskins/'+blahblah);
+			frames = Paths.getSparrowAtlas('noteskins/'+skin);
 			loadNoteAnims();
 			antialiasing = ClientPrefs.data.globalAntialiasing;
 		}
@@ -739,6 +751,14 @@ class Note extends NoteObject
 		}*/
 
 		return value;
+	}
+
+	public static function getNoteSkinPostfix()
+	{
+		var skin:String = '';
+		if(ClientPrefs.data.noteSkin != ClientPrefs.defaultData.noteSkin)
+			skin = '-' + ClientPrefs.data.noteSkin.trim().toLowerCase().replace(' ', '_');
+		return skin;
 	}
 
 	public function loadNoteAnims() {
