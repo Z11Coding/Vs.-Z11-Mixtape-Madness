@@ -629,6 +629,25 @@ class CommandPrompt {
 		var command = parts[0];
 		var args = parts.slice(1);
 
+		for (arg in args) { // WIP - Combine arguments with quotes
+			var combinedArgs:Array<String> = [];
+			if (arg.startsWith("'") || arg.startsWith('"')) {
+				var combinedArg:String = arg;
+				var quote:String = arg.charAt(0);
+				while (!combinedArg.endsWith(quote)) {
+					if (args.length == 0) {
+						print("Error: Unterminated quotes.");
+						return;
+					}
+					combinedArg += " " + args.shift();
+				}
+				combinedArgs.push(combinedArg);
+			} else {
+				combinedArgs.push(arg);
+			}
+		}
+
+
 		switch (command) {
 			case "switchState":
 				if (args.length == 1) {
@@ -654,6 +673,7 @@ class CommandPrompt {
 				if (args.length == 0) {
 					this.switchState("ExitState");
 				} else if (args.length == 1 && args[1] == "forced") {
+					print("Forcing game to close...");
 					Main.closeGame();
 					print("Game closed.");
 				} else {
