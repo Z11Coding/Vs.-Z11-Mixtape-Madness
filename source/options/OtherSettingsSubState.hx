@@ -26,6 +26,10 @@ class OtherSettingsSubState extends BaseOptionsMenu
 			"If checked, The Music Will Be Cached.", 'musicPreload2', 'bool');
 		addOption(option); // now shut up before i put you in my basement
 
+		var option:Option = new Option('Cache Videos', // even tho only one person asked, it here
+			"If checked, The Videos Will Be Cached.", 'videoPreload2', 'bool');
+		addOption(option); // now shut up before i put you in my basement
+
 		var option:Option = new Option(
 			'Silent Volume Noise', 
 			"If checked, The volume wont make noise when you turn up/down the volume", 

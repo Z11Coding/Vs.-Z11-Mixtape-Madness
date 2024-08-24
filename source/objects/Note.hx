@@ -402,7 +402,7 @@ class Note extends NoteObject
 	public var rgbShader:RGBShaderReference;
 	public static var globalRgbShaders:Array<RGBPalette> = [];
 	public static var SUSTAIN_SIZE:Int = 44;
-	public static var defaultNoteSkin(default, never):String = 'noteSkins/normalNOTE';
+	public static var defaultNoteSkin(default, never):String = 'noteskins/normalNOTE';
 
 	//AI Stuff
 	public var AIStrumTime:Float = 0;
@@ -422,24 +422,24 @@ class Note extends NoteObject
 	public var isSustainEnd:Bool = false;
 
 	private function set_multSpeed(value:Float):Float {
-		return multSpeed = value;
+		resizeByRatio(value / multSpeed);
+		multSpeed = value;
+		//trace('fuck cock');
+		return value;
 	}
 
 	public function resizeByRatio(ratio:Float) //haha funny twitter shit
-	{	
-	/*  if(isSustainNote && !animation.curAnim.name.endsWith('end'))
+	{
+		if(isSustainNote && animation.curAnim != null && !animation.curAnim.name.endsWith('end'))
 		{
 			scale.y *= ratio;
-			baseScaleY = scale.y;
 			updateHitbox();
-		} 
-	*/
+		}
 	}
 
 	private function set_texture(value:String):String {
-		if(texture != value) {
-			reloadNote('', value);
-		}
+		if(texture != value) reloadNote(value);
+
 		texture = value;
 		return value;
 	}
@@ -647,7 +647,7 @@ class Note extends NoteObject
 			if(skin == null || skin.length < 1)
 				skin = defaultNoteSkin + postfix;
 		}
-		else rgbShader.enabled = false;
+		//else rgbShader.enabled = false;
 
 		var animName:String = null;
 		if(animation.curAnim != null) {
@@ -673,17 +673,17 @@ class Note extends NoteObject
 		{
 			if (isSustainNote)
 			{
-				loadGraphic(Paths.image('pixelUI/noteskins/' + skinPixel + 'ENDS' + skinPostfix));
+				loadGraphic(Paths.image('pixelUI/' + skinPixel + 'ENDS' + skinPostfix));
 				width = width / 18;
 				height = height / 2;
-				loadGraphic(Paths.image('pixelUI/noteskins/' + skinPixel + 'ENDS' + skinPostfix), true, Math.floor(width), Math.floor(height));
+				loadGraphic(Paths.image('pixelUI/' + skinPixel + 'ENDS' + skinPostfix), true, Math.floor(width), Math.floor(height));
 			}
 			else
 			{
-				loadGraphic(Paths.image('pixelUI/noteskins/' + skinPixel + skinPostfix));
+				loadGraphic(Paths.image('pixelUI/' + skinPixel + skinPostfix));
 				width = width / 18;
 				height = height / 5;
-				loadGraphic(Paths.image('pixelUI/noteskins/' + skinPixel + skinPostfix), true, Math.floor(width), Math.floor(height));
+				loadGraphic(Paths.image('pixelUI/' + skinPixel + skinPostfix), true, Math.floor(width), Math.floor(height));
 			}
 			defaultWidth = width;
 			setGraphicSize(Std.int(width * PlayState.daPixelZoom * Note.pixelScales[mania]));
@@ -692,7 +692,7 @@ class Note extends NoteObject
 		}
 		else
 		{
-			frames = Paths.getSparrowAtlas('noteskins/'+skin);
+			frames = Paths.getSparrowAtlas(skin);
 			loadNoteAnims();
 			antialiasing = ClientPrefs.data.globalAntialiasing;
 		}

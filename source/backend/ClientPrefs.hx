@@ -88,6 +88,15 @@ import states.FirstCheckState;
 		[0xFFffd94a, 0xFFfffff9, 0xFF663500],
 		[0xFFB055BC, 0xFFf4f4ff, 0xFF4D0060],
 		[0xFFdf3e23, 0xFFffe6e9, 0xFF440000],
+		[0xFF2F69E5, 0xFFf5f5ff, 0xFF000F5D],
+		[0xFFE276FF, 0xFFFFF9FF, 0xFF60008D],
+		[0xFF3DCAFF, 0xFFF4FFFF, 0xFF003060],
+		[0xFF71E300, 0xFFF6FFE6, 0xFF003100],
+		[0xFFFF884E, 0xFFFFFAF5, 0xFF6C0000],
+		[0xFFb6b6b6, 0xFFFFFFFF, 0xFF444444],
+		[0xFFffd94a, 0xFFfffff9, 0xFF663500],
+		[0xFFB055BC, 0xFFf4f4ff, 0xFF4D0060],
+		[0xFFdf3e23, 0xFFffe6e9, 0xFF440000],
 		[0xFF2F69E5, 0xFFf5f5ff, 0xFF000F5D]];
 	public var imagesPersist:Bool = false;
 	public var ghostTapping:Bool = true;
@@ -490,18 +499,27 @@ class ClientPrefs {
 		if (FlxG.save.data.mute != null)
 			FlxG.sound.muted = FlxG.save.data.mute;
 
-		#if DISCORD_ALLOWED
-		DiscordClient.check();
-		#end
+		#if DISCORD_ALLOWED DiscordClient.check(); #end
 
-		// Load options file
-		// if (data.saveFormat == "ini") {
-		// 	loadOptionsIni();
-		// } else if (data.saveFormat == "json") {
-		// 	loadOptionsJson();
-		// } else {
-		// 	FlxG.log.add("Invalid save format specified!");
-		// }
+		// controls on a separate save file
+		var save:FlxSave = new FlxSave();
+		save.bind('controls_v3', CoolUtil.getSavePath());
+		if(save != null)
+		{
+			if(save.data.keyboard != null)
+			{
+				var loadedControls:Map<String, Array<FlxKey>> = save.data.keyboard;
+				for (control => keys in loadedControls)
+					if(keyBinds.exists(control)) keyBinds.set(control, keys);
+			}
+			if(save.data.gamepad != null)
+			{
+				var loadedControls:Map<String, Array<FlxGamepadInputID>> = save.data.gamepad;
+				for (control => keys in loadedControls)
+					if(gamepadBinds.exists(control)) gamepadBinds.set(control, keys);
+			}
+			reloadVolumeKeys();
+		}
 	}
 
 	public static function saveCharSlect() {

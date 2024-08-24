@@ -115,9 +115,9 @@ class Paths
 				}
 			}
 		}
-		trace('Crawled directory: ${directoryPath}, and found ${fileCount} files with extension ${fileExtension}. Total files found: ${result.length}');
+		//trace('Crawled directory: ${directoryPath}, and found ${fileCount} files with extension ${fileExtension}. Total files found: ${result.length}');
 		//trace('Files found: ${result}');
-		trace('Recursion: $recurrsion');
+		//trace('Recursion: $recurrsion');
 		return result;
 	}
 
@@ -141,10 +141,10 @@ class Paths
 					}
 				}
 			}
-			trace('Crawled directory: ${directoryPath}, and found ${fileCount} files with extension ${fileExtension}. Total files found: ${result.length}');
-			trace('Recursion: $recursion');
+			//trace('Crawled directory: ${directoryPath}, and found ${fileCount} files with extension ${fileExtension}. Total files found: ${result.length}');
+			//trace('Recursion: $recursion');
 		} catch (e:Dynamic) {
-			trace('Error crawling directory: $e');
+			//trace('Error crawling directory: $e');
 		}
 		return result;
 	}
@@ -235,7 +235,7 @@ public static function crawlDirectoryAlt(directoryPath:String, fileExtension:Str
         }
         // Trace the count at the root level of recursion
         if (subdirectoryCount == 0) {
-            trace('Total subdirectories crawled in: ${directoryPath} = ${subdirectoryCount}');
+           // trace('Total subdirectories crawled in: ${directoryPath} = ${subdirectoryCount}');
         }
         return result;
     }
@@ -350,68 +350,96 @@ public static function crawlDirectoryAlt(directoryPath:String, fileExtension:Str
 		return returnSound(songKey, 'songs', modsAllowed, false);
 	}
 
-	inline static public function inst(song:String, ?modsAllowed:Bool = true):Sound
-		return returnSound('${formatToSongPath(song)}/Inst', 'songs', modsAllowed);
+	inline static public function inst(song:String):Any
+	{
+		var songKey:String = '${formatToSongPath(song).toLowerCase()}/Inst';
+		var inst = returnSound(songKey, 'songs');
+		return inst;
+	}
 
 	public static var currentTrackedAssets:Map<String, FlxGraphic> = [];
-	static public function image(key:String, ?parentFolder:String = null, ?allowGPU:Bool = true):FlxGraphic
+	static public function image(key:String, ?library:String = null, ?allowGPU:Bool = false):FlxGraphic
 	{
-		key = Language.getFileTranslation('images/$key');
-		if(key.lastIndexOf('.') < 0) key += '.png';
-
-		if(ImageCache.exists(getPath(key, IMAGE)) && !allowGPU){
+		if(ImageCache.exists(getPath('images/$key.png', IMAGE, library)) && !allowGPU){
             //trace(key + " is in the cache");
-            return ImageCache.get(getPath(key, IMAGE));
+            return ImageCache.get(getPath('images/$key.png', IMAGE, library));
         }
 		else if(ImageCache.exists(modsImages(key)) && !allowGPU){
             //trace(key + " is in the cache");
             return ImageCache.get(modsImages(key));
         }
         else{
+			//if (allowGPU) trace(key + " can't be loaded due to GPU Cache being on");
+			//else trace(key + " is NOT in the cache");
+		
 			var bitmap:BitmapData = null;
-			if (currentTrackedAssets.exists(key))
+			var file:String = null;
+
+			#if MODS_ALLOWED
+			file = modsImages(key);
+			if (currentTrackedAssets.exists(file))
 			{
-				localTrackedAssets.push(key);
-				return currentTrackedAssets.get(key);
+				localTrackedAssets.push(file);
+				return currentTrackedAssets.get(file);
 			}
-			return cacheBitmap(key, parentFolder, bitmap, allowGPU);
+			else if (FileSystem.exists(file))
+				bitmap = BitmapData.fromFile(file);
+			else
+			#end
+			{
+				file = getPath('images/$key.png', IMAGE, library);
+				if (currentTrackedAssets.exists(file))
+				{
+					localTrackedAssets.push(file);
+					return currentTrackedAssets.get(file);
+				}
+				else if (OpenFlAssets.exists(file, IMAGE))
+					bitmap = OpenFlAssets.getBitmapData(file);
+			}
+
+			if (bitmap != null)
+			{
+				var retVal = cacheBitmap(file, bitmap, allowGPU);
+				if(retVal != null) return retVal;
+			}
+
+			trace('oh no its returning null NOOOO ($file)');
+			return null;
 		}
 	}
 
-		
-	public static function cacheBitmap(key:String, ?parentFolder:String = null, ?bitmap:BitmapData, ?allowGPU:Bool = true):FlxGraphic
+	static public function cacheBitmap(file:String, ?bitmap:BitmapData = null, ?allowGPU:Bool = false)
 	{
-		if (bitmap == null)
+		if(bitmap == null)
 		{
-			var file:String = getPath(key, IMAGE, parentFolder, true);
 			#if MODS_ALLOWED
 			if (FileSystem.exists(file))
 				bitmap = BitmapData.fromFile(file);
-			else #end if (OpenFlAssets.exists(file, IMAGE))
-				bitmap = OpenFlAssets.getBitmapData(file);
-
-			if (bitmap == null)
+			else
+			#end
 			{
-				trace('oh no its returning null NOOOO ($file)');
-				return null;
+				if (OpenFlAssets.exists(file, IMAGE))
+					bitmap = OpenFlAssets.getBitmapData(file);
 			}
+
+			if(bitmap == null) return null;
 		}
 
-		if (allowGPU && ClientPrefs.data.cacheOnGPU && bitmap.image != null)
+		localTrackedAssets.push(file);
+		if (allowGPU && ClientPrefs.data.cacheOnGPU)
 		{
-			bitmap.lock();
-			bitmap.getSurface();
-			bitmap.disposeImage();
+			var texture:RectangleTexture = FlxG.stage.context3D.createRectangleTexture(bitmap.width, bitmap.height, BGRA, true);
+			texture.uploadFromBitmapData(bitmap);
 			bitmap.image.data = null;
+			bitmap.dispose();
+			bitmap.disposeImage();
+			bitmap = BitmapData.fromTexture(texture);
 		}
-
-		var graph:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, key);
-		graph.persist = true;
-		graph.destroyOnNoUse = false;
-
-		currentTrackedAssets.set(key, graph);
-		localTrackedAssets.push(key);
-		return graph;
+		var newGraphic:FlxGraphic = FlxGraphic.fromBitmapData(bitmap, false, file);
+		newGraphic.persist = true;
+		newGraphic.destroyOnNoUse = false;
+		currentTrackedAssets.set(file, newGraphic);
+		return newGraphic;
 	}
 
 	static public function getTextFromFile(key:String, ?ignoreMods:Bool = false):String

@@ -108,7 +108,7 @@ class CacheState extends MusicBeatState
 		trace('ngl pretty cool');
 
 
-		if (!cacheInit) {
+		if (!cacheInit && (FlxG.save.data.musicPreload2 == null || FlxG.save.data.graphicsPreload2 == null || FlxG.save.data.videoPreload2 == null)) {
 			FlxG.switchState(new CacheSettings());
 			cacheInit = true;
 		}
@@ -195,8 +195,9 @@ class CacheState extends MusicBeatState
 				}
 			}
 			
-			if(FlxG.save.data.musicPreload2 != null && ClientPrefs.data.musicPreload2 == false
-				&& FlxG.save.data.graphicsPreload2 != null && ClientPrefs.data.graphicsPreload2 == false && !ClientPrefs.data.cacheCharts) {
+			if((FlxG.save.data.musicPreload2 != null && ClientPrefs.data.musicPreload2 == false)
+				|| (FlxG.save.data.graphicsPreload2 != null && ClientPrefs.data.graphicsPreload2 == false)
+				   || (FlxG.save.data.videoPreload2 != null && ClientPrefs.data.videoPreload2 == false)) {
 					FlxG.switchState(new What());
 					dontBother = true;
 					allowMusic = false;
@@ -481,7 +482,9 @@ class CacheState extends MusicBeatState
 					loadingWhatMini.screenCenter(X);
 					loadingWhat.screenCenter(XY);
 					if(CoolUtil.exists(videos[gfxV])){
-						preloadVideo(videos[gfxV]);
+						var a = StringTools.replace(videos[gfxV], '.mp4', '');
+						a = StringTools.replace(a, 'assets/videos/', '');
+						preloadVideo(StringTools.replace(a, '.mp4', ''));
 					}
 					else{
 						trace("Video: File at " + videos[gfxV] + " not found, skipping cache.");
@@ -502,8 +505,8 @@ class CacheState extends MusicBeatState
 							loadingWhatMini.text = modVideos[gfxMV];
 							loadingWhatMini.screenCenter(X);
 							loadingWhat.screenCenter(XY);
-							if (CoolUtil.exists(Paths.file2(StringTools.replace(modVideos[gfxMV], '.mp4', ''), '$i/images/$ii', "mp4", "mods"))){
-								preloadVideo(Paths.file2(StringTools.replace(modVideos[gfxMV], '.mp4', ''), '$i/images/$ii', "mp4", "mods"));
+							if (CoolUtil.exists(Paths.file2(StringTools.replace(modVideos[gfxMV], '.mp4', ''), '$i/videos/$ii', "mp4", "mods"))){
+								preloadVideo(StringTools.replace(modVideos[gfxMV], '.mp4', ''));
 							}
 							else{
 								trace("Video: File at " + modVideos[gfxMV] + " not found, skipping cache.");

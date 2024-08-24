@@ -63,8 +63,6 @@ class MainMenuState extends MusicBeatState
 
 	var bg:FlxSprite;
 
-	var bgdiferent:FlxSprite;
-
 	var date = Date.now();
 
 	var logoBl:FlxSprite;
@@ -102,7 +100,7 @@ class MainMenuState extends MusicBeatState
 		bg = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
 		bg.scrollFactor.set(0, yScroll);
 		bg.setGraphicSize(Std.int(bg.width * 1.175));
-		bg.color = FlxColor.YELLOW;
+		bg.color = 0xff270138;
 		bg.updateHitbox();
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.data.globalAntialiasing;
@@ -110,16 +108,6 @@ class MainMenuState extends MusicBeatState
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);
-
-		bgdiferent = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
-		bgdiferent.scrollFactor.set(0, yScroll);
-		bgdiferent.setGraphicSize(Std.int(bg.width * 1.175));
-		bgdiferent.updateHitbox();
-		bgdiferent.screenCenter();
-		bgdiferent.alpha = 0;
-		bgdiferent.color = FlxColor.MAGENTA;
-		bgdiferent.antialiasing = ClientPrefs.data.globalAntialiasing;
-		add(bgdiferent);
 
 		if (!ClientPrefs.data.lowQuality)
 		{
@@ -479,9 +467,7 @@ class MainMenuState extends MusicBeatState
 				// Main Menu Back Animations
 				FlxTween.tween(FlxG.camera, {zoom: 5}, 0.8, {ease: FlxEase.expoIn});
 				FlxTween.tween(bg, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
-				FlxTween.tween(bgdiferent, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
 				FlxTween.tween(bg, {alpha: 0}, 0.8, {ease: FlxEase.expoIn});
-				FlxTween.tween(bgdiferent, {alpha: 0}, 0.8, {ease: FlxEase.expoIn});
 				if (!ClientPrefs.data.lowQuality)
 				{
 					FlxTween.tween(logoBl, {
@@ -502,11 +488,7 @@ class MainMenuState extends MusicBeatState
 				{
 					selectedSomethin = true;
 					FlxG.mouse.visible = false;
-
 					FlxG.sound.play(Paths.sound('confirmMenu'));
-
-					if (ClientPrefs.data.flashing)
-						FlxFlicker.flicker(bgdiferent, 1.1, 0.15, false);
 
 					var item:FlxSprite;
 					var option:String;
@@ -531,7 +513,6 @@ class MainMenuState extends MusicBeatState
 						FlxG.camera.zoom = 1;
 					}});
 					FlxTween.tween(bg, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
-					FlxTween.tween(bgdiferent, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
 					if (!ClientPrefs.data.lowQuality)
 					{
 						FlxTween.tween(checker, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
@@ -631,7 +612,6 @@ class MainMenuState extends MusicBeatState
 			FlxTween.tween(spr, {alpha: 0.0}, time, {ease: FlxEase.quadOut});
 		});
 		FlxTween.tween(bg, {alpha: 0}, time, {ease: FlxEase.expoIn});
-		FlxTween.tween(bgdiferent, {alpha: 0}, time, {ease: FlxEase.expoIn});
 		if (!ClientPrefs.data.lowQuality)
 		{
 			FlxTween.tween(checker, {alpha: 0}, time, {ease: FlxEase.expoIn});

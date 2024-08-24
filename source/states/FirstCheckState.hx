@@ -28,7 +28,7 @@ class FirstCheckState extends MusicBeatState
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.keys.preventDefaultKeys = [TAB, ALT];
 
-		FlxG.save.bind('Mixtape' #if (flixel < "5.0.0"), 'Z11Gaming' #end);
+		FlxG.save.bind('Mixtape', CoolUtil.getSavePath());
 		ClientPrefs.loadPrefs();
 		ClientPrefs.reloadVolumeKeys();
 
