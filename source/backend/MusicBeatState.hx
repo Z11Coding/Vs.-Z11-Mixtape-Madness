@@ -23,9 +23,11 @@ class MusicBeatState extends FlxState
 	}
 
 	var _psychCameraInitialized:Bool = false;
+	public var variables:Map<String, Dynamic> = new Map<String, Dynamic>();
+	public static function getVariables()
+		return getState().variables;
 
 	override function create() {
-		//trace('Creating MusicBeatState');
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		#if MODS_ALLOWED Mods.updatedOnState = false; #end
 
@@ -36,13 +38,14 @@ class MusicBeatState extends FlxState
 		if(!skip) {
 			openSubState(new CustomFadeTransition(0.6, true));
 		}
+		FlxTransitionableState.skipNextTransOut = false;
+		timePassedOnState = 0;
 		if (reopen)
 		{
 			reopen = false;
 			openSubState(emptyStickers);
 			//trace('reopened stickers');
 		}
-		timePassedOnState = 0;
 	}
 
 	public static var emptyStickers:StickerSubState = null;
@@ -61,7 +64,7 @@ class MusicBeatState extends FlxState
 	public static var timePassedOnState:Float = 0;
 	override function update(elapsed:Float)
 	{
-		 EventFunc.updateAll();
+		EventFunc.updateAll();
 		if (Main.audioDisconnected && getState() == PlayState.instance)
 		{
 			//Save your progress and THEN reset it (I knew there was a common use for this)
@@ -90,14 +93,6 @@ class MusicBeatState extends FlxState
 					rollbackSection();
 			}
 		}
-
-		// if (Controls.L.keyJustPressed && Controls.CTRL.keyJustPressed && Controls.SHIFT.keyJustPressed)
-		// {
-		// 	if (SaveState.savedStates.get("lastState") != null)
-		// 		FlxG.switchState(SaveState.loadState("lastState"));
-		// 	else 
-		// 	SaveState.saveState("lastState", FlxG.state);
-		// }
 
 		if(FlxG.save.data != null) FlxG.save.data.fullscreen = FlxG.fullscreen;
 		

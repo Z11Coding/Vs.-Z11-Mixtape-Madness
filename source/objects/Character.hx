@@ -319,10 +319,13 @@ class Character extends FlxSprite
 								var animToPlay:String = 'sing'+Note.keysShit.get(PlayState.mania).get('anims')[Std.int(Math.abs(noteData))];
 								//animToPlay += animationNotes[0].animSuffix;
 								if (canHitNote) playAnim(animToPlay, true);
-								holdTimer = 0;
 								animationNotes.shift();
 							}
-							if(isAnimationFinished()) dance();
+							if(isAnimationFinished()) 
+							{
+								holdTimer = 0;
+								dance();
+							}
 						case "Zenetta":
 							if(animationNotes.length > 0 && Conductor.songPosition > animationNotes[0][0])
 							{
@@ -339,10 +342,13 @@ class Character extends FlxSprite
 								var animToPlay:String = 'sing'+Note.keysShit.get(PlayState.mania).get('anims')[Std.int(Math.abs(noteData))];
 								//animToPlay += animationNotes[0].animSuffix;
 								if (canHitNote) playAnim(animToPlay, true);
-								holdTimer = 0;
 								animationNotes.shift();
 							}
-							if(isAnimationFinished()) dance();
+							if(isAnimationFinished())
+							{
+								holdTimer = 0;
+								dance();
+							}
 					}
 			}
 		}

@@ -509,7 +509,7 @@ class ChartingStateOG extends MusicBeatChartingState
 
 		if(curSec >= _song.notes.length) curSec = _song.notes.length - 1;
 
-		FlxG.mouse.visible = true;
+		Cursor.show();
 		//FlxG.save.bind('funkin', 'ninjamuffin99');
 
 		tempBpm = _song.bpm;
@@ -2139,7 +2139,7 @@ class ChartingStateOG extends MusicBeatChartingState
 			strumLineNotes.members[i].y = strumLine.y;
 		}
 
-		FlxG.mouse.visible = true;//cause reasons. trust me
+		Cursor.show();//cause reasons. trust me
 		camPos.y = strumLine.y;
 		
 		if(!disableAutoScrolling.checked) {
@@ -2183,10 +2183,13 @@ class ChartingStateOG extends MusicBeatChartingState
 			notSaved = false;
 		}
 
+		if (FlxG.mouse.overlaps(curRenderedNotes) && !FlxG.mouse.justPressed) Cursor.cursorMode = Grabbing;
+
 		if (FlxG.mouse.justPressed)
 		{
 			if (FlxG.mouse.overlaps(curRenderedNotes))
 			{
+				Cursor.cursorMode = Grabbing;
 				curRenderedNotes.forEachAlive(function(note:Note)
 				{
 					if (FlxG.mouse.overlaps(note))
@@ -2291,7 +2294,7 @@ class ChartingStateOG extends MusicBeatChartingState
 			else if (FlxG.keys.justPressed.ENTER)
 			{
 				autosaveSong();
-				FlxG.mouse.visible = false;
+				Cursor.hide();
 				PlayState.SONG = _song;
 				FlxG.sound.music.stop();
 				if(vocals != null) vocals.stop();
@@ -2318,7 +2321,7 @@ class ChartingStateOG extends MusicBeatChartingState
 				PlayState.chartingMode = false;
 				MusicBeatState.switchState(new states.editors.MasterEditorMenu());
 				FlxG.sound.playMusic(Paths.music('panixPress'));
-				FlxG.mouse.visible = false;
+				Cursor.hide();
 				return;
 			}
 
@@ -3369,7 +3372,7 @@ function updateGrid():Void
 			note.sustainLength = daSus;
 			note.noteType = i[3];
 		} else { //Event note
-			note.loadGraphic(Paths.image('eventArrow'));
+			note.loadGraphic(Paths.image('editors/eventArrow'));
 			note.eventName = getEventName(i[1]);
 			note.eventLength = i[1].length;
 			if(i[1].length < 2)
@@ -3517,6 +3520,7 @@ function updateGrid():Void
 		var delnote = false;
 		if(strumLineNotes.members[d].overlaps(curRenderedNotes))
 		{
+			Cursor.cursorMode = Pointer;
 			curRenderedNotes.forEachAlive(function(note:Note)
 			{
 				if (note.overlapsPoint(new FlxPoint(strumLineNotes.members[d].x + 1,strumLine.y+1)) && note.noteData == d%Note.ammo[_song.mania])

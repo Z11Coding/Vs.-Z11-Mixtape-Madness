@@ -184,7 +184,6 @@ class PlayState extends MusicBeatState
 	public var dadMap:Map<String, Character> = new Map<String, Character>();
 	public var dadMap2:Map<String, Character> = new Map<String, Character>();
 	public var gfMap:Map<String, Character> = new Map<String, Character>();
-	public var variables:Map<String, Dynamic> = new Map<String, Dynamic>();
 
 	#if HSCRIPT_ALLOWED
 	public var hscriptArray:Array<HScript> = [];
@@ -732,6 +731,8 @@ class PlayState extends MusicBeatState
 		setOnScripts("initPlayfield", initPlayfield);
 		setOnScripts("newPlayField", newPlayfield);
 
+		Cursor.hide();
+
 		debugKeysChart = ClientPrefs.keyBinds.get('debug_1').copy();
 		debugKeysCharacter = ClientPrefs.keyBinds.get('debug_2').copy();
 
@@ -1021,11 +1022,21 @@ class PlayState extends MusicBeatState
 			introSoundsSuffix = '-pixel';
 		}
 
-		add(gfGroup); // Needed for blammed lights
-		add(dadGroup2);
-		add(boyfriendGroup2);
-		add(dadGroup);
-		add(boyfriendGroup);
+		if(stageData.objects != null && stageData.objects.length > 0)
+		{
+			var list:Map<String, FlxSprite> = StageData.addObjectsToState(stageData.objects, !stageData.hide_girlfriend ? gfGroup : null, dadGroup, boyfriendGroup, dadGroup2, boyfriendGroup2, this);
+			for (key => spr in list)
+				if(!StageData.reservedNames.contains(key))
+					variables.set(key, spr);
+		}
+		else
+		{
+			add(gfGroup); // Needed for blammed lights
+			add(dadGroup2);
+			add(boyfriendGroup2);
+			add(dadGroup);
+			add(boyfriendGroup);
+		}
 
 		if (curStage != 'spooky') // to avoid dups
 		{
@@ -4232,16 +4243,15 @@ case "Skip":
 
 		for (field in playfields.members)
 		{
-			trace(playfields.members);
 			field.keyCount = Note.ammo[mania];
 			if (modifyNotes)
 			{
-			for (note in allNotes)
-			{
-			field.unqueue(note);
-			field.queue(note);
+				for (note in allNotes)
+				{
+					field.unqueue(note);
+					field.queue(note);
+				}
 			}
-		}
 			field.generateStrums();
 		}
 

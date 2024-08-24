@@ -38,9 +38,7 @@ class MainMenuState extends MusicBeatState
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
 	var optionShit:Array<String> = [
-		'story_mode',
 		'freeplay',
-		#if MODS_ALLOWED 'mods', #end
 		'credits'
 	];
 	public var iconBG:FlxSprite;
@@ -93,8 +91,7 @@ class MainMenuState extends MusicBeatState
 
 		persistentUpdate = persistentDraw = true;
 
-		FlxG.mouse.visible = true;
-		FlxG.mouse.useSystemCursor = true;
+		Cursor.show();
 
 		var yScroll:Float = Math.max(0.25 - (0.05 * (optionShit.length - 4)), 0.1);
 		bg = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
@@ -132,7 +129,7 @@ class MainMenuState extends MusicBeatState
 
 		for (num => option in optionShit)
 		{
-			var item:FlxSprite = createMenuItem(option, 0, (num * 140) + 90);
+			var item:FlxSprite = createMenuItem(option, 0, (num * 140) + 180);
 			item.y += (4 - optionShit.length) * 70; // Offsets for when you have anything other than 4 items
 			item.screenCenter(X);
 		}
@@ -153,15 +150,15 @@ class MainMenuState extends MusicBeatState
 			logoBl.scrollFactor.set();
 			logoBl.antialiasing = ClientPrefs.data.globalAntialiasing;
 			logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
-			logoBl.setGraphicSize(Std.int(logoBl.width * 0.5));
+			logoBl.setGraphicSize(Std.int(logoBl.width * 0.6));
 			logoBl.animation.play('bump');
 			logoBl.alpha = 0;
 			logoBl.angle = -4;
 			logoBl.updateHitbox();
 			add(logoBl);
 			FlxTween.tween(logoBl, {
-				y: logoBl.y + 300,
-				x: logoBl.x + 50,
+				y: logoBl.y + 50,
+				x: logoBl.x + 450,
 				angle: -4,
 				alpha: 1
 			}, 1.4, {ease: FlxEase.expoInOut});
@@ -365,7 +362,7 @@ class MainMenuState extends MusicBeatState
 			if (allowMouse && ((FlxG.mouse.deltaScreenX != 0 && FlxG.mouse.deltaScreenY != 0) || FlxG.mouse.justPressed)) //FlxG.mouse.deltaScreenX/Y checks is more accurate than FlxG.mouse.justMoved
 			{
 				allowMouse = false;
-				FlxG.mouse.visible = true;
+				Cursor.show();
 				timeNotMoving = 0;
 
 				var selectedItem:FlxSprite;
@@ -381,6 +378,7 @@ class MainMenuState extends MusicBeatState
 
 				if(leftItem != null && FlxG.mouse.overlaps(leftItem))
 				{
+					Cursor.cursorMode = Pointer;
 					allowMouse = true;
 					if(selectedItem != leftItem)
 					{
@@ -390,6 +388,7 @@ class MainMenuState extends MusicBeatState
 				}
 				else if(rightItem != null && FlxG.mouse.overlaps(rightItem))
 				{
+					Cursor.cursorMode = Pointer;
 					allowMouse = true;
 					if(selectedItem != rightItem)
 					{
@@ -406,6 +405,7 @@ class MainMenuState extends MusicBeatState
 						var memb:FlxSprite = menuItems.members[i];
 						if(FlxG.mouse.overlaps(memb))
 						{
+							Cursor.cursorMode = Pointer;
 							var distance:Float = Math.sqrt(Math.pow(memb.getGraphicMidpoint().x - FlxG.mouse.screenX, 2) + Math.pow(memb.getGraphicMidpoint().y - FlxG.mouse.screenY, 2));
 							if (dist < 0 || distance < dist)
 							{
@@ -426,8 +426,9 @@ class MainMenuState extends MusicBeatState
 			}
 			else
 			{
+
 				timeNotMoving += elapsed;
-				if(timeNotMoving > 2) FlxG.mouse.visible = false;
+				if(timeNotMoving > 2) Cursor.hide();
 			}
 
 			switch(curColumn)
@@ -483,11 +484,12 @@ class MainMenuState extends MusicBeatState
 
 			if (controls.ACCEPT || (FlxG.mouse.justPressed && allowMouse))
 			{
+				Cursor.hide();
 				FlxG.sound.play(Paths.sound('confirmMenu'));
 				if (optionShit[curSelected] != 'donate')
 				{
 					selectedSomethin = true;
-					FlxG.mouse.visible = false;
+					Cursor.hide();
 					FlxG.sound.play(Paths.sound('confirmMenu'));
 
 					var item:FlxSprite;

@@ -390,6 +390,11 @@ class FreeplayState extends MusicBeatState
 	var stopMusicPlay:Bool = false;
 	override function update(elapsed:Float)
 	{
+		for (i in multiSongs)
+		{
+			if (Paths.formatToSongPath(songs[curSelected].songName) == i) diffText.visible = false;
+			else diffText.visible = true;
+		}
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
 
@@ -662,22 +667,14 @@ class FreeplayState extends MusicBeatState
 				persistentUpdate = false;
 				var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
 				var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
-				/*#if MODS_ALLOWED
-				if(!FileSystem.exists(Paths.modsJson(songLowercase + '/' + poop)) && !FileSystem.exists(Paths.json(songLowercase + '/' + poop))) {
-				#else
-				if(!OpenFlAssets.exists(Paths.json(songLowercase + '/' + poop))) {
-				#end
-					poop = songLowercase;
-					curDifficulty = 1;
-					trace('Couldnt find file');
-				}*/
 				trace(poop);
 				for (i in multiSongs)
 				{
+					trace(multiSongs);
 					if (songLowercase == i)
 					{
 						multisong = true;
-						switch(songLowercase)
+						switch(songLowercase.toLowerCase())
 						{
 							case 'resistance':
 								songChoices = ['Resistance', 'Resistance-k', 'Resistance Awsome Mix', 'Resistance-kai'];
