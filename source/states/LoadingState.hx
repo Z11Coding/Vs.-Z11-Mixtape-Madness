@@ -231,14 +231,18 @@ class LoadingState extends MusicBeatState
 	var finishedLoading:Bool = false;
 	function onLoad()
 	{
-		if (stopMusic && FlxG.sound.music != null)
-			FlxG.sound.music.stop();
+		if (!finishedLoading)
+		{
+			trace('working');
+			if (stopMusic && FlxG.sound.music != null)
+				FlxG.sound.music.stop();
 
-		FlxG.camera.visible = false;
-		FlxTransitionableState.skipNextTransIn = true;
-		MusicBeatState.switchState(target);
-		transitioning = true;
-		finishedLoading = true;
+			FlxTransitionableState.skipNextTransIn = true;
+			TransitionState.transitionState(PlayState, {transitionType: "stickers"});
+			transitioning = true;
+			finishedLoading = true;
+			dontUpdate = true;
+		}	
 	}
 
 	public static function checkLoaded():Bool
@@ -377,7 +381,7 @@ class LoadingState extends MusicBeatState
 		});
 
 		Thread.create(() -> {
-			preloadScript();
+			//preloadScript();
 
 			if (song.stage == null || song.stage.length < 1)
 				song.stage = StageData.vanillaSongStage(folder);
@@ -522,7 +526,7 @@ class LoadingState extends MusicBeatState
 		//then start threads
 		for (sound in soundsToPrepare) initThread(() -> Paths.sound(sound), 'sound $sound');
 		for (music in musicToPrepare) initThread(() -> Paths.music(music), 'music $music');
-		for (song in songsToPrepare) initThread(() -> Paths.returnSound(song, 'songs', true, false), 'song $song');
+		for (song in songsToPrepare) initThread(() -> Paths.returnSound(null, song, 'songs'), 'song $song');
 
 		// for images, they get to have their own thread
 		for (image in imagesToPrepare)

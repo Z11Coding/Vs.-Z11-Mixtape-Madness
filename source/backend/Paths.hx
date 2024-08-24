@@ -330,30 +330,37 @@ public static function crawlDirectoryAlt(directoryPath:String, fileExtension:Str
 		return 'assets/videos/$key.$VIDEO_EXT';
 	}
 
-	inline static public function sound(key:String, ?modsAllowed:Bool = true):Sound
-		return returnSound('sounds/$key', modsAllowed);
+	static public function sound(key:String, ?library:String):Sound
+	{
+		var sound:Sound = returnSound('sounds', key, library);
+		return sound;
+	}
 
-	inline static public function soundRandom(key:String, min:Int, max:Int, ?modsAllowed:Bool = true)
-		return sound(key + FlxG.random.int(min, max), modsAllowed);
+	inline static public function soundRandom(key:String, min:Int, max:Int, ?library:String)
+		return sound(key + FlxG.random.int(min, max), library);
 
 	inline static public function track(song:String, track:String):Any
 		return returnSound('${formatToSongPath(song)}/$track', 'songs');
 
-	inline static public function music(key:String, ?modsAllowed:Bool = true):Sound
-		return returnSound('music/$key', modsAllowed);
-	
-	inline static public function voices(song:String, postfix:String = null, ?modsAllowed:Bool = true):Sound
+	inline static public function music(key:String, ?library:String):Sound
 	{
-		var songKey:String = '${formatToSongPath(song)}/Voices';
+		var file:Sound = returnSound('music', key, library);
+		return file;
+	}
+	
+	inline static public function voices(song:String, postfix:String = null):Any
+	{
+		var songKey:String = '${formatToSongPath(song).toLowerCase()}/Voices';
 		if(postfix != null) songKey += '-' + postfix;
 		//trace('songKey test: $songKey');
-		return returnSound(songKey, 'songs', modsAllowed, false);
+		var voices = returnSound(null, songKey, 'songs');
+		return voices;
 	}
 
 	inline static public function inst(song:String):Any
 	{
 		var songKey:String = '${formatToSongPath(song).toLowerCase()}/Inst';
-		var inst = returnSound(songKey, 'songs');
+		var inst = returnSound(null, songKey, 'songs');
 		return inst;
 	}
 
@@ -583,29 +590,42 @@ public static function crawlDirectoryAlt(directoryPath:String, fileExtension:Str
 	}
 
 	public static var currentTrackedSounds:Map<String, Sound> = [];
-	public static function returnSound(key:String, ?path:String, ?modsAllowed:Bool = true, ?beepOnNull:Bool = true)
-	{
-		var file:String = getPath(Language.getFileTranslation(key) + '.$SOUND_EXT', SOUND, path, modsAllowed);
+	public static function returnSound(path:Null<String>, key:String, ?library:String) {
+		#if MODS_ALLOWED
+		var modLibPath:String = '';
+		if (library != null) modLibPath = '$library/';
+		if (path != null) modLibPath += '$path';
 
-		//trace('precaching sound: $file');
-		if(!currentTrackedSounds.exists(file))
-		{
-			#if sys
-			if(FileSystem.exists(file))
-				currentTrackedSounds.set(file, Sound.fromFile(file));
-			#else
-			if(OpenFlAssets.exists(file, SOUND))
-				currentTrackedSounds.set(file, OpenFlAssets.getSound(file));
-			#end
-			else if(beepOnNull)
+		var file:String = modsSounds(modLibPath, key);
+		if(FileSystem.exists(file)) {
+			if(!currentTrackedSounds.exists(file))
 			{
-				trace('SOUND NOT FOUND: $key, PATH: $path');
-				FlxG.log.error('SOUND NOT FOUND: $key, PATH: $path');
-				return FlxAssets.getSound('flixel/sounds/beep');
+				currentTrackedSounds.set(file, Sound.fromFile(file));
+				//trace('precached mod sound: $file');
+			}
+			localTrackedAssets.push(file);
+			return currentTrackedSounds.get(file);
+		}
+		#end
+
+		// I hate this so god damn much
+		var gottenPath:String = '$key.$SOUND_EXT';
+		if(path != null) gottenPath = '$path/$gottenPath';
+		gottenPath = getPath(gottenPath, SOUND, library);
+		gottenPath = gottenPath.substring(gottenPath.indexOf(':') + 1, gottenPath.length);
+		// trace(gottenPath);
+		if(!currentTrackedSounds.exists(gottenPath))
+		{
+			var retKey:String = (path != null) ? '$path/$key' : key;
+			retKey = ((path == 'songs') ? 'songs:' : '') + getPath('$retKey.$SOUND_EXT', SOUND, library);
+			if(OpenFlAssets.exists(retKey, SOUND))
+			{
+				currentTrackedSounds.set(gottenPath, OpenFlAssets.getSound(retKey));
+				//trace('precached vanilla sound: $retKey');
 			}
 		}
-		localTrackedAssets.push(file);
-		return currentTrackedSounds.get(file);
+		localTrackedAssets.push(gottenPath);
+		return currentTrackedSounds.get(gottenPath);
 	}
 
 	static public function exists(someString:String):Bool
