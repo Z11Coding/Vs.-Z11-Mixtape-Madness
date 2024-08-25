@@ -4991,6 +4991,7 @@ case "Skip":
 				if (FlxG.random.bool(0.1))
 				{
 					// gitaroo man easter egg
+					FlxG.camera.followLerp = 0;
 					if (FlxG.sound.music != null)
 					{
 						FlxG.sound.music.pause();
@@ -5002,21 +5003,9 @@ case "Skip":
 					}
 					openSubState(new PauseSubStateLost(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
 				}
-				else if (playAsGF)
-				{
-					if (FlxG.sound.music != null)
-					{
-						FlxG.sound.music.pause();
-						vocals.pause();
-						opponentVocals.pause();
-						gfVocals.pause();
-						for (track in tracks)
-							track.pause();
-					}
-					openSubState(new PauseSubState());
-				}
 				else
 				{
+					FlxG.camera.followLerp = 0;
 					if (FlxG.sound.music != null)
 					{
 						FlxG.sound.music.pause();
@@ -7484,7 +7473,7 @@ case "Skip":
 		}
 
 		rating.loadGraphic(Paths.image(getUiSkin(uiSkin, daRating.name, altPart)));
-		rating.cameras = [camHUD];
+		rating.cameras = [if (ClientPrefs.data.inGameRatings) camGame else camHUD];
 		rating.screenCenter();
 		rating.x = coolText.x - 40;
 		rating.y -= 60;
@@ -7496,7 +7485,7 @@ case "Skip":
 		rating.y -= ClientPrefs.data.comboOffset[1];
 
 		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(getUiSkin(uiSkin, 'combo', altPart)));
-		comboSpr.cameras = [camHUD];
+		comboSpr.cameras = [if (ClientPrefs.data.inGameRatings) camGame else camHUD];
 		comboSpr.screenCenter();
 		comboSpr.x = coolText.x;
 		comboSpr.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
@@ -7565,7 +7554,7 @@ case "Skip":
 		for (i in seperatedScore)
 		{
 			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(getUiSkin(uiSkin, '', altPart, true, Std.int(i))));
-			numScore.cameras = [camHUD];
+			numScore.cameras = [if (ClientPrefs.data.inGameRatings) camGame else camHUD];
 			numScore.screenCenter();
 			numScore.x = coolText.x + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2];
 			numScore.y += 80 - ClientPrefs.data.comboOffset[3];
@@ -7681,7 +7670,7 @@ case "Skip":
 		}
 
 		rating.loadGraphic(Paths.image(pixelShitPart1 + daRating.image + pixelShitPart2));
-		rating.cameras = [camHUD];
+		rating.cameras = [if (ClientPrefs.data.inGameRatings) camGame else camHUD];
 		rating.screenCenter();
 		rating.x = coolText.x - 40;
 		rating.y -= 60;
@@ -7693,7 +7682,7 @@ case "Skip":
 		rating.y -= ClientPrefs.data.comboOffset[1];
 
 		var comboSpr:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'combo' + pixelShitPart2));
-		comboSpr.cameras = [camHUD];
+		comboSpr.cameras = [if (ClientPrefs.data.inGameRatings) camGame else camHUD];
 		comboSpr.screenCenter();
 		comboSpr.x = coolText.x;
 		comboSpr.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
@@ -7763,7 +7752,7 @@ case "Skip":
 		for (i in seperatedScore)
 		{
 			var numScore:FlxSprite = new FlxSprite().loadGraphic(Paths.image(pixelShitPart1 + 'num' + Std.int(i) + pixelShitPart2));
-			numScore.cameras = [camHUD];
+			numScore.cameras = [if (ClientPrefs.data.inGameRatings) camGame else camHUD];
 			numScore.screenCenter();
 			numScore.x = coolText.x + (43 * daLoop) - 90 + ClientPrefs.data.comboOffset[2] + 400;
 			numScore.y += 80 - ClientPrefs.data.comboOffset[3];

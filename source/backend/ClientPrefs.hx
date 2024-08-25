@@ -44,6 +44,7 @@ import states.FirstCheckState;
 	public var holdSubdivs:Float = 2;
 	public var optimizeHolds:Bool = true;
 	public var gotit:Bool = false;
+	public var inGameRatings:Bool = false;
 	public var noteOffset:Int = 0;
 	public var progression:Int = 0;
 	public var videoPreload2:Bool = true;

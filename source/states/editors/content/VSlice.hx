@@ -1,11 +1,12 @@
 package states.editors.content;
 
 import backend.Song;
-import backend.Section;
 import backend.Difficulty;
 
 import flixel.math.FlxMath;
 import flixel.util.FlxSort;
+
+import backend.Section.SwagSection;
 
 // Chart
 typedef VSliceChart =
@@ -253,20 +254,21 @@ class VSlice
 				events: [],
 				bpm: songBpm,
 				needsVoices: true, //There's no value on V-Slice to identify if there are vocals as it checks automatically
-				newVoiceStyle: false,
 				speed: scrollSpeed,
 				offset: 0,
-
-				mania: Note.defaultMania,
-				startMania: Note.defaultMania,
 			
 				player1: metadata.playData.characters.player,
 				player2: metadata.playData.characters.opponent,
-				player4: null,
-				player5: null,
 				gfVersion: metadata.playData.characters.girlfriend,
 				stage: stage,
-				format: 'mixtape_v1_convert'
+				format: 'mixtape_v1_convert',
+
+				player4: null,
+				player5: null,
+				extraTracks: [],
+				newVoiceStyle: false,
+				mania: Note.defaultMania,
+				startMania: Note.defaultMania
 			}
 
 			Reflect.setField(swagSong, 'artist', metadata.artist);
@@ -336,7 +338,7 @@ class VSlice
 		}
 
 		var notes:Array<VSliceNote> = [];
-		var generatedBy:String = 'Mixtape Engine v${MainMenuState.psychEngineVersion} - Chart Editor V-Slice Exporter';
+		var generatedBy:String = 'Psych Engine v${MainMenuState.psychEngineVersion} - Chart Editor V-Slice Exporter';
 		var timeChanges:Array<VSliceTimeChange> = [];
 
 		var time:Float = 0;

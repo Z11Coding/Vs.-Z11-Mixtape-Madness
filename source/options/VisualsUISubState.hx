@@ -90,6 +90,12 @@ class VisualsUISubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
+		var option:Option = new Option('In-Game Rating',
+			"If checked, the ratings will be in-game instead of on the hud.",
+			'inGameRatings',
+			'bool');
+		addOption(option);
+
 		var option:Option = new Option('Start Hidden',
 			"If checked, the hud will be invisible during the countdown.",
 			'starHidden',
