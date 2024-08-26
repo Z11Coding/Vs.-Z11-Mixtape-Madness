@@ -2,7 +2,7 @@ function onCreate()
    for i = 0, getProperty('unspawnNotes.length')-1 do
 		--Check if the note is an Instakill Note
 		if getPropertyFromGroup('unspawnNotes', i, 'noteType') == 'pdNote' then
-			setPropertyFromGroup('unspawnNotes', i, 'texture', 'Notes/PD'); --Change texture
+			setPropertyFromGroup('unspawnNotes', i, 'texture', 'noteskins/Notes/PD'); --Change texture
 			setPropertyFromGroup('unspawnNotes', i, 'noAnimation', true); --custom notesplash color, why not			
          setPropertyFromGroup('unspawnNotes', i, 'rgbShader.enable', false); --custom notesplash color, why not			
 		end

@@ -390,11 +390,16 @@ class FreeplayState extends MusicBeatState
 	var stopMusicPlay:Bool = false;
 	override function update(elapsed:Float)
 	{
-		for (i in multiSongs)
+		switch(Paths.formatToSongPath(songs[curSelected].songName))
 		{
-			if (Paths.formatToSongPath(songs[curSelected].songName) == i) diffText.visible = false;
-			else diffText.visible = true;
+			case 'resistance':
+				diffText.visible = false;
+			case 'resistalovania':
+				diffText.visible = false;
+			default:
+				diffText.visible = true;
 		}
+
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
 
@@ -668,26 +673,20 @@ class FreeplayState extends MusicBeatState
 				var songLowercase:String = Paths.formatToSongPath(songs[curSelected].songName);
 				var poop:String = Highscore.formatSong(songLowercase, curDifficulty);
 				trace(poop);
-				for (i in multiSongs)
+				switch(songLowercase)
 				{
-					trace(multiSongs);
-					if (songLowercase == i)
-					{
+					case 'resistance':
 						multisong = true;
-						switch(songLowercase.toLowerCase())
-						{
-							case 'resistance':
-								songChoices = ['Resistance', 'Resistance-k', 'Resistance Awsome Mix', 'Resistance-kai'];
-								listChoices = ['Resistance', 'Resistance (Kyren Mix)', 'Resistance (Awsome Mix)', 'Resistance (Kai Mix)'];
-							case 'resistalovania':
-								songChoices = ['Resistalovania', 'Resistalovania Mega Mix'];
-								listChoices = ['Resistalovania', 'Resistalovania (Mega Mix)'];
-							default:
-								songChoices = [];
-								listChoices = [];
-						}
-					}
-					else multisong = false;
+						songChoices = ['Resistance', 'Resistance-k', 'Resistance Awsome Mix', 'Resistance-kai'];
+						listChoices = ['Resistance', 'Resistance (Kyren Mix)', 'Resistance (Awsome Mix)', 'Resistance (Kai Mix)'];
+					case 'resistalovania':
+						multisong = true;
+						songChoices = ['Resistalovania', 'Resistalovania Mega Mix'];
+						listChoices = ['Resistalovania', 'Resistalovania (Mega Mix)'];
+					default:
+						multisong = false;
+						songChoices = [];
+						listChoices = [];
 				}
 
 				FlxTransitionableState.skipNextTransIn = false;

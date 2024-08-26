@@ -3,22 +3,19 @@
 	"difficulties": "Normal",
 	"hideFreeplay": false,
 	"weekBackground": "stage",
+	"weekBefore": "tutorial",
 	"freeplayColor": [
 		146,
 		113,
 		253
 	],
-	"weekBefore": "tutorial",
 	"startUnlocked": true,
-	"weekCharacters": [
-		"dad",
-		"bf",
-		"gf"
-	],
+	"category": "oneshots",
+	"hideStoryMode": false,
 	"songs": [
 		[
 			"Pack-A-Punch",
-			"Matt",
+			"matt",
 			[
 				255,
 				153,
@@ -27,7 +24,7 @@
 		],
 		[
 			"Driller",
-			"Matt",
+			"matt",
 			[
 				255,
 				153,
@@ -35,8 +32,11 @@
 			]
 		]
 	],
-	"hideStoryMode": false,
-	"category": "oneshots",
-	"weekName": "pack-a-punch",
-	"hiddenUntilUnlocked": false
+	"weekCharacters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"hiddenUntilUnlocked": false,
+	"weekName": "pack-a-punch"
 }

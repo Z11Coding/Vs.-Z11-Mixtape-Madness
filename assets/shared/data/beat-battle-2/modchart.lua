@@ -92,7 +92,8 @@ function onStepHit()
             end
         elseif eff == 'rotato' then
             if curStep % 8 == 0 then
-                queueEase(curStep, curStep+8, 'centerrotateZ', getValue('centerrotateZ', 0)+90, 'cubeOut', 0)
+                rotateArray = [0, 90, 180, 270];
+                queueEase(curStep, curStep+8, 'centerrotateZ', rotateArray[curStep % 64], 'cubeOut', 0)
             end
         end
     end

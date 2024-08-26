@@ -9,7 +9,6 @@ import shaders.ColorSwap;
 import shaders.RGBPalette;
 import shaders.RGBPalette.RGBShaderReference;
 
-import states.PlayState.Wife3;
 import haxe.io.Path;
 import flixel.math.FlxPoint;
 import math.Vector3;
@@ -229,12 +228,17 @@ class Note extends NoteObject
 	//This is needed for the hardcoded note types to appear on the Chart Editor,
 	//It's also used for backwards compatibility with 0.1 - 0.3.2 charts.
 	public static final defaultNoteTypes:Array<String> = [
-		'', //Always leave this one empty pls
+		'',
 		'Alt Animation',
 		'Hey!',
 		'Hurt Note',
 		'GF Sing',
-		'No Animation'
+		'No Animation',
+		'EX Note',
+		'GF Duet',
+		'Beatbox Note',
+		'Both Note',
+		'Both Alt Note'
 	];
 
 	public var extraData:Map<String, Dynamic> = new Map<String, Dynamic>();
@@ -267,11 +271,6 @@ class Note extends NoteObject
 	
 	public var noteType(default, set):String = null;  //the note type
 	public var causedMiss:Bool = false;
-/* 	public var hitbox:Float = Conductor.safeZoneOffset * Wife3.timeScale; // how far you can hit the note in ms
-	public var earlyHitMult:Float = 1; // multiplier to hitbox to hit this note early
-	public var lateHitMult:Float = 1; // multiplier to hitbox to hit this note late */
-	// ^^ this is now determined by the judgements
-
 	public var usesDefaultColours:Bool = true; // whether this note uses the default note colours (lets you change colours in options menu)
 
 	public var blockHit:Bool = false; // whether you can hit this note or not
@@ -281,7 +280,6 @@ class Note extends NoteObject
 	public var noteSplashHue:Float = 0; // hueshift for the notesplash, can be changed in note-type but otherwise its whatever the user sets in options
 	public var noteSplashSat:Float = 0; // ditto, but for saturation
 	public var noteSplashBrt:Float = 0; // ditto, but for brightness
-	//public var ratingDisabled:Bool = false; // disables judging this note
 	public var missHealth:Float = 0.0475; // health when you miss this note
 	public var texture(default, set):String = null; // texture for the note
 	public var noAnimation:Bool = false; // disables the animation for hitting this note

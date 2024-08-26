@@ -53,6 +53,7 @@ import sys.io.File;
 #end
 
 import backend.MusicBeatChartingState;
+import states.editors.content.*;
 
 @:access(flixel.sound.FlxSound._sound)
 @:access(openfl.media.Sound.__buffer)
@@ -439,8 +440,8 @@ class ChartingStateOG extends MusicBeatChartingState
 				splashSkin: 'noteSplashes',//idk it would crash if i didn't
 				player1: 'bf',
 				player2: 'bf',
-				player5: 'bf',
-				player4: 'bf',
+				player5: null,
+				player4: null,
 				gfVersion: 'gf',
 				speed: 1,
 				offset: 0,
@@ -2183,7 +2184,7 @@ class ChartingStateOG extends MusicBeatChartingState
 			notSaved = false;
 		}
 
-		if (FlxG.mouse.overlaps(curRenderedNotes) && !FlxG.mouse.justPressed) Cursor.cursorMode = Grabbing;
+		if (FlxG.mouse.overlaps(curRenderedNotes) && !FlxG.mouse.justPressed) Cursor.cursorMode = Pointer	;
 
 		if (FlxG.mouse.justPressed)
 		{
@@ -2229,16 +2230,15 @@ class ChartingStateOG extends MusicBeatChartingState
 				});
 			}
 		}
-			else
+		else
+		{
+			if (FlxG.mouse.x > gridBG.x
+				&& FlxG.mouse.x < gridBG.x + gridBG.width
+				&& FlxG.mouse.y > gridBG.y
+				&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
 			{
-				if (FlxG.mouse.x > gridBG.x
-					&& FlxG.mouse.x < gridBG.x + gridBG.width
-					&& FlxG.mouse.y > gridBG.y
-					&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
-				{
-					FlxG.log.add('added note');
-					addNote();
-				}
+				FlxG.log.add('added note');
+				addNote();
 			}
 		}
 
@@ -2306,7 +2306,7 @@ class ChartingStateOG extends MusicBeatChartingState
 				playtesting = true;
 				playtestingTime = Conductor.songPosition;
 				playtestingOnComplete = FlxG.sound.music.onComplete;
-				//openSubState(new states.editors.EditorPlayState(playbackSpeed));
+				openSubState(new EditorPlayState(cast _song.notes, [vocals, opponentVocals]));
 			}
 			else if (FlxG.keys.justPressed.ENTER)
 			{

@@ -502,7 +502,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 								noteHitCallback(daNote, this);
 						}
 					}
-					else if ((hitDiff + ClientPrefs.data.ratingOffset) <= (5 * (Wife3.timeScale > 1?1:Wife3.timeScale)) || hitDiff <= 0){
+					else if ((hitDiff + ClientPrefs.data.ratingOffset) <= (5 * 1) || hitDiff <= 0){
 						noteHitCallback(daNote, this);
 					}
 					
@@ -515,7 +515,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 				for (daNote in getNotes(i, (note:Note) -> !note.ignoreNote && !note.hitCausesMiss)){
 					if (!daNote.isSustainNote){
 						var hitDiff = Conductor.songPosition - daNote.strumTime;
-						if (isPlayer && (hitDiff + ClientPrefs.data.ratingOffset) >= (-5 * (Wife3.timeScale>1 ? 1 : Wife3.timeScale)) || hitDiff >= 0){
+						if (isPlayer && (hitDiff + ClientPrefs.data.ratingOffset) >= (-5 * 1) || hitDiff >= 0){
 							if (noteHitCallback!=null) noteHitCallback(daNote, this);
 						}
 					}
