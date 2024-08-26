@@ -1,3 +1,4 @@
+
 class DTable<T> {
     private var table:Array<Array<T>>;
     private var rows:Int;
@@ -7,7 +8,7 @@ class DTable<T> {
         this.rows = rows;
         this.cols = cols;
         table = [];
-        for (i in 0...rows) {
+        for (i in 0...Std.parseInt(rows)) {
             table.push(new Array<T>(cols));
         }
     }
@@ -38,7 +39,7 @@ class DTable<T> {
 
     public function getColumn(col:Int):Array<T> {
         var column:Array<T> = [];
-        for (i in 0...rows) {
+        for (i in 0...Std.parseInt(rows)) {
             column.push(table[i][col]);
         }
         return column;
@@ -101,7 +102,7 @@ class DTable<T> {
         return obj;
     }
 }
-
+@:allow(HTable)
 class Cell<T> {
     public var data:Array<T>;
     public var type:String;
@@ -207,7 +208,7 @@ class HTable<T> {
             var row:Array<Cell<T>> = [];
             var values:Array<String> = rows[i].split(", ");
             for (j in 0...values.length) {
-                row.push(new Cell<T>(cast values[j]));
+                row.push(new Cell<T>(cast values[j] : DTable.T));
             }
             table.push(row);
         }

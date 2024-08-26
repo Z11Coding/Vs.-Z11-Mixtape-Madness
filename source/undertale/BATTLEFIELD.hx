@@ -19,6 +19,34 @@ import undertale.MSOUL.DialogueHandler;
 import flixel.ui.FlxBar;
 class BATTLEFIELD extends MusicBeatState
 {
+        // Static variable to hold all sprites
+        public static var spriteHolder:Array<FlxSprite> = [];
+
+        // Method to add a sprite to the holder
+        public static function addSprite(sprite:FlxSprite, initialState:Dynamic = null):Void {
+            if (sprite != null) {
+                if (initialState != null) {
+                    // Set initial state if provided
+                    Reflect.setField(sprite, "initialState", initialState);
+                }
+                spriteHolder.push(sprite);
+                // Add sprite to the field (assuming add is a method to display the sprite)
+                add(sprite);
+            }
+        }
+    
+        // Method to remove a sprite from the holder
+        public static function removeSprite(sprite:FlxSprite):Void {
+            if (sprite != null) {
+                var index = spriteHolder.indexOf(sprite);
+                if (index != -1) {
+                    spriteHolder.splice(index, 1);
+                    // Remove sprite from the field (assuming remove is a method to delete the sprite)
+                    remove(sprite);
+                }
+            }
+        }
+        
     //Basic Stuff
     var box:FlxSprite;
     var boxB:FlxSprite;
@@ -798,12 +826,10 @@ class BATTLEFIELD extends MusicBeatState
             case 'test 2':
                 if (curTime % 20 == 0)
                 {
-                    var blaster = new Blaster(960, 400 /*+ FlxG.random.int(-100, 100)*/, 90, 270, 'ut/gasterintro', 'ut/gasterfire', 'blaster', 'beam');
-                    blaster.holdfire = 50;
+                    var blaster = new Blaster(960, 400, 90, 270, 'ut/gasterintro', 'ut/gasterfire', 'blaster', 'beam');
                     bulletGroup.add(blaster.sprite);
                     bulletGroup.add(blaster.beam);
                     sequence.addEvent(blaster);
-                    sequence.addEvent(blaster.beambp);
                 }
             default:
                 sequence.events = [];

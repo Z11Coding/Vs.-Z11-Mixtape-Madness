@@ -330,12 +330,27 @@ class EditorPlayState extends MusicBeatSubstate
 	{
 		startingSong = false;
 		FlxG.sound.music.onComplete = finishSong;
-		FlxG.sound.music.volume = vocals.volume = opponentVocals.volume = 1;
-
-		FlxG.sound.music.play();
-		vocals.play();
-		opponentVocals.play();
-		FlxG.sound.music.time = vocals.time = opponentVocals.time = startPos - Conductor.offset;
+		if (FlxG.sound.music != null) {
+			FlxG.sound.music.volume = 1;
+			FlxG.sound.music.play();
+		}
+		if (vocals != null) {
+			vocals.volume = 1;
+			vocals.play();
+		}
+		if (opponentVocals != null) {
+			opponentVocals.volume = 1;
+			opponentVocals.play();
+		}
+		if (FlxG.sound.music != null) {
+			FlxG.sound.music.time = startPos - Conductor.offset;
+		}
+		if (vocals != null) {
+			vocals.time = startPos - Conductor.offset;
+		}
+		if (opponentVocals != null) {
+			opponentVocals.time = startPos - Conductor.offset;
+		}
 
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
@@ -359,7 +374,15 @@ class EditorPlayState extends MusicBeatSubstate
 		var songData = PlayState.SONG;
 		Conductor.bpm = songData.bpm;
 
-		FlxG.sound.music.volume = vocals.volume = opponentVocals.volume = 0;
+		if (FlxG.sound.music != null) {
+			FlxG.sound.music.volume = 0;
+		}
+		if (vocals != null) {
+			vocals.volume = 0;
+		}
+		if (opponentVocals != null) {
+			opponentVocals.volume = 0;
+		}
 
 		notes = new FlxTypedGroup<Note>();
 		add(notes);

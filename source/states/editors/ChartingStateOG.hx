@@ -2212,6 +2212,23 @@ class ChartingStateOG extends MusicBeatChartingState
 					}
 				});
 			}
+		}
+		else if (FlxG.mouse.justPressedRight)
+		{
+			if (FlxG.mouse.overlaps(curRenderedNotes))
+			{
+				Cursor.cursorMode = Grabbing;
+				curRenderedNotes.forEachAlive(function(note:Note)
+				{
+					if (FlxG.mouse.overlaps(note))
+					{
+						selectNote(note);
+						curSelectedNote[3] = curNoteTypes[0];
+						updateGrid();
+					}
+				});
+			}
+		}
 			else
 			{
 				if (FlxG.mouse.x > gridBG.x
