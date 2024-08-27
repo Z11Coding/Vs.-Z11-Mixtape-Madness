@@ -2213,8 +2213,20 @@ class ChartingStateOG extends MusicBeatChartingState
 					}
 				});
 			}
+			else
+				{
+					if (FlxG.mouse.x > gridBG.x
+						&& FlxG.mouse.x < gridBG.x + gridBG.width
+						&& FlxG.mouse.y > gridBG.y
+						&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
+					{
+						FlxG.log.add('added note');
+						addNote();
+					}
+				}
 		}
-		else if (FlxG.mouse.justPressedRight)
+
+		if (FlxG.mouse.justPressedRight)
 		{
 			if (FlxG.mouse.overlaps(curRenderedNotes))
 			{
@@ -2223,24 +2235,13 @@ class ChartingStateOG extends MusicBeatChartingState
 				{
 					if (FlxG.mouse.overlaps(note))
 					{
-						selectNote(note);
 						curSelectedNote[3] = curNoteTypes[0];
 						updateGrid();
 					}
 				});
 			}
 		}
-		else
-		{
-			if (FlxG.mouse.x > gridBG.x
-				&& FlxG.mouse.x < gridBG.x + gridBG.width
-				&& FlxG.mouse.y > gridBG.y
-				&& FlxG.mouse.y < gridBG.y + (GRID_SIZE * getSectionBeats() * 4) * zoomList[curZoom])
-			{
-				FlxG.log.add('added note');
-				addNote();
-			}
-		}
+
 
 		var blockInput:Bool = false;
 		for (inputText in blockPressWhileTypingOn) {

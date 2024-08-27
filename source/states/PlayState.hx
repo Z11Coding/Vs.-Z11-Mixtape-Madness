@@ -6432,6 +6432,12 @@ case "Skip":
 					var skipTween:Bool = value2 == "true" ? true : false;
 					var prevNote1:Note = null;
 					var prevNote2:Note = null;
+
+					playfields.forEach(function(daPlayfield:PlayField)
+						{
+							for (note in allNotes)
+								daPlayfield.unqueue(note);
+						});
 	
 					if (value1.toLowerCase().trim() == "random") {
 						newMania = FlxG.random.int(0, 8);
@@ -6464,6 +6470,11 @@ case "Skip":
 							}
 							else if (prevNote2 != null && allNotes[i].isSustainNote) allNotes[i].noteData = prevNote2.noteData;
 						}
+						playfields.forEach(function(daPlayfield:PlayField)
+						{
+							for (note in allNotes)
+								daPlayfield.queue(note);
+						});
 					}
 					changeMania(newMania, skipTween, true);
 	
