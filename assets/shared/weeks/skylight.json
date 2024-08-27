@@ -1,0 +1,33 @@
+{
+	"storyName": "",
+	"difficulties": "Hard",
+	"weekBackground": "",
+	"hideFreeplay": false,
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"weekBefore": "tutorial",
+	"startUnlocked": true,
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"songs": [
+		[
+			"Skylight",
+			"grimbly",
+			[
+				220,
+				115,
+				48
+			]
+		]
+	],
+	"category": "remixes",
+	"hideStoryMode": false,
+	"hiddenUntilUnlocked": false,
+	"weekName": "Skylight"
+}

@@ -626,6 +626,7 @@ class CommandPrompt {
 			if (input == "$reset") {
 				print("Resetting game...");
 				var processChecker = new Process("MixEngine.exe", ["check"]);
+			}
 
             this.executeCommand(input);
         }

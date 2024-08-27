@@ -4,14 +4,10 @@ var abot:ABotSpeaker;
 
 function onCreatePost()
 {
-    var curLevel = Paths.currentLevel;
-
-    Paths.setCurrentLevel('weekend1');
     abot = new ABotSpeaker(game.gfGroup.x, game.gfGroup.y + 550);
     abot.x -= 80;
     abot.y -= 200;
-    abot.antialiasing = ClientPrefs.data.antialiasing;
-    Paths.setCurrentLevel(curLevel);
+    abot.antialiasing = ClientPrefs.data.globalAntialiasing;
 
     updateABotEye("dad", true);
     game.addBehindGF(abot);

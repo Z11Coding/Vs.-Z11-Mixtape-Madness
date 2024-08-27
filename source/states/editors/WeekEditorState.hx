@@ -696,7 +696,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 
 		iconInputText = new PsychUIInputText(10, bgColorStepperR.y + 70, 100, '', 8);
 
-		var decideIconColor:PsychUIButton = new PsychUIButton(iconInputText.x + 30, iconInputText.y, "Get Icon Color", function()
+		var decideIconColor:PsychUIButton = new PsychUIButton(iconInputText.x + 120, iconInputText.y, "Get Icon Color", function()
 		{
 			var coolColor:FlxColor = FlxColor.fromInt(CoolUtil.dominantColor(iconArray[curSelected]));
 			bgColorStepperR.value = coolColor.red;
@@ -721,6 +721,7 @@ class WeekEditorFreeplayState extends MusicBeatState implements PsychUIEventHand
 		tab_group.add(copyColor);
 		tab_group.add(pasteColor);
 		tab_group.add(iconInputText);
+		tab_group.add(decideIconColor);
 		tab_group.add(hideFreeplayCheckbox);
 	}
 

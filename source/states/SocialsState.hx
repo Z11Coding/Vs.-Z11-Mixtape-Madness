@@ -41,32 +41,11 @@ class SocialsState extends MusicBeatState
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
 			// Name - Icon name - Description - Link - HEX BG Color
 			[
-				'Discord',
+				'Psych Engine Discord',
 				'discord',
-				"BEAT!Engine's Discord Server!",
-				'https://discord.gg/CqWbjb6w',
+				"Join the Psych Ward!",
+				'https://discord.gg/2ka77eMXDv',
 				'5165F6'
-			],
-			[
-				'Twitter',
-				'twitter',
-				"BEAT!Engine's Twitter Account!",
-				'https://twitter.com/beat_engine',
-				'3DADE2'
-			],
-			[
-				'YouTube',
-				'youtube',
-				"BEAT!Engine's YouTube Channel!",
-				'https://youtu.be/VfmpFCe7SPA',
-				'DD0004',
-			],
-			[
-				'Github',
-				'github',
-				"BEAT!Engine's Github Page",
-				"https://github.com/Luisinhi010/BEAT-engine/",
-				"161C21"
 			]
 		];
 		
