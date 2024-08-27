@@ -88,6 +88,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 	public var AIPlayer:Bool = false; // if this playfield is played by the "AI" instead
 	public var keyCount(default, set):Int = 4; // How many lanes are in this field
 	public var autoPlayed(default, set):Bool = false; // if this playfield should be played automatically (botplay, opponent, etc)
+	public var isEditor:Bool = false;
 
     public var x:Float = 0;
     public var y:Float = 0;
@@ -146,6 +147,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 
 		////
 		noteField = new NoteField(this, modMgr);
+		//noteField.isEditor = isEditor;
 		//add(noteField);
 
 		// idk what haxeflixel does to regenerate the frames

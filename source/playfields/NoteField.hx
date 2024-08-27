@@ -73,6 +73,8 @@ class NoteField extends FieldBase
 	var curDecStep:Float = 0;
 	var curDecBeat:Float = 0;
 
+	public var isEditor:Bool = true;
+
 	final perspectiveArrDontUse:Array<String> = ['perspectiveDONTUSE'];
 
 	/**
@@ -415,7 +417,9 @@ class NoteField extends FieldBase
 		var strumDiff = (Conductor.songPosition - hold.strumTime);
 		var visualDiff = (Conductor.visualPosition - hold.visualTime); // TODO: get the start and end visualDiff and interpolate so that changing speeds mid-hold will look better
 		var zIndex:Float = basePos.z;
-		var sv = PlayState.instance.getSV(hold.strumTime).speed;
+		var sv;
+		if (isEditor) sv = states.editors.EditorPlayState.instance.getSV(hold.strumTime).speed / 2;
+		else sv = PlayState.instance.getSV(hold.strumTime).speed;
 		var scalePoint = FlxPoint.weak(1, 1);
 
 		for (sub in 0...holdSubdivisions)

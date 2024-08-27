@@ -2307,7 +2307,7 @@ class ChartingStateOG extends MusicBeatChartingState
 				playtesting = true;
 				playtestingTime = Conductor.songPosition;
 				playtestingOnComplete = FlxG.sound.music.onComplete;
-				openSubState(new EditorPlayState(cast _song.notes, [vocals, opponentVocals]));
+				openSubState(new states.editors.EditorPlayState(playbackSpeed));
 			}
 			else if (FlxG.keys.justPressed.ENTER)
 			{

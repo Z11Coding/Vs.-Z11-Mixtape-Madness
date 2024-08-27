@@ -1187,6 +1187,7 @@ class PlayState extends MusicBeatState
 		playerField = new PlayField(modManager);
 		playerField.modNumber = 0;
 		playerField.characters = [];
+		playerField.noteField.isEditor = false;
 		for (n => ch in boyfriendMap)
 			playerField.characters.push(ch);
 		for (n => ch in boyfriendMap2)
@@ -1202,6 +1203,7 @@ class PlayState extends MusicBeatState
 		dadField.AIPlayer = AIMode;
 		dadField.modNumber = 1;
 		dadField.characters = [];
+		dadField.noteField.isEditor = false;
 		for (n => ch in dadMap)
 			dadField.characters.push(ch);
 		for (n => ch in dadMap2)
@@ -3274,11 +3276,11 @@ if (result < 0 || result > mania) {
 								}
 								daNoteData = Std.int(Math.max(0, Math.min(daNoteData, mania - 1)));
 
-case "Skip":
-	var skipStep = 2; // Define the step size for skipping notes.
-	var randomLane = Math.random() < 0.5 ? prevNoteData : (prevNoteData + skipStep) % mania;
-	var randomDuration = Math.random() * 30; // Randomize the duration before switching lanes (in notes).
-	daNoteData = randomLane;
+					case "Skip":
+						var skipStep = 2; // Define the step size for skipping notes.
+						var randomLane = Math.random() < 0.5 ? prevNoteData : (prevNoteData + skipStep) % mania;
+						var randomDuration = Math.random() * 30; // Randomize the duration before switching lanes (in notes).
+						daNoteData = randomLane;
 					case "Flip":
 						if (gottaHitNote)
 						{
@@ -6434,10 +6436,10 @@ case "Skip":
 					var prevNote2:Note = null;
 
 					playfields.forEach(function(daPlayfield:PlayField)
-						{
-							for (note in allNotes)
-								daPlayfield.unqueue(note);
-						});
+					{
+						for (note in allNotes)
+							daPlayfield.unqueue(note);
+					});
 	
 					if (value1.toLowerCase().trim() == "random") {
 						newMania = FlxG.random.int(0, 8);

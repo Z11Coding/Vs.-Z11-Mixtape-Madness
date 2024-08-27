@@ -46,6 +46,8 @@ class EditorPlayState extends MusicBeatSubstate
 	public var notefields = new NotefieldManager();
 	public var playfields = new FlxTypedGroup<PlayField>();
 	public var allNotes:Array<Note> = []; // all notes
+
+	public static var instance:EditorPlayState;
 	
 	var songHits:Int = 0;
 	var songMisses:Int = 0;
@@ -87,6 +89,7 @@ class EditorPlayState extends MusicBeatSubstate
 		Conductor.songPosition = startPos;
 
 		playbackRate = FlxG.sound.music.pitch;
+		instance = this;
 	}
 
 	override function create()
@@ -122,11 +125,13 @@ class EditorPlayState extends MusicBeatSubstate
 		
 		playerField.isPlayer = true;
 		playerField.autoPlayed = false;
+		playerField.isEditor = true;
 		playerField.noteHitCallback = goodNoteHit;
 
 		dadField = new PlayField(modManager);
 		dadField.isPlayer = false;
 		dadField.autoPlayed = true;
+		dadField.isEditor = true;
 		dadField.modNumber = 1;
 		dadField.characters = [];
 		dadField.noteHitCallback = opponentNoteHit;
@@ -727,7 +732,7 @@ class EditorPlayState extends MusicBeatSubstate
 	private function onKeyPress(event:KeyboardEvent):Void
 	{
 		var eventKey:FlxKey = event.keyCode;
-		var key:Int = PlayState.instance.getKeyFromEvent(eventKey);
+		var key:Int = getKeyFromEvent(eventKey);
 		//trace('Pressed: ' + eventKey);
 
 		if (key > -1)
@@ -762,10 +767,29 @@ class EditorPlayState extends MusicBeatSubstate
 		}
 	}
 
+	public function getKeyFromEvent(key:FlxKey):Int
+	{
+		// var tempKeys:Array<Dynamic> = backend.Keybinds.fill();
+		if (key != NONE)
+		{
+			for (i in 0...keysArray[PlayState.mania].length)
+			{
+				for (j in 0...keysArray[PlayState.mania][i].length)
+				{
+					if (key == keysArray[PlayState.mania][i][j])
+					{
+						return i;
+					}
+				}
+			}
+		}
+		return -1;
+	}
+
 	private function onKeyRelease(event:KeyboardEvent):Void
 	{
 		var eventKey:FlxKey = event.keyCode;
-		var key:Int = PlayState.instance.getKeyFromEvent(eventKey);
+		var key:Int = getKeyFromEvent(eventKey);
 		//trace('Pressed: ' + eventKey);
 
 		if (key > -1)
