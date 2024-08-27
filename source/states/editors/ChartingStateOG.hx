@@ -2235,6 +2235,7 @@ class ChartingStateOG extends MusicBeatChartingState
 				{
 					if (FlxG.mouse.overlaps(note))
 					{
+						selectNote(note);
 						curSelectedNote[3] = curNoteTypes[0];
 						updateGrid();
 					}
