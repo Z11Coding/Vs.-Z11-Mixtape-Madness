@@ -1,127 +1,87 @@
 {
 	"animations": [
 		{
-			"offsets": [
-				0,
-				0
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [0, 0],
 			"anim": "idle",
-			"indices": [],
-			"name": "ohagi_idle"
+			"fps": 24,
+			"name": "ohagi_idle",
+			"indices": []
 		},
 		{
-			"offsets": [
-				21,
-				-12
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [21, -12],
 			"anim": "singLEFT",
-			"indices": [],
-			"name": "ohagi_left"
+			"fps": 24,
+			"name": "ohagi_left",
+			"indices": []
 		},
 		{
-			"offsets": [
-				70,
-				-30
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [70, -30],
 			"anim": "singLEFT-alt",
-			"indices": [],
-			"name": "ohagi_hidari"
+			"fps": 24,
+			"name": "ohagi_hidari",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-15,
-				-7
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [-15, -7],
 			"anim": "singRIGHT",
-			"indices": [],
-			"name": "ohagi_right"
+			"fps": 24,
+			"name": "ohagi_right",
+			"indices": []
 		},
 		{
-			"offsets": [
-				51,
-				-24
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [51, -24],
 			"anim": "singRIGHT-alt",
-			"indices": [],
-			"name": "ohagi_migi"
+			"fps": 24,
+			"name": "ohagi_migi",
+			"indices": []
 		},
 		{
-			"offsets": [
-				15,
-				-41
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [15, -41],
 			"anim": "singDOWN",
-			"indices": [],
-			"name": "ohagi_down"
+			"fps": 24,
+			"name": "ohagi_down",
+			"indices": []
 		},
 		{
-			"offsets": [
-				37,
-				-74
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [37, -74],
 			"anim": "singDOWN-alt",
-			"indices": [],
-			"name": "ohagi_shita"
+			"fps": 24,
+			"name": "ohagi_shita",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-9,
-				74
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [-9, 74],
 			"anim": "singUP",
-			"indices": [],
-			"name": "ohagi_up"
+			"fps": 24,
+			"name": "ohagi_up",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-15,
-				76
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [-15, 76],
 			"anim": "singUP-alt",
-			"indices": [],
-			"name": "ohagi_ue"
+			"fps": 24,
+			"name": "ohagi_ue",
+			"indices": []
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/ohagi_p2",
-	"position": [
-		-180,
-		-150
-	],
-	"healthicon": "ohagi",
+	"position": [-180, -150],
+	"healthicon": "icons-ohagi",
 	"flip_x": false,
-	"healthbar_colors": [
-		255,
-		185,
-		74
-	],
-	"healthbar_colors_alt": [
-		177,
-		84,
-		36
-	],
-	"camera_position": [
-		50,
-		40
-	],
+	"healthbar_colors": [255, 185, 74],
+	"camera_position": [50, 40],
 	"sing_duration": 4.5,
-	"scale": 1
+	"scale": 1,
+	"_editor_isPlayer": false
 }

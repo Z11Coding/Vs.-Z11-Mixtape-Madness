@@ -1,133 +1,95 @@
 {
 	"animations": [
 		{
-			"offsets": [
-				0,
-				0
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [0, 0],
 			"anim": "idle",
-			"indices": [],
-			"name": "Z_idle"
+			"fps": 24,
+			"name": "Z_idle",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-46,
-				27
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [-46, 27],
 			"anim": "singDOWN",
-			"indices": [],
-			"name": "Z_down"
+			"fps": 24,
+			"name": "Z_down",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-88,
-				45
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [-88, 45],
 			"anim": "singUP",
-			"indices": [],
-			"name": "Z_up"
+			"fps": 24,
+			"name": "Z_up",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-45,
-				-39
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [-45, -39],
 			"anim": "idle-alt",
-			"indices": [],
-			"name": "alt_Z_idle"
+			"fps": 24,
+			"name": "alt_Z_idle",
+			"indices": []
 		},
 		{
-			"offsets": [
-				62,
-				-22
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [62, -22],
 			"anim": "singDOWN-alt",
-			"indices": [],
-			"name": "alt_Z_down"
+			"fps": 24,
+			"name": "alt_Z_down",
+			"indices": []
 		},
 		{
-			"offsets": [
-				161,
-				52
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [161, 52],
 			"anim": "singUP-alt",
-			"indices": [],
-			"name": "alt_Z_up"
+			"fps": 24,
+			"name": "alt_Z_up",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-32,
-				11
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [-32, 11],
 			"anim": "singLEFT",
-			"indices": [],
-			"name": "Z_right"
+			"fps": 24,
+			"name": "Z_right",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-126,
-				30
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [-126, 30],
 			"anim": "singRIGHT",
-			"indices": [],
-			"name": "Z_left"
+			"fps": 24,
+			"name": "Z_left",
+			"indices": []
 		},
 		{
-			"offsets": [
-				420,
-				-22
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [420, -22],
 			"anim": "singLEFT-alt",
-			"indices": [],
-			"name": "alt_Z_right"
+			"fps": 24,
+			"name": "alt_Z_right",
+			"indices": []
 		},
 		{
-			"offsets": [
-				328,
-				-27
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [328, -27],
 			"anim": "singRIGHT-alt",
-			"indices": [],
-			"name": "alt_Z_left"
+			"fps": 24,
+			"name": "alt_Z_left",
+			"indices": []
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": false,
 	"image": "characters/Z_assest",
-	"position": [
-		-60,
-		-50
-	],
-	"healthicon": "z11-playable",
+	"position": [-60, -50],
+	"healthicon": "Z_icon",
 	"flip_x": false,
-	"healthbar_colors": [
-		95,
-		60,
-		155
-	],
-	"camera_position": [
-		0,
-		-220
-	],
+	"healthbar_colors": [95, 60, 155],
+	"camera_position": [0, -220],
 	"sing_duration": 6.1,
-	"scale": 1.7
+	"scale": 1.7,
+	"_editor_isPlayer": true
 }
