@@ -672,10 +672,10 @@ class NoteField extends FieldBase
 			var len:Int = e.message.indexOf('\n') + 1;
 			if(len <= 0) len = e.message.length;
 			#if windows
-			lime.app.Application.current.window.alert('ERROR: ' + e.message.substr(0, len), 'Error Loading!');
+			lime.app.Application.current.window.alert('ERROR: ' + e.message.substr(0, len)+'\nChances are your noteskin broke if you\'re reading this', 'Error Loading!');
 			Sys.exit(0);
 			#else
-			throw 'Error: '+e;
+			throw 'Error: '+e+'\nChances are your noteskin broke something if you\'re reading this';
 			#end
 			return null;
 		}

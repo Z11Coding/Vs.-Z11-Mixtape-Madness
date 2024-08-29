@@ -3567,7 +3567,7 @@ if (result < 0 || result > mania) {
 				swagNote.mustPress = gottaHitNote;
 				swagNote.sustainLength = songNotes[2];
 				swagNote.gfNote = section.gfSection;
-				swagNote.animSuffix = section.altAnim ? '-alt' : '';
+				//swagNote.animSuffix = section.altAnim ? '-alt' : '';
 				swagNote.noteType = type;
 				swagNote.noteIndex = noteIndex++;
 				if (!Std.isOfType(songNotes[3], String))
@@ -8527,8 +8527,6 @@ if (result < 0 || result > mania) {
 		if (!note.noAnimation)
 		{
 			var animToPlay:String = 'sing' + Note.keysShit.get(mania).get('anims')[Std.int(Math.abs(note.noteData))];
-
-			var curSection = SONG.notes[curSection];
 			animToPlay += note.animSuffix;
 
 			/*for(char in chars){

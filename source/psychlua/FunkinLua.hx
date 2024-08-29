@@ -1653,7 +1653,7 @@ class FunkinLua {
 		CustomSubstate.implement(this);
 		ShaderFunctions.implement(this);
 		DeprecatedFunctions.implement(this);
-
+		
 		for (name => func in customFunctions)
 		{
 			if(func != null)

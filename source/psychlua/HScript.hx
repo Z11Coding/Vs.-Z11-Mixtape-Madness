@@ -9,8 +9,6 @@ import psychlua.CustomSubstate;
 import psychlua.FunkinLua;
 #end
 
-import modchart.SubModifier;
-
 #if HSCRIPT_ALLOWED
 import crowplexus.iris.Iris;
 
@@ -328,108 +326,6 @@ class HScript extends Iris
 			set('addBehindDad', PlayState.instance.addBehindDad);
 			set('addBehindBF', PlayState.instance.addBehindBF);
 		}
-
-        //Troll Engine Hscript Functions
-		set("NoteObject", objects.NoteObject);
-		set("PlayField", playfields.PlayField);
-		set("NoteField", playfields.NoteField);
-		set("ProxyField", proxies.ProxyField);
-		set("ProxySprite", proxies.ProxySprite);
-		set("ModManager", modchart.ModManager);
-		set("Modifier", modchart.Modifier);
-		set("SubModifier", modchart.SubModifier);
-		set("NoteModifier", modchart.NoteModifier);
-		set("EventTimeline", modchart.EventTimeline);
-		set("StepCallbackEvent", modchart.events.StepCallbackEvent);
-		set("CallbackEvent", modchart.events.CallbackEvent);
-		set("ModEvent", modchart.events.ModEvent);
-		set("EaseEvent", modchart.events.EaseEvent);
-		set("SetEvent", modchart.events.SetEvent);
-
-        // TODO: create a compatibility wrapper for the various versions
-		// (so you can use any version of hxcodec and use the same versions)
-		#if !VIDEOS_ALLOWED
-		set("hxcodec", "0");
-		set("MP4Handler", null);
-		set("MP4Sprite", null);
-		#elseif (hxCodec >= "3.0.0")
-		set("hxcodec", "3.0.0");
-		set("MP4Handler", hxcodec.flixel.FlxVideo);
-		set("MP4Sprite", hxcodec.flixel.FlxVideoSprite); // idk how hxcodec 3.0.0 works :clueless:
-		#elseif (hxCodec >= "2.6.1")
-		set("hxcodec", "2.6.1");
-		set("MP4Handler", hxcodec.VideoHandler);
-		set("MP4Sprite", hxcodec.VideoSprite);
-		#elseif (hxCodec == "2.6.0")
-		set("hxcodec", "2.6.0");
-		set("MP4Handler", VideoHandler);
-		set("MP4Sprite", VideoSprite);
-		#elseif (hxCodec)
-		set("hxcodec", "1.0.0");
-		set("MP4Handler", vlc.MP4Handler);
-		set("MP4Sprite", vlc.MP4Sprite);
-		#end
-
-        set("modMgr", PlayState.instance.modManager);
-		set("setPercent", function(modName:String, val:Float, player:Int = -1)
-		{
-			PlayState.instance.modManager.setPercent(modName, val, player);
-		});
-
-		set("addBlankMod", function(modName:String, defaultVal:Float = 0, player:Int = -1)
-		{
-			PlayState.instance.modManager.quickRegister(new SubModifier(modName, PlayState.instance.modManager));
-			PlayState.instance.modManager.setValue(modName, defaultVal);
-		});
-
-		set("setValue", function(modName:String, val:Float, player:Int = -1)
-		{
-			PlayState.instance.modManager.setValue(modName, val, player);
-		});
-
-		set("getPercent", function(modName:String, player:Int)
-		{
-			return PlayState.instance.modManager.getPercent(modName, player);
-		});
-
-		set("getValue", function(modName:String, player:Int)
-		{
-			return PlayState.instance.modManager.getValue(modName, player);
-		});
-
-		set("queueSet", 
-		function(step:Float, modName:String, target:Float, player:Int = -1)
-			{
-				PlayState.instance.modManager.queueSet(step, modName, target, player);
-			}
-		);
-
-		set("queueSetP", 
-			function(step:Float, modName:String, perc:Float, player:Int = -1)
-			{
-				PlayState.instance.modManager.queueSetP(step, modName, perc, player);
-			}
-		);
-
-		set("queueEase",
-			function(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1, ?startVal:Float) // lua is autistic and can only accept 5 args
-			{
-				PlayState.instance.modManager.queueEase(step, endStep, modName, percent, style, player, startVal);
-			}
-		);
-
-		set("queueEaseP",
-			function(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1, ?startVal:Float) // lua is autistic and can only accept 5 args
-			{
-				PlayState.instance.modManager.queueEaseP(step, endStep, modName, percent, style, player, startVal);
-			}
-		);
-
-		//Base game things
-		set("FlxPoint", {
-			get: FlxPoint.get,
-			weak: FlxPoint.weak
-		});
 	}
 
 	public function executeCode(?funcToRun:String = null, ?funcArgs:Array<Dynamic> = null):IrisCall {

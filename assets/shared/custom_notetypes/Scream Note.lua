@@ -1,7 +1,7 @@
 function onUpdatePost()
     for i = 0, getProperty("notes.length")-1 do
         if getPropertyFromGroup('notes', i, 'noteType') == 'Scream Note' then
-            setPropertyFromGroup("notes", i, 'texture', 'SCREAMNOTE')
+            setPropertyFromGroup("notes", i, 'texture', 'noteskins/SCREAMNOTE')
         end
     end
 end

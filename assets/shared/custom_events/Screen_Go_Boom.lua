@@ -1,5 +1,5 @@
 function onCreate()
-    makeAnimatedLuaSprite("Glass_Effect", "Glass_Boom", 0, 0)
+    makeAnimatedLuaSprite("Glass_Effect", "effects/Glass_Boom", 0, 0)
     addAnimationByPrefix("Glass_Effect", "Break", "Break", 20, false)
     addLuaSprite("Glass_Effect")
     setObjectCamera("Glass_Effect", "other")
