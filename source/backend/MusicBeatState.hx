@@ -185,6 +185,7 @@ class MusicBeatState extends FlxState
 			PlayState.storyPlaylist = songs.map(function(song:SwagSong):String {
 				return song.song;
 			});
+			PlayState.SONG = null;
 		} else {
 			// songsInput is a String when storyMode is false
 			var songLowercase:String = Paths.formatToSongPath(storyPlaylist[0]);
@@ -203,7 +204,7 @@ class MusicBeatState extends FlxState
 				FlxG.switchState(new PlayState());
 				
 			case "MusicBeatState":
-				FlxG.switchState(new MusicBeatState());
+				switchState(new PlayState());
 				
 			case "TransitionState":
 				TransitionState.transitionState(PlayState, {
