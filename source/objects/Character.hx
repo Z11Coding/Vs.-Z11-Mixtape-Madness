@@ -329,12 +329,8 @@ class Character extends FlxSprite
 								var canHitNote = false;
 								if(animationNotes[0][1] > (Note.ammo[PlayState.mania] - 1)) 
 								{
-									canHitNote = true;
 									noteData = Std.int(animationNotes[0][1] % Note.ammo[PlayState.mania]);
 								}
-								else 
-									canHitNote = false;
-	
 								var animToPlay:String = 'sing'+Note.keysShit.get(PlayState.mania).get('anims')[Std.int(Math.abs(noteData))];
 								//animToPlay += animationNotes[0].animSuffix;
 								if (canHitNote) playAnim(animToPlay, true);
@@ -352,12 +348,8 @@ class Character extends FlxSprite
 								var canHitNote = false;
 								if (animationNotes[0][1] < (Note.ammo[PlayState.mania]))
 								{ 
-									canHitNote = true;
 									noteData = Std.int(animationNotes[0][1] % Note.ammo[PlayState.mania]);
 								}
-								else 
-									canHitNote = false;
-	
 								var animToPlay:String = 'sing'+Note.keysShit.get(PlayState.mania).get('anims')[Std.int(Math.abs(noteData))];
 								//animToPlay += animationNotes[0].animSuffix;
 								if (canHitNote) playAnim(animToPlay, true);

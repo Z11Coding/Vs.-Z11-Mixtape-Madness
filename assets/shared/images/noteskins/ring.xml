@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="ring.png">
+<SubTexture name="arrowSPACE0000" x="158" y="229" width="149" height="150" frameX="0" frameY="0" frameWidth="150" frameHeight="150" />
+<SubTexture name="A0000" x="424" y="0" width="149" height="150" frameX="0" frameY="0" frameWidth="150" frameHeight="150" />
+<SubTexture name="B0000" x="424" y="0" width="149" height="150" frameX="0" frameY="0" frameWidth="150" frameHeight="150" />
+<SubTexture name="C0000" x="424" y="0" width="149" height="150" frameX="0" frameY="0" frameWidth="150" frameHeight="150" />
+<SubTexture name="D0000" x="424" y="0" width="149" height="150" frameX="0" frameY="0" frameWidth="150" frameHeight="150" />
+<SubTexture name="A tail0000" x="424" y="150" width="50" height="64" frameX="0" frameY="0" frameWidth="50" frameHeight="64" />
+<SubTexture name="A hold0000" x="474" y="150" width="50" height="44" frameX="0" frameY="0" frameWidth="50" frameHeight="44" />
+<SubTexture name="B tail0000" x="424" y="150" width="50" height="64" frameX="0" frameY="0" frameWidth="50" frameHeight="64" />
+<SubTexture name="B hold0000" x="474" y="150" width="50" height="44" frameX="0" frameY="0" frameWidth="50" frameHeight="44" />
+<SubTexture name="C tail0000" x="424" y="150" width="50" height="64" frameX="0" frameY="0" frameWidth="50" frameHeight="64" />
+<SubTexture name="C hold0000" x="474" y="150" width="50" height="44" frameX="0" frameY="0" frameWidth="50" frameHeight="44" />
+<SubTexture name="D tail0000" x="424" y="150" width="50" height="64" frameX="0" frameY="0" frameWidth="50" frameHeight="64" />
+<SubTexture name="D hold0000" x="474" y="150" width="50" height="44" frameX="0" frameY="0" frameWidth="50" frameHeight="44" />
+<SubTexture name="space confirm0000" x="0" y="0" width="224" height="229" frameX="-4" frameY="0" frameWidth="233" frameHeight="234" />
+<SubTexture name="space confirm0001" x="224" y="0" width="200" height="200" frameX="-14" frameY="-15" frameWidth="233" frameHeight="234" />
+<SubTexture name="space confirm0002" x="224" y="0" width="200" height="200" frameX="-14" frameY="-14" frameWidth="233" frameHeight="234" />
+<SubTexture name="space confirm0003" x="224" y="0" width="200" height="200" frameX="-14" frameY="-14" frameWidth="233" frameHeight="234" />
+<SubTexture name="space confirm0004" x="224" y="0" width="200" height="200" frameX="-14" frameY="-14" frameWidth="233" frameHeight="234" />
+<SubTexture name="space press0000" x="0" y="388" width="150" height="150" frameX="-4" frameY="-4" frameWidth="158" frameHeight="159" />
+<SubTexture name="space press0001" x="0" y="388" width="150" height="150" frameX="-4" frameY="-4" frameWidth="158" frameHeight="159" />
+<SubTexture name="space press0002" x="0" y="229" width="158" height="159" frameX="0" frameY="0" frameWidth="158" frameHeight="159" />
+<SubTexture name="space press0003" x="0" y="229" width="158" height="159" frameX="0" frameY="0" frameWidth="158" frameHeight="159" />
+</TextureAtlas>

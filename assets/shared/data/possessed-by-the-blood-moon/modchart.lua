@@ -511,7 +511,7 @@ function onUpdatePost()
     hudZoom = getProperty("camHUD.zoom")
     for i = 0, getProperty("notes.length")-1 do
         if not getPropertyFromGroup("notes", i, 'mustPress') then
-            setPropertyFromGroup("notes", i, 'texture', 'PIXEL')
+            setPropertyFromGroup("notes", i, 'texture', 'noteskins/PIXEL')
         end
     end
     for i = 0, getProperty('dadField.strumNotes.length') - 1 do
@@ -524,7 +524,7 @@ function onUpdatePost()
     setProperty("camGame.y", (((screenHeight - getProperty("camGame.height")) / 2) + math.random(-getValue("hudShake") * hudZoom, getValue("hudShake") * hudZoom) / 10000) * getProperty("camGame.height"))
 end
 
-function postReceptorGeneration()
+function onModifierRegisterPost()
     if not middlescroll and difficultyName == "NITG" or difficultyName == "POSSESSED" then
         setValue('transformX', 325, 1)
         setValue('transformX', -325, 0)
@@ -532,6 +532,7 @@ function postReceptorGeneration()
         setValue('transformX', 325, 1)
         setValue('transformX', -325, 0)
         setValue('alpha', 1, 1)
+        setValue('noteAlpha', 1, 1)
     end
     setProperty('dadField.inControl', true)
     setProperty('dadField.isPlayer', true)
@@ -555,9 +556,7 @@ function postReceptorGeneration()
         game.add(savingGrace2);
         game.variables.set("savingGrace2", savingGrace2);
     ]])
-end
-
-function onModifierRegisterPost()
+    
     addBlankMod("haloRadiusX", 0)
     addBlankMod("haloRadiusZ", 0)
     addBlankMod("haloSpeed", 0)

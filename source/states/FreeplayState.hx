@@ -82,6 +82,8 @@ class FreeplayState extends MusicBeatState
 	];
 	var rank:FlxSprite = new FlxSprite(0).loadGraphic(Paths.image('rankings/NA'));
 
+	public static var allowedSongs:Array<String> = [];
+
 	override function create()
 	{
 		curSelected = 0; //so it doesn't do weird things. might rework later
@@ -274,6 +276,8 @@ class FreeplayState extends MusicBeatState
 				searchBar.updateHitbox();
 		}});
 
+		if (CategoryState.loadWeekForce == 'secrets') reloadSongs(CategoryState.loadWeekForce);
+
 		/*if (archipelago)
 		{ 
 			var playButton = new FlxButton(0, 0, "Get Random Song", onAddSong);
@@ -304,7 +308,7 @@ class FreeplayState extends MusicBeatState
 		return (!leWeek.startUnlocked && leWeek.weekBefore.length > 0 && (!StoryMenuState.weekCompleted.exists(leWeek.weekBefore) || !StoryMenuState.weekCompleted.get(leWeek.weekBefore)));
 	}
 
-	function reloadSongs()
+	function reloadSongs(?category:String = null)
 	{
 		grpSongs.clear();
 		songs = [];
@@ -332,7 +336,22 @@ class FreeplayState extends MusicBeatState
 			WeekData.setDirectoryFromWeek(leWeek);
 			for (song in leWeek.songs)
 			{
-				if (Std.string(song[0]).toLowerCase().trim().contains(searchBar.text.toLowerCase().trim()))
+				if (category != null && category == 'secrets')
+				{
+					for (a in 0...allowedSongs.length)
+					{
+						if (Std.string(song[0]).toLowerCase().trim().contains(allowedSongs[i]))
+						{
+							var colors:Array<Int> = song[2];
+							if(colors == null || colors.length < 3)
+							{
+								colors = [146, 113, 253];
+							}
+							addSong(song[0], i, song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2]));
+						}
+					}
+				}
+				else if (Std.string(song[0]).toLowerCase().trim().contains(searchBar.text.toLowerCase().trim()))
 				{
 					var colors:Array<Int> = song[2];
 					if(colors == null || colors.length < 3)
@@ -394,10 +413,13 @@ class FreeplayState extends MusicBeatState
 		{
 			case 'resistance':
 				diffText.visible = false;
+				multisong = true;
 			case 'resistalovania':
 				diffText.visible = false;
+				multisong = true;
 			default:
 				diffText.visible = true;
+				multisong = false;
 		}
 
 		if (FlxG.sound.music != null)
@@ -676,57 +698,73 @@ class FreeplayState extends MusicBeatState
 				switch(songLowercase)
 				{
 					case 'resistance':
-						multisong = true;
 						songChoices = ['Resistance', 'Resistance-k', 'Resistance Awsome Mix', 'Resistance-kai'];
 						listChoices = ['Resistance', 'Resistance (Kyren Mix)', 'Resistance (Awsome Mix)', 'Resistance (Kai Mix)'];
 					case 'resistalovania':
-						multisong = true;
 						songChoices = ['Resistalovania', 'Resistalovania Mega Mix'];
 						listChoices = ['Resistalovania', 'Resistalovania (Mega Mix)'];
 					default:
-						multisong = false;
 						songChoices = [];
 						listChoices = [];
 				}
 
 				FlxTransitionableState.skipNextTransIn = false;
 				FlxTransitionableState.skipNextTransOut = false;
-				try
+				if (!multisong)
 				{
-					Song.loadFromJson(poop, songLowercase);
-					PlayState.isStoryMode = false;
-					PlayState.storyDifficulty = curDifficulty;
+					try
+					{
+						if (songLowercase == "song not found")
+						{
+							Song.loadFromJson('eternity-song-not-found', 'eternity');
+							PlayState.isStoryMode = false;
+							PlayState.storyDifficulty = curDifficulty;
 
-					trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
-				}
-				catch(e:Dynamic)
-				{
-					trace('ERROR! $e');
+							trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
+						}
+						else
+						{
+							Song.loadFromJson(poop, songLowercase);
+							PlayState.isStoryMode = false;
+							PlayState.storyDifficulty = curDifficulty;
 
-					var errorStr:String = e.toString();
-					if(errorStr.startsWith('[file_contents,assets/data/')) errorStr = 'Missing file: ' + errorStr.substring(34, errorStr.length-1); //Missing chart
-					missingText.text = 'ERROR WHILE LOADING CHART:\n$errorStr';
-					missingText.screenCenter(Y);
-					missingText.visible = true;
-					missingTextBG.visible = true;
-					FlxG.sound.play(Paths.sound('cancelMenu'));
+							trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
+						}
+					}
+					catch(e:Dynamic)
+					{
+						trace('ERROR! $e');
 
-					updateTexts(elapsed);
-					super.update(elapsed);
-					return;
-				}
+						var errorStr:String = e.toString();
+						if(errorStr.startsWith('[file_contents,assets/data/')) errorStr = 'Missing file: ' + errorStr.substring(34, errorStr.length-1); //Missing chart
+						missingText.text = 'ERROR WHILE LOADING CHART:\n$errorStr';
+						missingText.screenCenter(Y);
+						missingText.visible = true;
+						missingTextBG.visible = true;
+						FlxG.sound.play(Paths.sound('cancelMenu'));
+
+						updateTexts(elapsed);
+						super.update(elapsed);
+						return;
+					}
 				
-				if (FlxG.keys.pressed.SHIFT){
-					TransitionState.transitionState(ChartingStateOG, {transitionType: "stickers"});
-				} else if (multisong) {
+					if (FlxG.keys.pressed.SHIFT){
+						TransitionState.transitionState(ChartingStateOG, {transitionType: "stickers"});
+					} else{
+						if (!CacheState.didPreCache)
+						{
+							LoadingState.prepareToSong();
+							LoadingState.loadAndSwitchState(new PlayState());
+						}
+						else TransitionState.transitionState(PlayState, {transitionType: "stickers"});
+						#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
+						stopMusicPlay = true;
+					}
+				}
+				else {
 					substates.DiffSubState.songChoices = songChoices;
 					substates.DiffSubState.listChoices = listChoices;
 					openSubState(new substates.DiffSubState());
-				}else{
-					LoadingState.prepareToSong();
-					LoadingState.loadAndSwitchState(new PlayState());
-					#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
-					stopMusicPlay = true;
 				}
 
 				FlxG.sound.music.volume = 0;
@@ -909,7 +947,7 @@ class FreeplayState extends MusicBeatState
 		{
 			Mods.currentModDirectory = songs[curSelected].folder;
 			PlayState.storyWeek = songs[curSelected].week;
-			Difficulty.loadFromWeek();
+			try {Difficulty.loadFromWeek();} catch(e:Dynamic) {}
 		}
 		
 		var savedDiff:String = songs[curSelected].lastDifficulty;
@@ -949,7 +987,6 @@ class FreeplayState extends MusicBeatState
 			Difficulty.list = ['SONG NOT FOUND'];
 			curDifficulty = 0;
 			addSong('SONG NOT FOUND', -999, 'face', FlxColor.fromRGB(255, 255, 255));
-			songs = [new SongMetadata('SONG NOT FOUND', -999, 'face', FlxColor.fromRGB(255, 255, 255))];
 		}
 
 		changeDiff();

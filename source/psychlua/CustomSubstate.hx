@@ -50,8 +50,8 @@ class CustomSubstate extends MusicBeatSubstate
 	{
 		if(instance != null)
 		{
-			var tagObject:FlxObject = cast (MusicBeatState.getVariables().get(tag), FlxObject);
-			#if LUA_ALLOWED if(tagObject == null) tagObject = cast (MusicBeatState.getVariables().get(tag), FlxObject); #end
+			var tagObject:FlxObject = cast (PlayState.instance.variables.get(tag), FlxObject);
+			#if LUA_ALLOWED if(tagObject == null) tagObject = cast (PlayState.instance.modchartSprites.get(tag), FlxObject); #end
 
 			if(tagObject != null)
 			{
@@ -88,11 +88,15 @@ class CustomSubstate extends MusicBeatSubstate
 
 	override function destroy()
 	{
-		PlayState.instance.callOnScripts('onCustomSubstateDestroy', [name]);
-		name = 'unnamed';
+		try 
+		{
+			PlayState.instance.callOnScripts('onCustomSubstateDestroy', [name]);
+			name = 'unnamed';
 
-		PlayState.instance.setOnHScript('customSubstate', null);
-		PlayState.instance.setOnHScript('customSubstateName', name);
+			PlayState.instance.setOnHScript('customSubstate', null);
+			PlayState.instance.setOnHScript('customSubstateName', name);
+		}
+		catch (e:Dynamic) {trace('Whoops! Substate Failed to close properly.\nHopefully that wasn\'t important...');}
 		super.destroy();
 	}
 }

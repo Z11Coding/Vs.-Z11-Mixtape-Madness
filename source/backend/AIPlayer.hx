@@ -26,7 +26,7 @@ class AIPlayer
 		{
             case 0: //First Time Playing FNF
 				{
-					var ratingChance:Array<Float> = [0, 30, 50, 70, 95];
+					var ratingChance:Array<Float> = [0, 0, 25, 70, 95];
 					var isolatedHits:Array<Array<Float>> = isolateHits(map);
 
 					for (section in isolatedHits)
@@ -74,7 +74,7 @@ class AIPlayer
 				}
 			case 1: //I Play Occasonally
 				{
-					var ratingChance:Array<Float> = [60, 93.43, 5.57, 3.3, 1.6];
+					var ratingChance:Array<Float> = [5, 10, 30, 3.3, 1.6];
 					var isolatedHits:Array<Array<Float>> = isolateHits(map);
 
 					for (section in isolatedHits)
@@ -122,7 +122,7 @@ class AIPlayer
 				}
 			case 2: //I play all the time
 				{
-					var ratingChance:Array<Float> = [90, 95.43, 2.57, 1.3, 0.1];
+					var ratingChance:Array<Float> = [50, 20, 10, 1.3, 0.1];
 					var isolatedHits:Array<Array<Float>> = isolateHits(map);
 
 					for (section in isolatedHits)
@@ -171,7 +171,7 @@ class AIPlayer
 				}
 			case 3: //FNF is my life, my religion, and everything I breath for
 				{
-					var ratingChance:Array<Float> = [99, 97.5, 1, 0.5, 0.0];
+					var ratingChance:Array<Float> = [70, 50, 20, 0.5, 0.0];
 					var isolatedHits:Array<Array<Float>> = isolateHits(map);
 
 					for (section in isolatedHits)
@@ -212,7 +212,7 @@ class AIPlayer
 				}
             case 4: //Hi, my name is SillyFangirlosu
 				{
-					var ratingChance:Array<Float> = [99, 1, 0.5, 0.1, 0.01];
+					var ratingChance:Array<Float> = [90, 70, 0.5, 0.1, 0.01];
 					var isolatedHits:Array<Array<Float>> = isolateHits(map);
 
 					for (section in isolatedHits)

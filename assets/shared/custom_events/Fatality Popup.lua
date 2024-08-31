@@ -1,7 +1,7 @@
 local FB = {'error_popups'}
 local FPS = {24, 12, 12}
 
-local Boxhit = {'hitBox'}
+local Boxhit = {'hitbox'}
 local Bxpos = {363, 364, 1025}
 local Bypos = {460, 360, 608}
 
@@ -15,25 +15,25 @@ local ugh = 11
 
 function onCreate()
     setPropertyFromClass('flixel.FlxG', 'mouse.visible', false);
-    makeLuaSprite('mouse', 'bg/fatal/fatal_mouse_cursor', getMouseX('other'), getMouseY('other'));   
+    makeLuaSprite('mouse', 'mechanics/personel/fatal/fatal_mouse_cursor', getMouseX('other'), getMouseY('other'));   
     setProperty('mouse.antialiasing', false);
     scaleLuaSprite('mouse', 1.5, 1.5)
     addLuaSprite('mouse', true);
     setObjectCamera('mouse', 'other')	
     for i = 1,10 do
-        makeAnimatedLuaSprite('error_popups'..i, 'bg/fatal/error_popups', getRandomInt(0, 700), getRandomInt(0, 300))
-        addAnimationByPrefix('error_popups'..i, 'idle', 'idle', 24, false);
+        makeAnimatedLuaSprite('error_popups'..i, 'mechanics/personel/fatal/error_popups', getRandomInt(0, 700), getRandomInt(0, 300))
+        addAnimationByPrefix('error_popups'..i, 'idle', 'idle', 0, false);
         addAnimationByPrefix('error_popups'..i, 'end', 'end', 36, false);
         scaleObject('error_popups'..i, ransize1, ransize1)
         setProperty('error_popups'..i..'.antialiasing', false);
         addLuaSprite('error_popups'..i, false)
         setObjectCamera('error_popups'..i, 'other')
         objectPlayAnimation('error_popups', 'idle') 
-        makeLuaSprite('hitBox'..i, 'hitBox', getProperty('error_popups'..i..'.x') + xpos, getProperty('error_popups'..i..'.y') + ypos)
-        setObjectCamera('hitBox'..i, 'other')
-        scaleObject('hitBox'..i, SOX, SOY)
-        addLuaSprite('hitBox'..i, true)
-        setProperty('hitBox'..i..'.alpha', 0.0)
+        makeLuaSprite('hitbox'..i, 'mechanics/personel/hitbox', getProperty('error_popups'..i..'.x') + xpos, getProperty('error_popups'..i..'.y') + ypos)
+        setObjectCamera('hitbox'..i, 'other')
+        scaleObject('hitbox'..i, SOX, SOY)
+        addLuaSprite('hitbox'..i, true)
+        setProperty('hitbox'..i..'.alpha', 0.0)
     end
 end
 
@@ -76,7 +76,7 @@ function onEvent(name, value1, value2)
                 if ransize == 5 then
                     ransize1 = 2
                 end
-                makeAnimatedLuaSprite('error_popups'..i, 'bg/fatal/error_popups', getRandomInt(0, 700), getRandomInt(0, 300))
+                makeAnimatedLuaSprite('error_popups'..i, 'mechanics/personel/fatal/error_popups', getRandomInt(0, 700), getRandomInt(0, 300))
                 addAnimationByPrefix('error_popups'..i, 'idle', 'idle', 24, false);
                 addAnimationByPrefix('error_popups'..i, 'end', 'end', 36, false);
                 scaleObject('error_popups'..i, ransize1, ransize1)
@@ -114,11 +114,11 @@ function onEvent(name, value1, value2)
                     SOX = 0.69
                     SOY = 0.36
                 end
-                makeLuaSprite('hitBox'..i, 'hitBox', getProperty('error_popups'..i..'.x') + xpos, getProperty('error_popups'..i..'.y') + ypos)
-                setObjectCamera('hitBox'..i, 'other')
-                scaleObject('hitBox'..i, SOX, SOY)
-                addLuaSprite('hitBox'..i, true)
-                setProperty('hitBox'..i..'.alpha', 0.0)
+                makeLuaSprite('hitbox'..i, 'mechanics/personel/hitbox', getProperty('error_popups'..i..'.x') + xpos, getProperty('error_popups'..i..'.y') + ypos)
+                setObjectCamera('hitbox'..i, 'other')
+                scaleObject('hitbox'..i, SOX, SOY)
+                addLuaSprite('hitbox'..i, true)
+                setProperty('hitbox'..i..'.alpha', 0.0)
                 i = i + 1
             end
         elseif value2 == 2 then
@@ -127,18 +127,18 @@ function onEvent(name, value1, value2)
                     ugh = 11
                 end
                 ransize1 = 2.5
-                makeAnimatedLuaSprite('error_popups'..ugh, 'bg/fatal/error_popups', getRandomInt(0, 600), getRandomInt(0, 300))
+                makeAnimatedLuaSprite('error_popups'..ugh, 'mechanics/personel/fatal/error_popups', getRandomInt(0, 600), getRandomInt(0, 300))
                 addAnimationByPrefix('error_popups'..ugh, 'idle', 'idle', 24, false);
                 addAnimationByPrefix('error_popups'..ugh, 'end', 'end', 36, false);
                 scaleObject('error_popups'..ugh, ransize1, ransize1)
                 setProperty('error_popups'..ugh..'.antialiasing', false);
                 addLuaSprite('error_popups'..ugh, false)
                 setObjectCamera('error_popups'..ugh, 'other')
-                makeLuaSprite('hitBox'..ugh, 'hitBox', getProperty('error_popups'..ugh..'.x') + 302, getProperty('error_popups'..ugh..'.y') + 300)
-                setObjectCamera('hitBox'..ugh, 'other')
-                scaleObject('hitBox'..ugh, 0.86, 0.45)
-                addLuaSprite('hitBox'..ugh, true)
-                setProperty('hitBox'..ugh..'.alpha', 0.0)
+                makeLuaSprite('hitbox'..ugh, 'mechanics/personel/hitbox', getProperty('error_popups'..ugh..'.x') + 302, getProperty('error_popups'..ugh..'.y') + 300)
+                setObjectCamera('hitbox'..ugh, 'other')
+                scaleObject('hitbox'..ugh, 0.86, 0.45)
+                addLuaSprite('hitbox'..ugh, true)
+                setProperty('hitbox'..ugh..'.alpha', 0.0)
                 ugh = ugh + 1
             end
         elseif value2 == 3 then
@@ -147,18 +147,18 @@ function onEvent(name, value1, value2)
                     ugh = 11
                 end
                 ransize1 = 4.7
-                makeAnimatedLuaSprite('error_popups'..ugh, 'bg/fatal/error_popups', -40, -65)
+                makeAnimatedLuaSprite('error_popups'..ugh, 'mechanics/personel/fatal/error_popups', -40, -65)
                 addAnimationByPrefix('error_popups'..ugh, 'idle', 'idle', 24, false);
                 addAnimationByPrefix('error_popups'..ugh, 'end', 'end', 36, false);
                 scaleObject('error_popups'..ugh, ransize1, ransize1)
                 setProperty('error_popups'..ugh..'.antialiasing', false);
                 addLuaSprite('error_popups'..ugh, false)
                 setObjectCamera('error_popups'..ugh, 'other')
-                makeLuaSprite('hitBox'..ugh, 'hitBox', getProperty('error_popups'..ugh..'.x') + 568, getProperty('error_popups'..ugh..'.y') + 564)
-                setObjectCamera('hitBox'..ugh, 'other')
-                scaleObject('hitBox'..ugh, 1.6, 0.85)
-                addLuaSprite('hitBox'..ugh, true)
-                setProperty('hitBox'..ugh..'.alpha', 0.0)
+                makeLuaSprite('hitbox'..ugh, 'mechanics/personel/hitbox', getProperty('error_popups'..ugh..'.x') + 568, getProperty('error_popups'..ugh..'.y') + 564)
+                setObjectCamera('hitbox'..ugh, 'other')
+                scaleObject('hitbox'..ugh, 1.6, 0.85)
+                addLuaSprite('hitbox'..ugh, true)
+                setProperty('hitbox'..ugh..'.alpha', 0.0)
                 ugh = ugh + 1
             end
         end
@@ -170,7 +170,7 @@ function onUpdate(elapsed)
     setProperty('mouse.y', getMouseY('other'))
     if mouseReleased() then
         for i = 1, 100 do 
-            if getMouseX('other') > getProperty('hitBox'..i..'.x') and getMouseY('other') > getProperty('hitBox'..i..'.y') and getMouseX('other') < getProperty('hitBox'..i..'.x') + getProperty('hitBox'..i..'.width') and getMouseY('other') < getProperty('hitBox'..i..'.y') + getProperty('hitBox'..i..'.height') and mouseReleased() then
+            if getMouseX('other') > getProperty('hitbox'..i..'.x') and getMouseY('other') > getProperty('hitbox'..i..'.y') and getMouseX('other') < getProperty('hitbox'..i..'.x') + getProperty('hitbox'..i..'.width') and getMouseY('other') < getProperty('hitbox'..i..'.y') + getProperty('hitbox'..i..'.height') and mouseReleased() then
                 objectPlayAnimation('error_popups'..i, 'end') 
                 runTimer('endd'..i, .1)
             end

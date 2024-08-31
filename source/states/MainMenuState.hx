@@ -18,6 +18,7 @@ import flixel.addons.plugin.FlxMouseControl;
 import states.editors.MasterEditorMenu;
 import flixel.input.keyboard.FlxKey;
 import flixel.effects.FlxFlicker;
+import shaders.ChromaticAberration;
 
 using StringTools;
 
@@ -67,7 +68,13 @@ class MainMenuState extends MusicBeatState
 
 	var noname:Bool = false;
 
-	var charHitbox:FlxExtendedSprite;
+	//Secrets
+	var PBTBM:FlxSprite;
+	var FF:FlxSprite;
+	var ohno:FlxSound;
+	var TL:FlxSprite;
+	var h:String;
+	var chroma:ChromaticAberration;
 
 	override function create()
 	{
@@ -201,101 +208,6 @@ class MainMenuState extends MusicBeatState
 		versionShitFriday.screenCenter(X);
 		add(versionShitFriday);
 
-		if (!ClientPrefs.data.lowQuality)
-		{
-			iconBG = new FlxSprite().loadGraphic(Paths.image('pause/iconbackground'));
-			iconBG.scrollFactor.set();
-			iconBG.updateHitbox();
-			iconBG.screenCenter();
-			iconBG.antialiasing = ClientPrefs.data.globalAntialiasing;
-			//add(iconBG);
-
-			switch (FlxG.random.int(1, 15))
-			{
-				case 1:
-					icon = new HealthIcon('bf');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					iconBG.color = FlxColor.CYAN;
-				case 2:
-					icon = new HealthIcon('bf-old');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					iconBG.color = FlxColor.LIME;
-				case 3:
-					icon = new HealthIcon('gf');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					iconBG.color = FlxColor.RED;
-				case 4:
-					icon = new HealthIcon('dad');
-					icon.setGraphicSize(Std.int(icon.width * 1.7));
-					iconBG.color = FlxColor.PURPLE;
-				case 5:
-					icon = new HealthIcon('mom');
-					icon.setGraphicSize(Std.int(icon.width * 1.8));
-					iconBG.color = FlxColor.PURPLE;
-				case 6:
-					icon = new HealthIcon('spooky');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					switch (FlxG.random.int(1, 2))
-					{
-						case 1:
-							iconBG.color = FlxColor.ORANGE;
-						case 2:
-							iconBG.color = FlxColor.WHITE;
-					}
-				case 7:
-					icon = new HealthIcon('bf-pixel');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					iconBG.color = FlxColor.CYAN;
-				case 8:
-					icon = new HealthIcon('face');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					iconBG.color = FlxColor.GRAY;
-				case 9:
-					icon = new HealthIcon('monster');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					iconBG.color = FlxColor.YELLOW;
-				case 10:
-					icon = new HealthIcon('parents');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					iconBG.color = FlxColor.PURPLE;
-				case 11:
-					icon = new HealthIcon('pico');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					iconBG.color = FlxColor.GREEN;
-				case 12:
-					icon = new HealthIcon('senpai-pixel');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					iconBG.color = FlxColor.ORANGE;
-				case 13:
-					icon = new HealthIcon('spirit-pixel');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					iconBG.color = FlxColor.RED;
-				case 14:
-					icon = new HealthIcon('tankman');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					iconBG.color = FlxColor.BLACK;
-				case 15:
-					icon = new HealthIcon('z11-playable');
-					icon.setGraphicSize(Std.int(icon.width * 2));
-					switch (FlxG.random.int(1, 2))
-					{
-						case 1:
-							iconBG.color = FlxColor.BLACK;
-						case 2:
-							iconBG.color = FlxColor.WHITE;
-					}
-			} // YES, I WILL PUT THE HAXE COLORS INSTEAD THE NORMAL ONES
-
-			// icon = new HealthIcon('bf');
-			// icon.setGraphicSize(Std.int(icon.width * 2));
-			icon.antialiasing = ClientPrefs.data.globalAntialiasing;
-			icon.x = FlxG.width - 70;
-			icon.y = 180;
-			icon.scrollFactor.set();
-			icon.updateHitbox();
-			//add(icon);
-		}
-
 		// NG.core.calls.event.logEvent('swag').send();
 
 		changeItem();
@@ -311,6 +223,36 @@ class MainMenuState extends MusicBeatState
 		Achievements.reloadList();
 		#end
 		#end
+
+		var hh:Array<Chance> = [
+			{item: "PBTBM", chance: 28}, //56% chance to get the "Possessed by the Blood Moon" secret
+			{item: "FF", chance: 18}, // 39% chance to get the "Fangirl Frenzy" secret
+			{item: "TL", chance: 20}, // 53% chance to get the "Truly Lost" secret
+			{item: "nothing", chance: 90} // 90% chance to do nothing
+		];
+
+		if (Achievements.isUnlocked('secretsuntold')) h = ChanceSelector.selectOption(hh);
+		else h = 'nothing';
+		
+		trace(h);
+
+		if (h == 'PBTBM')
+		{
+			PBTBM = new FlxSprite().loadGraphic(Paths.image('stages/pbtbm/moon'));
+			PBTBM.setGraphicSize(Std.int(PBTBM.width * 0.3));
+			PBTBM.scrollFactor.set();
+			add(PBTBM);
+			FlxG.autoPause = false;
+		}
+		else if (h == 'FF')
+		{
+			ohno = new FlxSound();
+			ohno.loadEmbedded(Paths.music("The Shift"), true);
+			ohno.volume = 0;
+			ohno.play();
+		}
+
+		chroma = new ChromaticAberration();
 
 		super.create();
 
@@ -332,13 +274,155 @@ class MainMenuState extends MusicBeatState
 		return menuItem;
 	}
 
+	function setChrome(chromeOffset:Float):Void
+	{
+		chroma.data.rOffset.value = [chromeOffset];
+		chroma.data.gOffset.value = [0.0];
+		chroma.data.bOffset.value = [chromeOffset * -1];
+	}
+
 	var selectedSomethin:Bool = false;
 	var timeNotMoving:Float = 0;
+	var volTween:Bool = false;
+	var resetGrad:Bool = false;
+	var initShader:Bool = false;
 	override function update(elapsed:Float)
 	{
-		if (FlxG.sound.music.volume < 0.8)
+		if (h != 'FF')
+		{	
+			if (FlxG.sound.music.volume < 0.8)
+			{
+				FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
+			}
+		}
+
+		if (h == 'PBTBM')
 		{
-			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
+			PBTBM.x = logoBl.x + 130;
+			PBTBM.y = logoBl.y + 50;
+			PBTBM.alpha = logoBl.alpha;
+			logoBl.visible = false;
+			PBTBM.updateHitbox();
+
+			#if cpp			
+			if(FlxG.sound.music != null && FlxG.sound.music.playing)
+			{
+				@:privateAccess
+				{
+					var aux = lime.media.openal.AL.createAux();
+					var af = lime.media.openal.AL.createEffect(); // create AudioFilter
+					lime.media.openal.AL.effecti( af, lime.media.openal.AL.EFFECT_TYPE, lime.media.openal.AL.EFFECT_REVERB ); // set filter type
+					lime.media.openal.AL.effectf( af, lime.media.openal.AL.REVERB_DECAY_TIME, 5 ); // set gain
+					lime.media.openal.AL.effectf( af, lime.media.openal.AL.REVERB_GAIN, 0.4); // set gainhf
+					lime.media.openal.AL.auxi(aux, lime.media.openal.AL.EFFECTSLOT_EFFECT, af);
+					lime.media.openal.AL.source3i(FlxG.sound.music._channel.__audioSource.__backend.handle, lime.media.openal.AL.AUXILIARY_SEND_FILTER, aux, 0, lime.media.openal.AL.FILTER_NULL);
+				}
+			}
+			#end
+		}
+		else if (h == 'FF')
+		{
+			logoBl.color = FlxColor.fromRGB(49, 176, 209);
+			logoBl.updateHitbox();
+			menuItems.forEach(function(spr:FlxSprite)
+			{
+				spr.color = FlxColor.fromRGB(49, 176, 209);
+			});
+			if (!resetGrad) 
+			{
+				gradientBar = FlxGradient.createGradientFlxSprite(Math.round(FlxG.width), 512, [0x00ff0000, 0x5559CFE4, 0xAA00AEFF], 1, 90, true);
+				resetGrad = true;
+			}
+			checker.color = FlxColor.fromRGB(49, 176, 209);
+			bg.color = FlxColor.fromRGB(49, 176, 209);
+
+			if (FlxG.mouse.overlaps(logoBl) && !volTween)
+			{
+				volTween = true;
+				FlxTween.tween(ohno, {volume: 0.5}, 1, {ease:FlxEase.sineOut});
+				FlxTween.tween(FlxG.sound.music, {volume: 0.2}, 1, {ease:FlxEase.sineOut});
+			}
+			else if (!FlxG.mouse.overlaps(logoBl) && volTween)
+			{
+				volTween = false;
+				FlxTween.tween(ohno, {volume: 0}, 0.5, {ease:FlxEase.sineOut});
+				FlxTween.tween(FlxG.sound.music, {volume: 0.8}, 0.5, {ease:FlxEase.sineOut});
+			}
+
+			#if cpp			
+			if(ohno != null && ohno.playing)
+			{
+				@:privateAccess
+				{
+					var aux = lime.media.openal.AL.createAux();
+					var af = lime.media.openal.AL.createEffect(); // create AudioFilter
+					lime.media.openal.AL.effecti( af, lime.media.openal.AL.EFFECT_TYPE, lime.media.openal.AL.EFFECT_REVERB ); // set filter type
+					lime.media.openal.AL.effectf( af, lime.media.openal.AL.REVERB_DECAY_TIME, 5 ); // set gain
+					lime.media.openal.AL.effectf( af, lime.media.openal.AL.REVERB_GAIN, 0.4); // set gainhf
+					lime.media.openal.AL.auxi(aux, lime.media.openal.AL.EFFECTSLOT_EFFECT, af);
+					lime.media.openal.AL.source3i(ohno._channel.__audioSource.__backend.handle, lime.media.openal.AL.AUXILIARY_SEND_FILTER, aux, 0, lime.media.openal.AL.FILTER_NULL);
+				}
+			}
+			#end
+		}
+		else if (h == 'TL')
+		{
+			if (!initShader)
+			{
+				logoBl.shader = chroma;
+			}
+			var ch = FlxG.random.int(1, 10) / 1000;
+			setChrome(ch);
+			logoBl.updateHitbox();
+
+			if (FlxG.mouse.overlaps(logoBl))
+			{	
+				FlxG.sound.music.pitch = 0.1;
+				logoBl.color = FlxColor.fromRGB(0, 0, 0, 30);
+				menuItems.forEach(function(spr:FlxSprite)
+				{
+					spr.color = FlxColor.fromRGB(0, 0, 0, 255);
+				});
+				if (!resetGrad) 
+				{
+					gradientBar = FlxGradient.createGradientFlxSprite(Math.round(FlxG.width), 512, [0x00ff0000, 0x00ff0000, 0x00ff0000], 1, 90, true);
+					resetGrad = true;
+				}
+				checker.color = FlxColor.fromRGB(0, 0, 0, 255);
+				bg.color = FlxColor.fromRGB(0, 0, 0, 255);
+			}
+			else 
+			{
+				FlxG.sound.music.pitch = 1;
+				logoBl.color = FlxColor.fromRGB(255, 255, 255, 255);
+				menuItems.forEach(function(spr:FlxSprite)
+				{
+					spr.color = FlxColor.fromRGB(255, 255, 255, 255);
+				});
+				if (resetGrad) 
+				{
+					gradientBar = FlxGradient.createGradientFlxSprite(Math.round(FlxG.width), 512, [0x00ff0000, 0x55AE59E4, 0xAAFFA319], 1, 90, true);
+					resetGrad = false;
+				}
+				checker.color = FlxColor.fromRGB(255, 255, 255, 255);
+				bg.color = 0xff270138;
+			} 
+
+			#if cpp			
+			if(FlxG.sound.music != null && FlxG.sound.music.playing)
+			{
+				@:privateAccess
+				{
+					var aux = lime.media.openal.AL.createAux();
+					var af = lime.media.openal.AL.createEffect(); // create AudioFilter
+					lime.media.openal.AL.effecti( af, lime.media.openal.AL.EFFECT_TYPE, lime.media.openal.AL.EFFECT_REVERB ); // set filter type
+					lime.media.openal.AL.effectf( af, lime.media.openal.AL.REVERB_DECAY_TIME, 20 ); // set gain
+					lime.media.openal.AL.effectf( af, lime.media.openal.AL.REVERB_GAIN, 1); // set gainhf
+					lime.media.openal.AL.auxi(aux, lime.media.openal.AL.EFFECTSLOT_EFFECT, af);
+					lime.media.openal.AL.source3i(FlxG.sound.music._channel.__audioSource.__backend.handle, lime.media.openal.AL.AUXILIARY_SEND_FILTER, aux, 0, lime.media.openal.AL.FILTER_NULL);
+				}
+			}
+			#end
 		}
 
 		Conductor.songPosition = FlxG.sound.music.time;
@@ -477,21 +561,13 @@ class MainMenuState extends MusicBeatState
 						y: -100,
 						angle: 4
 					}, 0.5, {ease: FlxEase.quadOut});
-					FlxTween.tween(icon, {x: icon.x - 20, y: icon.y + 20}, 0.5, {ease: FlxEase.quadOut});
-					FlxTween.tween(iconBG, {x: iconBG.x - 20, y: iconBG.y + 20}, 0.5, {ease: FlxEase.quadOut});
 				}
 			}
 
 			if (controls.ACCEPT || (FlxG.mouse.justPressed && allowMouse))
 			{
-				Cursor.hide();
-				FlxG.sound.play(Paths.sound('confirmMenu'));
 				if (optionShit[curSelected] != 'donate')
 				{
-					selectedSomethin = true;
-					Cursor.hide();
-					FlxG.sound.play(Paths.sound('confirmMenu'));
-
 					var item:FlxSprite;
 					var option:String;
 					switch(curColumn)
@@ -509,62 +585,178 @@ class MainMenuState extends MusicBeatState
 							item = rightItem;
 					}
 
-					// Main Menu Select Animations
-					FlxTween.tween(FlxG.camera, {zoom: 5}, 0.8, {ease: FlxEase.expoIn, onComplete: function(twn:FlxTween)
+					if (h == 'PBTBM')
 					{
-						FlxG.camera.zoom = 1;
-					}});
-					FlxTween.tween(bg, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
-					if (!ClientPrefs.data.lowQuality)
-					{
-						FlxTween.tween(checker, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
-						FlxTween.tween(logoBl, {
-							alpha: 0,
-							x: logoBl.x - 30,
-							y: logoBl.y - 30,
-							angle: 4
-						}, 0.8, {ease: FlxEase.quadOut});
-						FlxTween.tween(icon, {x: icon.x - 10, y: icon.y + 10}, 0.8, {ease: FlxEase.quadOut});
-					}
-
-					new FlxTimer().start(0.2, function(tmr:FlxTimer)
-					{
-						hideit(0.6);
-					});
-
-					new FlxTimer().start(1, function(tmr:FlxTimer)
-					{
-						goToState(option);
-					});
-
-					menuItems.forEach(function(spr:FlxSprite)
-					{
-						if (curSelected != spr.ID)
+						if (!FlxG.mouse.overlaps(PBTBM))
 						{
-							FlxTween.tween(spr, {alpha: 0.1, x: 1500}, 1, {
-								ease: FlxEase.quadOut,
-								onComplete: function(twn:FlxTween)
-								{
-									spr.kill();
-								}
+							FlxG.sound.play(Paths.sound('cancelMenu'));
+							item.updateHitbox();
+							// spr.x += -300;
+							FlxTween.tween(item, {x: item.x - FlxG.random.int(-240, 240)}, 2, {ease: FlxEase.sineInOut});
+							FlxTween.tween(item, {y: 1000}, 1, {ease: FlxEase.backIn});
+						}
+						else if (allowMouse && FlxG.mouse.overlaps(PBTBM))
+						{
+							Achievements.unlock('secretsunveiled');
+							MusicBeatState.playSong(['possessed-by-the-blood-moon'], false, 0, 'TransitionState', 'stickers', ['FNF', 'NITG', 'POSSESSED']);
+							FlxG.autoPause = ClientPrefs.data.autoPause;
+						}
+					}
+					else if (h == 'TL')
+					{
+						if (!FlxG.mouse.overlaps(logoBl))
+						{
+							FlxG.sound.play(Paths.sound('cancelMenu'));
+							item.updateHitbox();
+							// spr.x += -300;
+							FlxTween.tween(item.scale, {x: 0}, 2, {ease: FlxEase.sineInOut});
+							FlxTween.tween(item.scale, {y: 0}, 1, {ease: FlxEase.backIn});
+						}
+						else if (allowMouse && FlxG.mouse.overlaps(logoBl))
+						{
+							Achievements.unlock('secretsunveiled');
+							selectedSomethin = true;
+							Cursor.hide();
+							FlxG.sound.music.stop();
+							FlxG.camera.fade(FlxColor.BLACK, 0.00001);
+							new FlxTimer().start(5, function(ct:FlxTimer)
+							{
+								MusicBeatState.playSong(['truly-lost', 'everlost', 'nowitness'], true, 2, 'FlxG');
 							});
-							FlxTween.tween(spr, {x: 1500}, 1, {
-								ease: FlxEase.quadOut
-							});
+							FlxG.autoPause = ClientPrefs.data.autoPause;
+						}
+					}
+					else if (h == 'FF')
+					{
+						if (allowMouse && FlxG.mouse.overlaps(logoBl))
+						{
+							ohno.stop();
+							Achievements.unlock('secretsunveiled');
+							MusicBeatState.playSong(['fangirl-frenzy'], false, 2, 'TransitionState', 'stickers');
 						}
 						else
 						{
-							spr.updateHitbox();
-							// spr.x += -300;
-							FlxTween.tween(spr, {x: spr.x - 240, y: 260}, 0.5, {ease: FlxEase.quadOut});
-							FlxTween.tween(spr.scale, {x: 1.2, y: 1.2}, 0.8, {ease: FlxEase.quadOut});
-
+							selectedSomethin = true;
+							Cursor.hide();
+							FlxG.sound.play(Paths.sound('confirmMenu'));
+							// Main Menu Select Animations
+							FlxTween.tween(FlxG.camera, {zoom: 5}, 0.8, {ease: FlxEase.expoIn, onComplete: function(twn:FlxTween)
+							{
+								FlxG.camera.zoom = 1;
+							}});
+							FlxTween.tween(bg, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
+							if (!ClientPrefs.data.lowQuality)
+							{
+								FlxTween.tween(checker, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
+								FlxTween.tween(logoBl, {
+									alpha: 0,
+									x: logoBl.x - 30,
+									y: logoBl.y - 30,
+									angle: 4
+								}, 0.8, {ease: FlxEase.quadOut});
+							}
+	
+							new FlxTimer().start(0.2, function(tmr:FlxTimer)
+							{
+								hideit(0.6);
+							});
+	
 							new FlxTimer().start(1, function(tmr:FlxTimer)
 							{
 								goToState(option);
 							});
+	
+							menuItems.forEach(function(spr:FlxSprite)
+							{
+								if (curSelected != spr.ID)
+								{
+									FlxTween.tween(spr, {alpha: 0.1, x: 1500}, 1, {
+										ease: FlxEase.quadOut,
+										onComplete: function(twn:FlxTween)
+										{
+											spr.kill();
+										}
+									});
+									FlxTween.tween(spr, {x: 1500}, 1, {
+										ease: FlxEase.quadOut
+									});
+								}
+								else
+								{
+									spr.updateHitbox();
+									// spr.x += -300;
+									FlxTween.tween(spr, {x: spr.x - 240, y: 260}, 0.5, {ease: FlxEase.quadOut});
+									FlxTween.tween(spr.scale, {x: 1.2, y: 1.2}, 0.8, {ease: FlxEase.quadOut});
+	
+									new FlxTimer().start(1, function(tmr:FlxTimer)
+									{
+										goToState(option);
+									});
+								}
+							});
 						}
-					});
+					}
+					else
+					{
+						selectedSomethin = true;
+						Cursor.hide();
+						FlxG.sound.play(Paths.sound('confirmMenu'));
+						// Main Menu Select Animations
+						FlxTween.tween(FlxG.camera, {zoom: 5}, 0.8, {ease: FlxEase.expoIn, onComplete: function(twn:FlxTween)
+						{
+							FlxG.camera.zoom = 1;
+						}});
+						FlxTween.tween(bg, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
+						if (!ClientPrefs.data.lowQuality)
+						{
+							FlxTween.tween(checker, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
+							FlxTween.tween(logoBl, {
+								alpha: 0,
+								x: logoBl.x - 30,
+								y: logoBl.y - 30,
+								angle: 4
+							}, 0.8, {ease: FlxEase.quadOut});
+						}
+
+						new FlxTimer().start(0.2, function(tmr:FlxTimer)
+						{
+							hideit(0.6);
+						});
+
+						new FlxTimer().start(1, function(tmr:FlxTimer)
+						{
+							goToState(option);
+						});
+
+						menuItems.forEach(function(spr:FlxSprite)
+						{
+							if (curSelected != spr.ID)
+							{
+								FlxTween.tween(spr, {alpha: 0.1, x: 1500}, 1, {
+									ease: FlxEase.quadOut,
+									onComplete: function(twn:FlxTween)
+									{
+										spr.kill();
+									}
+								});
+								FlxTween.tween(spr, {x: 1500}, 1, {
+									ease: FlxEase.quadOut
+								});
+							}
+							else
+							{
+								spr.updateHitbox();
+								// spr.x += -300;
+								FlxTween.tween(spr, {x: spr.x - 240, y: 260}, 0.5, {ease: FlxEase.quadOut});
+								FlxTween.tween(spr.scale, {x: 1.2, y: 1.2}, 0.8, {ease: FlxEase.quadOut});
+
+								new FlxTimer().start(1, function(tmr:FlxTimer)
+								{
+									goToState(option);
+								});
+							}
+						});
+					}
 				}
 			}
 			#if desktop
@@ -588,10 +780,8 @@ class MainMenuState extends MusicBeatState
 		trace(daChoice);
 		switch (daChoice)
 		{
-			case 'story_mode':
-				MusicBeatState.switchState(new StoryMenuState());
 			case 'freeplay':
-				MusicBeatState.switchState(new CategoryState());
+				TransitionState.transitionState(CategoryState, {transitionType: "stickers"});
 			case 'socials':
 				MusicBeatState.switchState(new SocialsState());
 			#if MODS_ALLOWED
@@ -599,7 +789,7 @@ class MainMenuState extends MusicBeatState
 				MusicBeatState.switchState(new ModsMenuState());
 			#end
 			case 'achievements':
-				MusicBeatState.switchState(new AchievementsMenuState());
+				TransitionState.transitionState(AchievementsMenuState, {transitionType: "stickers"});
 			case 'credits':
 				MusicBeatState.switchState(new CreditsState());
 			case 'options':

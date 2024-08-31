@@ -57,24 +57,24 @@ function onSongStart()
     songStarted = true
 end
 function opponentNoteHit(a,b,c)
-    if (difficultyName == 'Mega Nightmare' or difficultyName == 'Mega Unreal') and curStep >= 1024 and curStep <= 1536 then
+    if (difficultyName == 'Nightmare' or difficultyName == 'Unreal') and curStep >= 1024 and curStep <= 1536 then
         if currentBarPorcent < 1 then
             currentBarPorcent = currentBarPorcent + 0.0090
         end
     end
-    if (difficultyName == 'Mega Nightmare' or difficultyName == 'Mega Unreal') and curStep <= 2048 and curStep >= 2034 then
+    if (difficultyName == 'Nightmare' or difficultyName == 'Unreal') and curStep <= 2048 and curStep >= 2034 then
         if currentBarPorcent < 1 then
             currentBarPorcent = currentBarPorcent + 1
         end
     end
 end
 function onBeatHit()
-    if (difficultyName == 'Mega Nightmare' or difficultyName == 'Mega Unreal') and curStep >= 1024 and curStep <= 1536 or curStep <= 2048 and curStep >= 2034 then
+    if (difficultyName == 'Nightmare' or difficultyName == 'Unreal') and curStep >= 1024 and curStep <= 1536 or curStep <= 2048 and curStep >= 2034 then
         if currentBarPorcent < 1 then
             currentBarPorcent = currentBarPorcent + 0.010
         end
     end
-    if (difficultyName == 'Mega Nightmare' or difficultyName == 'Mega Unreal') then
+    if (difficultyName == 'Nightmare' or difficultyName == 'Unreal') then
         if curBeat == 256 or curBeat == 512 then
             doTweenX("helloBar", "FearBarImage", getProperty('FearBarBg.x') - 200, 0.5, "sineInOut")
         end
@@ -85,12 +85,12 @@ function onBeatHit()
     end
 end
 function goodNoteHit(a,b,c)
-    if (difficultyName == 'Mega Nightmare' or difficultyName == 'Mega Unreal') and curStep >= 1024 and curStep <= 1536 then
+    if (difficultyName == 'Nightmare' or difficultyName == 'Unreal') and curStep >= 1024 and curStep <= 1536 then
         if currentBarPorcent > 0 then
             currentBarPorcent = currentBarPorcent - 0.9
         end
     end
-    if (difficultyName == 'Mega Nightmare' or difficultyName == 'Mega Unreal') and curStep <= 2048 and curStep >= 2034 then
+    if (difficultyName == 'Nightmare' or difficultyName == 'Unreal') and curStep <= 2048 and curStep >= 2034 then
         if currentBarPorcent > 0 then
             currentBarPorcent = currentBarPorcent - 1
         end

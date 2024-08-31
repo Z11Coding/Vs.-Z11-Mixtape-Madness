@@ -20,15 +20,6 @@
 				140,
 				240
 			]
-		],
-		[
-			"Familiar Freakout",
-			"manifest",
-			[
-				0,
-				0,
-				0
-			]
 		]
 	],
 	"weekCharacters": [
@@ -36,7 +27,7 @@
 		"",
 		""
 	],
-	"category": "bonus",
+	"category": "secrets",
 	"hiddenUntilUnlocked": false,
 	"weekName": "Fanicon"
 }

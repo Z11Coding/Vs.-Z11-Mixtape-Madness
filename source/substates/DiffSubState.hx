@@ -239,6 +239,8 @@ class DiffSubState extends MusicBeatSubstate
 				var name:String = daSelected;
 				var poop = Highscore.formatSong(name, curDifficulty);
 				PlayState.SONG = Song.loadFromJson(poop, name);
+				PlayState.isStoryMode = false;
+				PlayState.storyDifficulty = curDifficulty;
 				TransitionState.transitionState(PlayState, {transitionType: "stickers"});
 				FlxG.sound.music.volume = 0;
 				PlayState.chartingMode = false;

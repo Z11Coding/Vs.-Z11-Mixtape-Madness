@@ -41,6 +41,7 @@ using StringTools;
 class CacheState extends MusicBeatState
 {
 	public var cacheNeeded:Bool = false;
+	public static var didPreCache:Bool = false;
 	public static var bitmapData:Map<String, FlxGraphic>;
 	var images:Array<String> = [];
 	var music:Array<String> = [];
@@ -206,6 +207,7 @@ class CacheState extends MusicBeatState
 			{
 				allowMusic = true;
 				dontBother = false;
+				didPreCache = true;
 			}
 
 			menuBG = new FlxSprite().loadGraphic(Paths.image('loading/' + FlxG.random.int(0, 16, [3])));

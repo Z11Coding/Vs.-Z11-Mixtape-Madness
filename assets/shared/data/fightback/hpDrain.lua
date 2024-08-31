@@ -57,6 +57,7 @@ function onUpdate()
 end
 function onSongStart()
     songStarted = true
+    queueEase(2800, 2816, 'opponentSwap', 1, 'elasticInOut')
 end
 function opponentNoteHit(a,b,c)
     if curStep > 3328 then
@@ -75,6 +76,7 @@ function onBeatHit()
         currentBarPorcent = currentBarPorcent + 0.010
     end]] --gigachad op shaggy
 end
+
 function goodNoteHit(a,b,c)
     if currentBarPorcent > 0 then
         if c == 'Alt Animation' then

@@ -69,6 +69,11 @@ import math.Vector3;
 import backend.util.MemoryUtil;
 import backend.Cursor;
 
+//Window Stuff
+import backend.window.Window;
+import backend.window.WindowUtil;
+import backend.window.WindowUtils;
+
 //Flixel
 import flixel.sound.FlxSound;
 import flixel.FlxG;

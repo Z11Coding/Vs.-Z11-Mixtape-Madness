@@ -2,10 +2,10 @@ function onCreate()
 	--Iterate over all notes
 	for i = 0, getProperty('unspawnNotes.length')-1 do
 		if getPropertyFromGroup('unspawnNotes', i, 'noteType') == 'Static Note' then
-			setPropertyFromGroup('unspawnNotes', i, 'texture', 'STATICNOTE_assets'); 
+			setPropertyFromGroup('unspawnNotes', i, 'texture', 'noteskins/STATICNOTE_assets'); 
 			if getPropertyFromGroup('unspawnNotes', i, 'mustPress') then --Doesn't let Dad/Opponent notes get ignored
 				setPropertyFromGroup('unspawnNotes', i, 'ignoreNote', false); --Miss has penalties
-				makeAnimatedLuaSprite('hitstatic', 'exe/hitStatic', -380, -90);
+				makeAnimatedLuaSprite('hitstatic', 'mechanics/personel/exe/hitStatic', -380, -90);
 				addAnimationByPrefix('hitstatic', 'static', 'staticANIMATION', 24, true);
 				setObjectCamera('hitstatic', 'camHUD')
 				setProperty('hitstatic.alpha', 0)

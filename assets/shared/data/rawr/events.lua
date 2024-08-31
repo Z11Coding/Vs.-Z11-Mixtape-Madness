@@ -6,6 +6,18 @@ function onCreatePost()
     screenCenter("blank", 'xy')
     setObjectCamera("blank", "other")
     addLuaSprite("blank", false)
+
+    if getModSetting("ultimaMode") then
+        for i = 0, getProperty("unspawnNotes.length")-1 do
+            setPropertyFromGroup("unspawnNotes", i, 'hitHealth', 0)
+            setPropertyFromGroup("unspawnNotes", i, 'missHealth', 0.0752)
+        end
+        for i = 0, getProperty("notes.length")-1 do
+            setPropertyFromGroup("notes", i, 'hitHealth', 0)
+            setPropertyFromGroup("notes", i, 'missHealth', 0.0752)
+        end
+        setProperty('health', 2)
+    end
 end
 
 function onSongStart()
@@ -59,74 +71,146 @@ function switchCamBop(setBop)
 
         if setBop == "buildupCam" then
             if daStep % 64 == 0 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 6 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 16 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 22 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 32 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 38 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 48 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 54 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 60 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 62 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
         end
 
         if setBop == "buildupCamalt" then
             if daStep % 64 == 0 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
                 setProperty("camGame.angle", 5)
                 doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
             end
             if daStep % 64 == 6 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
                 setProperty("camGame.angle", -5)
                 doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
             end
             if daStep % 64 == 16 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 setProperty("camGame.angle", 5)
                 doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 22 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 setProperty("camGame.angle", -5)
                 doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 32 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 setProperty("camGame.angle", 5)
                 doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 38 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 setProperty("camGame.angle", -5)
                 doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 48 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 setProperty("camGame.angle", 5)
                 doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 54 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 setProperty("camGame.angle", -5)
                 doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
@@ -138,83 +222,171 @@ function switchCamBop(setBop)
 
         if setBop == "buildupCamalt2" then
             if daStep % 32 == 0 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 setProperty("camGame.angle", 5)
                 doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
                 triggerEvent("Add Camera Zoom", 0.08, 0.06)
             end
             if daStep % 32 == 6 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 setProperty("camGame.angle", -5)
                 doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
                 triggerEvent("Add Camera Zoom", 0.08, 0.06)
             end
             if daStep % 32 == 16 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 setProperty("camGame.angle", 5)
                 doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
                 triggerEvent("Add Camera Zoom", 0.08, 0.06)
             end
             if daStep % 32 == 22 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 setProperty("camGame.angle", -5)
                 doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
                 triggerEvent("Add Camera Zoom", 0.08, 0.06)
             end
             if daStep % 32 == 28 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.08, 0.06)
             end
             if daStep % 32 == 30 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.08, 0.06)
             end
         end
 
         if setBop == "buildupCamSimple" then
             if daStep % 64 == 0 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 7 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 16 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 23 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 32 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 39 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 48 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
             if daStep % 64 == 55 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.05, 0.03)
             end
         end
 
         if setBop == "buildupCamSimple+" then
             if daStep % 64 == 0 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.1, 0.09)
             end
             if daStep % 64 == 7 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.1, 0.09)
             end
             if daStep % 64 == 16 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.1, 0.09)
             end
             if daStep % 64 == 23 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.1, 0.09)
             end
             if daStep % 64 == 32 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.1, 0.09)
             end
             if daStep % 64 == 39 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.1, 0.09)
             end
             if daStep % 64 == 48 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', 25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.1, 0.09)
             end
             if daStep % 64 == 55 then
+                if difficultyName == "Dave" then
+                    setProperty('inclination.y', -25)
+                    doTweenY('bBack', 'inclination', 0, stepCrochet*0.001*3, 'CubeOut')
+                end
                 triggerEvent("Add Camera Zoom", 0.1, 0.09)
             end
         end
@@ -223,9 +395,31 @@ function switchCamBop(setBop)
     function updateBopB(daBeat)
         if setBop == "basicBop1" then
             triggerEvent("Add Camera Zoom", 0.08, 0.06)
+            if difficultyName == "Dave" then
+                if daBeat % 2 == 0 then
+                    setProperty("bulge.y", 25)
+                    doTweenY('inv', "bulge", 0, stepCrochet*0.001*4, "sineInOut")
+                elseif daBeat % 2 == 1 then
+                    setProperty("bulge.y", -25)
+                    doTweenY('inv', "bulge", 0, stepCrochet*0.001*4, "sineInOut")
+                end
+            end
         end
         if setBop == "semiBasicBop1" then
             triggerEvent("Add Camera Zoom", 0.2, 0.1)
+            if difficultyName == "Dave" then
+                if daBeat % 2 == 0 then
+                    setProperty("Flip.y", 1)
+                    doTweenY('inv', "Flip", 0, stepCrochet*0.001*4, "sineInOut")
+                    setProperty("camGame.angle", -5)
+                    doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
+                elseif daBeat % 2 == 1 then
+                    setProperty("Flip.y", -1)
+                    doTweenY('inv', "Flip", 0, stepCrochet*0.001*4, "sineInOut")
+                    setProperty("camGame.angle", 5)
+                    doTweenAngle('ang', "camGame", 0, stepCrochet*0.001*4, "sineInOut")
+                end
+            end
         end
     end
 
@@ -233,177 +427,172 @@ end
 
 function onStepHit()
     --GLOBAL EVENTS
-    if getModSetting("allowParty") then
-        if curStep == 256 then
-            cameraFlash('other', 'ffffff', 1)
-            switchCamBop("buildupCam")
-        end
-        if curStep == 768 then
-            switchCamBop("basicBop1")
-        end
-        if curStep == 1263 then
-            switchCamBop("")
-            setVar("enableLockInCam", false)
-        end
-        if curStep == 1264 then
-            setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
-            setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
-            setProperty("camGame.angle", 15)
-        end
-        if curStep == 1270 then
-            setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
-            setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
-            setProperty("camGame.angle", -15)
-        end
-        if curStep == 1276 then
-            setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
-            setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
-            setProperty("camGame.angle", 15)
-        end
-        if curStep == 1280 then
-            setProperty("defaultCamZoom", 0.7)
-            doTweenZoom('zoom', "camGame", getProperty("camGame.zoom")-0.6, stepCrochet*0.001*28, "sineInOut")
-            doTweenAngle('left', "camGame", 0, stepCrochet*0.001*28, "sineInOut")
-        end
-        if curStep == 1312 then
-            switchCamBop("buildupCamalt")
-            setVar("enableLockInCam", true)
-            cameraFlash('other', 'ffffff', 1)
-        end
-        if curStep == 1824 then
-            switchCamBop("buildupCamalt2")
-        end
-        if curStep == 2063 then
-            switchCamBop("")
-        end
-        if curStep == 2072 then
-            triggerEvent("Add Camera Zoom", 0.5, 0.5)
-        end
-        if curStep == 2079 then
-            switchCamBop("semiBasicBop1")
-        end
-        if curStep == 2143 then
-            switchCamBop("buildupCamalt2")
-        end
-        if curStep == 2207 then
-            switchCamBop("semiBasicBop1")
-        end
-        if curStep == 2271 then
-            switchCamBop("buildupCamalt2")
-        end
-        if curStep == 2319 then
-            switchCamBop("")
-        end
-        if curStep == 2332 then
-            triggerEvent("Add Camera Zoom", -0.2, -0.2)
-        end
-        if curStep == 2336 then
-            switchCamBop("buildupCamSimple")
-        end
-        if curStep == 2336 then
-            switchCamBop("buildupCamSimple+")
-        end
-        if curStep == 2784 then
-            doTweenAlpha("reveal", "blank", 1, stepCrochet*0.001*64, "sineInOut")
-            doTweenAlpha("revealH", "camHUD", 0, stepCrochet*0.001*64, "sineInOut")
-        end
-        if curStep == 2832 then
-            switchCamBop("")
-        end
-        if curStep == 2848 then
-            switchCamBop("buildupCam")
-            doTweenAlpha("reveal", "blank", 0, stepCrochet*0.001*264, "sineInOut")
-        end
-        if curStep == 3087 then
-            switchCamBop("")
-        end
-        if curStep == 3088 then
-            triggerEvent("Add Camera Zoom", 0.1, 0.1)
-            doTweenAlpha("revealH", "camHUD", 1, stepCrochet*0.001*16, "sineInOut")
-        end
-        if curStep == 3096 then
-            triggerEvent("Add Camera Zoom", 0.1, 0.1)
-        end
-        if curStep == 3104 then
-            switchCamBop("basicBop1")
-        end
-        if curStep == 3343 then
-            switchCamBop("")
-        end
-        if curStep == 3344 then
-            setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
-            setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
-            setProperty("camGame.angle", 15)
-        end
-        if curStep == 3350 then
-            setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
-            setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
-            setProperty("camGame.angle", -15)
-        end
-        if curStep == 3356 then
-            setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
-            setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
-            setProperty("camGame.angle", 15)
-        end
-        if curStep == 3360 then
-            setProperty("defaultCamZoom", 0.7)
-            doTweenZoom('zoom', "camGame", getProperty("camGame.zoom")-0.6, stepCrochet*0.001*2, "sineInOut")
-            doTweenAngle('left', "camGame", 0, stepCrochet*0.001*2, "sineInOut")
-            switchCamBop("semiBasicBop1")
-        end
-        if curStep == 3599 then
-            switchCamBop("")
-        end
-        if curStep == 3600 then
-            triggerEvent("Add Camera Zoom", 0.1, 0.1)
-        end
-        if curStep == 3608 then
-            triggerEvent("Add Camera Zoom", 0.1, 0.1)
-        end
-        if curStep == 3615 then
-            switchCamBop("semiBasicBop1")
-        end
-        if curStep == 3855 then
-            switchCamBop("")
-        end
-        if curStep == 3856 then
-            setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
-            setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
-            setProperty("camGame.angle", 15)
-        end
-        if curStep == 3862 then
-            setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
-            setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
-            setProperty("camGame.angle", -15)
-        end
-        if curStep == 3868 then
-            setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
-            setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
-            setProperty("camGame.angle", 15)
-            setProperty("defaultCamZoom", 0.7)
-            doTweenZoom('zoom', "camGame", getProperty("camGame.zoom")-0.6, stepCrochet*0.001*2, "sineInOut")
-            doTweenAngle('left', "camGame", 0, stepCrochet*0.001*2, "sineInOut")
-            switchCamBop("buildupCamSimple+")
-        end
-        if curStep == 4375 then
-            switchCamBop("")
-        end
-        if curStep == 4380 then
-            triggerEvent("Add Camera Zoom", 0.1, 0.1)
-        end
-        if curStep == 4382 then
-            triggerEvent("Add Camera Zoom", 0.1, 0.1)
-            switchCamBop("buildupCam")
-        end
-        if curStep == 4639 then
-            switchCamBop("")
-        end
-        if curStep == 4896 then
-            setProperty('blank.alpha', 1)
-        end
+    if curStep == 256 then
+        cameraFlash('other', 'ffffff', 1)
+        switchCamBop("buildupCam")
     end
-
-    --Shadow Stuff
+    if curStep == 768 then
+        switchCamBop("basicBop1")
+    end
+    if curStep == 1263 then
+        switchCamBop("")
+        setVar("enableLockInCam", false)
+    end
+    if curStep == 1264 then
+        setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
+        setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
+    end
+    if curStep == 1270 then
+        setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
+        setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
+        setProperty("camGame.angle", -15)
+    end
+    if curStep == 1276 then
+        setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
+        setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
+        setProperty("camGame.angle", 15)
+    end
+    if curStep == 1280 then
+        setProperty("defaultCamZoom", 0.7)
+        doTweenZoom('zoom', "camGame", getProperty("camGame.zoom")-0.6, stepCrochet*0.001*28, "sineInOut")
+        doTweenAngle('left', "camGame", 0, stepCrochet*0.001*28, "sineInOut")
+    end
+    if curStep == 1312 then
+        switchCamBop("buildupCamalt")
+        setVar("enableLockInCam", true)
+        cameraFlash('other', 'ffffff', 1)
+    end
+    if curStep == 1824 then
+        switchCamBop("buildupCamalt2")
+    end
+    if curStep == 2063 then
+        switchCamBop("")
+    end
+    if curStep == 2072 then
+        triggerEvent("Add Camera Zoom", 0.5, 0.5)
+    end
+    if curStep == 2079 then
+        switchCamBop("semiBasicBop1")
+    end
+    if curStep == 2143 then
+        switchCamBop("buildupCamalt2")
+    end
+    if curStep == 2207 then
+        switchCamBop("semiBasicBop1")
+    end
+    if curStep == 2271 then
+        switchCamBop("buildupCamalt2")
+    end
+    if curStep == 2319 then
+        switchCamBop("")
+    end
+    if curStep == 2332 then
+        triggerEvent("Add Camera Zoom", -0.2, -0.2)
+    end
+    if curStep == 2336 then
+        switchCamBop("buildupCamSimple")
+    end
+    if curStep == 2336 then
+        switchCamBop("buildupCamSimple+")
+    end
+    if curStep == 2784 then
+        doTweenAlpha("reveal", "blank", 1, stepCrochet*0.001*64, "sineInOut")
+        doTweenAlpha("revealH", "camHUD", 0, stepCrochet*0.001*64, "sineInOut")
+    end
+    if curStep == 2832 then
+        switchCamBop("")
+    end
+    if curStep == 2848 then
+        switchCamBop("buildupCam")
+        doTweenAlpha("reveal", "blank", 0, stepCrochet*0.001*264, "sineInOut")
+    end
+    if curStep == 3087 then
+        switchCamBop("")
+    end
+    if curStep == 3088 then
+        triggerEvent("Add Camera Zoom", 0.1, 0.1)
+        doTweenAlpha("revealH", "camHUD", 1, stepCrochet*0.001*16, "sineInOut")
+    end
+    if curStep == 3096 then
+        triggerEvent("Add Camera Zoom", 0.1, 0.1)
+    end
+    if curStep == 3104 then
+        switchCamBop("basicBop1")
+    end
+    if curStep == 3343 then
+        switchCamBop("")
+    end
+    if curStep == 3344 then
+        setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
+        setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
+        setProperty("camGame.angle", 15)
+    end
+    if curStep == 3350 then
+        setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
+        setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
+        setProperty("camGame.angle", -15)
+    end
+    if curStep == 3356 then
+        setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
+        setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
+        setProperty("camGame.angle", 15)
+    end
+    if curStep == 3360 then
+        setProperty("defaultCamZoom", 0.7)
+        doTweenZoom('zoom', "camGame", getProperty("camGame.zoom")-0.6, stepCrochet*0.001*2, "sineInOut")
+        doTweenAngle('left', "camGame", 0, stepCrochet*0.001*2, "sineInOut")
+        switchCamBop("semiBasicBop1")
+    end
+    if curStep == 3599 then
+        switchCamBop("")
+    end
+    if curStep == 3600 then
+        triggerEvent("Add Camera Zoom", 0.1, 0.1)
+    end
+    if curStep == 3608 then
+        triggerEvent("Add Camera Zoom", 0.1, 0.1)
+    end
+    if curStep == 3615 then
+        switchCamBop("semiBasicBop1")
+    end
+    if curStep == 3855 then
+        switchCamBop("")
+    end
+    if curStep == 3856 then
+        setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
+        setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
+        setProperty("camGame.angle", 15)
+    end
+    if curStep == 3862 then
+        setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
+        setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
+        setProperty("camGame.angle", -15)
+    end
+    if curStep == 3868 then
+        setProperty("camGame.zoom", getProperty("camGame.zoom")+0.3)
+        setProperty("defaultCamZoom", getProperty("defaultCamZoom")+0.3)
+        setProperty("camGame.angle", 15)
+        setProperty("defaultCamZoom", 0.7)
+        doTweenZoom('zoom', "camGame", getProperty("camGame.zoom")-0.6, stepCrochet*0.001*2, "sineInOut")
+        doTweenAngle('left', "camGame", 0, stepCrochet*0.001*2, "sineInOut")
+        switchCamBop("buildupCamSimple+")
+    end
+    if curStep == 4375 then
+        switchCamBop("")
+    end
+    if curStep == 4380 then
+        triggerEvent("Add Camera Zoom", 0.1, 0.1)
+    end
+    if curStep == 4382 then
+        triggerEvent("Add Camera Zoom", 0.1, 0.1)
+        switchCamBop("buildupCam")
+    end
+    if curStep == 4639 then
+        switchCamBop("")
+    end
+    if curStep == 4896 then
+        setProperty('blank.alpha', 1)
+    end
     if curStep == 512 then
         triggerEvent("Edit Shadow", 'boyfriend', 'true')
     end

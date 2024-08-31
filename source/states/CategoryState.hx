@@ -99,6 +99,9 @@ class CategoryState extends MusicBeatState
 		if (h == "h?") {
 			menuItems.push("h?");
 		}
+		else if (h == 'no' && menuItems.contains("h?")) {
+			menuItems.remove("h?");
+		}
 		Cursor.cursorMode = Cross;
 		var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.color = FlxColor.PURPLE;
@@ -190,21 +193,33 @@ class CategoryState extends MusicBeatState
 
 							FlxG.sound.play(Paths.sound('ToggleJingle'));
 
-							var black:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-							black.alpha = 0;
-							add(black);
-
-							FlxTween.tween(black, {alpha: 1}, 1, {onComplete:
-								function(twn:FlxTween) {
-									FlxTransitionableState.skipNextTransIn = true;
-									FlxTransitionableState.skipNextTransOut = true;
-									MusicBeatState.switchState(new states.GodCode());
-								}
-							});
-							FlxG.sound.music.fadeOut();
-							if(FreeplayState.vocals != null)
+							if (word == 'CODES')
 							{
-								FreeplayState.vocals.fadeOut();
+								var black:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+								black.alpha = 0;
+								add(black);
+
+								FlxTween.tween(black, {alpha: 1}, 1, {onComplete:
+									function(twn:FlxTween) {
+										FlxTransitionableState.skipNextTransIn = true;
+										FlxTransitionableState.skipNextTransOut = true;
+										MusicBeatState.switchState(new states.GodCode());
+									}
+								});
+								FlxG.sound.music.fadeOut();
+								if(FreeplayState.vocals != null)
+								{
+									FreeplayState.vocals.fadeOut();
+								}
+							}
+							else if (word == 'SECRET')
+							{
+								grpMenuShit.forEach(function(item:FlxSprite)
+								{
+									if (item.ID == 3) FlxTween.color(item, 1, 0xff00cc1b, 0xffffffff, {ease: FlxEase.sineIn});
+									menuLocks[3] = false;
+									Achievements.unlock('secretsuntold');
+								});
 							}
 							easterEggKeysBuffer = '';
 							break;
@@ -227,42 +242,26 @@ class CategoryState extends MusicBeatState
 			}
 			else if (accepted)
 			{
-				if (loadWeekForce == 'secrets' && menuLocks[curSelected] == false)
-				{
-					TransitionState.transitionState(FreeplayState, {
-						transitionType: (function() {
-							var transitions = ["fadeOut", "fadeColor", "slideLeft", "slideRight", "slideUp", "slideDown", "slideRandom", "fallRandom", "fallSequential", "stickers"];
-							var options:Array<Chance> = [];
-						
-							for (transition in transitions) {
-								var chance:Float;
-								if (transition == "stickers") {
-									// Assign a lower chance for "stickers"
-									chance = 1 + Math.random() * 4; // 1% to 5%
-								} else if (transition == "fallRandom" || transition == "fallSequential") {
-									// Assign a higher chance for "fallRandom" and "fallSequential"
-									chance = 50 + Math.random() * 50; // 50% to 100%
-								} else {
-									// Assign a moderate chance for other transitions
-									chance = 10 + Math.random() * 40; // 10% to 50%
-								}
-								options.push({item: transition, chance: chance});
-							}
-						
-							return ChanceSelector.selectOption(options);
-						})()
-					});
-				}
-				else if (loadWeekForce == 'codes')
+				if (loadWeekForce == 'codes')
 				{
 					TransitionState.transitionState(CodeState, {transitionType: "stickers"});
 				}
-				else if (loadWeekForce == 'secrets' && menuLocks[curSelected] == true)
+				else if (loadWeekForce == 'secrets')
 				{
-					//Ill put the dialogue sequence in here later
+					if (Achievements.isUnlocked('secretsunveiled'))
+					{
+						TransitionState.transitionState(FreeplayState, {transitionType: "stickers"});
+					}
+					else
+					{
+						Window.alert('First, you must find the songs that are hidden in the main menu\nOnly then can you enter here.', 'Not yet...');
+					}
 				}
 				else if (loadWeekForce == 'h?')
-					throw "h?"; 
+				{
+					Window.alert('h?', 'h?');
+					throw "h?";
+				}
 				else
 				{
 					MusicBeatState.switchState(new FreeplayState());
