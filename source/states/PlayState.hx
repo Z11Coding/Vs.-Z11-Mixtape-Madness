@@ -831,16 +831,19 @@ class PlayState extends MusicBeatState
 		}
 
 		#if DISCORD_ALLOWED
-		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
-		storyDifficultyText = Difficulty.getString();
+		if (WeekData.getCurrentWeek() != null)
+		{
+			// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
+			storyDifficultyText = Difficulty.getString();
 
-		if (isStoryMode)
-			detailsText = "Story Mode: " + WeekData.getCurrentWeek().weekName;
-		else
-			detailsText = "Freeplay";
-		// String for when the game is paused
-		detailsPausedText = "Paused - " + detailsText;
-		#end
+			if (isStoryMode)
+				detailsText = "Story Mode: " + WeekData.getCurrentWeek().weekName;
+			else
+				detailsText = "Freeplay";
+			// String for when the game is paused
+			detailsPausedText = "Paused - " + detailsText;
+			#end
+		}
 
 		GameOverSubstate.resetVariables();
 		songName = Paths.formatToSongPath(SONG.song);

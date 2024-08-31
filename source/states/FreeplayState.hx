@@ -82,7 +82,7 @@ class FreeplayState extends MusicBeatState
 	];
 	var rank:FlxSprite = new FlxSprite(0).loadGraphic(Paths.image('rankings/NA'));
 
-	var allowedSongs:Array<String> = [];
+	public static var allowedSongs:Array<String> = [];
 
 	override function create()
 	{

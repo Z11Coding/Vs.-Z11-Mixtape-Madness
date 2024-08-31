@@ -598,7 +598,7 @@ class MainMenuState extends MusicBeatState
 						else if (allowMouse && FlxG.mouse.overlaps(PBTBM))
 						{
 							Achievements.unlock('secretsunveiled');
-							MusicBeatState.playSong(['possessed-by-the-blood-moon'], false, FlxG.random.int(0, 2), 'TransitionState', 'stickers', ['FNF', 'NITG', 'POSSESSED']);
+							MusicBeatState.playSong(['possessed-by-the-blood-moon'], false, 0, 'TransitionState', 'stickers', ['FNF', 'NITG', 'POSSESSED']);
 							FlxG.autoPause = ClientPrefs.data.autoPause;
 						}
 					}
