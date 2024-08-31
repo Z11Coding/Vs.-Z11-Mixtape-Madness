@@ -24,10 +24,6 @@ class MusicBeatState extends FlxState
 
 	var _psychCameraInitialized:Bool = false;
 
-	public var variables:Map<String, Dynamic> = new Map<String, Dynamic>();
-	public static function getVariables()
-		return getState().variables;
-
 	override function create() {
 		var skip:Bool = FlxTransitionableState.skipNextTransOut;
 		#if MODS_ALLOWED Mods.updatedOnState = false; #end
@@ -171,19 +167,20 @@ class MusicBeatState extends FlxState
 		curStep = lastChange.stepTime + Math.floor(shit);
 	}
 
-	public static function playSong(storyPlaylist:Array<String>, storyMode:Bool = false, difficulty:Int = 0, ?transition:String, ?type:String = null):Void {
+	public static function playSong(storyPlaylist:Array<String>, storyMode:Bool = false, difficulty:Int = 0, ?transition:String, ?type:String = null, ?manualDiff:Array<String> = null):Void {
 		var songs:Array<SwagSong> = [];
 
 		if (storyPlaylist.length > 1) {
 			storyMode = true;
 		}
 		Difficulty.resetList();
+		if (manualDiff != null) Difficulty.list = manualDiff;
 
 		if (storyMode) {
 			for (songPath in storyPlaylist) {
 				var songLowercase:String = Paths.formatToSongPath(songPath);
 				var formattedSong:String = Highscore.formatSong(songLowercase, difficulty);
-				songs.push(Song.loadFromJson(songLowercase));
+				songs.push(Song.loadFromJson(formattedSong, songLowercase));
 			}
 			PlayState.storyPlaylist = songs.map(function(song:SwagSong):String {
 				return song.song;

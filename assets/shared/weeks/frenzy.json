@@ -3,19 +3,14 @@
 	"difficulties": "Hard",
 	"hideFreeplay": false,
 	"weekBackground": "",
+	"weekBefore": "tutorial",
 	"freeplayColor": [
 		146,
 		113,
 		253
 	],
-	"weekBefore": "tutorial",
 	"startUnlocked": true,
-	"category": "bonus",
-	"weekCharacters": [
-		"",
-		"",
-		""
-	],
+	"hideStoryMode": false,
 	"songs": [
 		[
 			"Fangirl Frenzy",
@@ -27,7 +22,12 @@
 			]
 		]
 	],
-	"hideStoryMode": false,
-	"weekName": "Fanicon",
-	"hiddenUntilUnlocked": false
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"category": "secrets",
+	"hiddenUntilUnlocked": false,
+	"weekName": "Fanicon"
 }

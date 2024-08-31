@@ -39,8 +39,11 @@ class Achievements {
 		createAchievement('rawr',	                {name: "Don't mess with michael", description: "Beat \"Rawr\" without missing"});
 		createAchievement('underlust',	            {name: "DETERMINATION...I Think...", description: "Beat \"Resistalovania (Mega Mix)\" on the hardest difficulty"});
 		createAchievement('resistified',	        {name: "True Resistance", description: "Beat Every version of Resistance without missing", maxScore: 7, maxDecimals: 0});
-		createAchievement('skysthelimit',	        {name: "Sky's The Limit", description: "Beat \"Fangirl Frenzy\" and \"Familiar Freakout\" without missing", maxScore: 2, maxDecimals: 0});
-		createAchievement('secretsunveiled',	    {name: "THERE'S MORE???", description: "Find the Secrets Category", hidden: true});
+		createAchievement('skysthelimit',	        {name: "Sky's The Limit", description: "Beat \"Fangirl Frenzy\" without missing", hidden: true});
+		createAchievement('secretsunveiled',	    {name: "THERE'S MORE???", description: "Find one of the 3 secrets", hidden: true});
+		createAchievement('pokemon',	    		{name: "Gotta find em' all!", description: "Find all 3 menu secrets", hidden: true});
+		createAchievement('waldosworstnightmare',	{name: "Detective", description: "Find all 4 secret songs", hidden: true});
+		createAchievement('error404',	            {name: "SONG NOT FOUND", description: "Find and beat \"Eternity\"", hidden: true});
 		createAchievement('secretsuntold',	        {name: "Secret's Untold", description: "Unlock the Secrets Category", hidden: true});
 		createAchievement('potato',	                {name: "Slow-Mo", description: "Set the game to 1 FPS", hidden: true});
 		createAchievement('potatogameplay',	        {name: "YOU CAN PLAY LIKE THIS?!?!", description: "Beat a song while the FPS is set to 1", hidden: true});
@@ -50,8 +53,10 @@ class Achievements {
 		createAchievement('matt',	                {name: "Max Efficiency 4X", description: "Beat a song at 15X Speed or higher", hidden: true});
 		createAchievement('mattbeyond',	            {name: "Bro what are you even doing anymore", description: "Beat a song at 20X Speed or higher", hidden: true});
 		createAchievement('perfectionist',	        {name: "S for the best", description: "Beat every song with an S Rank or higher"});
-		createAchievement('nohitspecialist',	    {name: "No-Hit Specialist", description: "Beat Resistalovania without getting damaged"});
-		createAchievement('multitasker',	        {name: "Two-For-One Special", description: "Beat Resistalovania without getting damaged AND without missing"});
+		createAchievement('nohitspecialist',	    {name: "No-Hit Specialist", description: "Beat \"Resistalovania\" without getting damaged"});
+		createAchievement('multitasker',	        {name: "Two-For-One Special", description: "Beat \"Resistalovania\" without getting damaged AND without missing"});
+		createAchievement('possessed',	        	{name: "The Moon Slayer", description: "Beat \"Possessed by The Blood Moon\" on FNF or NITG difficulty without missing", hidden: true});
+		createAchievement('themoon',	        	{name: "The Exorcist", description: "Beat \"Possessed by The Blood Moon\" on Possessed difficulty without missing", hidden: true});
 		
 		//dont delete this thing below
 		_originalLength = _sortID + 1;

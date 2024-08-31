@@ -150,6 +150,7 @@ class PlayState extends MusicBeatState
 	public var modchartTexts:Map<String, FlxText> = new Map<String, FlxText>();
 	public var modchartSaves:Map<String, FlxSave> = new Map<String, FlxSave>();
 	#end
+	public var variables:Map<String, Dynamic> = new Map<String, Dynamic>();
 
 	public var BF_X:Float = 770;
 	public var BF_Y:Float = 100;
@@ -273,6 +274,9 @@ class PlayState extends MusicBeatState
 	public var chartModifier:String = 'Normal';
 	public var convertMania:Int = ClientPrefs.getGameplaySetting('convertMania', 3);
 	public var opponentmode:Bool = ClientPrefs.getGameplaySetting('opponentplay', false);
+
+	//Anticheat
+	var hadBotplayOn:Bool = false;
 
 	function set_cpuControlled(value)
 	{
@@ -2897,23 +2901,6 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if (!isStoryMode && playbackRate == 1)
-		{
-			for (i in 0...unspawnNotes.length + 1)
-			{
-				var daNote:Note = unspawnNotes[i];
-				if (daNote != null && daNote.strumTime > 1000)
-				{
-					needSkip = true;
-					skipTo = daNote.strumTime - 1000;
-				}
-				else
-				{
-					needSkip = false;
-				}
-			}
-		}
-
 		FlxG.sound.music.time = Conductor.songPosition;
 		FlxG.sound.music.play();
 
@@ -2972,6 +2959,19 @@ class PlayState extends MusicBeatState
 			DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")",
 				if (playAsGF && gf != null) iconGF.getCharacter() else iconP2.getCharacter(), true, songLength);
 			#end
+		}
+		if (songName.toLowerCase() == 'truly-lost' || songName.toLowerCase() == 'everlost')
+		{
+			healthBar.visible = false;
+			healthBar.bg.visible = false;
+			iconP1.visible = false;
+			iconP2.visible = false;
+			if (songName.toLowerCase() == 'everlost') triggerEvent('Enable or Disable Dad Trail', 'true', null, Conductor.crochet);
+		}
+		else if (songName.toLowerCase() == 'everfound')
+		{
+			health = 0.01;
+			triggerEvent('Enable or Disable Dad Trail', 'true', null, Conductor.crochet);
 		}
 	}
 
@@ -4542,6 +4542,21 @@ if (result < 0 || result > mania) {
 		if (FlxG.keys.justPressed.NINE)
 			iconP1.swapOldIcon();
 
+		if (!isStoryMode && playbackRate == 1)
+		{
+			var daNote:Note = allNotes[-1];
+			if (daNote != null && daNote.strumTime > 100)
+			{
+				needSkip = true;
+				skipTo = daNote.strumTime - 100;
+			}
+			else
+			{
+				needSkip = false;
+			}
+			
+		}
+
 		if (chartModifier == '4K Only' && mania != 3)
 			changeMania(3);
 
@@ -4553,6 +4568,8 @@ if (result < 0 || result > mania) {
 			if (playfield.isPlayer)
 				playfield.autoPlayed = cpuControlled;
 		}
+
+		if (cpuControlled) hadBotplayOn = true;
 
 		if (noteHits.length > 0)
 		{
@@ -6273,6 +6290,13 @@ if (result < 0 || result > mania) {
 							boyfriend = boyfriendMap.get(value2);
 							boyfriend.alpha = lastAlpha;
 							iconP1.changeIcon(boyfriend.healthIcon);
+
+							if (bfT != null)
+							{
+								//reset the trail if it was on
+								triggerEvent('Enable or Disable Dad Trail', 'false', null, Conductor.crochet);
+								triggerEvent('Enable or Disable Dad Trail', 'true', null, Conductor.crochet+0.1);
+							}
 						}
 						setOnScripts('boyfriendName', boyfriend.curCharacter);
 
@@ -6301,6 +6325,12 @@ if (result < 0 || result > mania) {
 							}
 							dad.alpha = lastAlpha;
 							iconP2.changeIcon(dad.healthIcon);
+							if (bfT != null)
+							{
+								//reset the trail if it was on
+								triggerEvent('Enable or Disable BF Trail', 'false', null, Conductor.crochet);
+								triggerEvent('Enable or Disable BF Trail', 'true', null, Conductor.crochet+0.1);
+							}
 						}
 						setOnScripts('dadName', dad.curCharacter);
 
@@ -7147,8 +7177,31 @@ if (result < 0 || result > mania) {
 		#if ACHIEVEMENTS_ALLOWED
 		var weekNoMiss:String = WeekData.getWeekFileName() + '_nomiss';
 		checkForAchievement([
-			weekNoMiss, 'ur_bad', 'ur_good', 'hype', 'two_keys', 'toastie', 'debugger', 'smooth_moves', 'way_too_spoopy', 'gf_mode', 'beat_battle',
-			'beat_battle_master', 'beat_battle_god'
+			weekNoMiss, 
+			'ur_bad', 
+			'ur_good', 
+			'hype', 
+			'two_keys', 
+			'toastie', 
+			'beat_battle', 
+			'beat_battle_master', 
+			'beat_battle_god', 
+			'beat_battle_fanatic', 
+			'feelinfrisky',
+			'leantastic', 
+			'punchout',
+			'rawr',
+			'underlust',
+			'resistified',
+			'skysthelimit',
+			'potatogameplay',
+			'mattdestroyer',
+			'matteleminator',
+			'mattgod',
+			'matt',
+			'mattbeyond',
+			'perfectionist',
+			'error404'
 		]);
 		#end
 
@@ -9488,7 +9541,7 @@ if (result < 0 || result > mania) {
 			return;
 
 		var usedPractice:Bool = (ClientPrefs.getGameplaySetting('practice') || ClientPrefs.getGameplaySetting('botplay'));
-		if (cpuControlled)
+		if (cpuControlled || hadBotplayOn) //So that if it's turned off last second, they still dont get the achievement
 			return;
 
 		var altsongname = StringTools.replace(songName, '-', '');
@@ -9573,6 +9626,28 @@ if (result < 0 || result > mania) {
 							&& songMisses < 26
 							&& !playAsGF);
 
+					case 'beat_battle_fanatic':
+						if (altsongname.toLowerCase() == 'beat battle'
+							&& (Difficulty.getString().toUpperCase() == 'SEMIIMPOSSIBLE'
+								|| Difficulty.getString().toUpperCase() == 'IMPOSSIBLE')
+							&& !changedDifficulty
+							&& !usedPractice
+							&& songMisses < 26
+							&& !playAsGF
+							&& Achievements.isUnlocked('beat_battle_god'))
+						{
+							Achievements.addScore('beat_battle_fanatic');
+						}
+
+						if (altsongname.toLowerCase() == 'beat battle 2'
+							&& ClientPrefs.data.modcharts
+							&& !usedPractice
+							&& !playAsGF)
+						{
+							Achievements.addScore('beat_battle_fanatic');
+						}
+
+
 					case 'feelinfrisky':
 						unlock = (altsongname.toLowerCase() == 'funky fanta' && songMisses == 0 && !usedPractice && !playAsGF);
 
@@ -9607,6 +9682,7 @@ if (result < 0 || result > mania) {
 									{
 										FlxG.save.data.resistCheck[0] = true;
 										Achievements.addScore("resistified");
+										FlxG.save.flush();
 									}
 								case 'resistance-k':
 									if (songName.toLowerCase() == 'resistance-k'
@@ -9618,6 +9694,7 @@ if (result < 0 || result > mania) {
 									{
 										FlxG.save.data.resistCheck[1] = true;
 										Achievements.addScore("resistified");
+										FlxG.save.flush();
 									}
 								case 'resistance awsome mix':
 									if (altsongname.toLowerCase() == 'resistance awsome mix'
@@ -9629,6 +9706,7 @@ if (result < 0 || result > mania) {
 									{
 										FlxG.save.data.resistCheck[2] = true;
 										Achievements.addScore("resistified");
+										FlxG.save.flush();
 									}
 								case 'resistance-kai':
 									if (songName.toLowerCase() == 'resistance-kai'
@@ -9640,6 +9718,7 @@ if (result < 0 || result > mania) {
 									{
 										FlxG.save.data.resistCheck[3] = true;
 										Achievements.addScore("resistified");
+										FlxG.save.flush();
 									}
 								case 'resistalovania':
 									if (songName.toLowerCase() == 'resistalovania'
@@ -9651,6 +9730,7 @@ if (result < 0 || result > mania) {
 									{
 										FlxG.save.data.resistCheck[4] = true;
 										Achievements.addScore("resistified");
+										FlxG.save.flush();
 									}
 								case 'resistalovania-(mega-mix)':
 									if (altsongname.toLowerCase() == 'resistalovania (mega mix)'
@@ -9662,6 +9742,7 @@ if (result < 0 || result > mania) {
 									{
 										FlxG.save.data.resistCheck[5] = true;
 										Achievements.addScore("resistified");
+										FlxG.save.flush();
 									}
 								case 'fightback':
 									if (altsongname.toLowerCase() == 'fightback'
@@ -9673,9 +9754,13 @@ if (result < 0 || result > mania) {
 									{
 										FlxG.save.data.resistCheck[6] = true;
 										Achievements.addScore("resistified");
+										FlxG.save.flush();
 									}
 							}
 						}
+
+					case 'skysthelimit':
+						unlock = (songName.toLowerCase() == 'fangirl frenzy' && songMisses == 0 && !changedDifficulty && !usedPractice && !playAsGF);
 
 					case 'mattdestroyer':
 						unlock = (playbackRate >= 2 && !usedPractice && !playAsGF);
@@ -9691,17 +9776,26 @@ if (result < 0 || result > mania) {
 
 					case 'mattbeyond':
 						unlock = (playbackRate >= 20 && !usedPractice && !playAsGF);
-				}
-			}
-			else // any FC achievements, name should be "weekFileName_nomiss", e.g: "week3_nomiss";
-			{
-				if (isStoryMode
-					&& campaignMisses + songMisses < 1
-					&& Difficulty.getString().toUpperCase() == 'HARD'
-					&& storyPlaylist.length <= 1
-					&& !changedDifficulty
-					&& !usedPractice)
-					unlock = true;
+					case 'possessed':
+						unlock = (altsongname.toLowerCase() == 'possessed by the blood moon'
+							&& (Difficulty.getString().toUpperCase() == 'FNF'
+								|| Difficulty.getString().toUpperCase() == 'NITG')
+							&& !changedDifficulty
+							&& !usedPractice
+							&& songMisses < 1
+							&& !playAsGF);
+					case 'themoon':
+						unlock = (altsongname.toLowerCase() == 'possessed by the blood moon'
+							&& Difficulty.getString().toUpperCase() == 'POSSESSED'
+							&& !changedDifficulty
+							&& !usedPractice
+							&& songMisses < 1
+							&& !playAsGF);
+					case 'potatogameplay':
+						unlock = (ClientPrefs.data.framerate == 1 && !usedPractice && !playAsGF);
+					case 'error404':
+						unlock = (songName.toLowerCase() == 'eternity' && songMisses == 0 && !changedDifficulty && !usedPractice && !playAsGF);
+					}
 			}
 
 			if (unlock)

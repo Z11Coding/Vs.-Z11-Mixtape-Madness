@@ -142,6 +142,7 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 
 	function onChangeFramerate()
 	{
+		if (ClientPrefs.data.framerate == 1) Achievements.unlock('potato');
 		if(ClientPrefs.data.framerate > FlxG.drawFramerate)
 		{
 			FlxG.updateFramerate = ClientPrefs.data.framerate;

@@ -10,42 +10,23 @@ function onCreate()
         enableShader = true
     end
 end
-function onCreatePost()
-    for events = 0,getProperty('eventNotes.length') do
-        if getPropertyFromGroup('eventNotes',events,'event') == 'Change Character' then
-            table.insert(changeCharacterStrum,{getPropertyFromGroup('eventNotes',events,'strumTime'),getPropertyFromGroup('eventNotes',events,'value1')})
-        end
-    end
-    if songName ~= 'King Hit' then
-        for notes = 0,getProperty('unspawnNotes.length')-1 do
-            local type = getPropertyFromGroup('unspawnNotes',notes,'noteType')
-            if type == 'Wiik3Punch' or type == 'Wiik4Sword' or type == 'BoxingMatchPunch' then
-                doChrom = true
-                callScript('scripts/loadEvents','loadEvent',{'ca burst'})
-                break
-            end
-        end
-    end
-end
 function createShader(lua,s,obrigatory)
-    if checkFileExists('shaders/'..s..'.frag') then
-        if not luaShaderIsRunning(lua) then
-            if obrigatory == nil then
-                if s == 'MirrorRepeatEffect' then
-                    obrigatory = true
-                end
+    if not luaShaderIsRunning(lua) then
+        if obrigatory == nil then
+            if s == 'MirrorRepeatEffect' then
+                obrigatory = true
             end
-            if not enableShader then
-                if obrigatory then
-                    setPropertyFromClass('backend.ClientPrefs','data.shaders',true)
-                end
+        end
+        if not enableShader then
+            if obrigatory then
+                setPropertyFromClass('backend.ClientPrefs','data.shaders',true)
             end
-            initLuaShader(s)
-            makeLuaSprite(lua,nil)
-            loadShader(lua,s)
-            if obrigatory and not enableShader then
-                setPropertyFromClass('backend.ClientPrefs','data.shaders',false)
-            end
+        end
+        initLuaShader(s)
+        makeLuaSprite(lua,nil)
+        loadShader(lua,s)
+        if obrigatory and not enableShader then
+            setPropertyFromClass('backend.ClientPrefs','data.shaders',false)
         end
     end
 end
@@ -64,7 +45,7 @@ function getArrayAsString(array)
         end
         r = r.."]"
     elseif type(array) == 'string' then
-        r = '["'..array.."]"
+        r = '["'+array+"]"
     end
     return r
 end
@@ -73,8 +54,7 @@ function loadShader(lua,shader)
     shaderArray[lua] = shader
     runHaxeCode(
         [[
-            var shaderLua = ]]..getArrayAsString(s)..[[;
-            game.getLuaObject(shaderLua[0]).shader = game.createRuntimeShader(shaderLua[1]);
+            game.getLuaObject("]]..lua..[[").shader = game.createRuntimeShader("]]..shader..[[");
         ]]
     )
 
@@ -161,12 +141,13 @@ function loadShaderCam(camera,shader)
         if cam == 'camGame' or cam == 'camHUD' or cam == 'camOther' or cam == 'camVisual' then
             cam = 'game.'..cam
         end
+        luaDebugMode = true
         runHaxeCode(
             [[
                 var voiidShaders = [];
                 var voiidLuas = ]]..getArrayAsString(sha)..[[;
-                for(s in voiidLuas){
-                    var initLua = game.getLuaObject(s).shader;
+                for(z in voiidLuas){
+                    var initLua = game.getLuaObject(z).shader;
                     if(initLua != null){
                         voiidShaders.insert(voiidShaders.length,new ShaderFilter(initLua));
                     }
@@ -412,11 +393,6 @@ function onEvent(name,v1)
         if (string.lower(v1) == 'bf' or v1 == '0') and runningShaders['boyfriend'] ~= nil then
             loadShaderSprite('boyfriend')
         end
-    end
-end
-function goodNoteHit(id,data,type,sus)
-    if doChrom and (type == 'Wiik3Punch' or type == 'VoiidParry' or type == 'BoxingMatchPunch' or type == 'Wiik4Sword') then
-        triggerEvent('ca burst', '0.007', '0.01')
     end
 end
 --[[function getShaderVar(shader,var,type)

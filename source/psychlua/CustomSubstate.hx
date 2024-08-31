@@ -88,11 +88,15 @@ class CustomSubstate extends MusicBeatSubstate
 
 	override function destroy()
 	{
-		PlayState.instance.callOnScripts('onCustomSubstateDestroy', [name]);
-		name = 'unnamed';
+		try 
+		{
+			PlayState.instance.callOnScripts('onCustomSubstateDestroy', [name]);
+			name = 'unnamed';
 
-		PlayState.instance.setOnHScript('customSubstate', null);
-		PlayState.instance.setOnHScript('customSubstateName', name);
+			PlayState.instance.setOnHScript('customSubstate', null);
+			PlayState.instance.setOnHScript('customSubstateName', name);
+		}
+		catch (e:Dynamic) {trace('Whoops! Substate Failed to close properly.\nHopefully that wasn\'t important...');}
 		super.destroy();
 	}
 }

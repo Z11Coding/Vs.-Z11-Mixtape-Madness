@@ -462,7 +462,7 @@ class Note extends NoteObject
 			switch(value) {
 				case 'Hurt Note':
 					ignoreNote = mustPress;
-					reloadNote('HURT');
+					reloadNote('noteskins/HURT');
 					noteSplashTexture = 'HURTnoteSplashes';
 					usesDefaultColours = false;
 					if(isSustainNote) {
@@ -486,7 +486,7 @@ class Note extends NoteObject
 				case 'EX Note':
 					exNote = true;
 				case 'Center Note':
-					reloadNote('CENTER');
+					reloadNote('noteskins/CENTER');
 					hitCausesMiss = false;
 					centerNote = true;
 				default:
@@ -656,7 +656,7 @@ class Note extends NoteObject
 		var lastScaleY:Float = scale.y;
 		var skinPostfix:String = getNoteSkinPostfix();
 		var customSkin:String = skin + skinPostfix;
-		var path:String = PlayState.isPixelStage ? 'pixelUI/' : 'noteskins/';
+		var path:String = PlayState.isPixelStage ? 'pixelUI/' : '/';
 		if(customSkin == _lastValidChecked || Paths.fileExists('images/' + path + customSkin + '.png', IMAGE))
 		{
 			skin = customSkin;

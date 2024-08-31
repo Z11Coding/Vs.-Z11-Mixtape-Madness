@@ -5,12 +5,7 @@
 	"weekBackground": "",
 	"weekBefore": "tutorial",
 	"startUnlocked": true,
-	"hideStoryMode": false,
-	"weekCharacters": [
-		"",
-		"",
-		""
-	],
+	"category": "secrets",
 	"songs": [
 		[
 			"Possessed By The Blood Moon",
@@ -22,6 +17,11 @@
 			]
 		]
 	],
-	"category": "bonus",
+	"hideStoryMode": false,
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
 	"weekName": "Possessed By The Blood Moon"
 }
