@@ -185,7 +185,7 @@ class MusicBeatState extends FlxState
 			PlayState.storyPlaylist = songs.map(function(song:SwagSong):String {
 				return song.song;
 			});
-			PlayState.SONG = PlayState.storyPlaylist[0];
+			PlayState.SONG = null;
 		} else {
 			// songsInput is a String when storyMode is false
 			var songLowercase:String = Paths.formatToSongPath(storyPlaylist[0]);
