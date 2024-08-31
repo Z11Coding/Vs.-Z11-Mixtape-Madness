@@ -50,6 +50,8 @@ class Achievements {
 		createAchievement('matt',	                {name: "Max Efficiency 4X", description: "Beat a song at 15X Speed or higher", hidden: true});
 		createAchievement('mattbeyond',	            {name: "Bro what are you even doing anymore", description: "Beat a song at 20X Speed or higher", hidden: true});
 		createAchievement('perfectionist',	        {name: "S for the best", description: "Beat every song with an S Rank or higher"});
+		createAchievement('nohitspecialist',	    {name: "No-Hit Specialist", description: "Beat Resistalovania without getting damaged"});
+		createAchievement('multitasker',	        {name: "Two-For-One Special", description: "Beat Resistalovania without getting damaged AND without missing"});
 		
 		//dont delete this thing below
 		_originalLength = _sortID + 1;

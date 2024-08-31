@@ -236,26 +236,22 @@ end
 -- the thing.
 function ringMech(bool)
     if bool and not ringmechanic then
-    ringmechanic = true
-    makeyStuff()
-    -- tweens shitty
-    doTweenAlpha('funny1', 'strumring', 1, 0.5, 'circInOut')
-    for i = 4, 5 do
-    noteTweenX('funnynote'..i..'', i, getPropertyFromGroup('strumLineNotes', i, 'x') - 56, 0.5, 'circInOut')
-    end
-    for i = 6, 7 do
-    noteTweenX('funnynote'..i..'', i, getPropertyFromGroup('strumLineNotes', i, 'x') + 56, 0.5, 'circInOut')
-    end
-else
-    if not bool and ringmechanic then
-    ringmechanic = false
-    doTweenAlpha('funny1', 'strumring', 0, 0.5, 'circInOut')
-        for i = 4, 5 do
-            noteTweenX('funnynote'..i..'', i, getPropertyFromGroup('strumLineNotes', i, 'x') + 56, 0.5, 'circInOut')
-        end
-        for i = 6, 7 do
-           noteTweenX('funnynote'..i..'', i, getPropertyFromGroup('strumLineNotes', i, 'x') - 56 , 0.5, 'circInOut')
-        end
+        ringmechanic = true
+        makeyStuff()
+        -- tweens shitty
+        doTweenAlpha('funny1', 'strumring', 1, 0.5, 'circInOut')
+        queueEase(curStep, curStep+3, 'transform0X', -56, 'sineInOut', 0)
+        queueEase(curStep, curStep+3, 'transform1X', -56, 'sineInOut', 0)
+        queueEase(curStep, curStep+3, 'transform2X', 56, 'sineInOut', 0)
+        queueEase(curStep, curStep+3, 'transform3X', 56, 'sineInOut', 0)
+    else
+        if not bool and ringmechanic then
+            ringmechanic = false
+            doTweenAlpha('funny1', 'strumring', 0, 0.5, 'circInOut')
+            queueEase(curStep, curStep+3, 'transform0X', -56, 'sineInOut', 0)
+            queueEase(curStep, curStep+3, 'transform1X', -56, 'sineInOut', 0)
+            queueEase(curStep, curStep+3, 'transform2X', 56, 'sineInOut', 0)
+            queueEase(curStep, curStep+3, 'transform3X', 56, 'sineInOut', 0)
         end
     end
 end

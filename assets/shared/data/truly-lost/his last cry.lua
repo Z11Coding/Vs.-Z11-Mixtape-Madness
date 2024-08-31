@@ -1,13 +1,14 @@
 local activateHallucination = false
 local activateHallucinationAlt = false
 function onCreatePost()
-    precacheImage("memory1")
-    precacheImage("memory2")
-    precacheImage("memory3")
-    precacheImage("memory4")
-    precacheImage("memory5")
-    precacheImage("memory6")
-    precacheImage("memory7")
+    precacheImage("mechanics/lost/memory1")
+    precacheImage("mechanics/lost/memory2")
+    precacheImage("mechanics/lost/memory3")
+    precacheImage("mechanics/lost/memory4")
+    precacheImage("mechanics/lost/memory5")
+    precacheImage("mechanics/lost/memory6")
+    precacheImage("mechanics/lost/memory7")
+    precacheImage("mechanics/lost/memory8")
     makeAnimatedLuaSprite("hallucinationBF", "characters/BOYFRIEND", getProperty("boyfriend.x") + 300, getProperty("boyfriend.y") + 10)
     addAnimationByPrefix("hallucinationBF", "idle", "BF idle dance", 24, false)
     addOffset("hallucinationBF", "idle", -5, 0)
@@ -23,28 +24,13 @@ function onCreatePost()
     addLuaSprite("hallucinationBF", true)
     setProperty("hallucinationBF.alpha", 0)
 
-    makeAnimatedLuaSprite("hallucinationZ11", "characters/Z11", getProperty("boyfriend.x") + 300, getProperty("boyfriend.y") + 300)
-    addAnimationByPrefix("hallucinationZ11", "idle", "BF idle dance", 24, false)
-    addOffset("hallucinationZ11", "idle", -5, 0)
-    addAnimationByPrefix("hallucinationZ11", "singLEFT", "BF NOTE LEFT0", 24, false)
-    addOffset("hallucinationZ11", "singLEFT", 5, -6)
-    addAnimationByPrefix("hallucinationZ11", "singDOWN", "BF NOTE DOWN0", 24, false)
-    addOffset("hallucinationZ11", "singDOWN", -20, -51)
-    addAnimationByPrefix("hallucinationZ11", "singUP", "BF NOTE UP0", 24, false)
-    addOffset("hallucinationZ11", "singUP", -46, 27)
-    addAnimationByPrefix("hallucinationZ11", "singRIGHT", "BF NOTE RIGHT0", 24, false)
-    addOffset("hallucinationZ11", "singRIGHT", -48, -7)
-    --setObjectOrder("hallucinationBF", getObjectOrder("boyfriendGroup") - 7)
-    addLuaSprite("hallucinationZ11", true)
-    setProperty("hallucinationZ11.alpha", 0)
-
-    makeAnimatedLuaSprite("rain", "rain", 0, 0)
+    makeAnimatedLuaSprite("rain", "effects/rain", 0, 0)
     addAnimationByPrefix("rain", "idle", "rain tho", 60, true)
     screenCenter("rain", 'xy')
     addLuaSprite("rain", true)
     setProperty("rain.alpha", 0)
 
-    makeAnimatedLuaSprite("static", "static", 0, 0)
+    makeAnimatedLuaSprite("static", "effects/static", 0, 0)
     addAnimationByPrefix("static", "idle", "lestatic", 24, true)
     scaleObject("static", 8, 5)
     screenCenter("static", 'xy')
@@ -62,22 +48,22 @@ function onCreatePost()
     setProperty("theDarkAbyss.alpha", 0)
     didTheThing = true
 
-    makeLuaSprite('memories', 'memory1', 100, 100)
+    makeLuaSprite('memories', 'mechanics/lost/memory1', 100, 100)
     addLuaSprite("memories", true)
     setObjectCamera("memories", "xy")
     scaleObject("memories", 1.2, 1.2)
     --screenCenter("memories", 'xy')
     updateHitbox("memories", true)
     setProperty("memories.alpha", 0)
+
     playAnim("boyfriend", "scared", true)
     playAnim("dad", "scared", true)
     setTextString("botplayTxt", "Forever Empty...")
 end
 
 function onSongStart()
-    for i = 0, 3 do
-        setPropertyFromGroup("strumLineNotes", i, 'alpha', 0)
-    end
+    setValue('alpha', 1, 1)
+    setValue('noteAlpha', 1, 1)
     if getPropertyFromClass('backend.ClientPrefs', 'data.flashing') then
         cameraFlash("other", "be201c", 1, 'sineInOut')
     end
@@ -123,96 +109,89 @@ function goodNoteHit(a)
         doTweenAlpha("itsnotreal", "hallucinationBF", 0, 1, "sineInOut")
         playAnim("hallucinationBF", getProperty("boyfriend.animation.curAnim.name"), true)
     end
-    if activateHallucinationAlt then
-        setProperty("hallucinationZ11.alpha", 0.5)
-        doTweenAlpha("itsnotreal", "hallucinationZ11", 0, 1, "sineInOut")
-        playAnim("hallucinationZ11", getProperty("boyfriend.animation.curAnim.name"), true)
-    end
 end
 
 function onStepHit()
-    if difficultyName == 'Hard' then
-        if curStep == 256 then
-            setProperty("memories.alpha", 0.3)
-            doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
-        end
-        if curStep == 288 then
-            removeLuaSprite("memories", true)
-            makeLuaSprite('memories', 'memory2', 100, 100)
-            addLuaSprite("memories", true)
-            setObjectCamera("memories", "xy")
-            scaleObject("memories", 1.2, 1.2)
-            --screenCenter("memories", 'xy')
-            updateHitbox("memories", true)
-            setProperty("memories.alpha", 0.3)
-            doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
-        end
-        if curStep == 320 then
-            removeLuaSprite("memories", true)
-            makeLuaSprite('memories', 'memory3', 100, 100)
-            addLuaSprite("memories", true)
-            setObjectCamera("memories", "xy")
-            scaleObject("memories", 1.2, 1.2)
-            --screenCenter("memories", 'xy')
-            updateHitbox("memories", true)
-            setProperty("memories.alpha", 0.3)
-            doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
-        end
-        if curStep == 352 then
-            removeLuaSprite("memories", true)
-            makeLuaSprite('memories', 'memory4', 100, 100)
-            addLuaSprite("memories", true)
-            setObjectCamera("memories", "xy")
-            scaleObject("memories", 1.2, 1.2)
-            --screenCenter("memories", 'xy')
-            updateHitbox("memories", true)
-            setProperty("memories.alpha", 0.3)
-            doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
-        end
-        if curStep == 384 then
-            removeLuaSprite("memories", true)
-            makeLuaSprite('memories', 'memory5', 100, 100)
-            addLuaSprite("memories", true)
-            setObjectCamera("memories", "xy")
-            scaleObject("memories", 1.2, 1.2)
-            --screenCenter("memories", 'xy')
-            updateHitbox("memories", true)
-            setProperty("memories.alpha", 0.3)
-            doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
-        end
-        if curStep == 416 then
-            removeLuaSprite("memories", true)
-            makeLuaSprite('memories', 'memory6', 100, 100)
-            addLuaSprite("memories", true)
-            setObjectCamera("memories", "xy")
-            --screenCenter("memories", 'xy')
-            scaleObject("memories", 1.2, 1.2)
-            updateHitbox("memories", true)
-            setProperty("memories.alpha", 0.3)
-            doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
-        end
-        if curStep == 448 then
-            removeLuaSprite("memories", true)
-            makeLuaSprite('memories', 'memory7', 100, 100)
-            addLuaSprite("memories", true)
-            setObjectCamera("memories", "xy")
-            scaleObject("memories", 1.2, 1.2)
-            --screenCenter("memories", 'xy')
-            updateHitbox("memories", true)
-            setProperty("memories.alpha", 0.3)
-            doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
-        end
-        if curStep == 480 then
-            removeLuaSprite("memories", true)
-            makeLuaSprite('memories', 'memory8', 100, 100)
-            addLuaSprite("memories", true)
-            setObjectCamera("memories", "xy")
-            scaleObject("memories", 1.2, 1.2)
-            --screenCenter("memories", 'xy')
-            updateHitbox("memories", true)
-            setProperty("memories.alpha", 0.3)
-            doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
-        end
+    if curStep == 256 then
+        setProperty("memories.alpha", 0.3)
+        doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
+    end
+    if curStep == 288 then
+        removeLuaSprite("memories", true)
+        makeLuaSprite('memories', 'mechanics/lost/memory2', 100, 100)
+        addLuaSprite("memories", true)
+        setObjectCamera("memories", "xy")
+        scaleObject("memories", 1.2, 1.2)
+        --screenCenter("memories", 'xy')
+        updateHitbox("memories", true)
+        setProperty("memories.alpha", 0.3)
+        doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
+    end
+    if curStep == 320 then
+        removeLuaSprite("memories", true)
+        makeLuaSprite('memories', 'mechanics/lost/memory3', 100, 100)
+        addLuaSprite("memories", true)
+        setObjectCamera("memories", "xy")
+        scaleObject("memories", 1.2, 1.2)
+        --screenCenter("memories", 'xy')
+        updateHitbox("memories", true)
+        setProperty("memories.alpha", 0.3)
+        doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
+    end
+    if curStep == 352 then
+        removeLuaSprite("memories", true)
+        makeLuaSprite('memories', 'mechanics/lost/memory4', 100, 100)
+        addLuaSprite("memories", true)
+        setObjectCamera("memories", "xy")
+        scaleObject("memories", 1.2, 1.2)
+        --screenCenter("memories", 'xy')
+        updateHitbox("memories", true)
+        setProperty("memories.alpha", 0.3)
+        doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
+    end
+    if curStep == 384 then
+        removeLuaSprite("memories", true)
+        makeLuaSprite('memories', 'mechanics/lost/memory5', 100, 100)
+        addLuaSprite("memories", true)
+        setObjectCamera("memories", "xy")
+        scaleObject("memories", 1.2, 1.2)
+        --screenCenter("memories", 'xy')
+        updateHitbox("memories", true)
+        setProperty("memories.alpha", 0.3)
+        doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
+    end
+    if curStep == 416 then
+        removeLuaSprite("memories", true)
+        makeLuaSprite('memories', 'mechanics/lost/memory6', 100, 100)
+        addLuaSprite("memories", true)
+        setObjectCamera("memories", "xy")
+        --screenCenter("memories", 'xy')
+        scaleObject("memories", 1.2, 1.2)
+        updateHitbox("memories", true)
+        setProperty("memories.alpha", 0.3)
+        doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
+    end
+    if curStep == 448 then
+        removeLuaSprite("memories", true)
+        makeLuaSprite('memories', 'mechanics/lost/memory7', 100, 100)
+        addLuaSprite("memories", true)
+        setObjectCamera("memories", "xy")
+        scaleObject("memories", 1.2, 1.2)
+        --screenCenter("memories", 'xy')
+        updateHitbox("memories", true)
+        setProperty("memories.alpha", 0.3)
+        doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
+    end
+    if curStep == 480 then
+        removeLuaSprite("memories", true)
+        makeLuaSprite('memories', 'mechanics/lost/memory8', 100, 100)
+        addLuaSprite("memories", true)
+        setObjectCamera("memories", "xy")
+        scaleObject("memories", 1.2, 1.2)
+        --screenCenter("memories", 'xy')
+        updateHitbox("memories", true)
+        setProperty("memories.alpha", 0.3)
+        doTweenAlpha("memoriesfade", "memories", 0, 3, "sineInOut")
     end
     if curStep == 512 then
         if getPropertyFromClass('backend.ClientPrefs', 'data.flashing') then
@@ -224,9 +203,8 @@ function onStepHit()
         activateHallucination = true
         doTweenAlpha("cmeredad", "dad", 0.5, 5, "sineInOut")
         doTweenAlpha("cmeredadicon", "iconP2", 0.5, 5, "sineInOut")
-        for i = 0, 3 do
-            noteTweenAlpha("cmeredadnotes"..i, i, 0.5, 5, "sineInOut")
-        end
+        queueEase(curStep, curStep+15, 'alpha', 0.5, 'sineInOut', 1)
+        queueEase(curStep, curStep+15, 'noteAlpha', 0.5, 'sineInOut', 1)
     end
     if curStep == 1215 then
         setHealthBarColors("000000", rgbToHex(getProperty("boyfriend.healthColorArray")))
@@ -235,17 +213,15 @@ function onStepHit()
         end
         doTweenAlpha("cmeredad", "dad", 0, 0.1, "sineInOut")
         doTweenAlpha("cmeredadicon", "iconP2", 0, 0.1, "sineInOut")
-        for i = 0, 3 do
-            noteTweenAlpha("cmeredadnotes"..i, i, 0, 0.1, "sineInOut")
-        end
+        setValue('alpha', 1, 1)
+        setValue('noteAlpha', 1, 1)
     end
     if curStep == 1310 then
         setHealthBarColors(rgbToHex(getProperty("dad.healthColorArray")), rgbToHex(getProperty("boyfriend.healthColorArray")))
         doTweenAlpha("cmeredad", "dad", 0.1, 5, "sineInOut")
         doTweenAlpha("cmeredadicon", "iconP2", 0.1, 5, "sineInOut")
-        for i = 0, 3 do
-            noteTweenAlpha("cmeredadnotes"..i, i, 0.1, 5, "sineInOut")
-        end
+        queueEase(curStep, curStep+15, 'alpha', 0.9, 'sineInOut', 1)
+        queueEase(curStep, curStep+15, 'noteAlpha', 0.9, 'sineInOut', 1)
     end
     if curStep == 1715 then
         setHealthBarColors("000000", rgbToHex(getProperty("boyfriend.healthColorArray")))
@@ -258,11 +234,6 @@ function onBeatHit()
     if curBeat % 2 == 0 then
         if getProperty("hallucinationBF.animation.curAnim.name") == 'idle' then
             playAnim("hallucinationBF", "idle", true)
-        end
-    end
-    if curBeat % 2 == 0 then
-        if getProperty("hallucinationZ11.animation.curAnim.name") == 'idle' then
-            playAnim("hallucinationZ11", "idle", true)
         end
     end
 end

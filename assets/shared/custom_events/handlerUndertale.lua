@@ -1164,3 +1164,8 @@ function onStepHit()
 	end
 	if (curStep == 2040) then setProperty('cpuControlled', true) end
 end
+
+function onEndSong()
+	if (damageTaken == 0) unlockAchievement('nohitspecialist')
+	if (damageTaken == 0 && getMisses() == 0) unlockAchievement('multitasker')
+end

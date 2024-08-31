@@ -394,10 +394,13 @@ class FreeplayState extends MusicBeatState
 		{
 			case 'resistance':
 				diffText.visible = false;
+				multisong = true;
 			case 'resistalovania':
 				diffText.visible = false;
+				multisong = true;
 			default:
 				diffText.visible = true;
+				multisong = false;
 		}
 
 		if (FlxG.sound.music != null)
@@ -676,57 +679,58 @@ class FreeplayState extends MusicBeatState
 				switch(songLowercase)
 				{
 					case 'resistance':
-						multisong = true;
 						songChoices = ['Resistance', 'Resistance-k', 'Resistance Awsome Mix', 'Resistance-kai'];
 						listChoices = ['Resistance', 'Resistance (Kyren Mix)', 'Resistance (Awsome Mix)', 'Resistance (Kai Mix)'];
 					case 'resistalovania':
-						multisong = true;
 						songChoices = ['Resistalovania', 'Resistalovania Mega Mix'];
 						listChoices = ['Resistalovania', 'Resistalovania (Mega Mix)'];
 					default:
-						multisong = false;
 						songChoices = [];
 						listChoices = [];
 				}
 
 				FlxTransitionableState.skipNextTransIn = false;
 				FlxTransitionableState.skipNextTransOut = false;
-				try
+				if (!multisong)
 				{
-					Song.loadFromJson(poop, songLowercase);
-					PlayState.isStoryMode = false;
-					PlayState.storyDifficulty = curDifficulty;
+					try
+					{
+						Song.loadFromJson(poop, songLowercase);
+						PlayState.isStoryMode = false;
+						PlayState.storyDifficulty = curDifficulty;
 
-					trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
-				}
-				catch(e:Dynamic)
-				{
-					trace('ERROR! $e');
+						trace('CURRENT WEEK: ' + WeekData.getWeekFileName());
+					}
+					catch(e:Dynamic)
+					{
+						trace('ERROR! $e');
 
-					var errorStr:String = e.toString();
-					if(errorStr.startsWith('[file_contents,assets/data/')) errorStr = 'Missing file: ' + errorStr.substring(34, errorStr.length-1); //Missing chart
-					missingText.text = 'ERROR WHILE LOADING CHART:\n$errorStr';
-					missingText.screenCenter(Y);
-					missingText.visible = true;
-					missingTextBG.visible = true;
-					FlxG.sound.play(Paths.sound('cancelMenu'));
+						var errorStr:String = e.toString();
+						if(errorStr.startsWith('[file_contents,assets/data/')) errorStr = 'Missing file: ' + errorStr.substring(34, errorStr.length-1); //Missing chart
+						missingText.text = 'ERROR WHILE LOADING CHART:\n$errorStr';
+						missingText.screenCenter(Y);
+						missingText.visible = true;
+						missingTextBG.visible = true;
+						FlxG.sound.play(Paths.sound('cancelMenu'));
 
-					updateTexts(elapsed);
-					super.update(elapsed);
-					return;
-				}
+						updateTexts(elapsed);
+						super.update(elapsed);
+						return;
+					}
 				
-				if (FlxG.keys.pressed.SHIFT){
-					TransitionState.transitionState(ChartingStateOG, {transitionType: "stickers"});
-				} else if (multisong) {
+					if (FlxG.keys.pressed.SHIFT){
+						TransitionState.transitionState(ChartingStateOG, {transitionType: "stickers"});
+					} else{
+						LoadingState.prepareToSong();
+						LoadingState.loadAndSwitchState(new PlayState());
+						#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
+						stopMusicPlay = true;
+					}
+				}
+				else {
 					substates.DiffSubState.songChoices = songChoices;
 					substates.DiffSubState.listChoices = listChoices;
 					openSubState(new substates.DiffSubState());
-				}else{
-					LoadingState.prepareToSong();
-					LoadingState.loadAndSwitchState(new PlayState());
-					#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
-					stopMusicPlay = true;
 				}
 
 				FlxG.sound.music.volume = 0;

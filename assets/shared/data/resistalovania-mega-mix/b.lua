@@ -69,7 +69,7 @@ function onEvent(name, value1, value2)
         end
         end
         runTimer("doWarn", (crochet/1000)/playbackRate)
-        setProperty("dad.x", getProperty("dad.x") + 100)
+        if (difficultyName == 'Nightmare' or difficultyName == 'Unreal') and not (curStep >= 1024 and curStep <= 1536) or (curStep <= 2048 and curStep >= 2034) then setProperty("dad.x", getProperty("dad.x") + 100)
         amountLeft = value1-2
         if value1 == 3 then
             amountMoved = 400
@@ -83,7 +83,7 @@ function onTimerCompleted(a,b,c)
     if a == 'doWarn' then
         if amountLeft == 0 then
             setTextColor("warnem", "RED")
-            if difficultyName == 'Mega Nightmare' then
+            if difficultyName == 'Nightmare' then
                 if keyboardPressed("SPACE") then
                     setProperty("health", 0)
                     setProperty("dad.x", getProperty("dad.x") + 400)
@@ -92,14 +92,14 @@ function onTimerCompleted(a,b,c)
                 doTweenAlpha("redAl", "redFlash", 0, 0.2, "sineInOut")
                 setProperty("warnem.alpha", 1)
                 doTweenAlpha("warnemAl", "warnem", 0, 0.2, "sineInOut")
-            else if difficultyName == 'Mega Mix' then
+            else if difficultyName == 'Hard' then
                 setProperty("sign.alpha", 1)
                 doTweenAlpha("signAl", "sign", 0, 0.2, "sineInOut")
                 setProperty("redFlash.alpha", 1)
                 doTweenAlpha("redAl", "redFlash", 0, 0.2, "sineInOut")
                 setProperty("warnem.alpha", 1)
                 doTweenAlpha("warnemAl", "warnem", 0, 0.2, "sineInOut")
-            else if difficultyName == 'Mega Unreal' then
+            else if difficultyName == 'Unreal' then
                 if keyboardPressed("SPACE") then
                     setProperty("health", 0)
                     setProperty("dad.x", getProperty("dad.x") + 400)
@@ -108,13 +108,13 @@ function onTimerCompleted(a,b,c)
             end
             end
             runTimer("doAttackMech", (crochet/1000)/playbackRate)
-            setProperty("dad.x", getProperty("dad.x") + 100)
+            if (difficultyName == 'Nightmare' or difficultyName == 'Unreal') and not (curStep >= 1024 and curStep <= 1536) or (curStep <= 2048 and curStep >= 2034) then setProperty("dad.x", getProperty("dad.x") + 100) end
             setTextString("warnem", "PRESS SPACE!")
             safeCheck = true
             --debugPrint('PRESS NOW!')
         else
             setTextColor("warnem", "YELLOW")
-            if difficultyName == 'Mega Nightmare' then
+            if difficultyName == 'Nightmare' then
                 if keyboardPressed("SPACE") then
                     setProperty("health", 0)
                     setProperty("dad.x", getProperty("dad.x") + 400)
@@ -123,14 +123,14 @@ function onTimerCompleted(a,b,c)
                 doTweenAlpha("redAl", "redFlash", 0, 0.2, "sineInOut")
                 setProperty("warnem.alpha", 1)
                 doTweenAlpha("warnemAl", "warnem", 0, 0.2, "sineInOut")
-            else if difficultyName == 'Mega Mix' then
+            else if difficultyName == 'Hard' then
                 setProperty("x.alpha", 1)
                 doTweenAlpha("xAl", "x", 0, 0.2, "sineInOut")
                 setProperty("redFlash.alpha", 1)
                 doTweenAlpha("redAl", "redFlash", 0, 0.2, "sineInOut")
                 setProperty("warnem.alpha", 1)
                 doTweenAlpha("warnemAl", "warnem", 0, 0.2, "sineInOut")
-            else if difficultyName == 'Mega Unreal' then
+            else if difficultyName == 'Unreal' then
                 if keyboardPressed("SPACE") then
                     setProperty("health", 0)
                     setProperty("dad.x", getProperty("dad.x") + 400)
@@ -140,13 +140,13 @@ function onTimerCompleted(a,b,c)
             end
             amountLeft = amountLeft - 1
             runTimer("doWarn", (crochet/1000)/playbackRate)
-            setProperty("dad.x", getProperty("dad.x") + 100)
+            if (difficultyName == 'Nightmare' or difficultyName == 'Unreal') and not (curStep >= 1024 and curStep <= 1536) or (curStep <= 2048 and curStep >= 2034) then setProperty("dad.x", getProperty("dad.x") + 100) end
             setTextString("warnem", "WAIT...")
             --debugPrint('WAIT...')
         end
     end
     if a == 'doAttackMech' then
-        if difficultyName == 'Mega Nightmare' then
+        if difficultyName == 'Nightmare' then
             runTimer("doCheck", 0.01)
             if keyboardJustPressed("SPACE") then
                 safeForNow = true
@@ -156,7 +156,7 @@ function onTimerCompleted(a,b,c)
             else
                 --debugPrint('LAST CHANCE!')
             end
-        else if difficultyName == 'Mega Unreal' then
+        else if difficultyName == 'Unreal' then
             runTimer("doCheck", 0.001)
             if safeForNow then
                 --debugPrint('SAFE!')
@@ -192,7 +192,6 @@ function onTimerCompleted(a,b,c)
                 safeCheck = false
             end
         else
-            debugPrint('BOTPLAY PASS')
             playAnim("boyfriend", "idle-alt", true)
             setProperty("boyfriend.specialAnim", true)
             setProperty("dad.x", getProperty("dad.x") + 200)

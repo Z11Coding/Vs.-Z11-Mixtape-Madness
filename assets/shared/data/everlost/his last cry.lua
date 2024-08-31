@@ -19,13 +19,13 @@ function onCreatePost()
     addLuaSprite("hallucinationBF", true)
     setProperty("hallucinationBF.alpha", 0)
 
-    makeAnimatedLuaSprite("rain", "rain", 0, 0)
+    makeAnimatedLuaSprite("rain", "effects/rain", 0, 0)
     addAnimationByPrefix("rain", "idle", "rain tho", 60, true)
     screenCenter("rain", 'xy')
     addLuaSprite("rain", true)
     setProperty("rain.alpha", 0)
 
-    makeAnimatedLuaSprite("static", "static", 0, 0)
+    makeAnimatedLuaSprite("static", "effects/static", 0, 0)
     addAnimationByPrefix("static", "idle", "lestatic", 24, true)
     scaleObject("static", 8, 8)
     screenCenter("static", 'xy')
@@ -45,9 +45,8 @@ function onCreatePost()
     setProperty("theDarkAbyss.alpha", 1)
     didTheThing = true
     setTextString("botplayTxt", "Forever Empty...")
-    for i = 0, 3 do
-        setPropertyFromGroup("strumLineNotes", i, 'alpha', 0)
-    end
+    setValue('alpha', 1, 1)
+    setValue('noteAlpha', 1, 1)
     makeLuaText('toolongago', '3 YEARS LATER...', 900, 0, 0)
     setTextSize('toolongago', 50)
     setObjectCamera('toolongago', 'other')
@@ -88,9 +87,8 @@ function onStepHit()
         doTweenAlpha("liftTheAbyss", "theDarkAbyss", 0.5, 9, "sineInOut")
         doTweenAlpha("camHUDLIVE", "camHUD", 0.6, 9, "sineInOut")
         setHealthBarColors(rgbToHex(getProperty("dad.healthColorArray")), rgbToHex(getProperty("boyfriend.healthColorArray")))
-        for i = 0, 3 do
-            noteTweenAlpha("cmeredadnotes"..i, i, 0.6, 9, "sineInOut")
-        end
+        queueEase(curStep, curStep+15, 'alpha', 0.4, 'sineInOut', 1)
+        queueEase(curStep, curStep+15, 'noteAlpha', 0.4, 'sineInOut', 1)
         doTweenAlpha("cmeredad", "dad", 0.6, 9, "sineInOut")
         doTweenAlpha("cmeredadicon", "iconP2", 0.6, 9, "sineInOut")
     end

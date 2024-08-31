@@ -4,7 +4,7 @@ local currentPos = 0
 function onCreate()
     for i = 0,getProperty('unspawnNotes.length')-1 do
         if getPropertyFromGroup('unspawnNotes', i,'noteType') == 'Phantom Note' then
-            setPropertyFromGroup('unspawnNotes', i,'texture','PHANTOMNOTE_assets')
+            setPropertyFromGroup('unspawnNotes', i,'texture','noteskins/PHANTOMNOTE_assets')
             setPropertyFromGroup('unspawnNotes', i,'ignoreNote', true)
         end
     end
