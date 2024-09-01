@@ -89,6 +89,13 @@ class FreeplayState extends MusicBeatState
 		curSelected = 0; //so it doesn't do weird things. might rework later
 		//Paths.clearStoredMemory();
 		//Paths.clearUnusedMemory();
+
+		if (FlxG.save.data.allowedSongs != null) allowedSongs = FlxG.save.data.allowedSongs;
+		if (FlxG.save.data.allowedSongs == null) 
+		{
+			FlxG.save.data.allowedSongs = allowedSongs;
+			FlxG.save.data.flush();
+		}
 		
 		persistentUpdate = true;
 		PlayState.isStoryMode = false;
@@ -319,9 +326,9 @@ class FreeplayState extends MusicBeatState
 		{
 			iconArray.pop();
 		}
-
+		
 		for (i in 0...WeekData.weeksList.length) {
-			if(weekIsLocked(WeekData.weeksList[i])) continue;
+			if(!allowedSongs.contains(WeekData.weeksList[i])) continue;
 
 			var leWeek:WeekData = WeekData.weeksLoaded.get(WeekData.weeksList[i]);
 			var leSongs:Array<String> = [];
@@ -338,17 +345,14 @@ class FreeplayState extends MusicBeatState
 			{
 				if (category != null && category == 'secrets')
 				{
-					for (a in 0...allowedSongs.length)
+					if (Std.string(song[0]).toLowerCase().trim().contains(allowedSongs[i]))
 					{
-						if (Std.string(song[0]).toLowerCase().trim().contains(allowedSongs[i]))
+						var colors:Array<Int> = song[2];
+						if(colors == null || colors.length < 3)
 						{
-							var colors:Array<Int> = song[2];
-							if(colors == null || colors.length < 3)
-							{
-								colors = [146, 113, 253];
-							}
-							addSong(song[0], i, song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2]));
+							colors = [146, 113, 253];
 						}
+						addSong(song[0], i, song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2]));
 					}
 				}
 				else if (Std.string(song[0]).toLowerCase().trim().contains(searchBar.text.toLowerCase().trim()))

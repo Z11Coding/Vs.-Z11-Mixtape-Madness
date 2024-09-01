@@ -597,6 +597,7 @@ class MainMenuState extends MusicBeatState
 						}
 						else if (allowMouse && FlxG.mouse.overlaps(PBTBM))
 						{
+							FreeplayState.allowedSongs.push('possessed-by-the-blood-moon');
 							Achievements.unlock('secretsunveiled');
 							MusicBeatState.playSong(['possessed-by-the-blood-moon'], false, 0, 'TransitionState', 'stickers', ['FNF', 'NITG', 'POSSESSED']);
 							FlxG.autoPause = ClientPrefs.data.autoPause;
@@ -614,6 +615,7 @@ class MainMenuState extends MusicBeatState
 						}
 						else if (allowMouse && FlxG.mouse.overlaps(logoBl))
 						{
+							FreeplayState.allowedSongs.push('lost');
 							Achievements.unlock('secretsunveiled');
 							selectedSomethin = true;
 							Cursor.hide();
@@ -631,6 +633,7 @@ class MainMenuState extends MusicBeatState
 						if (allowMouse && FlxG.mouse.overlaps(logoBl))
 						{
 							ohno.stop();
+							FreeplayState.allowedSongs.push('fangirl-frenzy');
 							Achievements.unlock('secretsunveiled');
 							MusicBeatState.playSong(['fangirl-frenzy'], false, 2, 'TransitionState', 'stickers');
 						}

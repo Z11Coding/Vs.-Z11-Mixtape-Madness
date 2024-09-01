@@ -8,7 +8,7 @@ end
 
 function onCustomSubstateCreatePost(name)
     if name == "GiveUp" then
-        makeLuaSprite("giveup", 'giveup', 0, 0)
+        makeLuaSprite("giveup", 'lost/giveup', 0, 0)
         insertToCustomSubstate('giveup')
         makeLuaText('ye', '>Yes', 400, -300, 0)
         screenCenter("ye", 'y')

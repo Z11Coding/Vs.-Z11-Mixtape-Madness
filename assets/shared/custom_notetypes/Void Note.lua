@@ -58,11 +58,9 @@ function onUpdate(elapsed)
     if turnON then
         if active then
             setTextString("timeTxt", "ERROR")
-            setShaderFloat("underwater2", "prob", shadeRand2)
             setPropertyFromClass("openfl.Lib", "application.window.x",getPropertyFromClass("openfl.Lib", "application.window.x") + math.random(-10, 10))
             setPropertyFromClass("openfl.Lib", "application.window.y",getPropertyFromClass("openfl.Lib", "application.window.y") + math.random(-10, 10))
         else
-            setShaderFloat("underwater2", "prob", 0)
             if getPropertyFromClass("openfl.Lib", "application.window.x") > window_default[1] then
                 setPropertyFromClass("openfl.Lib", "application.window.x",getPropertyFromClass("openfl.Lib", "application.window.x") - 1)
             else if getPropertyFromClass("openfl.Lib", "application.window.x") < window_default[1] then

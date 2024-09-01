@@ -559,7 +559,7 @@ class PlayState extends MusicBeatState
 			}
 			else if (PlayState.SONG == null && PlayState.storyPlaylist.length > 0)
 			{
-				PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + PlayState.storyDifficulty,
+				PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + '-' + Difficulty.list[PlayState.storyDifficulty],
 					PlayState.storyPlaylist[0].toLowerCase());
 			}
 			else if (PlayState.SONG == null && PlayState.cachingSongs.length > 0 && CacheMode)
