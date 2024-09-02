@@ -198,7 +198,9 @@ class FunkinLua {
 		set('lowQuality', ClientPrefs.data.lowQuality);
 		set('shadersEnabled', ClientPrefs.data.shaders);
 		set('noParticles', ClientPrefs.data.noParticles);
-		set('modcharts', ClientPrefs.data.modcharts); //FOR ANYONE MAKING MODCHARTS; REMEMBER TO USE THIS! PLEASE DON'T MAKE ME AUTOMATE IT
+		//FOR ANYONE MAKING MODCHARTS; REMEMBER TO USE THIS! PLEASE DON'T MAKE ME AUTOMATE IT
+		//nvm I automated it anyway
+		set('modcharts', ClientPrefs.data.modcharts);
 		set('allowHealthDrain', ClientPrefs.data.drain);
 		set('allowSwears', ClientPrefs.data.cursing);
 		set('allowViolence', ClientPrefs.data.violence);
@@ -264,7 +266,7 @@ class FunkinLua {
 		// mod manager
 		Lua_helper.add_callback(lua, "setPercent", function(modName:String, val:Float, player:Int = -1)
 		{
-			PlayState.instance.modManager.setPercent(modName, val, player);
+			if (ClientPrefs.data.modcharts) PlayState.instance.modManager.setPercent(modName, val, player);
 		});
 		
 		Lua_helper.add_callback(lua, "addBlankMod", function(modName:String, defaultVal:Float = 0, player:Int = -1)
@@ -275,46 +277,40 @@ class FunkinLua {
 		
 		Lua_helper.add_callback(lua, "setValue", function(modName:String, val:Float, player:Int = -1)
 		{
-			PlayState.instance.modManager.setValue(modName, val, player);
+			if (ClientPrefs.data.modcharts) PlayState.instance.modManager.setValue(modName, val, player);
 		});
 		
 		Lua_helper.add_callback(lua, "getPercent", function(modName:String, player:Int)
 		{
-			return PlayState.instance.modManager.getPercent(modName, player);
+			if (ClientPrefs.data.modcharts) return PlayState.instance.modManager.getPercent(modName, player);
+			else return 0;
 		});
 		
 		Lua_helper.add_callback(lua, "getValue", function(modName:String, player:Int)
 		{
-			return PlayState.instance.modManager.getValue(modName, player);
+			if (ClientPrefs.data.modcharts) return PlayState.instance.modManager.getValue(modName, player);
+			else return 0;
 		});
 		
-		Lua_helper.add_callback(lua, "queueSet", 
-		function(step:Float, modName:String, target:Float, player:Int = -1)
-			{
-				PlayState.instance.modManager.queueSet(step, modName, target, player);
-			}
-		);
+		Lua_helper.add_callback(lua, "queueSet", function(step:Float, modName:String, target:Float, player:Int = -1)
+		{
+			if (ClientPrefs.data.modcharts) PlayState.instance.modManager.queueSet(step, modName, target, player);
+		});
 		
-		Lua_helper.add_callback(lua, "queueSetP", 
-			function(step:Float, modName:String, perc:Float, player:Int = -1)
-			{
-				PlayState.instance.modManager.queueSetP(step, modName, perc, player);
-			}
-		);
+		Lua_helper.add_callback(lua, "queueSetP", function(step:Float, modName:String, perc:Float, player:Int = -1)
+		{
+			if (ClientPrefs.data.modcharts) PlayState.instance.modManager.queueSetP(step, modName, perc, player);
+		});
 		
-		Lua_helper.add_callback(lua, "queueEase",
-			function(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1, ?startVal:Float) // lua is autistic and can only accept 5 args
-			{
-				PlayState.instance.modManager.queueEase(step, endStep, modName, percent, style, player, startVal);
-			}
-		);
+		Lua_helper.add_callback(lua, "queueEase", function(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1, ?startVal:Float) // lua is autistic and can only accept 5 args
+		{
+			if (ClientPrefs.data.modcharts) PlayState.instance.modManager.queueEase(step, endStep, modName, percent, style, player, startVal);
+		});
 		
-		Lua_helper.add_callback(lua, "queueEaseP",
-			function(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1, ?startVal:Float) // lua is autistic and can only accept 5 args
-			{
-				PlayState.instance.modManager.queueEaseP(step, endStep, modName, percent, style, player, startVal);
-			}
-		);
+		Lua_helper.add_callback(lua, "queueEaseP", function(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1, ?startVal:Float) // lua is autistic and can only accept 5 args
+		{
+			if (ClientPrefs.data.modcharts) PlayState.instance.modManager.queueEaseP(step, endStep, modName, percent, style, player, startVal);
+		});
 
 		//
 		Lua_helper.add_callback(lua, "getRunningScripts", function(){
@@ -999,11 +995,11 @@ class FunkinLua {
 			return isDad;
 		});
 		Lua_helper.add_callback(lua, "cameraShake", function(camera:String, intensity:Float, duration:Float) {
-			LuaUtils.cameraFromString(camera).shake(intensity, duration);
+			if (ClientPrefs.data.flashing) LuaUtils.cameraFromString(camera).shake(intensity, duration);
 		});
 
 		Lua_helper.add_callback(lua, "cameraFlash", function(camera:String, color:String, duration:Float,forced:Bool) {
-			LuaUtils.cameraFromString(camera).flash(CoolUtil.colorFromString(color), duration, null,forced);
+			if (ClientPrefs.data.flashing) LuaUtils.cameraFromString(camera).flash(CoolUtil.colorFromString(color), duration, null,forced);
 		});
 		Lua_helper.add_callback(lua, "cameraFade", function(camera:String, color:String, duration:Float,forced:Bool) {
 			LuaUtils.cameraFromString(camera).fade(CoolUtil.colorFromString(color), duration, false,null,forced);

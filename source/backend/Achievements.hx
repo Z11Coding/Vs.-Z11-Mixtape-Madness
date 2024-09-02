@@ -172,6 +172,41 @@ class Achievements {
 		return name;
 	}
 
+	public static function lock(name:String, autoStartPopup:Bool = false):String {
+		if(!achievements.exists(name))
+		{
+			FlxG.log.error('Achievement "$name" does not exists!');
+			throw new Exception('Achievement "$name" does not exists!');
+			return null;
+		}
+
+		if(!Achievements.isUnlocked(name)) return null;
+
+		trace('Completed achievement "$name"');
+		achievementsUnlocked.remove(name);
+
+		// earrape prevention
+		/*var time:Int = openfl.Lib.getTimer();
+		if(Math.abs(time - _lastUnlock) >= 100) //If last unlocked happened in less than 100 ms (0.1s) ago, then don't play sound
+		{
+			FlxG.sound.play(Paths.sound('confirmMenu'), 0.5);
+			_lastUnlock = time;
+		}*/
+
+		Achievements.save();
+		FlxG.save.flush();
+
+		if(autoStartPopup) startPopup(name);
+		return name;
+	}
+
+	public static function relock()
+	{
+		achievementsUnlocked = [];
+		Achievements.save();
+		FlxG.save.flush();
+	}
+
 	inline public static function isUnlocked(name:String)
 		return achievementsUnlocked.contains(name);
 

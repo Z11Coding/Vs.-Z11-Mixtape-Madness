@@ -355,7 +355,7 @@ class ChartingStatePsych extends MusicBeatState implements PsychUIEventHandler.P
 		var iconY:Float = 50;
 		if(SHOW_EVENT_COLUMN)
 		{
-			eventIcon = new FlxSprite(0, iconY).loadGraphic(Paths.image('editors/eventIcon'));
+			eventIcon = new FlxSprite(0, iconY).loadGraphic(Paths.image('editors/eventArrow'));
 			eventIcon.antialiasing = ClientPrefs.data.globalAntialiasing;
 			eventIcon.alpha = 0.6;
 			eventIcon.setGraphicSize(30, 30);
@@ -403,10 +403,10 @@ class ChartingStatePsych extends MusicBeatState implements PsychUIEventHandler.P
 		selectionBox.visible = false;
 		add(selectionBox);
 
-		infoBox = new PsychUIBox(infoBoxPosition.x, infoBoxPosition.y, 220, 220, ['Information']);
+		infoBox = new PsychUIBox(infoBoxPosition.x, infoBoxPosition.y, 320, 720, ['Information']);
 		infoBox.scrollFactor.set();
 		infoBox.cameras = [camUI];
-		infoText = new FlxText(15, 15, 230, '', 16);
+		infoText = new FlxText(15, 15, 400, '', 16);
 		infoText.scrollFactor.set();
 		infoBox.getTab('Information').menu.add(infoText);
 		add(infoBox);
@@ -501,6 +501,7 @@ class ChartingStatePsych extends MusicBeatState implements PsychUIEventHandler.P
 
 		stageDropDown.list = loadFileList('stages/', 'data/stageList.txt');
 		onChartLoaded();
+		changeMania();
 
 		var tipText:FlxText = new FlxText(FlxG.width - 210, FlxG.height - 30, 200, 'Press F1 for Help', 20);
 		tipText.cameras = [camUI];
@@ -669,7 +670,93 @@ class ChartingStatePsych extends MusicBeatState implements PsychUIEventHandler.P
 		stageDropDown.selectedLabel = PlayState.SONG.stage;
 		StageData.loadDirectory(PlayState.SONG);
 
-		// DATA TAB
+		GRID_COLUMNS_PER_PLAYER = Note.ammo[PlayState.SONG.mania];
+		GRID_SIZE = Note.gridSizes[PlayState.SONG.mania];
+	}
+
+	function changeMania()
+	{
+		createGrids();
+		strumLineNotes.clear();
+
+		eventLockOverlay.x = gridBg.x;
+		eventLockOverlay.scrollFactor.x = 0;
+		eventLockOverlay.scale.x = GRID_SIZE;
+		eventLockOverlay.updateHitbox();
+		add(eventLockOverlay);
+
+		timeLine.x = gridBg.x;
+		timeLine.setGraphicSize(Std.int(gridBg.width), 4);
+		timeLine.updateHitbox();
+		timeLine.screenCenter(Y);
+		timeLine.scrollFactor.set();
+		add(timeLine);
+
+		var startX:Float = gridBg.x;
+		var startY:Float = FlxG.height/2;
+		vortexIndicator.visible = strumLineNotes.visible = strumLineNotes.active = vortexEnabled;
+		if(SHOW_EVENT_COLUMN) startX += GRID_SIZE;
+		for (i in 0...Std.int(GRID_PLAYERS * GRID_COLUMNS_PER_PLAYER))
+		{
+			var note:StrumNote = new StrumNote(startX + (GRID_SIZE * i), startY, i % GRID_COLUMNS_PER_PLAYER);
+			note.scrollFactor.set();
+			note.playAnim('static');
+			note.alpha = 0.4;
+			note.updateHitbox();
+			if(note.width > note.height)
+				note.setGraphicSize(GRID_SIZE);
+			else
+				note.setGraphicSize(0, GRID_SIZE);
+	
+			note.updateHitbox();
+			note.x += GRID_SIZE/2 - note.width/2;
+			note.y += GRID_SIZE/2 - note.height/2;
+			strumLineNotes.add(note);
+		}
+
+		var columns:Int = 0;
+		var iconX:Float = gridBg.x;
+		var iconY:Float = 50;
+		if(SHOW_EVENT_COLUMN)
+		{
+			remove(eventIcon);
+			eventIcon = new FlxSprite(0, iconY).loadGraphic(Paths.image('editors/eventArrow'));
+			eventIcon.antialiasing = ClientPrefs.data.globalAntialiasing;
+			eventIcon.alpha = 0.6;
+			eventIcon.setGraphicSize(30, 30);
+			eventIcon.updateHitbox();
+			eventIcon.scrollFactor.set();
+			add(eventIcon);
+			eventIcon.x = iconX + (GRID_SIZE * 0.5) - eventIcon.width/2;
+			iconX += GRID_SIZE;
+
+			columns++;
+		}
+		var gridStripes:Array<Int> = [];
+		for (icon in icons) remove(icon);
+		icons = [];
+		for (i in 0...GRID_PLAYERS)
+		{
+			if(columns > 0) gridStripes.push(columns);
+			columns += GRID_COLUMNS_PER_PLAYER;
+
+			var icon:HealthIcon = new HealthIcon();
+			icon.autoAdjustOffset = false;
+			icon.y = iconY;
+			icon.alpha = 0.6;
+			icon.scrollFactor.set();
+			icon.scale.set(0.3, 0.3);
+			icon.updateHitbox();
+			icon.ID = i+1;
+			add(icon);
+			icons.push(icon);
+			
+			icon.x = iconX + GRID_SIZE * (GRID_COLUMNS_PER_PLAYER/2) - icon.width/2;
+			iconX += GRID_SIZE * GRID_COLUMNS_PER_PLAYER;
+		}
+		prevGridBg.stripes = nextGridBg.stripes = gridBg.stripes = gridStripes;
+		vortexIndicator.x = gridBg.x - GRID_SIZE;
+		reloadNotes();
 	}
 	
 	var noteSelectionSine:Float = 0;
@@ -1423,15 +1510,34 @@ class ChartingStatePsych extends MusicBeatState implements PsychUIEventHandler.P
 
 		if(Conductor.songPosition != lastTime || forceDataUpdate)
 		{
-			var curTime:String = FlxStringUtil.formatTime(Conductor.songPosition / 1000, true);
+			var curTime:Float = Conductor.songPosition - ClientPrefs.data.noteOffset;
+			if(curTime < 0) curTime = 0;
+			var songPercent:Float = 0;
+			songPercent = (curTime / FlxG.sound.music.length * playbackRate);
+			var secondsTotal:Int = Math.floor(curTime / 1000  * playbackRate);
+			if(secondsTotal < 0) secondsTotal = 0;
+			var timeLeft:String = (FlxG.sound.music != null) ? FlxStringUtil.formatTime(secondsTotal, false) : '???';
 			var songLength:String = (FlxG.sound.music != null) ? FlxStringUtil.formatTime(FlxG.sound.music.length / 1000, true) : '???';
-			var str:String =  '$curTime / $songLength' +
-							  '\n\nSection: $curSec' +
-							  '\nBeat: $curBeat' +
-							  '\nStep: $curStep' +
-							  '\n\nBeat Snap: ${curQuant} / 16' +
-							  '\nSelected: ${selectedNotes.length}';
-
+			var str:String =  
+				"Song Name: " + PlayState.SONG.song +
+				"\n\nMania: " + PlayState.SONG.mania +
+				"\nStart Mania: " + PlayState.SONG.startMania +
+				"\n\nTime: " + timeLeft + " / " + songLength +
+				"\nTime (In seconds) " + Std.string(FlxMath.roundDecimal(Conductor.songPosition / 1000, 2)) + " / " + Std.string(FlxMath.roundDecimal(FlxG.sound.music.length / 1000, 2)) +
+				"\n\nSection: " + curSec +
+				"\nBeat: " + Std.string(curDecBeat).substring(0,4) +
+				"\nStep: " + curStep +
+				"\nBeat Snap: " + curQuant + "th" + 
+				'\nSelected: ${selectedNotes.length}' +
+				"\n\nSong BPM: " + PlayState.SONG.bpm + 
+				"\nScroll Speed: " + PlayState.SONG.speed +
+				"\n\nBF: " + PlayState.SONG.player1 +
+				"\nDAD: " + PlayState.SONG.player2 + 
+				"\nGF: " + PlayState.SONG.gfVersion +
+				"\nDAD 2: " + PlayState.SONG.player4 + 
+				"\nBF 2: " + PlayState.SONG.player5 + 
+				"\n\nStage: " + PlayState.SONG.stage;
+			
 			if(str != infoText.text)
 			{
 				infoText.text = str;
@@ -3228,11 +3334,11 @@ class ChartingStatePsych extends MusicBeatState implements PsychUIEventHandler.P
 		maniaStepper = new PsychUINumericStepper(objX + 140, objY, 1, 3, 0, 17, 0);
 		maniaStepper.onValueChange = function()
 		{
-			GRID_COLUMNS_PER_PLAYER = Note.ammo[PlayState.mania];
-			GRID_SIZE = Note.gridSizes[PlayState.mania];
 			PlayState.SONG.mania = Std.int(maniaStepper.value);
 			PlayState.mania = Std.int(maniaStepper.value);
-			reloadNotes();
+			GRID_COLUMNS_PER_PLAYER = Note.ammo[PlayState.mania];
+			GRID_SIZE = Note.gridSizes[PlayState.mania];
+			changeMania();
 		};
 
 		startManiaStepper = new PsychUINumericStepper(objX + 140, objY + 40, 1, 3, 0, 17, 0);

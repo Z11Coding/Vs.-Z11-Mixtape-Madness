@@ -219,6 +219,8 @@ class CategoryState extends MusicBeatState
 									if (item.ID == 3) FlxTween.color(item, 1, 0xff00cc1b, 0xffffffff, {ease: FlxEase.sineIn});
 									menuLocks[3] = false;
 									Achievements.unlock('secretsuntold');
+									FlxG.save.data.menuLocks = menuLocks;
+									FlxG.save.flush();
 								});
 							}
 							easterEggKeysBuffer = '';

@@ -285,7 +285,14 @@ class EditorPlayState extends MusicBeatSubstate
 			Conductor.songPosition = startPos - timerToStart;
 			if(timerToStart < 0) startSong();
 		}
-		else Conductor.songPosition += elapsed * 1000 * playbackRate;
+		else 
+		{
+			for (field in playfields.members)
+				field.fadeIn(true); // TODO: check if its the first song so it should fade the notes in on song 1 of story mode
+			modManager.setValue('transformX', -400);
+            modManager.setValue('transformY', -300);
+			Conductor.songPosition += elapsed * 1000 * playbackRate;
+		}
 		
 		var time:Float = CoolUtil.floorDecimal((Conductor.songPosition - ClientPrefs.data.noteOffset) / 1000, 1);
 		dataTxt.text = 'Time: $time / ${songLength/1000}

@@ -231,7 +231,8 @@ class MainMenuState extends MusicBeatState
 			{item: "nothing", chance: 90} // 90% chance to do nothing
 		];
 
-		if (Achievements.isUnlocked('secretsuntold')) h = ChanceSelector.selectOption(hh);
+		if (Achievements.isUnlocked('secretsuntold') && (FlxG.save.data.menuLocks != null && FlxG.save.data.menuLocks[3] == false)) 
+			h = ChanceSelector.selectOption(hh);
 		else h = 'nothing';
 		
 		trace(h);
@@ -295,6 +296,8 @@ class MainMenuState extends MusicBeatState
 				FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 			}
 		}
+
+		if (FlxG.keys.justPressed.END) Achievements.relock();
 
 		if (h == 'PBTBM')
 		{

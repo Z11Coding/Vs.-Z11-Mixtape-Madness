@@ -94,7 +94,7 @@ class FreeplayState extends MusicBeatState
 		if (FlxG.save.data.allowedSongs == null) 
 		{
 			FlxG.save.data.allowedSongs = allowedSongs;
-			FlxG.save.data.flush();
+			FlxG.save.flush();
 		}
 		
 		persistentUpdate = true;

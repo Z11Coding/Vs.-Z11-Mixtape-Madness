@@ -33,14 +33,6 @@ end
 
 function onUpdatePost(elapsed)
     setShaderFloat("oldtimer", "iTime", os.clock());
-    if keyboardJustPressed('SPACE') then
-        setProperty('black.alpha', 0)
-        setObjectCamera('black', 'other')   
-        runHaxeCode([[
-            game.camGame.setFilters([]);
-            game.camHUD.setFilters([]);
-        ]]);
-    end
 end
 
 function loadModchart()
@@ -92,8 +84,8 @@ function onStepHit()
             end
         elseif eff == 'rotato' then
             if curStep % 8 == 0 then
-                rotateArray = [0, 90, 180, 270];
-                queueEase(curStep, curStep+8, 'centerrotateZ', rotateArray[curStep % 64], 'cubeOut', 0)
+                rotateArray = {0, 90, 180, 270};
+                queueEase(curStep, curStep+8, 'centerrotateZ', rotateArray[curBeat % 5], 'cubeOut', 0)
             end
         end
     end
@@ -141,6 +133,7 @@ function onStepHit()
             ]]);
         end
         if curStep == 1120 then
+            setValue('centerrotateZ', 0, 0)
             cameraFlash('other', 'FFFFFF', 1)
             runHaxeCode([[
                 game.camGame.setFilters([new ShaderFilter(game.getLuaObject("oldtimer").shader)]);

@@ -16,11 +16,4 @@ fanta
 inmysystem
 pbtbm
 lost
-noWitness
-week1-cap
-week2-cap
-week3-cap
-week4-cap
-week5-cap
-week6-cap
 sticky

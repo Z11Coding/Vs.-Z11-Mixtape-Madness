@@ -29,6 +29,7 @@ import cutscenes.DialogueBoxPsych;
 import states.StoryMenuState;
 import states.FreeplayState;
 import states.editors.ChartingStateOG;
+import states.editors.ChartingStatePsych;
 import states.editors.CharacterEditorState;
 import substates.PauseSubState;
 import substates.PauseSubStateLost;
@@ -4952,7 +4953,9 @@ if (result < 0 || result > mania) {
 
 		if (!endingSong && !inCutscene && allowDebugKeys)
 		{
-			if (FlxG.keys.justPressed.SEVEN)
+			if (FlxG.keys.pressed.SHIFT && FlxG.keys.justPressed.SEVEN)
+				openChartEditor(true);
+			else if (FlxG.keys.justPressed.SEVEN)
 				openChartEditor();
 			else if (FlxG.keys.justPressed.EIGHT)
 				openCharacterEditor();
@@ -5814,7 +5817,7 @@ if (result < 0 || result > mania) {
 		}
 	}
 
-	function openChartEditor()
+	function openChartEditor(?psychEditor:Bool = false)
 	{
 		FlxG.camera.followLerp = 0;
 		paused = true;
@@ -5827,7 +5830,8 @@ if (result < 0 || result > mania) {
 		DiscordClient.resetClientID();
 		#end
 
-		FlxG.switchState(new ChartingStateOG());
+		if (psychEditor) FlxG.switchState(new ChartingStatePsych());
+		else FlxG.switchState(new ChartingStateOG());
 	}
 
 	function openCharacterEditor()
@@ -8860,8 +8864,9 @@ if (result < 0 || result > mania) {
 
 	function resyncVocals():Void
 	{
-		if (finishTimer != null)
-			return;
+		if (finishTimer != null) return;
+
+		trace('resynced vocals at ' + Math.floor(Conductor.songPosition));
 
 		vocals.pause();
 		opponentVocals.pause();
