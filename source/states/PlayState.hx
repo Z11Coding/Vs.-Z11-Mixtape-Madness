@@ -2103,8 +2103,8 @@ class PlayState extends MusicBeatState
 			}
 			add(cutscene);
 
-			if (playOnLoad)
-				cutscene.videoSprite.play();
+			if (playOnLoad) cutscene.videoSprite.play();
+			
 			return cutscene;
 		}
 		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
