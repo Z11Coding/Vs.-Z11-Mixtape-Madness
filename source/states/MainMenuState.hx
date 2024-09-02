@@ -792,7 +792,7 @@ class MainMenuState extends MusicBeatState
 				MusicBeatState.switchState(new ModsMenuState());
 			#end
 			case 'achievements':
-				TransitionState.transitionState(AchievementsMenuState, {transitionType: "stickers"});
+				TransitionState.transitionState(AchievementsMenuState, {transitionType: "fallRandom"});
 			case 'credits':
 				MusicBeatState.switchState(new CreditsState());
 			case 'options':
