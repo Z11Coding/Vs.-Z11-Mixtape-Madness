@@ -283,7 +283,7 @@ class FreeplayState extends MusicBeatState
 				searchBar.updateHitbox();
 		}});
 
-		if (CategoryState.loadWeekForce == 'secrets') reloadSongs(CategoryState.loadWeekForce);
+		if (CategoryState.loadWeekForce == 'secrets') reloadSongs('secrets');
 
 		/*if (archipelago)
 		{ 
@@ -440,7 +440,7 @@ class FreeplayState extends MusicBeatState
 		if (searchBar.text == 'CLICK TO SEARCH FREEPLAY!' && searchBar.hasFocus)
 		{
 			searchBar.text = '';
-			reloadSongs();
+			reloadSongs(null);
 			searchBar.updateHitbox();
 		}
 		if (!searchBar.hasFocus)
@@ -559,7 +559,7 @@ class FreeplayState extends MusicBeatState
 		{
 			searchBar.hasFocus = false;
 		}
-		if (FlxG.keys.justPressed.ANY && searchBar.hasFocus) reloadSongs();
+		if (FlxG.keys.justPressed.ANY && searchBar.hasFocus) reloadSongs(null);
 
 		if (searchBar.hasFocus == false || searchBar.text == null)
 		{
@@ -718,9 +718,13 @@ class FreeplayState extends MusicBeatState
 				{
 					try
 					{
-						if (songLowercase == "song not found")
+						if (songLowercase == "song-not-found")
 						{
-							Song.loadFromJson('eternity-song-not-found', 'eternity');
+							FlxG.save.data.slowdown = true;
+							FlxG.save.flush();
+							FreeplayState.allowedSongs.push('slow');
+							Achievements.unlock('secretsunveiled');
+							Song.loadFromJson('slowdown-hard', 'slowdown');
 							PlayState.isStoryMode = false;
 							PlayState.storyDifficulty = curDifficulty;
 

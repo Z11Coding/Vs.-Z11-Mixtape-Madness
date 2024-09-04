@@ -143,15 +143,15 @@ class MasterEditorMenu extends MusicBeatState
 					case 'Character Editor':
 						FlxG.switchState(new CharacterEditorState(Character.DEFAULT_CHARACTER, false));
 					case 'Stage Editor':
-						MusicBeatState.switchState(new StageEditorState());
+						FlxG.switchState(new StageEditorState());
 					case 'Week Editor':
-						MusicBeatState.switchState(new WeekEditorState());
+						FlxG.switchState(new WeekEditorState());
 					case 'Menu Character Editor':
-						MusicBeatState.switchState(new MenuCharacterEditorState());
+						FlxG.switchState(new MenuCharacterEditorState());
 					case 'Dialogue Editor':
-						LoadingState.loadAndSwitchState(new DialogueEditorState(), false);
+						FlxG.switchState(new DialogueEditorState());
 					case 'Dialogue Portrait Editor':
-						LoadingState.loadAndSwitchState(new DialogueCharacterEditorState(), false);
+						FlxG.switchState(new DialogueCharacterEditorState());
 				}
 			}
 		}

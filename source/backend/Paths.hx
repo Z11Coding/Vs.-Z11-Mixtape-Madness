@@ -368,11 +368,11 @@ public static function crawlDirectoryAlt(directoryPath:String, fileExtension:Str
 	static public function image(key:String, ?library:String = null, ?allowGPU:Bool = false):FlxGraphic
 	{
 		if(ImageCache.exists(getPath('images/$key.png', IMAGE, library)) && !allowGPU){
-            //trace(key + " is in the cache");
+            trace(key + " is in the cache");
             return ImageCache.get(getPath('images/$key.png', IMAGE, library));
         }
 		else if(ImageCache.exists(modsImages(key)) && !allowGPU){
-            //trace(key + " is in the cache");
+            trace(key + " is in the cache");
             return ImageCache.get(modsImages(key));
         }
         else{

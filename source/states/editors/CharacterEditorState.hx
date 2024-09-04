@@ -105,7 +105,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		animsTxt.setFormat(null, 16, FlxColor.WHITE, LEFT, OUTLINE_FAST, FlxColor.BLACK);
 		animsTxt.scrollFactor.set();
 		animsTxt.borderSize = 1;
-		animsTxt.cameras = [camEditor, camHUD];
+		animsTxt.cameras = [camHUD];
 
 		addCharacter();
 
@@ -115,11 +115,11 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 
 		healthBar = new Bar(30, FlxG.height - 75);
 		healthBar.scrollFactor.set();
-		healthBar.cameras = [camEditor, camHUD];
+		healthBar.cameras = [camHUD];
 
 		healthIcon = new HealthIcon(character.healthIcon, false, false);
 		healthIcon.y = FlxG.height - 150;
-		healthIcon.cameras = [camEditor, camHUD];
+		healthIcon.cameras = [camHUD];
 
 		add(cameraFollowPointer);
 		add(healthBar);
@@ -140,7 +140,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		cameraZoomText.scrollFactor.set();
 		cameraZoomText.borderSize = 1;
 		cameraZoomText.screenCenter(X);
-		cameraZoomText.cameras = [camEditor, camHUD];
+		cameraZoomText.cameras = [camHUD];
 		add(cameraZoomText);
 
 		frameAdvanceText = new FlxText(0, 75, 350, '');
@@ -148,7 +148,7 @@ class CharacterEditorState extends MusicBeatState implements PsychUIEventHandler
 		frameAdvanceText.scrollFactor.set();
 		frameAdvanceText.borderSize = 1;
 		frameAdvanceText.screenCenter(X);
-		frameAdvanceText.cameras = [camEditor, camHUD];
+		frameAdvanceText.cameras = [camHUD];
 		add(frameAdvanceText);
 
 		addHelpScreen();

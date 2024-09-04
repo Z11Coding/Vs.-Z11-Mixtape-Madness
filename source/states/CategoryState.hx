@@ -30,6 +30,9 @@ class CategoryState extends MusicBeatState
 		if (FlxG.save.data.enableCodes) menuItems.insert(99, 'Codes');
 		FlxTransitionableState.skipNextTransOut = false;
 
+		if (FlxG.save.data.menuLocks != null) menuLocks = FlxG.save.data.menuLocks;
+		else FlxG.save.data.menuLocks = menuLocks; // just to be sure
+
 		WeekData.reloadWeekFiles(false);
 		var weeks:Array<WeekData> = [];
 		for (i in 0...WeekData.weeksList.length) {
@@ -185,12 +188,6 @@ class CategoryState extends MusicBeatState
 						if (easterEggKeysBuffer.contains(word))
 						{
 							//trace('YOOO! ' + word);
-							if (FlxG.save.data.passwordEasterEgg == word)
-								FlxG.save.data.passwordEasterEgg = '';
-							else
-								FlxG.save.data.passwordEasterEgg = word;
-							FlxG.save.flush();
-
 							FlxG.sound.play(Paths.sound('ToggleJingle'));
 
 							if (word == 'CODES')
@@ -212,7 +209,7 @@ class CategoryState extends MusicBeatState
 									FreeplayState.vocals.fadeOut();
 								}
 							}
-							else if (word == 'SECRET')
+							else if (word == 'SECRETS')
 							{
 								grpMenuShit.forEach(function(item:FlxSprite)
 								{

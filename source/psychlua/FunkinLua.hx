@@ -266,7 +266,7 @@ class FunkinLua {
 		// mod manager
 		Lua_helper.add_callback(lua, "setPercent", function(modName:String, val:Float, player:Int = -1)
 		{
-			if (ClientPrefs.data.modcharts) PlayState.instance.modManager.setPercent(modName, val, player);
+			PlayState.instance.modManager.setPercent(modName, val, player);
 		});
 		
 		Lua_helper.add_callback(lua, "addBlankMod", function(modName:String, defaultVal:Float = 0, player:Int = -1)
@@ -277,39 +277,37 @@ class FunkinLua {
 		
 		Lua_helper.add_callback(lua, "setValue", function(modName:String, val:Float, player:Int = -1)
 		{
-			if (ClientPrefs.data.modcharts) PlayState.instance.modManager.setValue(modName, val, player);
+			PlayState.instance.modManager.setValue(modName, val, player);
 		});
 		
 		Lua_helper.add_callback(lua, "getPercent", function(modName:String, player:Int)
 		{
-			if (ClientPrefs.data.modcharts) return PlayState.instance.modManager.getPercent(modName, player);
-			else return 0;
+			return PlayState.instance.modManager.getPercent(modName, player);
 		});
 		
 		Lua_helper.add_callback(lua, "getValue", function(modName:String, player:Int)
 		{
-			if (ClientPrefs.data.modcharts) return PlayState.instance.modManager.getValue(modName, player);
-			else return 0;
+			return PlayState.instance.modManager.getValue(modName, player);
 		});
 		
 		Lua_helper.add_callback(lua, "queueSet", function(step:Float, modName:String, target:Float, player:Int = -1)
 		{
-			if (ClientPrefs.data.modcharts) PlayState.instance.modManager.queueSet(step, modName, target, player);
+			PlayState.instance.modManager.queueSet(step, modName, target, player);
 		});
 		
 		Lua_helper.add_callback(lua, "queueSetP", function(step:Float, modName:String, perc:Float, player:Int = -1)
 		{
-			if (ClientPrefs.data.modcharts) PlayState.instance.modManager.queueSetP(step, modName, perc, player);
+			PlayState.instance.modManager.queueSetP(step, modName, perc, player);
 		});
 		
 		Lua_helper.add_callback(lua, "queueEase", function(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1, ?startVal:Float) // lua is autistic and can only accept 5 args
 		{
-			if (ClientPrefs.data.modcharts) PlayState.instance.modManager.queueEase(step, endStep, modName, percent, style, player, startVal);
+			PlayState.instance.modManager.queueEase(step, endStep, modName, percent, style, player, startVal);
 		});
 		
 		Lua_helper.add_callback(lua, "queueEaseP", function(step:Float, endStep:Float, modName:String, percent:Float, style:String = 'linear', player:Int = -1, ?startVal:Float) // lua is autistic and can only accept 5 args
 		{
-			if (ClientPrefs.data.modcharts) PlayState.instance.modManager.queueEaseP(step, endStep, modName, percent, style, player, startVal);
+			PlayState.instance.modManager.queueEaseP(step, endStep, modName, percent, style, player, startVal);
 		});
 
 		//

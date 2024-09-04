@@ -19,6 +19,7 @@ import states.editors.MasterEditorMenu;
 import flixel.input.keyboard.FlxKey;
 import flixel.effects.FlxFlicker;
 import shaders.ChromaticAberration;
+import flixel.addons.effects.FlxTrail;
 
 using StringTools;
 
@@ -75,6 +76,7 @@ class MainMenuState extends MusicBeatState
 	var TL:FlxSprite;
 	var h:String;
 	var chroma:ChromaticAberration;
+	var logoTrail:FlxTrail;
 
 	override function create()
 	{
@@ -149,27 +151,26 @@ class MainMenuState extends MusicBeatState
 			rightItem.x -= rightItem.width;
 		}
 
-		if (!ClientPrefs.data.lowQuality)
-		{
-			logoBl = new FlxSprite(-100, -100);
+		logoBl = new FlxSprite(-100, -100);
 
-			logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
-			logoBl.scrollFactor.set();
-			logoBl.antialiasing = ClientPrefs.data.globalAntialiasing;
-			logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
-			logoBl.setGraphicSize(Std.int(logoBl.width * 0.6));
-			logoBl.animation.play('bump');
-			logoBl.alpha = 0;
-			logoBl.angle = -4;
-			logoBl.updateHitbox();
-			add(logoBl);
-			FlxTween.tween(logoBl, {
-				y: logoBl.y + 50,
-				x: logoBl.x + 450,
-				angle: -4,
-				alpha: 1
-			}, 1.4, {ease: FlxEase.expoInOut});
-		}
+		logoBl.frames = Paths.getSparrowAtlas('logoBumpin');
+		logoBl.scrollFactor.set();
+		logoBl.antialiasing = ClientPrefs.data.globalAntialiasing;
+		logoBl.animation.addByPrefix('bump', 'logo bumpin', 24, false);
+		logoBl.setGraphicSize(Std.int(logoBl.width * 0.6));
+		logoBl.animation.play('bump');
+		logoBl.alpha = 0;
+		logoBl.angle = -4;
+		logoBl.updateHitbox();
+		add(logoBl);
+
+
+		FlxTween.tween(logoBl, {
+			y: logoBl.y + 50,
+			x: logoBl.x + 450,
+			angle: -4,
+			alpha: 1
+		}, 1.4, {ease: FlxEase.expoInOut});
 
 		var funnytext:FlxText = new FlxText(12, FlxG.height - 104, 0, "", 12);
 		funnytext.scrollFactor.set();
@@ -225,11 +226,13 @@ class MainMenuState extends MusicBeatState
 		#end
 
 		var hh:Array<Chance> = [
-			{item: "PBTBM", chance: 28}, //56% chance to get the "Possessed by the Blood Moon" secret
-			{item: "FF", chance: 18}, // 39% chance to get the "Fangirl Frenzy" secret
-			{item: "TL", chance: 20}, // 53% chance to get the "Truly Lost" secret
-			{item: "nothing", chance: 90} // 90% chance to do nothing
+			{item: "nothing", chance: 99} // 90% chance to do nothing
 		];
+		if (FlxG.save.data.PBTBM != null && FlxG.save.data.PBTBM == false) hh.push({item: "PBTBM", chance: 14}); //56% chance to get the "Possessed by the Blood Moon" secret
+		if (FlxG.save.data.FF != null && FlxG.save.data.FF == false) hh.push({item: "FF", chance: 18}); // 39% chance to get the "Fangirl Frenzy" secret
+		if (FlxG.save.data.TL != null && FlxG.save.data.TL == false) hh.push({item: "TL", chance: 10}); // 53% chance to get the "Truly Lost" secret
+
+		trace(hh);
 
 		if (Achievements.isUnlocked('secretsuntold') && (FlxG.save.data.menuLocks != null && FlxG.save.data.menuLocks[3] == false)) 
 			h = ChanceSelector.selectOption(hh);
@@ -244,6 +247,9 @@ class MainMenuState extends MusicBeatState
 			PBTBM.scrollFactor.set();
 			add(PBTBM);
 			FlxG.autoPause = false;
+			remove(logoTrail);
+			logoTrail = new FlxTrail(PBTBM, null, 3, 6, 0.3, 0.002);
+			add(logoTrail);
 		}
 		else if (h == 'FF')
 		{
@@ -297,7 +303,18 @@ class MainMenuState extends MusicBeatState
 			}
 		}
 
-		if (FlxG.keys.justPressed.END) Achievements.relock();
+		if (FlxG.keys.justPressed.END) 
+		{
+			trace("resetting progress");
+			Achievements.relock();
+			FlxG.save.data.enableCodes = false;
+			FlxG.save.data.menuLocks = null;
+			FlxG.save.data.slowdown = false;
+			FlxG.save.data.PBTBM = false;
+			FlxG.save.data.TL = false;
+			FlxG.save.data.FF = false;
+			FlxG.save.data.allowedSongs = null;
+		}
 
 		if (h == 'PBTBM')
 		{
@@ -327,6 +344,7 @@ class MainMenuState extends MusicBeatState
 		{
 			logoBl.color = FlxColor.fromRGB(49, 176, 209);
 			logoBl.updateHitbox();
+			
 			menuItems.forEach(function(spr:FlxSprite)
 			{
 				spr.color = FlxColor.fromRGB(49, 176, 209);
@@ -567,7 +585,7 @@ class MainMenuState extends MusicBeatState
 				}
 			}
 
-			if (controls.ACCEPT || (FlxG.mouse.justPressed && allowMouse))
+			if (controls.ACCEPT || (FlxG.mouse.justPressed))
 			{
 				if (optionShit[curSelected] != 'donate')
 				{
@@ -598,9 +616,11 @@ class MainMenuState extends MusicBeatState
 							FlxTween.tween(item, {x: item.x - FlxG.random.int(-240, 240)}, 2, {ease: FlxEase.sineInOut});
 							FlxTween.tween(item, {y: 1000}, 1, {ease: FlxEase.backIn});
 						}
-						else if (allowMouse && FlxG.mouse.overlaps(PBTBM))
+						else if (FlxG.mouse.overlaps(PBTBM))
 						{
-							FreeplayState.allowedSongs.push('possessed-by-the-blood-moon');
+							FlxG.save.data.PBTBM = true;
+							FlxG.save.flush();
+							FreeplayState.allowedSongs.push('pbtbm');
 							Achievements.unlock('secretsunveiled');
 							MusicBeatState.playSong(['possessed-by-the-blood-moon'], false, 0, 'TransitionState', 'stickers', ['FNF', 'NITG', 'POSSESSED']);
 							FlxG.autoPause = ClientPrefs.data.autoPause;
@@ -616,8 +636,10 @@ class MainMenuState extends MusicBeatState
 							FlxTween.tween(item.scale, {x: 0}, 2, {ease: FlxEase.sineInOut});
 							FlxTween.tween(item.scale, {y: 0}, 1, {ease: FlxEase.backIn});
 						}
-						else if (allowMouse && FlxG.mouse.overlaps(logoBl))
+						else if (FlxG.mouse.overlaps(logoBl))
 						{
+							FlxG.save.data.TL = true;
+							FlxG.save.flush();
 							FreeplayState.allowedSongs.push('lost');
 							Achievements.unlock('secretsunveiled');
 							selectedSomethin = true;
@@ -633,10 +655,12 @@ class MainMenuState extends MusicBeatState
 					}
 					else if (h == 'FF')
 					{
-						if (allowMouse && FlxG.mouse.overlaps(logoBl))
+						if (FlxG.mouse.overlaps(logoBl))
 						{
+							FlxG.save.data.FF = true;
+							FlxG.save.flush();
 							ohno.stop();
-							FreeplayState.allowedSongs.push('fangirl-frenzy');
+							FreeplayState.allowedSongs.push('frenzy');
 							Achievements.unlock('secretsunveiled');
 							MusicBeatState.playSong(['fangirl-frenzy'], false, 2, 'TransitionState', 'stickers');
 						}
@@ -784,6 +808,7 @@ class MainMenuState extends MusicBeatState
 	function goToState(daChoice:String)
 	{
 		trace(daChoice);
+		if(ohno != null && ohno.playing) ohno.stop(); 
 		switch (daChoice)
 		{
 			case 'freeplay':

@@ -743,9 +743,9 @@ class PlayState extends MusicBeatState
 
 		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camVisual, false);
-		FlxG.cameras.add(camOther, false);
 		FlxG.cameras.add(camCredit, false);
 		FlxG.cameras.add(camDialogue, false);
+		FlxG.cameras.add(camOther, false);
 		if (ClientPrefs.data.starHidden)
 			camHUD.alpha = 0;
 
@@ -7210,7 +7210,8 @@ if (result < 0 || result > mania) {
 			'matt',
 			'mattbeyond',
 			'perfectionist',
-			'error404'
+			'error404',
+			'pokemon'
 		]);
 		#end
 
@@ -8866,7 +8867,7 @@ if (result < 0 || result > mania) {
 	{
 		if (finishTimer != null) return;
 
-		trace('resynced vocals at ' + Math.floor(Conductor.songPosition));
+		//trace('resynced vocals at ' + Math.floor(Conductor.songPosition));
 
 		vocals.pause();
 		opponentVocals.pause();
@@ -8926,6 +8927,7 @@ if (result < 0 || result > mania) {
 			if (Math.abs(FlxG.sound.music.time - (Conductor.songPosition - Conductor.offset)) > (20 * playbackRate)
 				|| (SONG.needsVoices
 					&& SONG.newVoiceStyle
+					&& opponentVocals.playing
 					&& Math.abs(opponentVocals.time - (Conductor.songPosition - Conductor.offset)) > (20 * playbackRate)))
 			{
 				resyncVocals();
@@ -8937,6 +8939,7 @@ if (result < 0 || result > mania) {
 			if (Math.abs(FlxG.sound.music.time - (Conductor.songPosition - Conductor.offset)) > (20 * playbackRate)
 				|| (SONG.needsVoices
 					&& SONG.newVoiceStyle
+					&& gfVocals.playing
 					&& Math.abs(gfVocals.time - (Conductor.songPosition - Conductor.offset)) > (20 * playbackRate)))
 			{
 				resyncVocals();
@@ -9554,7 +9557,7 @@ if (result < 0 || result > mania) {
 		if (cpuControlled || hadBotplayOn) //So that if it's turned off last second, they still dont get the achievement
 			return;
 
-		var altsongname = StringTools.replace(songName, '-', '');
+		var altsongname = StringTools.replace(songName, '-', ' ');
 		var a = [
 			'resistance',
 			'resistance-k',
@@ -9805,7 +9808,17 @@ if (result < 0 || result > mania) {
 						unlock = (ClientPrefs.data.framerate == 1 && !usedPractice && !playAsGF);
 					case 'error404':
 						unlock = (songName.toLowerCase() == 'eternity' && songMisses == 0 && !changedDifficulty && !usedPractice && !playAsGF);
-					}
+					case 'pokemon':
+						if (!changedDifficulty && !usedPractice && !playAsGF)
+						{
+							unlock = (FlxG.save.data.PBTBM && FlxG.save.data.FF && FlxG.save.data.TL);
+						}
+					case 'waldosworstnightmare':
+						if (!changedDifficulty && !usedPractice && !playAsGF)
+						{
+							unlock = (FlxG.save.data.PBTBM && FlxG.save.data.FF && FlxG.save.data.TL && FlxG.save.data.slowdown);
+						}	
+				}
 			}
 
 			if (unlock)

@@ -1,0 +1,33 @@
+{
+	"storyName": "",
+	"difficulties": "Hard",
+	"weekBackground": "",
+	"hideFreeplay": false,
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"weekBefore": "tutorial",
+	"startUnlocked": true,
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"songs": [
+		[
+			"Slowdown",
+			"astria",
+			[
+				255,
+				127,
+				202
+			]
+		]
+	],
+	"category": "secrets",
+	"hideStoryMode": false,
+	"hiddenUntilUnlocked": false,
+	"weekName": "Slowdown"
+}
