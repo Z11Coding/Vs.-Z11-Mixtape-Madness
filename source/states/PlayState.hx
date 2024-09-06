@@ -2273,6 +2273,15 @@ class PlayState extends MusicBeatState
 			callOnScripts('postModifierRegister'); // deprecated
 			callOnScripts('onModifierRegisterPost');
 
+			if (ClientPrefs.data.middleScroll)
+			{
+				modManager.setValue('transformX', -315, 0);
+				modManager.setValue('noteAlpha', .7, 1);
+				modManager.setValue('alpha', .7, 1);
+				modManager.setValue('transform2X', FlxG.width / 2, 1);
+				modManager.setValue('transform3X', FlxG.width / 2, 1);
+			}
+
 			startedCountdown = true;
 			countActive = true;
 			Conductor.songPosition = -Conductor.crochet * 5;

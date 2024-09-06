@@ -91,6 +91,7 @@ class CacheState extends MusicBeatState
 	var filesDone = 0;
 	var totalFiles = 0;
 	var allowMusic:Bool = false;
+	var pause:Bool = false;
 
 	var currentLoaded:Int = 0;
     var loadTotal:Int = 0;
@@ -112,6 +113,8 @@ class CacheState extends MusicBeatState
 		if (!cacheInit && (FlxG.save.data.musicPreload2 == null || FlxG.save.data.graphicsPreload2 == null || FlxG.save.data.videoPreload2 == null)) {
 			FlxG.switchState(new CacheSettings());
 			cacheInit = true;
+			pause = true;
+			allowMusic = false;
 		}
 
 		//Cursor.cursorMode = Cross;
@@ -356,7 +359,7 @@ class CacheState extends MusicBeatState
 	var move:Bool = false;
 	override function update(elapsed) 
 	{
-		if (!dontBother)
+		if (!dontBother && pause)
 		{
 			loadingBox.width = Std.int(loadingWhat.width);
 			loadingBox.height = Std.int(loadingWhat.height);

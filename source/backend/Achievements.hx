@@ -57,6 +57,7 @@ class Achievements {
 		createAchievement('multitasker',	        {name: "Two-For-One Special", description: "Beat \"Resistalovania\" without getting damaged AND without missing"});
 		createAchievement('possessed',	        	{name: "The Moon Slayer", description: "Beat \"Possessed by The Blood Moon\" on FNF or NITG difficulty without missing", hidden: true});
 		createAchievement('themoon',	        	{name: "The Exorcist", description: "Beat \"Possessed by The Blood Moon\" on Possessed difficulty without missing", hidden: true});
+		createAchievement('what',	        	    {name: "What.", description: "You did read the bottom of the file, right?"});
 		
 		//dont delete this thing below
 		_originalLength = _sortID + 1;

@@ -20,7 +20,7 @@ function onTimerCompleted(tag, loops, loopsLeft)
     elseif (tag == 'endit') then
         --endSong();
         playSound('title');
-        makeLuaSprite('sc', 'mechanics/ut/box', 1280 / 2, 720 - 200);
+        makeLuaSprite('sc', 'mechanics/ut/ui/box', 1280 / 2, 720 - 200);
         setProperty('sc.scale.x', 40);
         setProperty('sc.scale.y', 40);
         setObjectCamera('sc', 'camHUD');
@@ -304,14 +304,14 @@ function startDial(name)
 
 	getDial(dialId);--'bit-bone');
 	dStarted = true;
-    makeLuaSprite('screen', 'mechanics/ut/box', 0, 0);
+    makeLuaSprite('screen', 'mechanics/ut/ui/box', 0, 0);
     setProperty('screen.scale.x', 50);
 	setProperty('screen.scale.y', 50);
     setProperty('screen.alpha', 0);
     setObjectCamera('screen', 'camHUD');
     addLuaSprite('screen', false);
 
-	makeLuaSprite('box2', 'mechanics/ut/txtBox', 1280 / 2, 720 - 200);
+	makeLuaSprite('box2', 'mechanics/ut/ui/txtBox', 1280 / 2, 720 - 200);
 	setProperty('box2.offset.x', 289 / 2);
 	setProperty('box2.offset.y', 45);
 	setProperty('box2.scale.x', 4);

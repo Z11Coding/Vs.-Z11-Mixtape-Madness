@@ -484,7 +484,7 @@ class TitleState extends MusicBeatState
 						#if sys
 						thrd = Thread.create(function() {
 							try {
-								var data = Http.requestUrl("https://raw.githubusercontent.com/Z11Coding/MixtapeEngine-Release/main/versions/list.txt");
+								var data = Http.requestUrl("https://raw.githubusercontent.com/Z11Coding/Z11-s-Modpack-Mixup-RELEASE/main/versions/list.txt");
 								
 								onUpdateData(data);
 							} catch(e) {
@@ -539,7 +539,7 @@ class TitleState extends MusicBeatState
 		for(i in currentVerPos+1...versions.length) {
 			var data:String = "";
 			try {
-				data = Http.requestUrl('https://raw.githubusercontent.com/Z11Coding/MixtapeEngine-Release/main/versions/${versions[i]}.txt');
+				data = Http.requestUrl('https://raw.githubusercontent.com/Z11Coding/Z11-s-Modpack-Mixup-RELEASE/main/versions/${versions[i]}.txt');
 			} catch(e) {
 				trace(versions[i] + " data is incorrect");
 			}
@@ -551,7 +551,7 @@ class TitleState extends MusicBeatState
 			}
 		}
 
-		var changeLog:String = Http.requestUrl('https://raw.githubusercontent.com/Z11Coding/MixtapeEngine-Release/main/versions/changelog.txt');
+		var changeLog:String = Http.requestUrl('https://raw.githubusercontent.com/Z11Coding/Z11-s-Modpack-Mixup-RELEASE/main/versions/changelog.txt');
 		#if enable_updates
 		trace(currentVerPos);
 		trace(versions.length);
@@ -732,13 +732,13 @@ class TitleState extends MusicBeatState
 					deleteCoolText();
 
 				case 30:
-					addMoreText('Vs. Z11');
+					addMoreText('Z11\'s');
 				// credTextShit.visible = true;
 				case 31:
-					addMoreText('Mixtape');
+					addMoreText('Modpack');
 				// credTextShit.text += '\nNight';
 				case 32:
-					addMoreText('Mayhem');
+					addMoreText('Mixup');
 
 				case 33:
 					deleteCoolText();

@@ -14,8 +14,8 @@ import states.FirstCheckState;
 	public var noParticles:Bool = false;
 	public var modcharts:Bool = true;
 	public var loadCustomNoteGraphicschartEditor:Bool = false;
-	public var musicPreload2:Bool = true;
-	public var graphicsPreload2:Bool = true;
+	public var musicPreload2:Bool = false;
+	public var graphicsPreload2:Bool = false;
 	public var experimentalCaching:Bool = false;
 	public var saveCache:Bool = false;
 	public var cacheCharts:Bool = false;
@@ -47,7 +47,7 @@ import states.FirstCheckState;
 	public var inGameRatings:Bool = false;
 	public var noteOffset:Int = 0;
 	public var progression:Int = 0;
-	public var videoPreload2:Bool = true;
+	public var videoPreload2:Bool = false;
 	public var arrowHSV:Array<Array<Int>> = [
 		[0, 0, 0], [0, 0, 0], 
 		[0, 0, 0], [0, 0, 0], 

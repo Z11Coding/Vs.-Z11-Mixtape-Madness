@@ -25,6 +25,7 @@ function onCreatePost()
     setProperty("notestoremember.alpha", 0)
 
     if difficultyName == 'Impossible' then
+        setProperty('gfGroup.visible', false)
         for i = 0, 3 do
             --noteTweenX("suffering "..i, i, -400, 1, "elasticInOut")
             setValue('transformX', -1000, 1)

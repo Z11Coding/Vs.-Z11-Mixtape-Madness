@@ -36,28 +36,30 @@ function onUpdatePost(elapsed)
 end
 
 function loadModchart()
-    queueSet(348, 'reverse', 0.5, 0)
-    queueSet(350, 'reverse', 1, 0)
-    queueSet(412, 'reverse', 0.5, 0)
-    queueSet(414, 'reverse', 0, 0)
-    queueSet(476, 'reverse', 0.5, 0)
-    queueSet(478, 'reverse', 0, 0)
-    queueSet(478, 'centered', 1, 0)
-    queueSet(480, 'split', 1, 0)
-    queueSet(734, 'split', 0, 0)
-    queueSet(734, 'centered', 0, 0)
-    queueSet(734, 'receptorScroll', 1, 0)
-    queueSet(734, 'sudden', 0.5, 0)
-    queueSet(864, 'sudden', 1, 0)
-    queueSet(988, 'fieldRoll', 180/4, 0)
-    queueSet(990, 'fieldRoll', 180/3, 0)
-    queueSet(992, 'fieldRoll', 180/2, 0)
-    queueSet(1052, 'fieldRoll', 270/4, 0)
-    queueSet(1054, 'fieldRoll', 270/3, 0)
-    queueSet(1056, 'fieldRoll', 270/2, 0)
-    queueSet(1120, 'fieldRoll', 0, 0)
-    queueSet(1120, 'sudden', 0, 0)
-    queueSet(1120, 'receptorScroll', 0, 0)
+    if getPropertyFromClass('backend.CLientPrefs', 'data.modcharts') then
+        queueSet(348, 'reverse', 0.5, 0)
+        queueSet(350, 'reverse', 1, 0)
+        queueSet(412, 'reverse', 0.5, 0)
+        queueSet(414, 'reverse', 0, 0)
+        queueSet(476, 'reverse', 0.5, 0)
+        queueSet(478, 'reverse', 0, 0)
+        queueSet(478, 'centered', 1, 0)
+        queueSet(480, 'split', 1, 0)
+        queueSet(734, 'split', 0, 0)
+        queueSet(734, 'centered', 0, 0)
+        queueSet(734, 'receptorScroll', 1, 0)
+        queueSet(734, 'sudden', 0.5, 0)
+        queueSet(864, 'sudden', 1, 0)
+        queueSet(988, 'fieldRoll', 180/4, 0)
+        queueSet(990, 'fieldRoll', 180/3, 0)
+        queueSet(992, 'fieldRoll', 180/2, 0)
+        queueSet(1052, 'fieldRoll', 270/4, 0)
+        queueSet(1054, 'fieldRoll', 270/3, 0)
+        queueSet(1056, 'fieldRoll', 270/2, 0)
+        queueSet(1120, 'fieldRoll', 0, 0)
+        queueSet(1120, 'sudden', 0, 0)
+        queueSet(1120, 'receptorScroll', 0, 0)
+    end
 end
 
 index = 0
@@ -90,12 +92,14 @@ function onStepHit()
         end
     end
 
-    if curStep >= 284 and curStep <= 347 then
-        effectSwitcher('basic')
-    elseif curStep >= 352 and curStep <= 411 or curStep >= 864 and curStep <= 987 then
-        effectSwitcher('basicAlt')
-    elseif curStep >= 480 and curStep <= 731 then
-        effectSwitcher('rotato')
+    if getPropertyFromClass('backend.CLientPrefs', 'data.modcharts') then
+        if curStep >= 284 and curStep <= 347 then
+            effectSwitcher('basic')
+        elseif curStep >= 352 and curStep <= 411 or curStep >= 864 and curStep <= 987 then
+            effectSwitcher('basicAlt')
+        elseif curStep >= 480 and curStep <= 731 then
+            effectSwitcher('rotato')
+        end
     end
     
     if curStep == 32 then
@@ -133,7 +137,7 @@ function onStepHit()
             ]]);
         end
         if curStep == 1120 then
-            setValue('centerrotateZ', 0, 0)
+            if getPropertyFromClass('backend.CLientPrefs', 'data.modcharts') then setValue('centerrotateZ', 0, 0) end
             cameraFlash('other', 'FFFFFF', 1)
             runHaxeCode([[
                 game.camGame.setFilters([new ShaderFilter(game.getLuaObject("oldtimer").shader)]);

@@ -78,6 +78,8 @@ class FunkinLua {
 			this.modFolder = myFolder[1];
 		#end
 
+		//TODO: Fix the set functions not working
+
 		// Lua shit
 		set('Function_StopLua', LuaUtils.Function_StopLua);
 		set('Function_StopHScript', LuaUtils.Function_StopHScript);
@@ -199,7 +201,6 @@ class FunkinLua {
 		set('shadersEnabled', ClientPrefs.data.shaders);
 		set('noParticles', ClientPrefs.data.noParticles);
 		//FOR ANYONE MAKING MODCHARTS; REMEMBER TO USE THIS! PLEASE DON'T MAKE ME AUTOMATE IT
-		//nvm I automated it anyway
 		set('modcharts', ClientPrefs.data.modcharts);
 		set('allowHealthDrain', ClientPrefs.data.drain);
 		set('allowSwears', ClientPrefs.data.cursing);

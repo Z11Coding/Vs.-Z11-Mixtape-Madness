@@ -1,15 +1,14 @@
 function onCreate()
+
 	makeLuaSprite('ghosttile','stages/ghosts/ghostsStatic')
+	setGraphicSize("ghosttile", 0.5, 0.5)
+	screenCenter("ghosttile")
 	addLuaSprite('ghosttile')
 
-	setGraphicSize("ghosttile", 1.5, 1.5)
-	screenCenter("ghosttile", 'xy')
-
 	makeLuaSprite('skulls','stages/ghosts/skulls')
+	setGraphicSize("skulls", 0.5, 0.5)
+	screenCenter("skulls")
 	addLuaSprite('skulls')
-
-	setGraphicSize("skulls", 1.5, 1.5)
-	screenCenter("skulls", 'xy')
 
 	makeAnimatedLuaSprite("ghostbop", "stages/ghosts/ghostBop", -200, 400)
 	addAnimationByPrefix("ghostbop", "ghostbop", "ghostbop", 24, false)
@@ -30,6 +29,8 @@ function onCreate()
 	setProperty('ghostbop.alpha', 0)
 	setProperty('ghostbopmid.alpha', 0)
 	setProperty('ghostbopmidright.alpha', 0)
+	setProperty('ghosttile.alpha', 0)
+	setProperty('skulls.alpha', 0)
 end
 
 function onCreatePost()
@@ -53,7 +54,7 @@ function onCreatePost()
 
     setSpriteShader('die2','lens')
 
--- the haxe code is for changing the layr that the shader is applied to
+    -- the haxe code is for changing the layr that the shader is applied to
     addHaxeLibrary('ShaderFilter', 'openfl.filters');
     runHaxeCode([[
         game.camGame.setFilters([new ShaderFilter(game.getLuaObject('die2').shader)]);
@@ -62,9 +63,6 @@ function onCreatePost()
 	makeLuaSprite('shaderFloat',1,1)
 
 	setShaderFloat("die2",'strength', getProperty('shaderFloat.x'))
-
-	setProperty('ghosttile.alpha', 0)
-	setProperty('skulls.alpha', 0)
 end
 
 function onUpdate()
@@ -91,145 +89,132 @@ function onBeatHit()
 end
 
 function onStepHit()
-	if songName == 'Holy-Fucking-Shit' then
-		if curStep == 216 then
-			setProperty('ghosttile.alpha', 1)
-		end
+	if curStep == 256 then
+		cameraFlash('game', 'ffffff', 1)
+		setProperty('ghosttile.alpha', 1)
+	end
 
-		if curStep == 408 then
-			doTweenAlpha('ghosttilesFade','ghosttile',0,2,'quadInOut')
-		end
+	if curStep == 504 then
+		doTweenAlpha('ghosttilesFade','ghosttile',0,2,'quadInOut')
+	end
 
-		if curStep == 432 then
-			setProperty('skulls.alpha', 0.2)
-		end
+	if curStep == 608 then
+		pulseBG('ghost')
+	end
+	if curStep == 613 then
+		pulseBG('ghost')
+	end
+	if curStep == 619 then
+		pulseBG('ghost')
+	end
+	if curStep == 624 then
+		pulseBG('ghost')
+	end
 
-		if curStep == 624 then
-			doTweenAlpha('skullsFade','skulls',0,1,'quadInOut')
-		end
+	if curStep == 736 then
+		pulseBG('skull')
+	end
+	if curStep == 739 then
+		pulseBG('skull')
+	end
+	if curStep == 741 then
+		pulseBG('skull')
+	end
+	if curStep == 744 then
+		pulseBG('skull')
+	end
+	if curStep == 746 then
+		pulseBG('skull')
+	end
+	if curStep == 748 then
+		pulseBG('skull')
+	end
+	if curStep == 752 then
+		pulseBG('skull')
+	end
 
-		if curStep == 648 then
-			setProperty('ghosttile.alpha', 1)
-			setProperty('skulls.alpha', 0.2)
-			setProperty('ghostbop.alpha', 1)
-			setProperty('ghostbopmid.alpha', 1)
-			setProperty('ghostbopmidright.alpha', 1)
-		end
+	if curStep == 864 then
+		pulseBG('ghost')
+	end
+	if curStep == 869 then
+		pulseBG('ghost')
+	end
+	if curStep == 875 then
+		pulseBG('ghost')
+	end
+	if curStep == 880 then
+		pulseBG('ghost')
+	end
 
-		if curStep == 840 then
-			doTweenAlpha('ghosttilesFade','ghosttile',0,2,'quadInOut')
-			doTweenAlpha('skullsFade','skulls',0,1,'quadInOut')
-			setProperty('ghostbop.alpha', 0)
-			setProperty('ghostbopmid.alpha', 0)
-			setProperty('ghostbopmidright.alpha', 0)
+	if curStep == 992 then
+		pulseBG('skull')
+	end
+	if curStep == 994 then
+		pulseBG('skull')
+	end
+	if curStep == 997 then
+		pulseBG('skull')
+	end
+	if curStep == 1000 then
+		pulseBG('skull')
+	end
+	if curStep == 1002 then
+		pulseBG('skull')
+	end
+	if curStep == 1005 then
+		pulseBG('skull')
+	end
+	if curStep == 1008 then
+		pulseBG('skull')
+	end
+
+	if curStep == 1024 then
+		cameraFlash('game', 'ffffff', 1)
+		setProperty('ghosttile.alpha', 1)
+		if getPropertyFromClass('backend.CLientPrefs', 'data.modcharts') then
+			setValue('drunk', 1)
+			setValue('drunkZ', 2)
+			setValue('tipsy', 1)
+			setValue('cross', 1)
+		end
+	end
+	if curStep == 1152 then
+		cameraFlash('game', 'ffffff', 1)
+		setProperty('ghosttile.alpha', 0)
+		setProperty('skulls.alpha', 0.2)
+	end
+
+	if curStep == 1280 then
+		cameraFlash('game', 'ffffff', 1)
+		setProperty('ghosttile.alpha', 1)
+		setProperty('skulls.alpha', 0.2)
+		setProperty('ghostbop.alpha', 1)
+		setProperty('ghostbopmid.alpha', 1)
+		setProperty('ghostbopmidright.alpha', 1)
+		if getPropertyFromClass('backend.CLientPrefs', 'data.modcharts') then
+			setValue('cross', 0)
+			setValue('split', 1)
 		end
 	end
 
-	if songName == 'Ghost Remix' then
-		if curStep == 256 then
-			setProperty('ghosttile.alpha', 1)
+	if curStep == 1536 then
+		cameraFlash('game', 'ffffff', 1)
+		doTweenAlpha('skullsFade','skulls',0,1,'quadInOut')
+		setProperty('ghostbop.alpha', 0)
+		setProperty('ghostbopmid.alpha', 0)
+		setProperty('ghostbopmidright.alpha', 0)
+		if getPropertyFromClass('backend.CLientPrefs', 'data.modcharts') then
+			setValue('split', 0)
+			setValue('drunk', 0)
+			setValue('drunkZ', 0)
+			setValue('tipsy', 0)
+			setValue('beat', 1)
 		end
+	end
 
-		if curStep == 504 then
-			doTweenAlpha('ghosttilesFade','ghosttile',0,2,'quadInOut')
-		end
-
-		if curStep == 608 then
-			pulseBG('ghost')
-		end
-		if curStep == 613 then
-			pulseBG('ghost')
-		end
-		if curStep == 619 then
-			pulseBG('ghost')
-		end
-		if curStep == 624 then
-			pulseBG('ghost')
-		end
-
-		if curStep == 736 then
-			pulseBG('skull')
-		end
-		if curStep == 739 then
-			pulseBG('skull')
-		end
-		if curStep == 741 then
-			pulseBG('skull')
-		end
-		if curStep == 744 then
-			pulseBG('skull')
-		end
-		if curStep == 746 then
-			pulseBG('skull')
-		end
-		if curStep == 748 then
-			pulseBG('skull')
-		end
-		if curStep == 752 then
-			pulseBG('skull')
-		end
-
-		if curStep == 864 then
-			pulseBG('ghost')
-		end
-		if curStep == 869 then
-			pulseBG('ghost')
-		end
-		if curStep == 875 then
-			pulseBG('ghost')
-		end
-		if curStep == 880 then
-			pulseBG('ghost')
-		end
-
-		if curStep == 992 then
-			pulseBG('skull')
-		end
-		if curStep == 994 then
-			pulseBG('skull')
-		end
-		if curStep == 997 then
-			pulseBG('skull')
-		end
-		if curStep == 1000 then
-			pulseBG('skull')
-		end
-		if curStep == 1002 then
-			pulseBG('skull')
-		end
-		if curStep == 1005 then
-			pulseBG('skull')
-		end
-		if curStep == 1008 then
-			pulseBG('skull')
-		end
-
-		if curStep == 1024 then
-			setProperty('ghosttile.alpha', 1)
-		end
-		if curStep == 1152 then
-			setProperty('ghosttile.alpha', 0)
-			setProperty('skulls.alpha', 0.2)
-		end
-
-		if curStep == 1280 then
-			setProperty('ghosttile.alpha', 1)
-			setProperty('skulls.alpha', 0.2)
-			setProperty('ghostbop.alpha', 1)
-			setProperty('ghostbopmid.alpha', 1)
-			setProperty('ghostbopmidright.alpha', 1)
-		end
-
-		if curStep == 1536 then
-			doTweenAlpha('skullsFade','skulls',0,1,'quadInOut')
-			setProperty('ghostbop.alpha', 0)
-			setProperty('ghostbopmid.alpha', 0)
-			setProperty('ghostbopmidright.alpha', 0)
-		end
-
-		if curStep == 1784 then
-			doTweenAlpha('ghosttilesFade','ghosttile',0,2,'quadInOut')
-		end
+	if curStep == 1784 then
+		doTweenAlpha('ghosttilesFade','ghosttile',0,2,'quadInOut')
+		setValue('beat', 0)
 	end
 end
 

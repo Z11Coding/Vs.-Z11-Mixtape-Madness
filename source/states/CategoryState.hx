@@ -20,7 +20,7 @@ class CategoryState extends MusicBeatState
 	private static var curSelected:Int = 0;
 
 	var easterEggKeys:Array<String> = [
-		'CODES', 'SECRET', 'GARGANTUANELEPHANT'
+		'CODES', 'SECRETS', 'GARGANTUANELEPHANT'
 	];
 	var allowedKeys:String = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	var easterEggKeysBuffer:String = '';
@@ -187,41 +187,55 @@ class CategoryState extends MusicBeatState
 						var word:String = wordRaw.toUpperCase(); //just for being sure you're doing it right
 						if (easterEggKeysBuffer.contains(word))
 						{
-							//trace('YOOO! ' + word);
-							FlxG.sound.play(Paths.sound('ToggleJingle'));
-
-							if (word == 'CODES')
+							if (ClientPrefs.data.gotit)
 							{
-								var black:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-								black.alpha = 0;
-								add(black);
+								//trace('YOOO! ' + word);
+								FlxG.sound.play(Paths.sound('ToggleJingle'));
 
-								FlxTween.tween(black, {alpha: 1}, 1, {onComplete:
-									function(twn:FlxTween) {
-										FlxTransitionableState.skipNextTransIn = true;
-										FlxTransitionableState.skipNextTransOut = true;
-										MusicBeatState.switchState(new states.GodCode());
+								/*if (word == 'CODES')
+								{
+									var black:FlxSprite = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+									black.alpha = 0;
+									add(black);
+
+									FlxTween.tween(black, {alpha: 1}, 1, {onComplete:
+										function(twn:FlxTween) {
+											FlxTransitionableState.skipNextTransIn = true;
+											FlxTransitionableState.skipNextTransOut = true;
+											MusicBeatState.switchState(new states.GodCode());
+										}
+									});
+									FlxG.sound.music.fadeOut();
+									if(FreeplayState.vocals != null)
+									{
+										FreeplayState.vocals.fadeOut();
 									}
-								});
-								FlxG.sound.music.fadeOut();
-								if(FreeplayState.vocals != null)
-								{
-									FreeplayState.vocals.fadeOut();
 								}
-							}
-							else if (word == 'SECRETS')
-							{
-								grpMenuShit.forEach(function(item:FlxSprite)
+								else */if (word == 'SECRETS')
 								{
-									if (item.ID == 3) FlxTween.color(item, 1, 0xff00cc1b, 0xffffffff, {ease: FlxEase.sineIn});
-									menuLocks[3] = false;
-									Achievements.unlock('secretsuntold');
-									FlxG.save.data.menuLocks = menuLocks;
-									FlxG.save.flush();
-								});
+									grpMenuShit.forEach(function(item:FlxSprite)
+									{
+										if (item.ID == 3) FlxTween.color(item, 1, 0xff00cc1b, 0xffffffff, {ease: FlxEase.sineIn});
+										menuLocks[3] = false;
+										Achievements.unlock('secretsuntold');
+										FlxG.save.data.menuLocks = menuLocks;
+										FlxG.save.flush();
+									});
+								}
+								if (word == 'GARGANTUANELEPHANT')
+								{
+									grpMenuShit.forEach(function(item:FlxSprite)
+									{
+										Achievements.unlock('what');
+									});
+								}
+								easterEggKeysBuffer = '';
+								break;
 							}
-							easterEggKeysBuffer = '';
-							break;
+							else
+							{
+								Window.alert('FIRST YOU MUST FIND ME WHEN OPENING THE GAME, ONLY THEN MAY YOU DO THAT.', 'TOO FAST, TOO SOON.');
+							}
 						}
 					}
 				}
@@ -249,7 +263,7 @@ class CategoryState extends MusicBeatState
 				{
 					if (Achievements.isUnlocked('secretsunveiled'))
 					{
-						TransitionState.transitionState(FreeplayState, {transitionType: "stickers"});
+						TransitionState.transitionState(FreeplayState, {transitionType: "instant"});
 					}
 					else
 					{
@@ -263,7 +277,7 @@ class CategoryState extends MusicBeatState
 				}
 				else
 				{
-					MusicBeatState.switchState(new FreeplayState());
+					TransitionState.transitionState(FreeplayState, {transitionType: "instant"});
 				}
 			}
 		}

@@ -60,13 +60,14 @@ class WelcomeToPain extends MusicBeatState
 		
 	}
 
+	var gotSecret:String = if (Achievements.isUnlocked('secretsuntold')) 'gsecret' else 'nsecret';
 	override public function update(elapsed:Float)
 	{
 		ch = FlxG.random.int(1,5) / 1000;
 		ch = FlxG.random.int(1,5) / 1000;
 		shaders.ShadersHandler.setChrome(ch);
 		super.update(elapsed);
-		var file:String = Paths.json('secret/secretdialogue'); // Checks for json/Psych Engine dialogue
+		var file:String = Paths.json('secrets/'+gotSecret); // Checks for json/Psych Engine dialogue
 		if (OpenFlAssets.exists(file))
 		{
 			dialogueJson = DialogueBoxPsych.parseDialogue(file);

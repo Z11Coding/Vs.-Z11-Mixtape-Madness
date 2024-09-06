@@ -1166,6 +1166,6 @@ function onStepHit()
 end
 
 function onEndSong()
-	if (damageTaken == 0) unlockAchievement('nohitspecialist')
-	if (damageTaken == 0 && getMisses() == 0) unlockAchievement('multitasker')
+	if (damageTaken == 0) then unlockAchievement('nohitspecialist') end
+	if (damageTaken == 0 && getMisses() == 0) then unlockAchievement('multitasker') end
 end

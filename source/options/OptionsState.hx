@@ -7,7 +7,7 @@ import gamejolt.GameJolt.GameJoltLogin;
 
 class OptionsState extends MusicBeatState
 {
-	var options:Array<String> = ['Note Colors', 'Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay' #if TRANSLATIONS_ALLOWED , 'Language' #end, /*'GameJolt Login', //Not right now*/ 'Misc.'];
+	var options:Array<String> = ['Controls', 'Adjust Delay and Combo', 'Graphics', 'Visuals and UI', 'Gameplay' #if TRANSLATIONS_ALLOWED , 'Language' #end, /*'GameJolt Login', //Not right now*/ 'Misc.'];
 	private var grpOptions:FlxTypedGroup<Alphabet>;
 	private static var curSelected:Int = 0;
 	public static var menuBG:FlxSprite;

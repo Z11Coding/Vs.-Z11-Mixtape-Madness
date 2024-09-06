@@ -586,7 +586,7 @@ class FreeplayState extends MusicBeatState
 						colorTween.cancel();
 					}
 					FlxG.sound.play(Paths.sound('cancelMenu'));
-					MusicBeatState.switchState(new CategoryState());
+					FlxG.switchState(new CategoryState());
 				}
 			}
 
@@ -761,6 +761,7 @@ class FreeplayState extends MusicBeatState
 					} else{
 						if (!CacheState.didPreCache)
 						{
+							MusicBeatState.reopen = false; //Fix a sticker bug
 							LoadingState.prepareToSong();
 							LoadingState.loadAndSwitchState(new PlayState());
 						}

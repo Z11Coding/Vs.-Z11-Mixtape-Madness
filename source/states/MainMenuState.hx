@@ -314,6 +314,8 @@ class MainMenuState extends MusicBeatState
 			FlxG.save.data.TL = false;
 			FlxG.save.data.FF = false;
 			FlxG.save.data.allowedSongs = null;
+			ClientPrefs.data.gotit = false;
+			CategoryState.menuLocks[3] = true; 
 		}
 
 		if (h == 'PBTBM')

@@ -334,7 +334,7 @@ class Main extends Sprite
 
             default:
                 // Default behavior: close the window
-			TransitionState.transitionState(ExitState);
+			TransitionState.transitionState(ExitState, {transitionType: "stickers"});
         }
 		WindowUtils.resetClosing();
     }

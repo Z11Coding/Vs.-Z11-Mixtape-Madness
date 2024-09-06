@@ -43,7 +43,7 @@ class FirstCheckState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
-		switch (FlxG.random.bool(3) && !ClientPrefs.data.gotit)
+		switch (FlxG.random.bool(12) && !ClientPrefs.data.gotit && !FlxG.save.data.updated)
 		{
 			case false:
 				FlxG.switchState(new states.CacheState());
