@@ -25,7 +25,7 @@ class WindowUtils {
 	public static var preventClosing:Bool = true;
 	public static var onClosing:Void->Void;
 
-	static var __triedClosing:Bool = false;
+	public static var __triedClosing:Bool = false;
 	public static inline function resetClosing() __triedClosing = false;
 
 	public static inline function init() {

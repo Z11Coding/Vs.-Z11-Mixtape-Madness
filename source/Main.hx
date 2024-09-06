@@ -36,6 +36,10 @@ import gamejolt.GameJolt;
 import gamejolt.GameJolt.GJToastManager;
 
 import backend.window.WindowUtils;
+
+//Toll Update Stuff
+import backend.update.Github;
+import backend.update.SemanticVersion;
 class Main extends Sprite
 {
 	var game = {
@@ -52,6 +56,26 @@ class Main extends Sprite
 	public static var noTerminalColor:Bool = false;
 	public static var playTest:Bool = false;
 	public static var forceGPUOnlyBitmapsOff:Bool = #if windows false #else true #end;
+
+	public static var UserAgent:String = 'MixtapeEngine/${states.MainMenuState.mixtapeEngineVersion}'; // used for http requests. if you end up forking the engine and making your own then make sure to change this!!
+	public static var githubRepo:RepoInfo = Github.getCompiledRepoInfo();
+	public static var downloadBetas:Bool = beta;
+	public static var outOfDate:Bool = false;
+	public static var recentRelease:Release;
+	
+	public static var betaVersion(get, default):String = ''; // beta version, make blank if not on a beta version, otherwise do it based on semantic versioning (alpha.1, beta.1, rc.1, etc)
+	public static var beta:Bool = betaVersion.trim() != '';
+	public static var displayedVersion(get, never):String;
+    public static var semanticVersion(get, never):SemanticVersion;
+
+	@:noCompletion static function get_betaVersion()
+		return beta ? betaVersion : "0";
+
+	@:noCompletion static function get_semanticVersion()
+		return '${states.MainMenuState.mixtapeEngineVersion}${beta ? '-$betaVersion' : ""}';
+	
+	@:noCompletion static function get_displayedVersion()
+		return 'v${semanticVersion}';
 
 	// public var initStuff = game;
 	public static var fpsVar:FPS;
@@ -327,16 +351,24 @@ class Main extends Sprite
 		}
 
 
+	public static var pressedOnce:Bool = false;
 	public static inline function handleStateBasedClosing() {
-        switch (Type.getClassName(Type.getClass(FlxG.state)).split(".")[Lambda.count(Type.getClassName(Type.getClass(FlxG.state)).split(".")) - 1]) {
-			case "ChartingStateOG":
-				// new Prompt("Are you sure you want to exit? Your progress will not be saved.", function (result:Bool) {
+		if (!pressedOnce || WindowUtils.__triedClosing)
+		{
+			pressedOnce = true;
+			switch (Type.getClassName(Type.getClass(FlxG.state)).split(".")[Lambda.count(Type.getClassName(Type.getClass(FlxG.state)).split(".")) - 1]) {
+				case "ChartingStateOG":
+					// new Prompt("Are you sure you want to exit? Your progress will not be saved.", function (result:Bool) {
 
-            default:
-                // Default behavior: close the window
-			TransitionState.transitionState(ExitState, {transitionType: "stickers"});
-        }
-		WindowUtils.resetClosing();
+				default:
+					// Default behavior: close the window
+				TransitionState.transitionState(ExitState, {transitionType: "stickers"});
+			}
+		}
+		else
+		{
+			Main.closeGame();
+		}
     }
 
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!

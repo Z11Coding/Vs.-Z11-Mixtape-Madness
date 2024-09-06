@@ -1,4 +1,5 @@
 package states;
+
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.ui.FlxUIText;
@@ -90,7 +91,7 @@ class WelcomeToPain extends MusicBeatState
 			{
 				Application.current.window.alert("Null Object Reference");
 				ClientPrefs.data.gotit = true;
-				MusicBeatState.switchState(new states.CacheState());
+				FlxG.switchState(new states.CacheState());
 				psychDialogue = null;
 			}
 			psychDialogue.nextDialogueThing = startNextDialogue;
@@ -101,7 +102,7 @@ class WelcomeToPain extends MusicBeatState
 		else
 		{
 			FlxG.log.warn('Your dialogue file is badly formatted!');
-			MusicBeatState.switchState(new TitleState());
+			FlxG.switchState(new TitleState());
 		}
 	}
 	function startNextDialogue()

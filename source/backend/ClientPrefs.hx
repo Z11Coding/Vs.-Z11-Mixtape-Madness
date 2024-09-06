@@ -8,9 +8,9 @@ import states.FirstCheckState;
 
 // Add a variable here and it will get automatically saved
 @:structInit class SaveVariables {
-	public var showCrash:Bool = false;
+	public var showCrash:Bool = true;
 	public var downScroll:Bool = false;
-	public var silentVol:Bool = true;
+	public var silentVol:Bool = false;
 	public var noParticles:Bool = false;
 	public var modcharts:Bool = true;
 	public var loadCustomNoteGraphicschartEditor:Bool = false;
@@ -115,7 +115,7 @@ import states.FirstCheckState;
 	public var antimash:Bool = true;
 	public var convertEK:Bool = true;
 	public var showKeybindsOnStart:Bool = true;
-	public var starHidden:Bool = true;
+	public var starHidden:Bool = false;
 	public var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
 		'scrolltype' => 'multiplicative', 

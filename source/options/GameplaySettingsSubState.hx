@@ -62,8 +62,8 @@ class GameplaySettingsSubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
-		var option:Option = new Option('Allow Gimmicks',
-			'If unchecked, turns off the gimmicks for songs that have them.',
+		var option:Option = new Option('Allow Mechanics',
+			'If unchecked, turns off the mechanics for songs that have them.',
 			'gimmicksAllowed',
 			'bool');
 		addOption(option);

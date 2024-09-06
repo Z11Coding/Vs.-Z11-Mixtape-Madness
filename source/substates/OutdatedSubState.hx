@@ -1,4 +1,4 @@
-package;
+package substates;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -49,7 +49,7 @@ class OutdatedSubState extends MusicBeatState
 		}
 
 
-		var localVer = MainMenuState.mixtapeEngineVersion;
+		var localVer = states.MainMenuState.mixtapeEngineVersion;
 		var latestVer = ver;
 
 		var txt:FlxText = new FlxText(0, 10, FlxG.width,
@@ -70,7 +70,7 @@ class OutdatedSubState extends MusicBeatState
 		if (FlxG.keys.justPressed.ENTER)
 		{
 			#if windows
-				FlxG.switchState(new UpdateState(files));
+				FlxG.switchState(new states.UpdateState(files));
 			#else
 				FlxG.openURL('https://github.com/Z11Coding/MixtapeEngine-Release/releases/latest');
 			#end
@@ -82,7 +82,7 @@ class OutdatedSubState extends MusicBeatState
 		if (controls.BACK)
 		{
 			leftState = true;
-			FlxG.switchState(new MainMenuState());
+			FlxG.switchState(new states.MainMenuState());
 		}
 		super.update(elapsed);
 	}

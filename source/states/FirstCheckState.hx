@@ -3,6 +3,7 @@ import backend.Highscore;
 import backend.Achievements;
 import backend.util.WindowUtil;
 import flixel.input.keyboard.FlxKey;
+import states.UpdateState;
 class FirstCheckState extends MusicBeatState
 {
 	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
@@ -38,17 +39,26 @@ class FirstCheckState extends MusicBeatState
 
 		Highscore.load();
 
+		UpdateState.getRecentGithubRelease();
+		UpdateState.checkOutOfDate();
+		UpdateState.clearTemps("./");
+
 		super.create();
 	}
 
 	override public function update(elapsed:Float)
 	{
-		switch (FlxG.random.bool(12) && !ClientPrefs.data.gotit && !FlxG.save.data.updated)
+		if (Main.outOfDate)
+			FlxG.switchState(new UpdateState(Main.recentRelease)); // UPDATE!!
+		else
 		{
-			case false:
-				FlxG.switchState(new states.CacheState());
-			case true:
-				FlxG.switchState(new states.WelcomeToPain());
+			switch (FlxG.random.bool(12) && !ClientPrefs.data.gotit && !FlxG.save.data.updated)
+			{
+				case false:
+					FlxG.switchState(new states.CacheState());
+				case true:
+					FlxG.switchState(new states.WelcomeToPain());
+			}
 		}
 	}
 }

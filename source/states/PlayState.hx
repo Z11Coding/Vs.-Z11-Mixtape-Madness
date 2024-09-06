@@ -8026,6 +8026,7 @@ if (result < 0 || result > mania) {
 	function noteMiss(daNote:Note, field:PlayField):Void
 	{ // You didn't hit the key and let it go offscreen, also used by Hurt Notes
 		// Dupe note remove
+		justmissed = true;
 		for (note in field.spawnedNotes)
 		{
 			if (!note.alive || daNote.tail.contains(note) || note.isSustainNote)
@@ -8127,6 +8128,7 @@ if (result < 0 || result > mania) {
 
 	function noteMissPress(direction:Int = 1):Void // You pressed a key when there was no notes to press for this key
 	{
+		justmissed = true;
 		if (ClientPrefs.data.ghostTapping)
 			return; // fuck it
 		bfkilledcheck = true;

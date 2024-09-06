@@ -101,9 +101,7 @@ function onStepHit()
     doTweenAlpha('woah33', 'camHUD', 1, 2, 'linear')
     setProperty('glitchshit.alpha', 0)
     setProperty('uiGroup.visible', false)
-    for i = 0, getProperty('opponentStrums.length') - 1 do
-      setProperty('opponentStrums.members['..i..'].visible', false)
-    end
+    setValue('alpha', 1, 1)
     for i = 0, getProperty('notes.length') - 1 do
       if not getPropertyFromGroup('notes', i, 'mustPress') then
         setPropertyFromGroup('notes', i, 'visible', false)
@@ -120,9 +118,7 @@ function onStepHit()
     setProperty("defaultCamZoom",1.3)
     doTweenAlpha('woah11', 'camHUD', 0, 0.5, 'linear')
   elseif curStep == 512 then
-    for i = 0, getProperty('opponentStrums.length') - 1 do
-      setProperty('opponentStrums.members['..i..'].visible', true)
-    end
+    setValue('alpha', 0, 1)
     for i = 0, getProperty('notes.length') - 1 do
       if not getPropertyFromGroup('notes', i, 'mustPress') then
         setPropertyFromGroup('notes', i, 'visible', true)
@@ -178,9 +174,7 @@ function onStepHit()
     setObjectCamera('bg2','camHUD')
     setProperty('glitchshit.alpha', 0)
     setProperty('uiGroup.visible', false)
-    for i = 0, getProperty('opponentStrums.length') - 1 do
-      setProperty('opponentStrums.members['..i..'].visible', false)
-    end
+    setValue('alpha', 1, 1)
     for i = 0, getProperty('notes.length') - 1 do
       if not getPropertyFromGroup('notes', i, 'mustPress') then
         setPropertyFromGroup('notes', i, 'visible', false)
@@ -196,9 +190,7 @@ function onStepHit()
     setObjectCamera('bg2','camHUD')
     setProperty('glitchshit.alpha',1)
     setProperty('uiGroup.visible', true)
-    for i = 0, getProperty('opponentStrums.length') - 1 do
-      setProperty('opponentStrums.members['..i..'].visible', true)
-    end
+    setValue('alpha', 0, 1)
     for i = 0, getProperty('notes.length') - 1 do
       if not getPropertyFromGroup('notes', i, 'mustPress') then
         setPropertyFromGroup('notes', i, 'visible', true)
@@ -230,9 +222,7 @@ function onStepHit()
   elseif curStep == 1792 then
     setProperty('glitchshit.alpha', 0)
     setProperty('uiGroup.visible', false)
-    for i = 0, getProperty('opponentStrums.length') - 1 do
-      setProperty('opponentStrums.members['..i..'].visible', false)
-    end
+    setValue('alpha', 1, 1)
     for i = 0, getProperty('notes.length') - 1 do
       if not getPropertyFromGroup('notes', i, 'mustPress') then
         setPropertyFromGroup('notes', i, 'visible', false)
@@ -254,9 +244,7 @@ function onStepHit()
   elseif curStep == 1793 then
     setProperty('cameraSpeed',1)
   elseif curStep == 1905 then
-    for i = 0, getProperty('opponentStrums.length') - 1 do
-      setProperty('opponentStrums.members['..i..'].visible', false)
-    end
+    setValue('alpha', 1, 1)
     for i = 0, getProperty('notes.length') - 1 do
       if not getPropertyFromGroup('notes', i, 'mustPress') then
         setPropertyFromGroup('notes', i, 'visible', false)
@@ -276,9 +264,7 @@ function onStepHit()
   elseif curStep == 2048 then
     setProperty('glitchshit.alpha', 1)
     setProperty('uiGroup.visible', true)
-    for i = 0, getProperty('opponentStrums.length') - 1 do
-      setProperty('opponentStrums.members['..i..'].visible', true)
-    end
+    setValue('alpha', 0, 1)
     for i = 0, getProperty('notes.length') - 1 do
       if not getPropertyFromGroup('notes', i, 'mustPress') then
         setPropertyFromGroup('notes', i, 'visible', true)
@@ -301,9 +287,7 @@ function onStepHit()
     setProperty('bg2.alpha', 1)
     setProperty('glitchshit.alpha', 0)
     setProperty('uiGroup.visible', false)
-    for i = 0, getProperty('opponentStrums.length') - 1 do
-      setProperty('opponentStrums.members['..i..'].visible', false)
-    end
+    setValue('alpha', 1, 1)
     for i = 0, getProperty('notes.length') - 1 do
       if not getPropertyFromGroup('notes', i, 'mustPress') then
         setPropertyFromGroup('notes', i, 'visible', false)
@@ -320,9 +304,7 @@ function onStepHit()
     reveal = false
     treehouse = false
   elseif curStep == 2561 then
-    for i = 0, getProperty('opponentStrums.length') - 1 do
-      setProperty('opponentStrums.members['..i..'].visible', true)
-    end
+    setValue('alpha', 0, 1)
     for i = 0, getProperty('notes.length') - 1 do
       if not getPropertyFromGroup('notes', i, 'mustPress') then
         setPropertyFromGroup('notes', i, 'visible', true)

@@ -8,8 +8,8 @@ class VisualsUISubState extends BaseOptionsMenu
 		rpcTitle = 'Visuals Settings Menu'; //for Discord Rich Presence
 
 		var option:Option = new Option('Note Splashes',
-			"If unchecked, hitting \"Sick!\" notes won't show particles.",
-			'noteSplashes',
+			"no",
+			'',
 			'bool');
 		addOption(option);
 
@@ -64,12 +64,6 @@ class VisualsUISubState extends BaseOptionsMenu
 		option.onChange = onChangeFPSCounter;
 		#end
 
-		var option:Option = new Option('Shaders',
-			'If unchecked, turns off the chromatic abberation shader.',
-			'shaders',
-			'bool');
-		addOption(option);
-
 		#if DISCORD_ALLOWED
 		var option:Option = new Option('Discord Rich Presence',
 			"Uncheck this to prevent accidental leaks, it will hide the Application from your \"Playing\" box on Discord",
@@ -88,7 +82,7 @@ class VisualsUISubState extends BaseOptionsMenu
 			"If checked, your keybinds will be shown on the strum that they correspond to when you start a song.",
 			'showKeybindsOnStart',
 			'bool');
-		addOption(option);
+		//addOption(option);
 
 		var option:Option = new Option('In-Game Rating',
 			"If checked, the ratings will be in-game instead of on the hud.",

@@ -1,18 +1,20 @@
 package states;
+
 import lime.system.System;
 import haxe.io.Path;
-import openfl.utils.ByteArray;
 import sys.io.File;
 import sys.io.FileOutput;
-import flixel.ui.FlxBar;
-import openfl.net.URLRequest;
+import sys.FileSystem;
+import openfl.utils.ByteArray;
 import openfl.events.Event;
 import openfl.events.ProgressEvent;
-import sys.FileSystem;
+import openfl.net.URLRequest;
 import openfl.net.URLLoader;
-import flixel.util.FlxColor;
+import flixel.ui.FlxBar;
 import flixel.text.FlxText;
-import Github.Release;
+import flixel.util.FlxColor;
+
+import backend.update.Github;
 
 using StringTools;
 
@@ -65,11 +67,12 @@ class UpdateState extends MusicBeatState {
     var fileBar:FlxBar;
     override function create(){
 		var beta = release.prerelease ? " (PRE-RELEASE)" : "";
-		var currentBeta = MainMenuState.beta ? " (PRE-RELEASE)" : "";
+		var currentBeta = Main.beta ? " (PRE-RELEASE)" : "";
 		updateText = new FlxText(0, 0, FlxG.width,
-			'You are on Mixtape Engine ${MainMenuState.mixtapeEngineVersion}${currentBeta}, but the most recent is v${release.tag_name}${beta}!\nY = Update, N = Remind me later, I = Skip this update');
+			'You are on Mixtape Engine ${MainMenuState.mixtapeEngineVersion}${currentBeta}, but the most recent is v${release.tag_name}${beta}!\n\nY = Update, N = Remind me later, I = Skip this update');
+		updateText.setFormat(Paths.font("Quantico-Bold.ttf"), 32, FlxColor.WHITE, CENTER);
+		updateText.updateHitbox();
 		updateText.screenCenter(Y);
-		updateText.setFormat(Paths.font("FridayNightFunkin.ttf"), 32, FlxColor.WHITE, CENTER);
 		add(updateText);
 
 		fileBar = new FlxBar(0, 0, LEFT_TO_RIGHT, Std.int(FlxG.width/2), 10, null, null, 0, 100, false);
@@ -126,9 +129,9 @@ class UpdateState extends MusicBeatState {
 						File.saveBytes(fullPath, data);
                     }
                 }
-            }else{
+            }else
                 prog.finishedFiles.push(file);
-            }
+            
         }
 
 		
@@ -192,7 +195,8 @@ class UpdateState extends MusicBeatState {
                 FileSystem.rename(progPath, nu);
 				File.copy('${finishedFolder}\\${exe}', progPath);
 				prog.done = true; 
-				Sys.command('start /B "$progPath"');
+				Sys.command('start /B ${exe}');
+				clearFiles(path);
                 System.exit(0);
 			});
         });
@@ -295,10 +299,10 @@ class UpdateState extends MusicBeatState {
         
 		if (downloading)return;
         if(FlxG.keys.justPressed.N){
-			MusicBeatState.switchState(new MainMenuState());
+			MusicBeatState.switchState(new TitleState());
         }else if(FlxG.keys.justPressed.I){
 			Main.outOfDate = false;
-			MusicBeatState.switchState(new MainMenuState());
+			MusicBeatState.switchState(new TitleState());
 			if (FlxG.save.data.ignoredUpdates == null)
 				FlxG.save.data.ignoredUpdates = [];
 			
@@ -307,6 +311,95 @@ class UpdateState extends MusicBeatState {
         }else if(FlxG.keys.justPressed.Y){
             startDownload();
         }
-
     }
+
+	#if DO_AUTO_UPDATE
+	// gets the most recent release and returns it
+	// if you dont have download betas on, then it'll exclude prereleases
+	public static function getRecentGithubRelease()
+	{
+        var recentRelease:Release;
+
+		if (ClientPrefs.data.checkForUpdates)
+		{
+			var github:Github = new Github(); // leaving the user and repo blank means it'll derive it from the repo the mod is compiled from
+			// if it cant find the repo you compiled in, it'll just default to troll engine's repo
+			recentRelease = github.getReleases((release:Release) ->{
+				return (Main.downloadBetas || !release.prerelease);
+			})[0];			
+
+			if (FlxG.save.data.ignoredUpdates == null){
+				FlxG.save.data.ignoredUpdates = [];
+				FlxG.save.flush();
+			}
+			
+			if (recentRelease != null && FlxG.save.data.ignoredUpdates.contains(recentRelease.tag_name))
+				recentRelease = null;
+
+		}else{
+			recentRelease = null;
+		}
+
+		return Main.recentRelease = recentRelease;
+	}
+
+	public static function checkOutOfDate(){
+		var outOfDate = false;
+
+		if (ClientPrefs.data.checkForUpdates && Main.recentRelease != null)
+		{
+        	var recentRelease = Main.recentRelease;
+            
+            // hoping this works lol
+			var tagName:backend.update.SemanticVersion = recentRelease.tag_name;
+			if (tagName > Main.semanticVersion){
+				outOfDate = true;
+				trace('New version found! Newest version: $tagName | Current: ${Main.semanticVersion}');
+			}
+						
+			/* if (recentRelease.prerelease)
+			{
+				var tagName = recentRelease.tag_name;
+				var split = tagName.split("-");
+				var betaVersion = split.length == 1 ? "1" : split.pop();
+				var versionName = split.pop();
+				outOfDate = (versionName > Main.engineVersion && betaVersion > Main.betaVersion)
+					|| (Main.beta && versionName == Main.engineVersion && betaVersion > Main.betaVersion)
+					|| (versionName > Main.engineVersion);
+			}else{
+				var versionName = recentRelease.tag_name;
+				// if you're in beta and version is the same as the engine version, but just not beta
+				// then you should absolutely be prompted to update
+				outOfDate = Main.beta && Main.engineVersion <= versionName || Main.engineVersion < versionName;
+			} */
+		}
+
+		return Main.outOfDate = outOfDate;
+	}
+
+	public static function clearTemps(dir:String)
+	{
+		#if desktop
+		for (file in FileSystem.readDirectory(dir)){
+			var file = './$dir/$file';
+			if (FileSystem.isDirectory(file))
+				clearTemps(file);
+			else if (file.endsWith(".tempcopy"))
+				FileSystem.deleteFile(file);
+		}
+		#end
+	}
+	#else
+	public static function getRecentGithubRelease()
+	{
+		Main.recentRelease = null;
+		Main.outOfDate = false;
+		return null;
+	}
+
+	public static function checkOutOfDate(){
+		Main.outOfDate = false;
+		return false;
+	}
+	#end
 }
