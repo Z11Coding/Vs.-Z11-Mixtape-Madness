@@ -1745,13 +1745,14 @@ class ChartingStateOG extends MusicBeatChartingState
 		gfVocals = new FlxSound();
 
 		var file:Dynamic = Paths.voices(_song.song, (characterData.vocalsP1 == null || characterData.vocalsP1.length < 1) ? 'player' : characterData.vocalsP1);
-		if (Std.isOfType(file, Sound) || OpenFlAssets.exists(file)) {
+		try
+		{
 			soundTracksMap.set(
 				"Vocals", 
-				vocals.loadEmbedded(file)
+				vocals.loadEmbedded(file != null ? file : Paths.voices(PlayState.SONG.song))
 			);
 			FlxG.sound.list.add(vocals);
-		}else{
+		}catch (e:Dynamic) {
 			vocals = null;
 		}
 		var file:Dynamic = Paths.voices(_song.song, (characterData.vocalsP2 == null || characterData.vocalsP2.length < 1) ? 'opponent' : characterData.vocalsP2);

@@ -761,9 +761,13 @@ class FreeplayState extends MusicBeatState
 					} else{
 						if (!CacheState.didPreCache)
 						{
-							MusicBeatState.reopen = false; //Fix a sticker bug
-							LoadingState.prepareToSong();
-							LoadingState.loadAndSwitchState(new PlayState());
+							if (!alreadyClicked)
+							{
+								MusicBeatState.reopen = false; //Fix a sticker bug
+								LoadingState.prepareToSong();
+								LoadingState.loadAndSwitchState(new PlayState());
+							}
+							else TransitionState.transitionState(PlayState, {transitionType: "stickers"});
 						}
 						else TransitionState.transitionState(PlayState, {transitionType: "stickers"});
 						#if !SHOW_LOADING_SCREEN FlxG.sound.music.stop(); #end
@@ -825,6 +829,7 @@ class FreeplayState extends MusicBeatState
 		super.update(elapsed);
 	}
 
+	var alreadyClicked:Bool = false;
 	function getVocalFromCharacter(char:String)
 	{
 		try

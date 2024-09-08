@@ -38,6 +38,9 @@ class CreditsState extends MusicBeatState
 		#end
 
 		var defaultList:Array<Array<String>> = [ //Name - Icon name - Description - Link - BG Color
+			['Beta Testers'],
+			['Dylan',		        'dylan',		    '',					                                         'https://docs.google.com/document/d/1Ece_WG4QBnYSlRPEotqwCXxAEz2o_ugF_9YgSQ3oelU/edit?usp=sharing',		'9ff1cd'],
+			['Dave',				'dave',			    '',						                                     'https://twitter.com/vids144p/status/1792668118222864402',		'f62681'],
 			['Fanta in my system Team'],
 			['JDST',		        'jsdt',		        'Main Director, Artist, Animator and Composer of (SONG NAME HERE)',					 'https://docs.google.com/document/d/1Ece_WG4QBnYSlRPEotqwCXxAEz2o_ugF_9YgSQ3oelU/edit?usp=sharing',		'9ff1cd'],
 			['Magi',				'magi',			    'Composer of (SONG NAME HERE)',						                                 'https://twitter.com/vids144p/status/1792668118222864402',		'f62681'],

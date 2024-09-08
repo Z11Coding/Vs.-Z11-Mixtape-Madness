@@ -102,6 +102,13 @@ class CoolUtil
 		return a[a.length - 1];
 	}
 
+	public static function wrapInt(e:Int, min:Int, max:Int) {
+		if (min == max) return min;
+		var result = (e - min) % (max - min);
+		if (result < 0) result += (max - min);
+		return result + min;
+	}
+	
 	inline public static function boundTo(value:Float, min:Float, max:Float):Float {
 		return Math.max(min, Math.min(max, value));
 	}
@@ -214,6 +221,19 @@ class CoolUtil
 
 		return convertedValue;
 	}
+
+	public static function getSizeLabel(num:UInt):String{
+        var size:Float = num;
+        var data = 0;
+        var dataTexts = ["B", "KB", "MB", "GB", "TB", "PB"];
+        while(size > 1024 && data < dataTexts.length - 1) {
+          data++;
+          size = size / 1024;
+        }
+        
+        size = Math.round(size * 100) / 100;
+        return size + " " + dataTexts[data];
+    }
 
 	public static function deleteFolder(delete:String) {
 		#if sys

@@ -23,19 +23,19 @@ class TransitionState {
             postSwitchTransition(currenttransition.options);
         }
         if (!Reflect.isFunction(onComplete) && onComplete != null) {
-            trace("onComplete is not a function: " + onComplete);
+            //trace("onComplete is not a function: " + onComplete);
         }
-        trace("Switched to state: " + Type.getClassName(targetState));
+        //trace("Switched to state: " + Type.getClassName(targetState));
         currenttransition = null;
     }
 
     public static function transitionState(targetState:Class<FlxState>, options:Dynamic = null, ?args:Array<Dynamic>):Void {
-        trace("Transitioning to state: " + Type.getClassName(targetState));
-        trace("Options: " + options);
+        //trace("Transitioning to state: " + Type.getClassName(targetState));
+        //trace("Options: " + options);
         currenttransition = { targetState: targetState, options: options, args: args };
         if (options == null) {
             // If options are null, select a random transition
-            trace("Random transition selected due to null options.");
+            //trace("Random transition selected due to null options.");
             var transitions = ["fadeOut", "fadeColor", "slideLeft", "slideRight", "slideUp", "slideDown", "slideRandom", "fallRandom", "fallSequential", "stickers"];
             var random = new FlxRandom();
             options = {
@@ -43,17 +43,17 @@ class TransitionState {
                 duration: random.float(0.5, 2), // Random duration between 0.5 and 2 seconds
                 color: random.color() // Random color for fadeColor transition
             };
-            trace("Random options: " + options);
+            //trace("Random options: " + options);
         }
         var duration:Float = options != null && Reflect.hasField(options, "duration") ? options.duration : 1;
         var onComplete = options != null && Reflect.hasField(options, "onComplete") ? options.onComplete : null;
         var transitionType:String = options != null && Reflect.hasField(options, "transitionType") ? options.transitionType : "fadeOut";
-        trace("Transition type: " + transitionType);
-        trace("Duration: " + duration);
-        trace("On complete: " + onComplete);
-        trace("Args: " + args);
-        trace("Target state: " + Type.getClassName(targetState));
-        trace("Options: " + options);
+        //trace("Transition type: " + transitionType);
+        //trace("Duration: " + duration);
+        //trace("On complete: " + onComplete);
+        //trace("Args: " + args);
+        //trace("Target state: " + Type.getClassName(targetState));
+        //trace("Options: " + options);
         
         switch (transitionType) {
             case "fadeOut":
@@ -86,7 +86,7 @@ class TransitionState {
                 var totalTweens = 0;
             
                 // Collect valid sprites
-                trace("Collecting sprites...");
+                //trace("Collecting sprites...");
                 for (object in FlxG.state.members) {
                     if (object != null && Std.is(object, FlxSprite)) {
                         sprites.push(cast(object));
@@ -128,7 +128,7 @@ class TransitionState {
                 var objectsToTween: Array<FlxSprite> = [];
                 
                 // Collect valid objects first
-                trace("Collecting sprites...");
+                //trace("Collecting sprites...");
 
                 for (object in FlxG.state.members) {
                     if (object != null && Std.is(object, FlxSprite)) {
@@ -158,7 +158,7 @@ class TransitionState {
                 processNextObject();
 
             case "stickers":
-                trace("Opening sticker substate...");
+                //trace("Opening sticker substate...");
                 MusicBeatState.reopen = true;
                 FlxG.state.openSubState(new substates.StickerSubState(null,  (sticker) -> Type.createInstance(targetState, args != null ? args : [])));
             case "melt":
@@ -169,7 +169,7 @@ class TransitionState {
             case "instant":
                 FlxG.switchState(Type.createInstance(targetState, null));
         }
-        trace("Transition complete!");
+        //trace("Transition complete!");
     }
 
     static function slideScreen(x:Float, y:Float, duration:Float, targetState:Class<FlxState>, onComplete:Dynamic, ?args:Array<Dynamic>):Void {
@@ -201,50 +201,50 @@ class TransitionState {
     // }
 
     static function postSwitchTransition(options:Dynamic = null):Void {
-        trace("Post-switch transition started.");
+        //trace("Post-switch transition started.");
         if (options == null) {
-            trace("No options provided for post-switch transition.");
+            //trace("No options provided for post-switch transition.");
             return;
         }
 
         var duration:Float = Reflect.hasField(options, "duration") ? options.duration : 1;
         var transitionType:String = Reflect.hasField(options, "transitionType") ? options.transitionType : "fadeIn";
-        trace("Post-switch transition type: " + transitionType);
-        trace("Duration: " + duration);
+        //trace("Post-switch transition type: " + transitionType);
+        //trace("Duration: " + duration);
 
         switch (transitionType) {
             case "fadeOut":
                 FlxTween.tween(FlxG.camera, { alpha: 1 }, duration, {
                     onComplete: function(_) {
-                        trace("Post-switch fadeIn complete.");
+                        //trace("Post-switch fadeIn complete.");
                     }
                 });
             case "slideLeft":
                 FlxTween.tween(FlxG.camera.scroll, { x: 0 }, duration, {
                     onComplete: function(_) {
-                        trace("Post-switch slideInLeft complete.");
+                        //trace("Post-switch slideInLeft complete.");
                     }
                 });
             case "slideRight":
                 FlxTween.tween(FlxG.camera.scroll, { x: 0 }, duration, {
                     onComplete: function(_) {
-                        trace("Post-switch slideInRight complete.");
+                        //trace("Post-switch slideInRight complete.");
                     }
                 });
             case "slideUp":
                 FlxTween.tween(FlxG.camera.scroll, { y: 0 }, duration, {
                     onComplete: function(_) {
-                        trace("Post-switch slideInUp complete.");
+                        //trace("Post-switch slideInUp complete.");
                     }
                 });
             case "slideDown":
                 FlxTween.tween(FlxG.camera.scroll, { y: 0 }, duration, {
                     onComplete: function(_) {
-                        trace("Post-switch slideInDown complete.");
+                        //trace("Post-switch slideInDown complete.");
                     }
                 });
             default:
-                trace("Unknown post-switch transition type: " + transitionType);
+                //trace("Unknown post-switch transition type: " + transitionType);
         }
     }
 
@@ -269,7 +269,7 @@ class TransitionState {
                 FlxG.camera.buffer.draw(screenCopy);
             },
             onComplete: function(tween:FlxTween) {
-                trace("Post-switch melt complete.");
+                //trace("Post-switch melt complete.");
                 screenCopy.dispose(); // Clean up memory for screenCopy
             }
         });

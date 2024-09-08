@@ -1,0 +1,49 @@
+{
+	"song": {
+		"speed": 2.3,
+		"stage": null,
+		"player1": "bf",
+		"player2": "cg",
+		"player3": null,
+		"events": [
+			[
+				0,
+				[
+					[
+						"Opponent Fade",
+						"0",
+						"0"
+					]
+				]
+			],
+			[
+				16500,
+				[
+					[
+						"Opponent Fade",
+						"5",
+						"1"
+					]
+				]
+			],
+			[
+				232968.75,
+				[
+					[
+						"Opponent Fade",
+						"5",
+						"0"
+					]
+				]
+			]
+		],
+		"notes": [],
+		"splashSkin": null,
+		"validScore": false,
+		"gfVersion": "gf",
+		"bpm": 160,
+		"arrowSkin": null,
+		"needsVoices": true,
+		"song": "Dreamy-Sky"
+	}
+}

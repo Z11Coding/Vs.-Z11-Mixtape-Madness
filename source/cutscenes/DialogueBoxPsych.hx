@@ -385,7 +385,7 @@ class DialogueBoxPsych extends FlxSpriteGroup
 		if(curDialogue.text == null || curDialogue.text.length < 1) curDialogue.text = ' ';
 		if(curDialogue.boxState == null) curDialogue.boxState = 'normal';
 		if(curDialogue.speed == null || Math.isNaN(curDialogue.speed)) curDialogue.speed = 0.05;
-		if(ClientPrefs.data.username) StringTools.replace(curDialogue.text, 'USERNAME', Sys.environment()["USERNAME"]);
+		if(ClientPrefs.data.username) curDialogue.text = StringTools.replace(curDialogue.text, 'USERNAME', #if windows Sys.environment()["USERNAME"] #elseif mac Sys.environment()["USER"] #end);
 
 		var animName:String = curDialogue.boxState;
 		var boxType:String = textBoxTypes[0];

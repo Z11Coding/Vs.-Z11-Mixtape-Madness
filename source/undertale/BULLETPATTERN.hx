@@ -20,7 +20,6 @@ import flixel.tweens.FlxTween;
 import lime.app.Event;
 import flixel.math.FlxAngle;
 import backend.Conductor;
-import states.PlayState.Wife3;
 import objects.Note;
 import objects.NoteObject;
 import objects.StrumNote;

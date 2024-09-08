@@ -1,0 +1,33 @@
+{
+	"songs": [
+		[
+			"Testimony",
+			"retshaggy",
+			[
+				255,
+				255,
+				255
+			]
+		]
+	],
+	"category": "bonus",
+	"hiddenUntilUnlocked": false,
+	"hideFreeplay": false,
+	"weekBackground": "stage",
+	"difficulties": "4k, Canon",
+	"weekCharacters": [
+		"dad",
+		"bf",
+		"gf"
+	],
+	"storyName": "Your New Week",
+	"weekName": "Testimony",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"hideStoryMode": false,
+	"weekBefore": "tutorial",
+	"startUnlocked": true
+}

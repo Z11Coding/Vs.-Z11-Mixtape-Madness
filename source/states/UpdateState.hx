@@ -1,405 +1,245 @@
 package states;
-
-import lime.system.System;
-import haxe.io.Path;
-import sys.io.File;
-import sys.io.FileOutput;
-import sys.FileSystem;
-import openfl.utils.ByteArray;
+import substates.Prompt;
+import flixel.math.FlxMath;
+import flixel.FlxSprite;
+import openfl.events.IOErrorEvent;
+import openfl.events.ErrorEvent;
+import flixel.util.FlxColor;
+import flixel.util.FlxColor;
+import flixel.text.FlxText;
+import openfl.system.System;
+import sys.io.Process;
 import openfl.events.Event;
 import openfl.events.ProgressEvent;
-import openfl.net.URLRequest;
-import openfl.net.URLLoader;
+import sys.Http;
+import cpp.vm.Thread;
 import flixel.ui.FlxBar;
-import flixel.text.FlxText;
-import flixel.util.FlxColor;
-
-import backend.update.Github;
+import flixel.FlxG;
+import openfl.net.URLLoader;
+import openfl.net.URLLoaderDataFormat;
+import openfl.net.URLStream;
+import openfl.net.URLRequest;
+import openfl.utils.ByteArray;
+import sys.FileSystem;
+import sys.io.File;
+import sys.io.FileOutput;
+import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
 
 using StringTools;
 
-typedef DownloadData = {
-    var fileName:String;
-	var fileSize:Int;
-    var link:String;
-}
+class UpdateState extends MusicBeatState
+{
+	public var fileList:Array<String> = [];
+	public var baseURL:String;
+	public var downloadedFiles:Int = 0;
+	public var percentLabel:FlxText;
+	public var currentFileLabel:FlxText;
+	public var totalFiles:Int = 0;
+	
+    var bg:FlxTypedSpriteGroup<FlxSprite> = new FlxTypedSpriteGroup<FlxSprite>();
 
-typedef FileData = {
-    var fileName:String;
-    var path:String;
-}
+	var bf:FlxSprite;
 
-typedef DLProgress = {
-	var bytesFinished:Float;
-	var bytesTotal:Float;
-    var files:Array<DownloadData>;
-	var downloadedFiles:Array<FileData>;
-	var finishedFiles:Array<FileData>;
-    var currentFile:Int;
-    var totalFiles:Int;
-    var done:Bool;
-}
+	var error:Bool = false;
+	
+	public function new(baseURL:String = "http://raw.githubusercontent.com/Z11Coding/Z11-s-Modpack-Mixup-RELEASE/main/", fileList:Array<String>) 
+	{
+		super();
+		this.baseURL = baseURL;
+		this.fileList = fileList;
+		totalFiles = fileList.length;
+	}
 
-class UpdateState extends MusicBeatState {
-    var release:Release;
-    var downloading:Bool = false;
-    var stream:URLLoader;
-    var prog:DLProgress = {
-        bytesFinished: 0,
-        bytesTotal: 0,
-        files: [],
-        downloadedFiles: [],
-        finishedFiles: [],
-        currentFile: 0,
-        totalFiles: 0,
-        done: false
-    }
-
-    var path = '${Sys.getEnv("TEMP")}\\MixtapeEngineUpdate';
+	var currentLoadedStream:URLLoader = null;
+	var currentFile:String;
     
-    public function new(r:Release){
-        super();
-        release=r;
-    }
+    var w = 775;
+    var h = 550;
 
-    var updateText:FlxText;
-
-    var fileBar:FlxBar;
-    override function create(){
-		var beta = release.prerelease ? " (PRE-RELEASE)" : "";
-		var currentBeta = Main.beta ? " (PRE-RELEASE)" : "";
-		updateText = new FlxText(0, 0, FlxG.width,
-			'You are on Mixtape Engine ${MainMenuState.mixtapeEngineVersion}${currentBeta}, but the most recent is v${release.tag_name}${beta}!\n\nY = Update, N = Remind me later, I = Skip this update');
-		updateText.setFormat(Paths.font("Quantico-Bold.ttf"), 32, FlxColor.WHITE, CENTER);
-		updateText.updateHitbox();
-		updateText.screenCenter(Y);
-		add(updateText);
-
-		fileBar = new FlxBar(0, 0, LEFT_TO_RIGHT, Std.int(FlxG.width/2), 10, null, null, 0, 100, false);
-		fileBar.screenCenter(XY);
-		fileBar.numDivisions = 200;
-		fileBar.y += 100;
-		fileBar.createFilledBar(FlxColor.GRAY, FlxColor.GREEN);
-        fileBar.visible = false;
-		add(fileBar);
-        super.create();
-    }
-
-    function installShit(){
-        prog.currentFile = 0;
-        prog.totalFiles = prog.downloadedFiles.length;
-        prog.bytesFinished = 0;
-		prog.bytesTotal = 0;
-		fileBar.setRange(0, prog.totalFiles);
-		updateText.text = 'Extracting (0 / ${prog.totalFiles})';
-
-        
-        var extractionPath = '${path}\\Finished';
-		clearFiles(extractionPath);
-		FileSystem.createDirectory(extractionPath);
-        for(file in prog.downloadedFiles){
-            prog.currentFile++;
-            fileBar.value = prog.currentFile;
-            updateText.text = 'Extracting (${prog.currentFile} / ${prog.totalFiles})';
-            if(file.fileName.endsWith(".zip")){
-                var toRead = File.read(file.path);
-				var entries = haxe.zip.Reader.readZip(toRead);
-				toRead.close();
-				var extractedFiles:Int = 0;
-				var totalFiles:Int = entries.length;
-				updateText.text = 'Extracting (${extractedFiles} / ${totalFiles}) (${prog.currentFile} / ${prog.totalFiles})';
-
-                for(zippedFile in entries){
-					extractedFiles++;
-					updateText.text = 'Extracting (${extractedFiles} / ${totalFiles}) (${prog.currentFile} / ${prog.totalFiles})';
-                    var name = zippedFile.fileName;
-                    trace(name);
-					var fullPath = Path.join([extractionPath, name]);
-                    if(name.endsWith("/")){
-                        // dir
-						if (!FileSystem.exists(fullPath))
-							FileSystem.createDirectory(fullPath);
-                        else
-							clearFiles(fullPath);
-                    }else{
-						var directory = [for (w in name.split("/")) w.trim()];
-                        directory.pop();
-						FileSystem.createDirectory(Path.join([extractionPath, directory.join("/")]));
-						var data = haxe.zip.Reader.unzip(zippedFile);
-						File.saveBytes(fullPath, data);
-                    }
-                }
-            }else
-                prog.finishedFiles.push(file);
-            
-        }
-
-		
-    }
-
-    function clearFiles(path:String){
-		if (FileSystem.exists(path))
-		{
-			for (file in FileSystem.readDirectory(path))
-			{
-				var fp = Path.join([path, file]);
-				if (FileSystem.isDirectory(fp)){
-					clearFiles(fp);
-                    FileSystem.deleteDirectory(fp);
-                }else
-					FileSystem.deleteFile(fp);
-			}
+	function alright() {
+		downloadedFiles++;
+		percentLabel.text = '${Math.floor(downloadedFiles / totalFiles * 100)}%';
+		if (fileList.length > 0) {
+			doFile();
+		} else {
+			applyUpdate();
 		}
-    }
+	}
 
-    function startDownload(){
-        downloading = true;
-        FlxG.autoPause = false;
-		updateText.text = "Preparing";
-        // setup folder to download to
-
-		clearFiles(path);
-		FileSystem.createDirectory(path);
-		
-        // get every asset. there should probably only be 1 but y'know!!
-
-		updateText.text = "Gathering files";
-		prog.files = [];
-        for(asset in release.assets){
-			prog.files.push({
-                fileName: asset.name,
-                link: asset.browser_download_url,
-				fileSize: asset.size
-            });
-			prog.totalFiles++;
-        }
-
-		updateText.text = "Starting download";
-		fileBar.visible = true;
-
-		download(function(){
-            fileBar.visible = false;
-            updateText.text = "Finished downloading! Preparing extraction";
-	 		sys.thread.Thread.create(() ->
-			{ 
-                installShit();
-				updateText.text = "Finished extraction! Installing to the game folder..";
-				var finishedFolder = '${path}\\Finished';
-                var progPath = Sys.programPath();
-                var folderArray = progPath.split("\\");
-				var exe = Path.withoutDirectory(folderArray.pop());
-				var folder = folderArray.join("/");
-				copy(finishedFolder, '', FileSystem.absolutePath(folder));
-				updateText.text = "Done copying!";
- 				var nu = '${Path.withoutExtension(progPath)}.tempcopy';
-                FileSystem.rename(progPath, nu);
-				File.copy('${finishedFolder}\\${exe}', progPath);
-				prog.done = true; 
-				Sys.command('start /B ${exe}');
-				clearFiles(path);
-                System.exit(0);
+	function doFile() {
+		oldBytesLoaded = 0;
+		var f = fileList.shift();
+		currentFile = f;
+		if (f == null) {
+			applyUpdate();
+			return;
+		}
+		if (FileSystem.exists('./_cache/$f')) { // prevents redownloading of the entire thing after it failed
+			sys.thread.Thread.create(function()
+				{
+			alright();
+				});
+			return;
+		}
+		if (!FileSystem.exists('./_cache/$f') && f != null)
+		{
+			var downloadStream = new URLLoader();
+			currentLoadedStream = downloadStream;
+			downloadStream.dataFormat = BINARY;
+	
+			//dumbass
+			var request = new URLRequest('$baseURL/$f'.replace(" ", "%20"));
+			var good = true;
+			var label1 = '(${totalFiles - fileList.length}/${totalFiles})';
+			var label2 = '( - / - )';
+			var maxLength:Int = Std.int(Math.max(label1.length, label2.length));
+			while(label1.length < maxLength) label1 = " " + label1;
+			while(label2.length < maxLength) label2 += " ";
+			currentFileLabel.text = 'Downloading File: $f\n$label1 | $label2';
+			downloadStream.addEventListener(IOErrorEvent.IO_ERROR, function(e) {
+				if (e.text.contains("404")) {
+					trace('File not found: $f');
+					alright();
+				} else {
+					openSubState(new substates.Prompt('Failed to download $f. \nMake sure you have a working internet connection,\nand try again.\n\nError ID: ${e.errorID}\n${e.text}', 
+					0, 
+					function() {
+						fileList.insert(0, f);
+						doFile();
+					},
+					function() {
+						doFile();
+					},
+					false,
+					'Retry',
+					'Skip'
+					));
+					persistentUpdate = false;
+				}
 			});
-        });
-    }
-
-    function copy(base:String, dir:String, dest:String){
-        trace("copying from " + Path.join([base, dir]));
-		for (file in FileSystem.readDirectory(Path.join([base, dir])))
-		{
-			var finFile = Path.join([base, dir, file]);
-			var myFile = Path.join([dest, dir, file]);
-			if (file.endsWith(".dll") || file.endsWith(".ndll"))
-			{
-				var temp = '${Path.withoutExtension(myFile)}.tempcopy';
-                if(FileSystem.exists(temp))
-                    FileSystem.deleteFile(temp);
-				FileSystem.rename(myFile, temp); // anything with the .temp ext will be removed after the game restarts
-			}
-			if (file == Path.withoutDirectory(Sys.programPath()))
-			{
-				trace("Ignoring copying the executable");
-				continue;
-			}
-			if (FileSystem.isDirectory(finFile)){
-				if (FileSystem.exists(myFile) && !FileSystem.isDirectory(myFile)){
-                    FileSystem.deleteFile(myFile);
-                    trace("deletin da file " + myFile);
-                }
-				if (!FileSystem.exists(myFile)){
-                    trace("makin da directory " + myFile);
-					FileSystem.createDirectory(myFile);
-                }
-                
-				copy(base, Path.join([dir, file]), dest);
-            }else{
-                trace('Copying $finFile to $myFile');
-				File.copy(finFile, myFile); 
-            }
-            
+			downloadStream.addEventListener(Event.COMPLETE, function(e) {
+				var array = [];
+				var dir = [for (k => e in (array = f.replace("\\", "/").split("/"))) if (k < array.length - 1) e].join("/");
+				FileSystem.createDirectory('./_cache/$dir');
+				var fileOutput:FileOutput = File.write('./_cache/$f', true);
+	
+				var data:ByteArray = new ByteArray();
+				downloadStream.data.readBytes(data, 0, downloadStream.data.length - downloadStream.data.position);
+				fileOutput.writeBytes(data, 0, data.length);
+				fileOutput.flush();
+				fileOutput.close();
+				alright();
+			});
+			downloadStream.addEventListener(ProgressEvent.PROGRESS, function(e) {
+				var label1 = '(${totalFiles - fileList.length}/${totalFiles})';
+				var label2 = '(${CoolUtil.getSizeLabel(Std.int(e.bytesLoaded))} / ${CoolUtil.getSizeLabel(Std.int(e.bytesTotal))})';
+				
+				var ll = CoolUtil.getSizeLabel(Std.int((e.bytesLoaded - oldBytesLoaded) / (t - oldTime)));
+				percentLabel.text = '${[for(i in 0...ll.length) " "].join("")}     ${Math.floor(((downloadedFiles / totalFiles) + (e.bytesLoaded / e.bytesTotal / totalFiles)) * 100)}% (${ll}/s)';
+				var maxLength:Int = Std.int(Math.max(label1.length, label2.length));
+				while(label1.length < maxLength) label1 = " " + label1;
+				while(label2.length < maxLength) label2 += " ";
+				currentFileLabel.text = 'Downloading File: $f\n$label1 | $label2';
+				
+				oldTime = t;
+				oldBytesLoaded = e.bytesLoaded;
+			});
+	
+	
+			downloadStream.load(request);
 		}
-    }
+	}
 
-    function download(onFinish:Void->Void){
-		var file = prog.files.shift();
-        if(file==null){
-            onFinish();
-            return;
-        }
-        prog.currentFile++;
-		updateText.text = 'Starting to download ${file.fileName} (${prog.currentFile} / ${prog.totalFiles})';
-		// wanted to use a while loop to download everything, but can't cus of it being async so L
-		downloadFile(file, download.bind(onFinish));
-    }
+	public function applyUpdate() {
+		// apply update
+		FlxG.save.data.updated = true;
+		FlxG.save.flush();
+		// copy file to prevent overriding issues
+		File.copy('MixEngine.exe', 'temp.exe');
 
-    function downloadFile(file:DownloadData, onFinish:Void->Void){      
-		prog.bytesTotal = 1; // so no 0 / 0 bullshit
-        prog.bytesFinished = 0; 
-		fileBar.setRange(0, file.fileSize);
-        stream = new URLLoader();
-        stream.dataFormat = BINARY;
-        stream.addEventListener(ProgressEvent.PROGRESS, function(e:ProgressEvent){
-			prog.bytesFinished = e.bytesLoaded;
-			prog.bytesTotal = e.bytesTotal;
+		// launch that file
+		new Process('start /B temp.exe update', null);
+		System.exit(0);
+	}
+	public override function create() {
+		super.create();
+		FlxG.autoPause = false;
 
-			fileBar.setRange(0, prog.bytesTotal);
-			fileBar.value = prog.bytesFinished;
-            
-			updateText.text = 'Downloading ${file.fileName} (${prog.bytesFinished} / ${prog.bytesTotal}) (${prog.currentFile} / ${prog.totalFiles})';
-            // TODO: format the bytes downloaded and total into more readable things (KB, MB, etc)
-        });
-        stream.addEventListener(Event.COMPLETE, function(e:Event) {
-			fileBar.percent = 100;
-			prog.bytesFinished = prog.bytesTotal;
-			var path = '$path\\${file.fileName}';
-            var output:FileOutput = File.write(path);
-            try{
-                var writingData:ByteArray = new ByteArray();
-                var downloadedData:ByteArray = stream.data;
-                downloadedData.readBytes(writingData); // should read all bytes? if needed i'll stream it into the file output instead tho
-                output.write(writingData); // should write all bytes? same as above if needed ill stream it
-                prog.downloadedFiles.push({
-                    fileName: file.fileName,
-                    path: path
-                });
-            }catch(e:Dynamic){
-                trace(file.fileName + " failed to write, RIP!! " + e);
+		var loadingThingy = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK, true);
+        loadingThingy.pixels.lock();
+        var color1 = FlxColor.fromRGB(0, 0, 0);
+        var color2 = FlxColor.fromRGB(0, 0, 0);
+        for(x in 0...loadingThingy.pixels.width) {
+            for(y in 0...loadingThingy.pixels.height) {
+                loadingThingy.pixels.setPixel32(x, y, FlxColor.fromRGB(
+                    Std.int(FlxMath.remapToRange(((y / loadingThingy.pixels.height) * 1), 0, 1, color1.red, color2.red)),
+                    Std.int(FlxMath.remapToRange(((y / loadingThingy.pixels.height) * 1), 0, 1, color1.green, color2.green)),
+                    Std.int(FlxMath.remapToRange(((y / loadingThingy.pixels.height) * 1), 0, 1, color1.blue, color2.blue))
+                ));
             }
-            output.flush();
-            output.close();
-			onFinish();
-        });
+        }
+        loadingThingy.pixels.unlock();
+        add(loadingThingy);
+		
 
-        stream.load(new URLRequest(file.link));
-    }
+		for(x in 0...Math.ceil(FlxG.width / w)+1) {
+            for(y in 0...(Math.ceil(FlxG.height / h)+1)) {
+                // bg pattern
+                var pattern = new FlxSprite(x * w, y * h);
+                pattern.loadGraphic(Paths.image("loading/bgpattern", "preload"));
+                pattern.antialiasing = true;
+                bg.add(pattern);
+            }
+        }
+        add(bg);
 
-    var done:Bool = false;
+		bf = new FlxSprite(337.60, 27.30).loadGraphic(Paths.image("loading/loading", "preload"));
+		bf.antialiasing = true;
+        bf.screenCenter(X);
+        add(bf);
 
-    override function update(elapsed:Float){
+        var loading = new FlxSprite().loadGraphic(Paths.image("loading/updating"));
+        loading.scale.set(0.85, 0.85);
+        loading.updateHitbox();
+        loading.y = FlxG.height - (loading.height * 1.15);
+        loading.screenCenter(X);
+        loading.antialiasing = true;
+        add(loading);
+
+
+		
+		var downloadBar = new FlxBar(0, 0, LEFT_TO_RIGHT, Std.int(FlxG.width * 0.75), 30, this, "downloadedFiles", 0, fileList.length);
+		downloadBar.createGradientBar([0x88222222], [0xFFFF9900, 0xFF6200FF], 1, 90, true, 0xFF000000);
+		downloadBar.screenCenter(X);
+		downloadBar.y = FlxG.height - 45;
+		downloadBar.scrollFactor.set(0, 0);
+		add(downloadBar);
+		
+		percentLabel = new FlxText(downloadBar.x, downloadBar.y + (downloadBar.height / 2), downloadBar.width, "0%");
+		percentLabel.setFormat(Paths.font("vcr.ttf"), 22, FlxColor.WHITE, CENTER, OUTLINE, 0xFF000000);
+		percentLabel.y -= percentLabel.height / 2;
+		add(percentLabel);
+		
+		currentFileLabel = new FlxText(0, downloadBar.y - 10, FlxG.width, "");
+		currentFileLabel.setFormat(Paths.font("vcr.ttf"), 22, FlxColor.WHITE, CENTER, OUTLINE, 0xFF000000);
+		currentFileLabel.y -= percentLabel.height * 2;
+		add(currentFileLabel);
+	
+		doFile();
+	}
+
+	var t:Float = 0;
+	var oldTime:Float = 0;
+	var oldBytesLoaded:Float = 0;
+	public override function update(elapsed:Float) {
+		t += elapsed; // for speed calculations
+
+		bg.x = -(w * t / 4) % w;
+		bg.y = -(h * t / 4) % h;
         super.update(elapsed);
-        
-		if (downloading)return;
-        if(FlxG.keys.justPressed.N){
-			MusicBeatState.switchState(new TitleState());
-        }else if(FlxG.keys.justPressed.I){
-			Main.outOfDate = false;
-			MusicBeatState.switchState(new TitleState());
-			if (FlxG.save.data.ignoredUpdates == null)
-				FlxG.save.data.ignoredUpdates = [];
-			
-			FlxG.save.data.ignoredUpdates.push(release.tag_name);
-            FlxG.save.flush();
-        }else if(FlxG.keys.justPressed.Y){
-            startDownload();
-        }
-    }
 
-	#if DO_AUTO_UPDATE
-	// gets the most recent release and returns it
-	// if you dont have download betas on, then it'll exclude prereleases
-	public static function getRecentGithubRelease()
-	{
-        var recentRelease:Release;
-
-		if (ClientPrefs.data.checkForUpdates)
-		{
-			var github:Github = new Github(); // leaving the user and repo blank means it'll derive it from the repo the mod is compiled from
-			// if it cant find the repo you compiled in, it'll just default to troll engine's repo
-			recentRelease = github.getReleases((release:Release) ->{
-				return (Main.downloadBetas || !release.prerelease);
-			})[0];			
-
-			if (FlxG.save.data.ignoredUpdates == null){
-				FlxG.save.data.ignoredUpdates = [];
-				FlxG.save.flush();
-			}
-			
-			if (recentRelease != null && FlxG.save.data.ignoredUpdates.contains(recentRelease.tag_name))
-				recentRelease = null;
-
-		}else{
-			recentRelease = null;
-		}
-
-		return Main.recentRelease = recentRelease;
+		bf.angle = Math.sin(t / 10) * 10;
+		
+		super.update(elapsed);
 	}
-
-	public static function checkOutOfDate(){
-		var outOfDate = false;
-
-		if (ClientPrefs.data.checkForUpdates && Main.recentRelease != null)
-		{
-        	var recentRelease = Main.recentRelease;
-            
-            // hoping this works lol
-			var tagName:backend.update.SemanticVersion = recentRelease.tag_name;
-			if (tagName > Main.semanticVersion){
-				outOfDate = true;
-				trace('New version found! Newest version: $tagName | Current: ${Main.semanticVersion}');
-			}
-						
-			/* if (recentRelease.prerelease)
-			{
-				var tagName = recentRelease.tag_name;
-				var split = tagName.split("-");
-				var betaVersion = split.length == 1 ? "1" : split.pop();
-				var versionName = split.pop();
-				outOfDate = (versionName > Main.engineVersion && betaVersion > Main.betaVersion)
-					|| (Main.beta && versionName == Main.engineVersion && betaVersion > Main.betaVersion)
-					|| (versionName > Main.engineVersion);
-			}else{
-				var versionName = recentRelease.tag_name;
-				// if you're in beta and version is the same as the engine version, but just not beta
-				// then you should absolutely be prompted to update
-				outOfDate = Main.beta && Main.engineVersion <= versionName || Main.engineVersion < versionName;
-			} */
-		}
-
-		return Main.outOfDate = outOfDate;
-	}
-
-	public static function clearTemps(dir:String)
-	{
-		#if desktop
-		for (file in FileSystem.readDirectory(dir)){
-			var file = './$dir/$file';
-			if (FileSystem.isDirectory(file))
-				clearTemps(file);
-			else if (file.endsWith(".tempcopy"))
-				FileSystem.deleteFile(file);
-		}
-		#end
-	}
-	#else
-	public static function getRecentGithubRelease()
-	{
-		Main.recentRelease = null;
-		Main.outOfDate = false;
-		return null;
-	}
-
-	public static function checkOutOfDate(){
-		Main.outOfDate = false;
-		return false;
-	}
-	#end
 }

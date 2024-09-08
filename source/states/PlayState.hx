@@ -921,24 +921,16 @@ class PlayState extends MusicBeatState
 
 		switch (curStage)
 		{
-			case 'stage':
-				new states.stages.StageWeek1(); // Week 1
-			case 'spooky':
-				new states.stages.Spooky(); // Week 2
-			case 'philly':
-				new states.stages.Philly(); // Week 3
-			case 'limo':
-				new states.stages.Limo(); // Week 4
-			case 'mall':
-				new states.stages.Mall(); // Week 5 - Cocoa, Eggnog
-			case 'mallEvil':
-				new states.stages.MallEvil(); // Week 5 - Winter Horrorland
-			case 'school':
-				new states.stages.School(); // Week 6 - Senpai, Roses
-			case 'schoolEvil':
-				new states.stages.SchoolEvil(); // Week 6 - Thorns
-			case 'tank':
-				new states.stages.Tank(); // Week 7 - Ugh, Guns, Stress
+			case 'stage': new states.stages.StageWeek1(); // Week 1
+			case 'spooky': new states.stages.Spooky(); // Week 2
+			case 'philly': new states.stages.Philly(); // Week 3
+			case 'limo': new states.stages.Limo(); // Week 4
+			case 'mall': new states.stages.Mall(); // Week 5 - Cocoa, Eggnog
+			case 'mallEvil': new states.stages.MallEvil(); // Week 5 - Winter Horrorland
+			case 'school': new states.stages.School(); // Week 6 - Senpai, Roses
+			case 'schoolEvil': new states.stages.SchoolEvil(); // Week 6 - Thorns
+			case 'tank': new states.stages.Tank(); // Week 7 - Ugh, Guns, Stress
+			case 'portal': new states.stages.Portal();
 		}
 
 		whiteBG = new FlxSprite(-480, -480).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.WHITE);
@@ -4209,7 +4201,7 @@ if (result < 0 || result > mania) {
 		callOnScripts('onReceptorGenerationPost');
 
 		for (field in playfields.members)
-			field.fadeIn(isStoryMode || skipArrowStartTween); // TODO: check if its the first song so it should fade the notes in on song 1 of story mode
+			field.fadeIn(skipStrumFadeOut); // TODO: check if its the first song so it should fade the notes in on song 1 of story mode
 	}
 
 	override function openSubState(SubState:FlxSubState)
@@ -4655,28 +4647,13 @@ if (result < 0 || result > mania) {
 		{
 			if (SONG.notes[curSection].mustHitSection && !SONG.notes[curSection].exSection)
 			{
-				modManager.queueEase(curStep, curStep+4, 'alpha', 1, 'sineInOut', 0);
-				modManager.queueEase(curStep, curStep+4, 'alpha', 0, 'sineInOut', 1);
+				modManager.queueEase(curStep, curStep+4, 'alpha', 0.8, 'sineInOut', 1);
+				modManager.queueEase(curStep, curStep+4, 'alpha', 0, 'sineInOut', 0);
 			}
 			else if (!SONG.notes[curSection].mustHitSection && !SONG.notes[curSection].exSection)
 			{
-				modManager.queueEase(curStep, curStep+4, 'alpha', 1, 'sineInOut', 1);
-				modManager.queueEase(curStep, curStep+4, 'alpha', 0, 'sineInOut', 0);
-			}
-		}
-		else if (startingSong)
-		{
-			for (i in 0...playerStrums.length)
-			{
-				FlxTween.tween(playerStrums.members[i], {alpha: 1}, 0.1, {ease: FlxEase.sineInOut});
-			}
-			for (i in 0...opponentStrums.length)
-			{
-				FlxTween.tween(opponentStrums.members[i], {alpha: 1}, 0.1, {ease: FlxEase.sineInOut});
-			}
-			for (i in 0...opponentStrums2.length)
-			{
-				FlxTween.tween(opponentStrums2.members[i], {alpha: 1}, 0.1, {ease: FlxEase.sineInOut});
+				modManager.queueEase(curStep, curStep+4, 'alpha', 0.8, 'sineInOut', 0);
+				modManager.queueEase(curStep, curStep+4, 'alpha', 0, 'sineInOut', 1);
 			}
 		}
 
@@ -6539,6 +6516,8 @@ if (result < 0 || result > mania) {
 
 			case 'Turn off StrumFocus':
 				strumFocus = false;
+				modManager.queueEase(curStep, curStep+4, 'alpha', 0, 'sineInOut', 0);
+				modManager.queueEase(curStep, curStep+4, 'alpha', 0, 'sineInOut', 1);
 
 			case 'Fade Out':
 				FlxTween.tween(blackOverlay, {alpha: 1}, Std.parseFloat(value1));
@@ -6949,7 +6928,7 @@ if (result < 0 || result > mania) {
 	public function burstRelease(bX:Float, bY:Float)
 	{
 		FlxG.sound.play(Paths.sound('burst'));
-		remove(burst);
+		if (burst != null) remove(burst);
 		burst = new FlxSprite(bX - 1000, bY - 100);
 		burst.frames = Paths.getSparrowAtlas('characters/shaggy');
 		burst.animation.addByPrefix('burst', "burst", 30);
