@@ -27,8 +27,8 @@ function onStepHit()
     else
         unDoPixel = false
     end
-    if curStep <= 1534 then
-        pxSize = 0
+    if curStep >= 1534 then
+        pxSize = 1
     end
 end
 

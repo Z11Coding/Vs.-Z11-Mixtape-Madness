@@ -547,7 +547,9 @@ class PlayState extends MusicBeatState
 	var artistTxt:FlxText;
 	var charterTxt:FlxText;
 	var modTxt:FlxText;
+	
 
+	var backupGpu:Bool;
 	override public function create()
 	{
 		try
@@ -1218,6 +1220,8 @@ class PlayState extends MusicBeatState
 
 		callOnScripts("onPlayfieldCreationPost");
 
+		backupGpu = ClientPrefs.data.cacheOnGPU;
+		ClientPrefs.data.cacheOnGPU = false;
 		if (!CacheMode) {
 			if (chartModifier == "Normal") {
 				var songExists = false;
@@ -1264,6 +1268,10 @@ class PlayState extends MusicBeatState
 
 		FlxG.fixedTimestep = false;
 		if (!CacheMode) moveCameraSection();
+
+		playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
+		playfieldRenderer.cameras = [camHUD];
+		add(playfieldRenderer);
 
 		if (!playAsGF)
 		{

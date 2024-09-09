@@ -32,7 +32,7 @@ enum MainMenuColumn {
 class MainMenuState extends MusicBeatState
 {
 	public static var fridayVersion:String = '0.2.7-Git + 0.2.8-NG';
-	public static var mixtapeEngineVersion:String = '0.3.3'; // this is used for Discord RPC
+	public static var mixtapeEngineVersion:String = '0.3.4'; // this is used for Discord RPC
 	public static var psychEngineVersion:String = '1.0-prerelease'; // This is also used for Discord RPC
 	public static var beta:Bool = false;
 	public static var curSelected:Int = 0;

@@ -64,7 +64,7 @@
 	<define name="VIDEOS_ALLOWED" if="windows || linux || android" unless="32bits"/>
 	<define name="SHOW_LOADING_SCREEN" />
 	<define name="IRIS_DEBUG"/>
-	<define name="UNDERTALE"/>
+	<!-- define name="UNDERTALE"/ -->
 
 	<section if="officialBuild">
 		<define name="TITLE_SCREEN_EASTER_EGG"/>
@@ -152,18 +152,10 @@
 	<haxedef name="NO_PRECOMPILED_HEADERS" if="linux" />
 
 	<haxelib name="faxe" if='switch'/>
-	<!--<haxelib name="polymod"/> -->
-	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
 
-	<!-- <haxelib name="hxArchipelago"/>
-	<haxelib name="helder.set" />
-	<haxelib name="yaml" /> -->
-
-	<!-- <haxelib name="markdown" /> -->
-	<!-- <haxelib name="HtmlParser" /> -->
-
-	<!--In case you want to use nape with flixel-->
-	<!--<haxelib name="nape-haxe4" />-->
+	<!--Avoid memory leaks with for loops in HScript-->
+	<haxedef name="loop_unroll_max_cost" value="25" />
+	
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
@@ -224,6 +216,8 @@
 	<!-- <haxeflag name="macro" value="ReflectCheck.replaceVariableAccesses()" /> -->
 	<!-- <haxeflag name="macro" value="backend.ChanceValidator.checkChanceRange()" /> -->
 
+	<haxedef name="hscriptPos" /> <!-- for logging -->
+
 	<!-- <haxeflag name="macro" value="VariableInitializer.build()" /> -->
 	<!-- Run a script before and after building>
 	<prebuild haxe="source/Prebuild.hx"/>
@@ -238,6 +232,9 @@
 	<!-- Haxe 4.3.0+: Enable pretty syntax errors and stuff. -->
 	<!-- pretty (haxeflixel default), indent, classic (haxe compiler default) -->
 	<haxedef name="message.reporting" value="pretty" />
+
+	<!-- Fix compiling issues -->
+	<setenv name="HAXEPATH" value="./"/>
 
 
 	<!-- _________________________________ Custom _______________________________ -->

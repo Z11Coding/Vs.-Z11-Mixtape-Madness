@@ -22,6 +22,8 @@ class MusicBeatState extends FlxState
 		return Controls.instance;
 	}
 
+	public var playfieldRenderer:PlayfieldRenderer;
+
 	var _psychCameraInitialized:Bool = false;
 
 	override function create() {

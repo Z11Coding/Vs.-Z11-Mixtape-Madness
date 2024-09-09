@@ -379,16 +379,39 @@ public static function crawlDirectoryAlt(directoryPath:String, fileExtension:Str
 			//if (allowGPU) trace(key + " can't be loaded due to GPU Cache being on");
 			//else trace(key + " is NOT in the cache");
 		
-			key = Language.getFileTranslation('images/$key');
-			if(key.lastIndexOf('.') < 0) key += '.png';
-
 			var bitmap:BitmapData = null;
-			if (currentTrackedAssets.exists(key))
+			var file:String = null;
+
+			#if MODS_ALLOWED
+			file = modsImages(key);
+			if (currentTrackedAssets.exists(file))
 			{
-				localTrackedAssets.push(key);
-				return currentTrackedAssets.get(key);
+				localTrackedAssets.push(file);
+				return currentTrackedAssets.get(file);
 			}
-			return cacheBitmap(key, library, bitmap, allowGPU);
+			else if (FileSystem.exists(file))
+				bitmap = BitmapData.fromFile(file);
+			else
+			#end
+			{
+				file = getPath('images/$key.png', IMAGE, library);
+				if (currentTrackedAssets.exists(file))
+				{
+					localTrackedAssets.push(file);
+					return currentTrackedAssets.get(file);
+				}
+				else if (OpenFlAssets.exists(file, IMAGE))
+					bitmap = OpenFlAssets.getBitmapData(file);
+			}
+
+			if (bitmap != null)
+			{
+				var retVal = cacheBitmap(file, bitmap, allowGPU);
+				if(retVal != null) return retVal;
+			}
+
+			trace('oh no its returning null NOOOO ($file)');
+			return null;
 		}
 	}
 
