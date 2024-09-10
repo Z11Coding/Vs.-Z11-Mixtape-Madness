@@ -1269,10 +1269,6 @@ class PlayState extends MusicBeatState
 		FlxG.fixedTimestep = false;
 		if (!CacheMode) moveCameraSection();
 
-		playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
-		playfieldRenderer.cameras = [camHUD];
-		add(playfieldRenderer);
-
 		if (!playAsGF)
 		{
 			healthBar = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.89 : 0.11), 'healthBar', function() return health, 0, 2);
@@ -2217,6 +2213,8 @@ class PlayState extends MusicBeatState
 
 	public static var startOnTime:Float = 0;
 
+	public var forceInvis:Bool = false;
+
 	function cacheCountdown()
 	{
 		var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
@@ -2276,10 +2274,19 @@ class PlayState extends MusicBeatState
 			if (ClientPrefs.data.middleScroll)
 			{
 				modManager.setValue('transformX', -315, 0);
-				modManager.setValue('noteAlpha', .7, 1);
-				modManager.setValue('alpha', .7, 1);
-				modManager.setValue('transform2X', FlxG.width / 2, 1);
-				modManager.setValue('transform3X', FlxG.width / 2, 1);
+				if (mania == 3)
+				{
+					modManager.setValue('noteAlpha', .7, 1);
+					modManager.setValue('alpha', .7, 1);
+					modManager.setValue('transform2X', FlxG.width / 2, 1);
+					modManager.setValue('transform3X', FlxG.width / 2, 1);
+				}
+				else
+				{
+					modManager.setValue('noteAlpha', 1, 1);
+					modManager.setValue('alpha', 1, 1);
+					forceInvis = true;
+				}
 			}
 
 			startedCountdown = true;
@@ -4542,7 +4549,7 @@ if (result < 0 || result > mania) {
 	var freezeCamera:Bool = false;
 	var allowDebugKeys:Bool = true;
 
-	function die():Void
+	public function die():Void
 	{
 		bfkilledcheck = true;
 		doDeathCheck(true);
@@ -4570,6 +4577,12 @@ if (result < 0 || result > mania) {
 				needSkip = false;
 			}
 			
+		}
+
+		if (forceInvis)
+		{
+			modManager.setValue('noteAlpha', 1, 1);
+			modManager.setValue('alpha', 1, 1);
 		}
 
 		if (chartModifier == '4K Only' && mania != 3)

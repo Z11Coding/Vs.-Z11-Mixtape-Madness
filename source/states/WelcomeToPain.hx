@@ -38,7 +38,6 @@ class WelcomeToPain extends MusicBeatState
 		camMESSAGE.setFilters(camfilters);
 		camMESSAGE.filtersEnabled = true;	
 		camfilters.push(shaders.ShadersHandler.chromaticAberration);
-		FlxG.sound.playMusic(Paths.music("WELCOME"),0);
 		FlxG.sound.playMusic(Paths.music("hello"),1);
 		var daStatic:FlxSprite = new FlxSprite(0, 0);
 		daStatic.frames = Paths.getSparrowAtlas('effects/static');
@@ -50,10 +49,6 @@ class WelcomeToPain extends MusicBeatState
 		if (daStatic.alpha != 0)
 			daStatic.alpha = 1;
 		daStatic.animation.play('static');
-		daStatic.animation.finishCallback = function(pog:String)
-		{
-			daStatic.animation.play('static');
-		}
 		new FlxTimer().start(4, function(deadTime:FlxTimer)
 		{
 			startDialogue(dialogueJson);
@@ -102,7 +97,7 @@ class WelcomeToPain extends MusicBeatState
 		else
 		{
 			FlxG.log.warn('Your dialogue file is badly formatted!');
-			FlxG.switchState(new TitleState());
+			FlxG.switchState(new states.CacheState());
 		}
 	}
 	function startNextDialogue()

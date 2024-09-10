@@ -3,34 +3,37 @@
 		{
 			"expression": "talk",
 			"disableFadeBG": false,
-			"portrait": "osky-dialogue",
+			"portrait": "sky",
 			"text": "IT WORKED!!",
 			"shake": true,
 			"boxAnimPrefix": "normal",
-			"dialogueSound": "dialogue",
 			"speed": 0.05,
+			"dialogueSound": "dialogue",
+			"sound": "defB",
 			"skipDis": false
 		},
 		{
 			"expression": "talk",
 			"disableFadeBG": false,
-			"portrait": "osky-dialogue",
+			"portrait": "sky",
 			"text": "THE SHIFT WORKED!!!",
 			"shake": true,
 			"boxAnimPrefix": "normal",
-			"dialogueSound": "dialogue",
 			"speed": 0.05,
+			"dialogueSound": "dialogue",
+			"sound": "defB",
 			"skipDis": false
 		},
 		{
 			"expression": "talk",
 			"disableFadeBG": false,
-			"portrait": "osky-dialogue",
+			"portrait": "sky",
 			"text": "Now we can be",
 			"shake": false,
 			"boxAnimPrefix": "normal",
-			"dialogueSound": "dialogue",
 			"speed": 0.05,
+			"dialogueSound": "dialogue",
+			"sound": "defB",
 			"skipDis": true
 		}
 	],

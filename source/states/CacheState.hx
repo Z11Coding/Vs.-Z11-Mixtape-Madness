@@ -12,14 +12,14 @@ import flixel.util.FlxTimer;
 import flixel.text.FlxText;
 import flixel.system.FlxSound;
 import lime.app.Application;
-import flixel.ui.FlxBar;
 import flixel.FlxState;
-import openfl.system.System;
 import flixel.FlxSubState;
 import openfl.display.BitmapData;
 import backend.GPUBitmap;
 import backend.ImageCache;
 import options.CacheSettings;
+import flixel.ui.FlxBar;
+import openfl.system.System;
 #if windows
 import backend.Discord.DiscordClient;
 #end
@@ -87,20 +87,16 @@ class CacheState extends MusicBeatState
 	var sNmmI:Int = 0;
 	var gfxV:Int = 0;
 	var gfxMV:Int = 0;
-	public var percentLabel:FlxText;
-	var filesDone = 0;
-	var totalFiles = 0;
 	var allowMusic:Bool = false;
 	var pause:Bool = false;
-
-	var currentLoaded:Int = 0;
-    var loadTotal:Int = 0;
 	var loadingWhat:FlxText;
 	var loadingBar:FlxBar;
 	var loadingBox:FlxSprite;
 	var loadingWhatMini:FlxText;
 	var loadingBoxMini:FlxSprite;
 	public static var cacheInit:Bool = false;
+	var currentLoaded:Int = 0;
+	var loadTotal:Int = 0;
 	
 
 	public static var newDest:FlxState;
@@ -111,242 +107,166 @@ class CacheState extends MusicBeatState
 
 
 		if (!cacheInit && (FlxG.save.data.musicPreload2 == null || FlxG.save.data.graphicsPreload2 == null || FlxG.save.data.videoPreload2 == null)) {
-			FlxG.switchState(new CacheSettings());
 			cacheInit = true;
 			pause = true;
 			allowMusic = false;
+			FlxG.switchState(new CacheSettings());
 		}
 
 		//Cursor.cursorMode = Cross;
-
-		if (FlxG.save.data.updated)
+		FlxTransitionableState.skipNextTransOut = false;
+		newDest = new What();
+		//FlxG.sound.play(Paths.music('celebration'));
+		for (folder in Mods.getModDirectories())
 		{
-			#if sys
-			var countFiles:String->Void = null;
-			countFiles = function(path) {
-				for (f in FileSystem.readDirectory(path)) {
-					if (FileSystem.isDirectory('$path/$f')) {
-						countFiles('$path/$f');
-					} else {
-						try {
-							totalFiles++;
-						} catch(e) {
-						}
-					}
-				}
-				}
-				countFiles('./_cache');
-
-			add(new FlxText(0, 0, FlxG.width, 'Updating Game!\nDo not close the game\nAnd it\'s normal that the game isn\'t responding. ').setFormat(Paths.font("fridaynightfunkin.ttf"), 30, FlxColor.WHITE, 'center'));
-			var downloadBar = new FlxBar(0, 0, LEFT_TO_RIGHT, Std.int(FlxG.width * 0.75), 30, this, "filesDone", 0, totalFiles);
-			downloadBar.createGradientBar([0x88222222], [0xFFFFA600, 0xFF7700FF], 1, 90, true, 0xFF000000);
-			downloadBar.screenCenter(X);
-			downloadBar.y = FlxG.height - 45;
-			downloadBar.scrollFactor.set(0, 0);
-			add(downloadBar);
-			
-			percentLabel = new FlxText(downloadBar.x, downloadBar.y + (downloadBar.height / 2), downloadBar.width, "0%");
-			percentLabel.setFormat(Paths.font("vcr.ttf"), 22, FlxColor.WHITE, CENTER, OUTLINE, 0xFF000000);
-			percentLabel.y -= percentLabel.height / 2;
-			add(percentLabel);
-			
-			sys.thread.Thread.create(function()
+			if(!Mods.ignoreModFolders.contains(folder))
 			{
-				var copyFolder:String->String->Void = null;
-				copyFolder = function(path, destPath) {
-				FileSystem.createDirectory(path);
-				FileSystem.createDirectory(destPath);
-				for (f in FileSystem.readDirectory(path)) {
-					if (FileSystem.isDirectory('$path/$f')) {
-						copyFolder('$path/$f', '$destPath/$f');
-					} else {
-						try {
-							File.copy('$path/$f', '$destPath/$f');
-							fileDone();
-						} catch(e) {
-						}
+				daMods.push(folder);
+			}
+		}
+		
+		if((FlxG.save.data.musicPreload2 != null && ClientPrefs.data.musicPreload2 == false)
+			|| (FlxG.save.data.graphicsPreload2 != null && ClientPrefs.data.graphicsPreload2 == false)
+				|| (FlxG.save.data.videoPreload2 != null && ClientPrefs.data.videoPreload2 == false)) {
+				FlxG.switchState(new What());
+				dontBother = true;
+				allowMusic = false;
+		}	
+		else 
+		{
+			allowMusic = true;
+			dontBother = false;
+			didPreCache = true;
+		}
+
+		menuBG = new FlxSprite().loadGraphic(Paths.image('loading/' + FlxG.random.int(0, 16, [3])));
+		menuBG.screenCenter();
+		add(menuBG);
+
+
+
+		#if cpp
+		if (ClientPrefs.data.graphicsPreload2)
+		{
+			var cache:Array<String> = [];
+			cache = cache.concat(Paths.crawlDirectoryOG("assets", ".png", images));
+			cache = cache.concat(Paths.crawlDirectoryOG("mods", ".png", modImages));
+
+			if (ClientPrefs.data.saveCache) {
+				ImageCache.loadCache();
+			}
+
+
+			for (image in cache) {
+				if (ImageCache.exists(image)) {
+					if (images.indexOf(image) != -1) {
+						images.splice(images.indexOf(image), 1);
+					} else if (modImages.indexOf(image) != -1) {
+						modImages.splice(modImages.indexOf(image), 1);
 					}
 				}
-				}
-				copyFolder('./_cache', '.');
-				try {
-					CoolUtil.deleteFolder('./_cache/');
-					FileSystem.deleteDirectory('./_cache/');
-				}
-				catch (e) {
-				}
-				FlxG.save.data.updated = false;
-				FlxG.save.flush();
-				#if windows
-				new Process('start /B MixEngine.exe', null);
-				#else
-				new Process('start /B MixEngine.app', null);
-				#end
-				System.exit(0);
+			}
+		}
+
+		if (ClientPrefs.data.musicPreload2)
+		{
+			Paths.crawlDirectoryOG("assets", ".ogg", music);
+			Paths.crawlDirectoryOG("mods", ".ogg", modMusic);
+		}
+
+		if (ClientPrefs.data.videoPreload2)
+		{
+			Paths.crawlDirectoryOG("assets", ".mp4", videos);
+			Paths.crawlDirectoryOG("mods", ".mp4", modVideos);
+		}
+
+		var jsonCache = function() {
+			Paths.crawlDirectory("assets", ".json", json);
+			Paths.crawlDirectory("mods", ".json", json);
+			
+			for (json in json)
+			{
+				JSONCache.addToCache(json);
+			}
+			return true;
+		}
+
+		jsonCache();
+
+		//trace(JSONCache.charts());
+
+
+		#end
+
+
+		loadTotal = images.length + modImages.length + music.length + modMusic.length + videos.length + modVideos.length;
+		//trace("Files: " + "Images: " + images + "Images(Mod): " + modImages + "Music: " + music + "Music(Mod): " + modMusic);
+		//trace(loadTotal + " files to load");
+		
+		trace(loadTotal);
+		if(loadTotal > 0){
+			loadingBar = new FlxBar(0, 605, LEFT_TO_RIGHT, 600, 24, this, 'currentLoaded', 0, loadTotal);
+			loadingBar.createGradientBar([0xFF333333, 0xFFFFFFFF], [0xFF7233D8, 0xFFD89033]);
+			loadingBar.screenCenter(X);
+			loadingBar.visible = false;
+			add(loadingBar);
+		}
+
+		loadingWhat = new FlxText(FlxG.width/2 - 500, 0, 0, "Press ENTER to see cache options\nLoading will being soon", 24);
+		loadingWhat.setFormat(Paths.font("DS-DIGIB.TTF"), 50, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		loadingWhat.screenCenter(XY);
+
+		loadingWhatMini = new FlxText(loadingWhat.x, loadingWhat.y+285, 0, "Currently Loading: Music", 24);
+		loadingWhatMini.setFormat(Paths.font("DS-DIGIB.TTF"), 50, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		loadingWhatMini.setGraphicSize(Std.int(loadingWhatMini.width) * 0.5);
+		loadingWhatMini.screenCenter(X);
+
+		loadingBox = new FlxSprite(FlxG.width/2 - 500, 0).makeGraphic(Std.int(loadingWhat.width), Std.int(loadingWhat.height), FlxColor.BLACK);
+		loadingBox.screenCenter(XY);
+		loadingBox.alpha = 0.5;
+
+		add(loadingBox);
+		add(loadingWhat);
+		add(loadingWhatMini);
+
+		if(!cacheStart){
+			#if web
+			new FlxTimer().start(3, function(tmr:FlxTimer)
+			{
+				modImagesCached = true;
+				graphicsCached = true;
+				songsCached = true;
+			});
+			#else
+			new FlxTimer().start(3, function(tmr:FlxTimer)
+			{
+				cacheStart = true;
+				cache();
 			});
 			#end
 		}
-		else
-		{
-			FlxTransitionableState.skipNextTransOut = false;
-			newDest = new What();
-			//FlxG.sound.play(Paths.music('celebration'));
-			for (folder in Mods.getModDirectories())
-			{
-				if(!Mods.ignoreModFolders.contains(folder))
-				{
-					daMods.push(folder);
-				}
-			}
-			
-			if((FlxG.save.data.musicPreload2 != null && ClientPrefs.data.musicPreload2 == false)
-				|| (FlxG.save.data.graphicsPreload2 != null && ClientPrefs.data.graphicsPreload2 == false)
-				   || (FlxG.save.data.videoPreload2 != null && ClientPrefs.data.videoPreload2 == false)) {
-					FlxG.switchState(new What());
-					dontBother = true;
-					allowMusic = false;
-			}	
-			else 
-			{
-				allowMusic = true;
-				dontBother = false;
-				didPreCache = true;
-			}
 
-			menuBG = new FlxSprite().loadGraphic(Paths.image('loading/' + FlxG.random.int(0, 16, [3])));
-			menuBG.screenCenter();
-			add(menuBG);
-
-
-
-			#if cpp
-			if (ClientPrefs.data.graphicsPreload2)
-			{
-				var cache:Array<String> = [];
-				cache = cache.concat(Paths.crawlDirectoryOG("assets", ".png", images));
-				cache = cache.concat(Paths.crawlDirectoryOG("mods", ".png", modImages));
-
-				if (ClientPrefs.data.saveCache) {
-					ImageCache.loadCache();
-				}
-
-
-				for (image in cache) {
-					if (ImageCache.exists(image)) {
-						if (images.indexOf(image) != -1) {
-							images.splice(images.indexOf(image), 1);
-						} else if (modImages.indexOf(image) != -1) {
-							modImages.splice(modImages.indexOf(image), 1);
-						}
-					}
-				}
-			}
-
-			if (ClientPrefs.data.musicPreload2)
-			{
-				Paths.crawlDirectoryOG("assets", ".ogg", music);
-				Paths.crawlDirectoryOG("mods", ".ogg", modMusic);
-			}
-
-			if (ClientPrefs.data.videoPreload2)
-			{
-				Paths.crawlDirectoryOG("assets", ".mp4", videos);
-				Paths.crawlDirectoryOG("mods", ".mp4", modVideos);
-			}
-
-			var jsonCache = function() {
-				Paths.crawlDirectory("assets", ".json", json);
-				Paths.crawlDirectory("mods", ".json", json);
-				
-				for (json in json)
-				{
-					JSONCache.addToCache(json);
-				}
-				return true;
-			}
-
-			jsonCache();
-
-			//trace(JSONCache.charts());
-
-
-			#end
-
-
-			loadTotal = images.length + modImages.length + music.length + modMusic.length + videos.length + modVideos.length;
-			//trace("Files: " + "Images: " + images + "Images(Mod): " + modImages + "Music: " + music + "Music(Mod): " + modMusic);
-			//trace(loadTotal + " files to load");
-			
-			trace(loadTotal);
-			if(loadTotal > 0){
-				loadingBar = new FlxBar(0, 605, LEFT_TO_RIGHT, 600, 24, this, 'currentLoaded', 0, loadTotal);
-				loadingBar.createGradientBar([0xFF333333, 0xFFFFFFFF], [0xFF7233D8, 0xFFD89033]);
-				loadingBar.screenCenter(X);
-				loadingBar.visible = false;
-				add(loadingBar);
-			}
-
-			loadingWhat = new FlxText(FlxG.width/2 - 500, 0, 0, "Press ENTER to see cache options\nLoading will being soon", 24);
-			loadingWhat.setFormat(Paths.font("DS-DIGIB.TTF"), 50, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			loadingWhat.screenCenter(XY);
-
-			loadingWhatMini = new FlxText(loadingWhat.x, loadingWhat.y+285, 0, "Currently Loading: Music", 24);
-			loadingWhatMini.setFormat(Paths.font("DS-DIGIB.TTF"), 50, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			loadingWhatMini.setGraphicSize(Std.int(loadingWhatMini.width) * 0.5);
-			loadingWhatMini.screenCenter(X);
-
-			loadingBox = new FlxSprite(FlxG.width/2 - 500, 0).makeGraphic(Std.int(loadingWhat.width), Std.int(loadingWhat.height), FlxColor.BLACK);
-			loadingBox.screenCenter(XY);
-			loadingBox.alpha = 0.5;
-
-			add(loadingBox);
-			add(loadingWhat);
-			add(loadingWhatMini);
-
-			if(!cacheStart){
-				#if web
-				new FlxTimer().start(3, function(tmr:FlxTimer)
-				{
-					modImagesCached = true;
-					graphicsCached = true;
-					songsCached = true;
-				});
-				#else
-				new FlxTimer().start(3, function(tmr:FlxTimer)
-				{
-					cacheStart = true;
-					cache();
-				});
-				#end
-			}
-
-			if(ClientPrefs.data.graphicsPreload2){
-				GPUBitmap.disposeAll(); //cuz we moved to a pack without the undertale or origins and i didnt wanna complain about it cuz i know they were causing issues so i was being
-				ImageCache.cache.clear();
-			}
-			else{
-				modImagesCached = true;
-				graphicsCached = true;
-			}
-
-			if(ClientPrefs.data.musicPreload2){
-				Assets.cache.clear("music");
-			}
-			else{
-				songsCached = true;
-			}
-
-			totalToDo = totalthing.length;
-
-			if (allowMusic) FlxG.sound.playMusic(Paths.music('greetings'), 1, true);
+		if(ClientPrefs.data.graphicsPreload2){
+			GPUBitmap.disposeAll(); //cuz we moved to a pack without the undertale or origins and i didnt wanna complain about it cuz i know they were causing issues so i was being
+			ImageCache.cache.clear();
+		}
+		else{
+			modImagesCached = true;
+			graphicsCached = true;
 		}
 
+		if(ClientPrefs.data.musicPreload2){
+			Assets.cache.clear("music");
+		}
+		else{
+			songsCached = true;
+		}
+
+		totalToDo = totalthing.length;
+
+		if (allowMusic) FlxG.sound.playMusic(Paths.music('greetings'), 1, true);
+
 		super.create();
-	}
-	function fileDone() {
-		filesDone++;
-		percentLabel.text = '${Math.round(((filesDone / totalFiles * 100)*100)/100)}%';
-		//trace(totalFiles);
 	}
 
 	function openPreloadSettings(){

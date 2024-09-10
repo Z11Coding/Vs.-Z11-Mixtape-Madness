@@ -53,11 +53,14 @@ class Achievements {
 		createAchievement('matt',	                {name: "Max Efficiency 4X", description: "Beat a song at 15X Speed or higher", hidden: true});
 		createAchievement('mattbeyond',	            {name: "Bro what are you even doing anymore", description: "Beat a song at 20X Speed or higher", hidden: true});
 		createAchievement('perfectionist',	        {name: "S for the best", description: "Beat every song with an S Rank or higher"});
-		createAchievement('nohitspecialist',	    {name: "No-Hit Specialist", description: "Beat \"Resistalovania\" without getting damaged"});
-		createAchievement('multitasker',	        {name: "Two-For-One Special", description: "Beat \"Resistalovania\" without getting damaged AND without missing"});
+		createAchievement('nohitspecialist',	    {name: "No-Hit Specialist", description: "Beat \"Resistalovania (Mega Mix)\" without getting damaged"});
+		createAchievement('multitasker',	        {name: "Two-For-One Special", description: "Beat \"Resistalovania (Mega Mix)\" without getting damaged AND without missing"});
 		createAchievement('possessed',	        	{name: "The Moon Slayer", description: "Beat \"Possessed by The Blood Moon\" on FNF or NITG difficulty without missing", hidden: true});
 		createAchievement('themoon',	        	{name: "The Exorcist", description: "Beat \"Possessed by The Blood Moon\" on Possessed difficulty without missing", hidden: true});
 		createAchievement('what',	        	    {name: "What.", description: "You did read the bottom of the file, right?"});
+		createAchievement('lessismore',	        	{name: "Master of Less", description: "Beat any song in a mania of 1-3"});
+		createAchievement('toomanynotes',	        {name: "Master of Mania", description: "Beat any song in a mania higher than 4"});
+		createAchievement('h?',	                    {name: "h?", description: "h?"});
 		
 		//dont delete this thing below
 		_originalLength = _sortID + 1;

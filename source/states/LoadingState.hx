@@ -427,6 +427,8 @@ class LoadingState extends MusicBeatState
 
 			var player1:String = song.player1;
 			var player2:String = song.player2;
+			var player4:String = song.player4;
+			var player5:String = song.player5;
 			var gfVersion:String = song.gfVersion;
 			var prefixVocals:String = song.needsVoices ? '$folder/Voices' : null;
 			if (gfVersion == null) gfVersion = 'gf';
@@ -435,13 +437,15 @@ class LoadingState extends MusicBeatState
 			preloadCharacter(player1, prefixVocals);
 			if (!dontPreloadDefaultVoices && prefixVocals != null)
 			{
-				if(Paths.fileExists('$prefixVocals-Player.${Paths.SOUND_EXT}', SOUND, false, 'songs') && Paths.fileExists('$prefixVocals-Opponent.${Paths.SOUND_EXT}', SOUND, false, 'songs'))
+				if(Paths.fileExists('$prefixVocals-player.${Paths.SOUND_EXT}', SOUND, false, 'songs') && Paths.fileExists('$prefixVocals-opponent.${Paths.SOUND_EXT}', SOUND, false, 'songs'))
 				{
-					songsToPrepare.push('$prefixVocals-Player');
-					songsToPrepare.push('$prefixVocals-Opponent');
+					songsToPrepare.push('$prefixVocals-player');
+					songsToPrepare.push('$prefixVocals-opponent');
 				}
 				else if(Paths.fileExists('$prefixVocals.${Paths.SOUND_EXT}', SOUND, false, 'songs'))
 					songsToPrepare.push(prefixVocals);
+				if(Paths.fileExists('$prefixVocals-gf.${Paths.SOUND_EXT}', SOUND, false, 'songs'))
+					songsToPrepare.push('$prefixVocals-gf');
 			}
 
 			if (player2 != player1)
@@ -457,6 +461,22 @@ class LoadingState extends MusicBeatState
 				threadsMax++;
 				Thread.create(() -> {
 					preloadCharacter(gfVersion);
+					completedThread();
+				});
+			}
+			if (player4 != gfVersion && player4 != player2 && player4 != player1)
+			{
+				threadsMax++;
+				Thread.create(() -> {
+					preloadCharacter(player2);
+					completedThread();
+				});
+			}
+			if (player5 != gfVersion && player5 != player2 && player5 != player1 && player5 != player4)
+			{
+				threadsMax++;
+				Thread.create(() -> {
+					preloadCharacter(player2);
 					completedThread();
 				});
 			}

@@ -1167,5 +1167,5 @@ end
 
 function onEndSong()
 	if (damageTaken == 0) then unlockAchievement('nohitspecialist') end
-	if (damageTaken == 0 && getMisses() == 0) then unlockAchievement('multitasker') end
+	if (damageTaken == 0 and getMisses() == 0) then unlockAchievement('multitasker') end
 end

@@ -4,6 +4,8 @@ import backend.Achievements;
 import backend.util.WindowUtil;
 import flixel.input.keyboard.FlxKey;
 import states.UpdateState;
+import flixel.ui.FlxBar;
+import openfl.system.System;
 class FirstCheckState extends MusicBeatState
 {
 	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
@@ -15,6 +17,10 @@ class FirstCheckState extends MusicBeatState
 	var updateRibbon:FlxSprite;
 
 	var thrd:Thread;
+
+	public var percentLabel:FlxText;
+	var filesDone = 0;
+	var totalFiles = 0;
 
 	override public function create()
 	{
@@ -47,54 +53,129 @@ class FirstCheckState extends MusicBeatState
 
 		super.create();
 
-		updateRibbon = new FlxSprite(0, FlxG.height - 75).makeGraphic(FlxG.width, 75, 0x88FFFFFF, true);
-		updateRibbon.visible = false;
-		updateRibbon.alpha = 0;
-		add(updateRibbon);
-
-		updateIcon = new FlxSprite(FlxG.width - 75, FlxG.height - 75);
-		updateIcon.frames = Paths.getSparrowAtlas("pauseAlt/bfLol", "shared");
-		updateIcon.animation.addByPrefix("dance", "funnyThing instance 1", 20, true);
-		updateIcon.animation.play("dance");
-		updateIcon.setGraphicSize(65);
-		updateIcon.updateHitbox();
-		updateIcon.antialiasing = true;
-		updateIcon.visible = false;
-		add(updateIcon);
-
-		updateAlphabet = new Alphabet(0, 0, "Checking Your Vibe...", true);
-		for(c in updateAlphabet.members) {
-			c.scale.x /= 2;
-			c.scale.y /= 2;
-			c.updateHitbox();
-			c.x /= 2;
-			c.y /= 2;
-		}
-		updateAlphabet.visible = false;
-		updateAlphabet.x = updateIcon.x - updateAlphabet.width - 10;
-		updateAlphabet.y = updateIcon.y;
-		add(updateAlphabet);
-		updateIcon.y += 15;
-
-		var tmr = new FlxTimer().start(2, function(tmr:FlxTimer)
+		if (FlxG.save.data.updated)
 		{
-			thrd = Thread.create(function() {
-				try {
-					var data = Http.requestUrl("https://raw.githubusercontent.com/Z11Coding/Z11-s-Modpack-Mixup-RELEASE/main/versions/list.txt");
-					
-					onUpdateData(data);
-				} catch(e) {
-					trace(e.details());
-					trace(e.stack.toString());
-					//FlxG.switchState(new MainMenuState());
-					
+			#if sys
+			var countFiles:String->Void = null;
+			countFiles = function(path) {
+				for (f in FileSystem.readDirectory(path)) {
+					if (FileSystem.isDirectory('$path/$f')) {
+						countFiles('$path/$f');
+					} else {
+						try {
+							totalFiles++;
+						} catch(e) {
+						}
+					}
 				}
+				}
+				countFiles('./_cache');
+
+			add(new FlxText(0, 0, FlxG.width, 'Updating Game!\nDo not close the game\nAnd it\'s normal that the game isn\'t responding. ').setFormat(Paths.font("fridaynightfunkin.ttf"), 30, FlxColor.WHITE, 'center'));
+			var downloadBar = new FlxBar(0, 0, LEFT_TO_RIGHT, Std.int(FlxG.width * 0.75), 30, this, "filesDone", 0, totalFiles);
+			downloadBar.createGradientBar([0x88222222], [0xFFFFA600, 0xFF7700FF], 1, 90, true, 0xFF000000);
+			downloadBar.screenCenter(X);
+			downloadBar.y = FlxG.height - 45;
+			downloadBar.scrollFactor.set(0, 0);
+			add(downloadBar);
+			
+			percentLabel = new FlxText(downloadBar.x, downloadBar.y + (downloadBar.height / 2), downloadBar.width, "0%");
+			percentLabel.setFormat(Paths.font("vcr.ttf"), 22, FlxColor.WHITE, CENTER, OUTLINE, 0xFF000000);
+			percentLabel.y -= percentLabel.height / 2;
+			add(percentLabel);
+			
+			sys.thread.Thread.create(function()
+			{
+				var copyFolder:String->String->Void = null;
+				copyFolder = function(path, destPath) {
+				FileSystem.createDirectory(path);
+				FileSystem.createDirectory(destPath);
+				for (f in FileSystem.readDirectory(path)) {
+					if (FileSystem.isDirectory('$path/$f')) {
+						copyFolder('$path/$f', '$destPath/$f');
+					} else {
+						try {
+							File.copy('$path/$f', '$destPath/$f');
+							fileDone();
+						} catch(e) {
+						}
+					}
+				}
+				}
+				copyFolder('./_cache', '.');
+				try {
+					CoolUtil.deleteFolder('./_cache/');
+					FileSystem.deleteDirectory('./_cache/');
+				}
+				catch (e) {
+				}
+				FlxG.save.data.updated = false;
+				FlxG.save.flush();
+				#if windows
+				new Process('start /B MixEngine.exe', null);
+				#else
+				new Process('start /B MixEngine.app', null);
+				#end
+				System.exit(0);
 			});
-			updateIcon.visible = true;
-			updateAlphabet.visible = true;
-			updateRibbon.visible = true;
+			#end
+		}
+		else
+		{
+
+			updateRibbon = new FlxSprite(0, FlxG.height - 75).makeGraphic(FlxG.width, 75, 0x88FFFFFF, true);
+			updateRibbon.visible = false;
 			updateRibbon.alpha = 0;
-		});
+			add(updateRibbon);
+
+			updateIcon = new FlxSprite(FlxG.width - 75, FlxG.height - 75);
+			updateIcon.frames = Paths.getSparrowAtlas("pauseAlt/bfLol", "shared");
+			updateIcon.animation.addByPrefix("dance", "funnyThing instance 1", 20, true);
+			updateIcon.animation.play("dance");
+			updateIcon.setGraphicSize(65);
+			updateIcon.updateHitbox();
+			updateIcon.antialiasing = true;
+			updateIcon.visible = false;
+			add(updateIcon);
+
+			updateAlphabet = new Alphabet(0, 0, "Checking Your Vibe...", true);
+			for(c in updateAlphabet.members) {
+				c.scale.x /= 2;
+				c.scale.y /= 2;
+				c.updateHitbox();
+				c.x /= 2;
+				c.y /= 2;
+			}
+			updateAlphabet.visible = false;
+			updateAlphabet.x = updateIcon.x - updateAlphabet.width - 10;
+			updateAlphabet.y = updateIcon.y;
+			add(updateAlphabet);
+			updateIcon.y += 15;
+
+			var tmr = new FlxTimer().start(2, function(tmr:FlxTimer)
+			{
+				thrd = Thread.create(function() {
+					try {
+						var data = Http.requestUrl("https://raw.githubusercontent.com/Z11Coding/Z11-s-Modpack-Mixup-RELEASE/main/versions/list.txt");
+						onUpdateData(data);
+					} catch(e) {
+						trace(e.details());
+						trace(e.stack.toString());
+						switch (FlxG.random.bool(12) && !ClientPrefs.data.gotit && !FlxG.save.data.updated)
+						{
+							case false:
+								FlxG.switchState(new states.CacheState());
+							case true:
+								FlxG.switchState(new states.WelcomeToPain());
+						}						
+					}
+				});
+				updateIcon.visible = true;
+				updateAlphabet.visible = true;
+				updateRibbon.visible = true;
+				updateRibbon.alpha = 0;
+			});
+		}
 	}
 
 	function onUpdateData(data:String) {
@@ -124,7 +205,7 @@ class FirstCheckState extends MusicBeatState
 		updateIcon.visible = false;
 		updateAlphabet.visible = false;
 		updateRibbon.visible = false;
-		
+
 		if (currentVerPos+1 < versions.length)
 		{
 			trace("OLD VER!!!");
@@ -140,5 +221,11 @@ class FirstCheckState extends MusicBeatState
 					FlxG.switchState(new states.WelcomeToPain());
 			}
 		}
+	}
+
+	function fileDone() {
+		filesDone++;
+		percentLabel.text = '${Math.round(((filesDone / totalFiles * 100)*100)/100)}%';
+		//trace(totalFiles);
 	}
 }
