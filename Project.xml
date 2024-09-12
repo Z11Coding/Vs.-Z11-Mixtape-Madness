@@ -234,7 +234,7 @@
 	<haxedef name="message.reporting" value="pretty" />
 
 	<!-- Fix compiling issues -->
-	<setenv name="HAXEPATH" value="./"/>
+	<!-- setenv name="HAXEPATH" value="./"/ -->
 
 
 	<!-- _________________________________ Custom _______________________________ -->
