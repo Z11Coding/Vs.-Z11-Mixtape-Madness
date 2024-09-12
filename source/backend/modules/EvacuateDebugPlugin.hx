@@ -22,7 +22,7 @@ class EvacuateDebugPlugin extends FlxBasic
   {
     super.update(elapsed);
 
-    if (FlxG.keys.justPressed.F4)
+    if (!FlxG.keys.pressed.ALT && FlxG.keys.justPressed.F4)
     {
       FlxG.switchState(new states.MainMenuState());
     }

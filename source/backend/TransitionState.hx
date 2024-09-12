@@ -1,5 +1,6 @@
 package backend;
 
+import backend.window.CppAPI;
 import flixel.FlxState;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -9,6 +10,7 @@ import flixel.state.*;
 import substates.StickerSubState;
 import flixel.FlxSprite;
 import openfl.display.BitmapData;
+import openfl.Lib;
 
 class TransitionState {
     public static var stickers:FlxTypedGroup<StickerSprite>;
@@ -168,39 +170,41 @@ class TransitionState {
                 meltEffect(screenCopy, options);
             case "instant":
                 FlxG.switchState(Type.createInstance(targetState, null));
+            case 'transparent fade':
+                FlxTween.num(1, 0, 2, {ease: FlxEase.sineInOut, onComplete: 
+                function(twn:FlxTween)
+                {
+                    switchState(targetState, onComplete, args);
+                }}, 
+                function(num)
+                {
+                    CppAPI.setWindowOppacity(num);
+                });
+            case 'transparent close':
+                if (FlxG.sound.music != null && FlxG.sound.music.playing)
+                {
+                    FlxG.sound.music.stop();
+                    FlxG.sound.play(Paths.music('gameOverEnd'));
+                }
+                else
+                {
+                    FlxG.sound.play(Paths.music('gameOverEnd'));
+                }
+                if (ClientPrefs.data.flashing) FlxG.camera.flash(FlxColor.WHITE, 2);
+                FlxTween.num(1, 0, 2, {ease: FlxEase.sineInOut, onComplete: 
+                function(twn:FlxTween)
+                {
+                    switchState(targetState, onComplete, args);
+                }}, 
+                function(num)
+                {
+                    CppAPI.setWindowOppacity(num);
+                });
         }
         //trace("Transition complete!");
     }
 
-    static function slideScreen(x:Float, y:Float, duration:Float, targetState:Class<FlxState>, onComplete:Dynamic, ?args:Array<Dynamic>):Void {
-        FlxTween.tween(FlxG.camera.scroll, { x: x, y: y }, duration, {
-            onComplete: function(_) {
-                switchState(targetState, onComplete, args);
-            }
-        });
-    }
-
-    // static function slideWindow(x:Float, y:Float, duration:Float, targetState:Class<FlxState>, onComplete:Dynamic, ?args:Array<Dynamic>):Void {
-    //     var screenWidth:Float = FlxG.width * FlxG.camera.zoom;
-    //     var screenHeight:Float = FlxG.height * FlxG.camera.zoom;
-    //     var windowWidth:Float = Lib.current.stage.stageWidth;
-    //     var windowHeight:Float = Lib.current.stage.stageHeight;
-    //     var targetX:Float = (windowWidth - screenWidth) / 2 + x;
-    //     var targetY:Float = (windowHeight - screenHeight) / 2 + y;
-        
-    //     FlxTween.tween(Lib.current.stage, { x: targetX, y: targetY }, duration, {
-    //         onComplete: function(_) {
-    //             switchState(targetState, onComplete, args);
-    //             FlxTween.tween(Lib.current.stage, { x: 0, y: 0 }, duration, {
-    //                 onComplete: function(_) {
-    //                     trace("Slide back complete.");
-    //                 }
-    //             });
-    //         }
-    //     });
-    // }
-
-    static function postSwitchTransition(options:Dynamic = null):Void {
+    public static function postSwitchTransition(options:Dynamic = null):Void {
         //trace("Post-switch transition started.");
         if (options == null) {
             //trace("No options provided for post-switch transition.");
@@ -243,15 +247,46 @@ class TransitionState {
                         //trace("Post-switch slideInDown complete.");
                     }
                 });
+            case "transparent fade":
+				CppAPI.setWindowOppacity(1);
+				trace("Post-switch transparent fade complete.");
             default:
-                //trace("Unknown post-switch transition type: " + transitionType);
+                trace("Unknown post-switch transition type: " + transitionType);
         }
     }
+
+    static function slideScreen(x:Float, y:Float, duration:Float, targetState:Class<FlxState>, onComplete:Dynamic, ?args:Array<Dynamic>):Void {
+        FlxTween.tween(FlxG.camera.scroll, { x: x, y: y }, duration, {
+            onComplete: function(_) {
+                switchState(targetState, onComplete, args);
+            }
+        });
+    }
+
+    // static function slideWindow(x:Float, y:Float, duration:Float, targetState:Class<FlxState>, onComplete:Dynamic, ?args:Array<Dynamic>):Void {
+    //     var screenWidth:Float = FlxG.width * FlxG.camera.zoom;
+    //     var screenHeight:Float = FlxG.height * FlxG.camera.zoom;
+    //     var windowWidth:Float = Lib.current.stage.stageWidth;
+    //     var windowHeight:Float = Lib.current.stage.stageHeight;
+    //     var targetX:Float = (windowWidth - screenWidth) / 2 + x;
+    //     var targetY:Float = (windowHeight - screenHeight) / 2 + y;
+        
+    //     FlxTween.tween(Lib.current.stage, { x: targetX, y: targetY }, duration, {
+    //         onComplete: function(_) {
+    //             switchState(targetState, onComplete, args);
+    //             FlxTween.tween(Lib.current.stage, { x: 0, y: 0 }, duration, {
+    //                 onComplete: function(_) {
+    //                     trace("Slide back complete.");
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }
 
     static function meltEffect(screenCopy:BitmapData, ?options:Dynamic):Void {
         var pixels = screenCopy;
         var duration:Float = Reflect.hasField(options, "duration") ? options.duration : FlxG.random.float(1, 3);
-        var meltTween = FlxTween.num(0, FlxG.height, duration, {
+        FlxTween.num(0, FlxG.height, duration, {
             onUpdate: function(tween:FlxTween) {
                 var value = tween.percent;
                 for (y in 0...FlxG.height) {

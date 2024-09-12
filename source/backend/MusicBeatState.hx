@@ -1,10 +1,12 @@
 package backend;
 
+import backend.window.CppAPI;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.FlxState;
 import backend.PsychCamera;
 import substates.StickerSubState;
 import backend.Song;
+import flixel.tweens.FlxTween;
 
 class MusicBeatState extends FlxState
 {

@@ -1,6 +1,6 @@
-package backend;
+package backend.window;
 
-import backend.WindowsData;
+import backend.window.*;
 
 class CppAPI
 {

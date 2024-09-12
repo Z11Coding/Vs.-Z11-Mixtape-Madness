@@ -1,4 +1,4 @@
-package backend;
+package backend.window;
 
 @:headerCode('
     #include <windows.h>

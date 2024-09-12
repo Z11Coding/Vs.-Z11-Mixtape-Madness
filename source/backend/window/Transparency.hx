@@ -1,6 +1,4 @@
-package backend;
-
-import cpp.*;
+package backend.window;
 
 @:native("HWND__") extern class HWNDStruct {}
 typedef HWND = cpp.Pointer<HWNDStruct>;
