@@ -99,6 +99,8 @@ class MusicBeatState extends FlxState
 			stage.update(elapsed);
 		});
 
+		backend.window.WindowUtils.updateTitle();
+
 		super.update(elapsed);
 	}
 
