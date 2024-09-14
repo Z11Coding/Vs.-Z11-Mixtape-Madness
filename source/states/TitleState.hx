@@ -17,6 +17,7 @@ import openfl.display.Bitmap;
 import openfl.display.BitmapData;
 
 import shaders.ColorSwap;
+import objects.Alphabet.ColoredAlphabet;
 
 import states.StoryMenuState;
 import states.OutdatedState;
@@ -458,10 +459,35 @@ class TitleState extends MusicBeatState
 		}
 	}
 
+	function createCoolColoredText(textArray:Array<String>, ?offset:Float = 0, ?color:FlxColor = FlxColor.WHITE)
+	{
+		for (i in 0...textArray.length)
+		{
+			var money:ColoredAlphabet = new ColoredAlphabet(0, 0, textArray[i], true, color);
+			money.screenCenter(X);
+			money.y += (i * 60) + 200 + offset;
+			if(credGroup != null && textGroup != null) {
+				credGroup.add(money);
+				textGroup.add(money);
+			}
+		}
+	}
+
 	function addMoreText(text:String, ?offset:Float = 0)
 	{
 		if(textGroup != null && credGroup != null) {
 			var coolText:Alphabet = new Alphabet(0, 0, text, true);
+			coolText.screenCenter(X);
+			coolText.y += (textGroup.length * 60) + 200 + offset;
+			credGroup.add(coolText);
+			textGroup.add(coolText);
+		}
+	}
+
+	function addMoreColoredText(text:String, ?offset:Float = 0, ?color:FlxColor = FlxColor.WHITE)
+	{
+		if(textGroup != null && credGroup != null) {
+			var coolText:ColoredAlphabet = new ColoredAlphabet(0, 0, text, true, color);
 			coolText.screenCenter(X);
 			coolText.y += (textGroup.length * 60) + 200 + offset;
 			credGroup.add(coolText);
@@ -602,13 +628,13 @@ class TitleState extends MusicBeatState
 					deleteCoolText();
 
 				case 30:
-					addMoreText('Z11\'s');
+					addMoreColoredText('Z11\'s', 0, 0xFF7B1788);
 				// credTextShit.visible = true;
 				case 31:
-					addMoreText('Modpack');
+					addMoreColoredText('Modpack', 0, 0xFFFFFFFF);
 				// credTextShit.text += '\nNight';
 				case 32:
-					addMoreText('Mixup');
+					addMoreColoredText('Mixup', 0, 0xFF353535);
 
 				case 33:
 					deleteCoolText();

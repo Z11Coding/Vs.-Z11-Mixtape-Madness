@@ -286,6 +286,20 @@ class Alphabet extends FlxSpriteGroup
 	}
 }
 
+class ColoredAlphabet extends Alphabet {
+    var colour:FlxColor = 0xFFFFFF;
+    public function new(x:Float, y:Float, text:String = "", ?bold:Bool = true, ?color:FlxColor = 0xFFFFFF){
+        super(x, y, text, bold);
+        colour = color;
+        SetColor();
+    }
+    public function SetColor(){
+        for(letter in letters){
+            letter.color = colour;
+        }
+    }
+}
+
 
 ///////////////////////////////////////////
 // ALPHABET LETTERS, SYMBOLS AND NUMBERS //

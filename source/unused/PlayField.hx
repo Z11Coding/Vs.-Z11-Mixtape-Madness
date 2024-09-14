@@ -878,47 +878,43 @@ class NoteField extends FlxObject
 	}
 	
 	var crotchet = Conductor.getCrotchetAtTime(0) / 4;
-	function drawHold(hold:Note):Null<RenderObject>
-	{
-		if(hold.animation.curAnim==null)return null;
-		if(hold.scale==null)return null; 
-
+	function drawHold(hold:Note):Null<RenderObject> {
+		if (hold.animation.curAnim == null) return null;
+		if (hold.scale == null) return null;
+	
 		var verts = [];
 		var uv = [];
-		
+	
 		var render = false;
-		for (camera in cameras)
-		{
-			if (camera.alpha > 0 && camera.visible)
-			{
+		for (camera in cameras) {
+			if (camera.alpha > 0 && camera.visible) {
 				render = true;
 				break;
 			}
 		}
-		if (!render)
-			return null;
-		
+		if (!render) return null;
+	
 		var alpha = modManager.getAlpha(curDecBeat, hold.alpha, hold, modNumber, hold.noteData);
-		if(alpha==0)return null;
-
+		if (alpha == 0) return null;
+	
 		var lastMe = null;
-
+	
 		var tWid = hold.frameWidth * hold.scale.x;
-		var bWid = (function(){
-			if(hold.prevNote != null && hold.prevNote.scale!=null && hold.prevNote.isSustainNote)
+		var bWid = (function() {
+			if (hold.prevNote != null && hold.prevNote.scale != null && hold.prevNote.isSustainNote)
 				return hold.prevNote.frameWidth * hold.prevNote.scale.x;
 			else
 				return tWid;
 		})();
-		
+	
 		var basePos = modManager.getPos(0, 0, curDecBeat, hold.noteData, modNumber, hold, ['perspectiveDONTUSE']);
-		
+	
 		var strumDiff = (Conductor.songPosition - hold.strumTime);
 		var visualDiff = (Conductor.visualPosition - hold.visualTime); // TODO: get the start and end visualDiff and interpolate so that changing speeds mid-hold will look better
-		var zIndex:Float = basePos.z;
+		var zIndex:Float = basePos.z - 0.1; // Ensure hold note is drawn below the main note
 		var sv = PlayState.instance.getSV(hold.strumTime).speed;
-		for(sub in 0...holdSubdivisions){
-			var prog = sub / (holdSubdivisions+1);
+		for (sub in 0...holdSubdivisions) {
+			var prog = sub / (holdSubdivisions + 1);
 			var nextProg = (sub + 1) / (holdSubdivisions + 1);
 			var strumSub = crotchet / holdSubdivisions;
 			var strumOff = (strumSub * sub);
@@ -926,62 +922,59 @@ class NoteField extends FlxObject
 			strumSub *= sv;
 			var scale:Float = 1;
 			var fuck = strumDiff;
-
-			if((hold.wasGoodHit || hold.parent.wasGoodHit) && !hold.tooLate){
+	
+			if ((hold.wasGoodHit || hold.parent.wasGoodHit) && !hold.tooLate) {
 				scale = 1 - ((fuck + crotchet) / crotchet);
-				if(scale<0)scale=0;
-				if(scale>1)scale=1;
+				if (scale < 0) scale = 0;
+				if (scale > 1) scale = 1;
 				strumSub *= scale;
 				strumOff *= scale;
 			}
-			
+	
 			var topWidth = FlxMath.lerp(tWid, bWid, prog);
 			var botWidth = FlxMath.lerp(tWid, bWid, nextProg);
-
-			
+	
 			var top = lastMe == null ? getPoints(hold, topWidth, (visualDiff + (strumOff * 0.46)), strumDiff + strumOff) : lastMe;
 			var bot = getPoints(hold, botWidth, (visualDiff + ((strumOff + strumSub) * 0.46)), strumDiff + strumOff + strumSub);
-
+	
 			lastMe = bot;
-
+	
 			var quad:Array<Vector3> = [
 				top[0],
 				top[1],
 				bot[0],
 				bot[1]
 			];
-
-			
+	
 			verts = verts.concat([
 				quad[0].x, quad[0].y,
 				quad[1].x, quad[1].y,
 				quad[3].x, quad[3].y,
-
+	
 				quad[0].x, quad[0].y,
 				quad[2].x, quad[2].y,
 				quad[3].x, quad[3].y
 			]);
 			uv = uv.concat(getUV(hold, false, sub));
 		}
-
+	
 		var vertices = new Vector<Float>(verts.length, false, cast verts);
 		var uvData = new Vector<Float>(uv.length, false, uv);
-
+	
 		var shader = hold.shader != null ? hold.shader : new FlxShader();
 		if (shader != hold.shader)
 			hold.shader = shader;
-		
+	
 		shader.bitmap.input = hold.graphic.bitmap;
 		shader.bitmap.filter = hold.antialiasing ? LINEAR : NEAREST;
-
+	
 		return {
 			shader: shader,
-			alpha: alpha, 
+			alpha: alpha,
 			uvData: uvData,
 			vertices: vertices,
 			zIndex: zIndex
 		}
-		
 	}
 
 	private function getUV(sprite:FlxSprite, flipY:Bool, sub:Int)
