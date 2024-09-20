@@ -36,7 +36,7 @@ function onUpdatePost(elapsed)
 end
 
 function loadModchart()
-    if getPropertyFromClass('backend.CLientPrefs', 'data.modcharts') then
+    if getPropertyFromClass('backend.ClientPrefs', 'data.modcharts') then
         queueSet(348, 'reverse', 0.5, 0)
         queueSet(350, 'reverse', 1, 0)
         queueSet(412, 'reverse', 0.5, 0)
@@ -92,7 +92,7 @@ function onStepHit()
         end
     end
 
-    if getPropertyFromClass('backend.CLientPrefs', 'data.modcharts') then
+    if getPropertyFromClass('backend.ClientPrefs', 'data.modcharts') then
         if curStep >= 284 and curStep <= 347 then
             effectSwitcher('basic')
         elseif curStep >= 352 and curStep <= 411 or curStep >= 864 and curStep <= 987 then
@@ -137,7 +137,7 @@ function onStepHit()
             ]]);
         end
         if curStep == 1120 then
-            if getPropertyFromClass('backend.CLientPrefs', 'data.modcharts') then setValue('centerrotateZ', 0, 0) end
+            if getPropertyFromClass('backend.ClientPrefs', 'data.modcharts') then setValue('centerrotateZ', 0, 0) end
             cameraFlash('other', 'FFFFFF', 1)
             runHaxeCode([[
                 game.camGame.setFilters([new ShaderFilter(game.getLuaObject("oldtimer").shader)]);

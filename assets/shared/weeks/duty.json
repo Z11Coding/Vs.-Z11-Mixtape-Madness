@@ -1,0 +1,27 @@
+{
+	"storyName": "",
+	"difficulties": "NITG",
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"weekBefore": "tutorial",
+	"startUnlocked": true,
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"hideStoryMode": false,
+	"category": "secrets",
+	"songs": [
+		[
+			"Data Cycle",
+			"empty",
+			[
+				161,
+				161,
+				161
+			]
+		]
+	],
+	"weekName": "Data Cycle"
+}

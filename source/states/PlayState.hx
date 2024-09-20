@@ -2469,13 +2469,13 @@ class PlayState extends MusicBeatState
 	{
 		if (startedCountdown)
 		{
-			callOnScripts('onStartCountdown');
+			callOnScripts('onRestartCountdown');
 			return false;
 		}
 
 		seenCutscene = true;
 		inCutscene = false;
-		var ret:Dynamic = callOnScripts('onStartCountdown', null, true);
+		var ret:Dynamic = callOnScripts('onRestartCountdown', null, true);
 		if (ret != LuaUtils.Function_Stop)
 		{
 			if (skipCountdown || startOnTime > 0)
@@ -2483,7 +2483,7 @@ class PlayState extends MusicBeatState
 
 			startedCountdown = true;
 			countActive = true;
-			Conductor.songPosition = -Conductor.crochet * 5;
+			//Conductor.songPosition = -Conductor.crochet * 5;
 			setOnScripts('startedCountdown', true);
 			callOnScripts('onCountdownStarted', null);
 			var swagCounter:Int = 0;
@@ -2938,7 +2938,7 @@ class PlayState extends MusicBeatState
 			track.play();
 		}
 
-		if (needSkip)
+		if (needSkip && !skipActive)
 		{
 			skipActive = true;
 			skipText = new FlxText(healthBar.x + 80, healthBar.y - 110, 500);
@@ -2948,6 +2948,7 @@ class PlayState extends MusicBeatState
 			skipText.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2, 1);
 			skipText.cameras = [camHUD];
 			skipText.alpha = 0;
+			skipText.font = Paths.font('comboFont.ttf');
 			FlxTween.tween(skipText, {alpha: 1}, 0.2);
 			add(skipText);
 		}
@@ -4566,11 +4567,11 @@ if (result < 0 || result > mania) {
 
 		if (!isStoryMode && playbackRate == 1)
 		{
-			var daNote:Note = allNotes[-1];
+			var daNote:Note = allNotes[0];
 			if (daNote != null && daNote.strumTime > 100)
 			{
 				needSkip = true;
-				skipTo = daNote.strumTime - 100;
+				skipTo = daNote.strumTime - 500;
 			}
 			else
 			{
@@ -4732,6 +4733,11 @@ if (result < 0 || result > mania) {
 			botplayTxt.visible = true;
 			botplayTxt.text = "GFPLAY\n(What song are you playing that you can't tap to the beat?)";
 		}
+		else
+		{
+			scoreTxt.visible = true;
+			botplayTxt.visible = false;
+		}
 
 		rotRateSh = curStep / 9.5;
 		var sh_toy = -Math.sin(rotRateSh * 2) * sh_r * 0.45;
@@ -4762,6 +4768,7 @@ if (result < 0 || result > mania) {
 		if (needsReset)
 		{
 			callOnScripts('onSongRestart');
+			PlayState.savedTime = 0;
 
 			moveCamera(true);
 
@@ -4770,36 +4777,37 @@ if (result < 0 || result > mania) {
 			persistentUpdate = true;
 			persistentDraw = true;
 
+			// Reset music properly.
+			FlxG.sound.music.stop();
+			Conductor.songPosition = -5000;
+
+			Conductor.crochet = 0;
+			Conductor.stepCrochet = 0;
+			Conductor.visualPosition = 0;
+
 			startingSong = true;
 			isPlayerDying = false;
 
 			boyfriend.stunned = true;
 
-			// Reset music properly.
-			if (FlxG.sound.music != null)
-			{
-				Conductor.songPosition = -5000;
-				FlxG.sound.music.stop();
-
-				Conductor.crochet = 0;
-				Conductor.stepCrochet = 0;
-				Conductor.visualPosition = 0;
-			}
-
 			if (opponentVocals != null)
 				opponentVocals.pause();
 			if (gfVocals != null)
 				gfVocals.pause();
-			vocals.pause();
+			if (vocals != null)
+				vocals.pause();
+
 			if (opponentVocals != null)
 				opponentVocals.time = 0;
 			if (gfVocals != null)
 				gfVocals.time = 0;
-			vocals.time = 0;
+			if (vocals != null)
+				vocals.time = 0;
 
 			if (FlxG.sound.music != null)
 				FlxG.sound.music.volume = 1;
-			vocals.volume = 1;
+			if (vocals != null)
+				vocals.volume = 1;
 			if (opponentVocals != null)
 				opponentVocals.volume = 1;
 			if (gfVocals != null)
@@ -5113,7 +5121,8 @@ if (result < 0 || result > mania) {
 
 		if (FlxG.keys.justPressed.SPACE && skipActive)
 		{
-			clearNotesBefore(skipTo);
+			//clearNotesBefore(skipTo);
+			callOnScripts('onSkipIntro', [skipTo]);
 			FlxG.sound.music.pause();
 			vocals.pause();
 			opponentVocals.pause();
@@ -5591,7 +5600,8 @@ if (result < 0 || result > mania) {
 		}
 	}
 
-	/**
+	/*
+	 *
 	 * Call this when resetting the playstate.
 	 */
 	public function vwooshNotes():Void

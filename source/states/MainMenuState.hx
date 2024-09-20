@@ -185,12 +185,13 @@ class MainMenuState extends MusicBeatState
 		versionShitpsych.scrollFactor.set();
 		versionShitpsych.setFormat(Paths.font("FridayNightFunkin.ttf"), 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShitpsych);
+
 		#if !debug
 		versionShit.text = "Mixtape Engine v" + mixtapeEngineVersion;
-		#end
-		#if debug
+		#else
 		versionShit.text = "Mixtape Engine v" + mixtapeEngineVersion + ' (debug)';
 		#end
+
 		if (ClientPrefs.data.username)
 		{
 			#if windows
