@@ -1,157 +1,203 @@
 function onCreatePost()
-    loadModchart()
-    setValue('transformX', 200, 1)
-    setValue('localrotateZ', 90, 1)
-    setValue('noteAngle', 90, 1)
-    setValue('receptorAngle', 90, 1)
-    setValue('brake', 1, 1)
+    luaDebugMode = true
     makeLuaSprite("black")
     makeGraphic("black", screenWidth, screenHeight, '000000')
     setObjectCamera('black', 'hud')
+    screenCenter("black")
     addLuaSprite('black', true)
-    if (shadersEnabled) then
-        initLuaShader('old timer')
-        makeLuaSprite("oldtimer")
-        makeGraphic("oldtimer", screenWidth, screenHeight, '000000')
-        setSpriteShader("oldtimer", "old timer")
-        addHaxeLibrary("ShaderFilter", "openfl.filters");
-    end
-    if not middlescroll then
-        setValue('transformX', -315, 0)
-    end
+    --setProperty('black.alpha', 0)
+
+    makeLuaText('warning', 'WARNING:\nAstria will now try to mess with you!\nKeep in mind that you wont die until you miss at 0 HP!\n\nGOOD LUCK!', 800, 0, 0)
+    setTextColor("warning", "FF0000")
+    setObjectCamera('warning', 'other')
+    setTextSize("warning", 50)
+    setTextAlignment("warning", 'center')
+    screenCenter("warning")
+    addLuaText('warning')
+    setProperty('warning.alpha', 0)
+    setProperty('defaultCamZoom', 2)
+    setProperty('camGame.zoom', 2)
+    setValue('drunk', 1, 1)
+    loadModchart()
 end
 
 function onSongStart()
-    if (shadersEnabled) then
-        runHaxeCode([[
-            trace(ShaderFilter);
-            game.camGame.setFilters([new ShaderFilter(game.getLuaObject("oldtimer").shader)]);
-            game.camHUD.setFilters([new ShaderFilter(game.getLuaObject("oldtimer").shader)]);
-        ]]);
+    doTweenAlpha('reveal', 'black', 0, stepCrochet*0.001*(126*2), 'sineInOut')
+    doTweenZoom('camZoom', 'camGame', 1, stepCrochet*0.001*(126*2), 'sineInOut')
+end
+
+function onTweenCompleted(tag)
+    if tag == 'camZoom' then
+        setProperty('defaultCamZoom', getProperty("camGame.zoom"))
     end
 end
 
-function onUpdatePost(elapsed)
-    setShaderFloat("oldtimer", "iTime", os.clock());
+function onUpdate(elapsed)
+    songPos = getSongPosition()
+    local currentBeat = (songPos/5000)*(curBpm/60)
+
+    doTweenY('opponentmove', 'dad', 100 - 150*math.sin((currentBeat+12*12)*math.pi/3), 2)
+    doTweenX('opponentmove2', 'dad', 100 - 150*math.sin((currentBeat+24*24)*math.pi/4), 2)
+    if not (curStep > 2550) then runHaxeCode('game.moveCameraSection();') end
 end
 
 function loadModchart()
-    queueSet(348, 'reverse', 0.5, 0)
-    queueSet(350, 'reverse', 1, 0)
-    queueSet(412, 'reverse', 0.5, 0)
-    queueSet(414, 'reverse', 0, 0)
-    queueSet(476, 'reverse', 0.5, 0)
-    queueSet(478, 'reverse', 0, 0)
-    queueSet(478, 'centered', 1, 0)
-    queueSet(480, 'split', 1, 0)
-    queueSet(734, 'split', 0, 0)
-    queueSet(734, 'centered', 0, 0)
-    queueSet(734, 'receptorScroll', 1, 0)
-    queueSet(734, 'sudden', 0.5, 0)
-    queueSet(864, 'sudden', 1, 0)
-    queueSet(988, 'fieldRoll', 180/4, 0)
-    queueSet(990, 'fieldRoll', 180/3, 0)
-    queueSet(992, 'fieldRoll', 180/2, 0)
-    queueSet(1052, 'fieldRoll', 270/4, 0)
-    queueSet(1054, 'fieldRoll', 270/3, 0)
-    queueSet(1056, 'fieldRoll', 270/2, 0)
-    queueSet(1120, 'fieldRoll', 0, 0)
-    queueSet(1120, 'sudden', 0, 0)
-    queueSet(1120, 'receptorScroll', 0, 0)
+    --intro = true
+    setProperty('camZoomingMult', 0)
+    if not middlescroll then
+        queueEase(2552, 2560, 'transformX', -315, 'sineInOut', 0)
+    end
+    queueEase(2552, 2560, 'twirl', 1, 'sineInOut', 0)
+    queueEase(2552, 2560, 'bounce', 1, 'sineInOut', 0)
+    queueEase(2552, 2560, 'tornado', 2, 'sineInOut', 0)
+    queueEase(2552, 2560, 'tornado', 3, 'sineInOut', 1)
+    queueEase(2552, 2560, 'drunk', 2, 'sineInOut', 0)
+    queueEase(2552, 2560, 'drunkZ', 1, 'sineInOut', 0)
 end
 
-index = 0
-lol = 1
 function onStepHit()
-    function effectSwitcher(eff)
-        if eff == 'basic' then
-            if curStep % 8 == 0 then
-                queueSet(curStep, 'drunk', 5, 0)
-                queueEase(curStep, curStep+4, 'drunk', 0, 'cubeOut', 0)
-            end
-            if curStep % 8 == 4 then
-                queueSet(curStep, 'drunk', -5, 0)
-                queueEase(curStep, curStep+4, 'drunk', 0, 'cubeOut', 0)
-            end
-        elseif eff == 'basicAlt' then
-            if curStep % 8 == 0 then
-                queueSet(curStep, 'tipZ', 5)
-                queueEase(curStep, curStep+4, 'tipZ', 0, 'cubeOut')
-            end
-            if curStep % 8 == 4 then
-                queueSet(curStep, 'tipZ', -5)
-                queueEase(curStep, curStep+4, 'tipZ', 0, 'cubeOut')
-            end
-        elseif eff == 'rotato' then
-            if curStep % 8 == 0 then
-                rotateArray = {0, 90, 180, 270};
-                queueEase(curStep, curStep+8, 'centerrotateZ', rotateArray[curBeat % 5], 'cubeOut', 0)
-            end
-        end
+    if curStep == 240 then
+        intro = false
+    end
+    if curStep == 256 then
+        kick1 = true
+    end
+    if curStep == 495 then
+        kick1 = false
+    end
+    if curStep == 511 then
+        bopCam = true
+    end
+    if curStep == 1024 then
+        bopCam = false
+        bopCamLiteH = true
+    end
+    if curStep == 1280 then
+        growChant = true
+    end
+    if curStep == 1536 then
+        growChant = false
+        cameraFlash('camOther', 'FFFFFF', 1)
+        setObjectCamera('black', 'camOther')
+        setProperty('black.alpha', 1)
+        setValue('drunk', 1, 0)
+    end
+    if curStep == 1664 then
+        doTweenAlpha('reveal', 'black', 0, stepCrochet*0.001*128, 'sineInOut')
+        doTweenZoom('camZoom', 'camGame', 1.5, stepCrochet*0.001*128, 'sineInOut')
+    end
+    if curStep == 2048 then
+        cameraFlash('camOther', 'FFFFFF', 1)
+        setProperty('black.alpha', 1)
+        setValue('drunk', 0, 0)
+        doTweenAlpha('warnem', 'warning', 1, stepCrochet*0.001*128, 'sineInOut')
+    end
+    if curStep == 2176 then
+        doTweenZoom('camZoom', 'camGame', 1, stepCrochet*0.001*128, 'sineInOut')
+        setValue('drunk', 7, 1)
+        doTweenAlpha('reveal', 'black', 0, stepCrochet*0.001*128, 'sineInOut')
+        doTweenAlpha('warnem', 'warning', 0, stepCrochet*0.001*128, 'sineInOut')
+    end
+    if curStep == 2559 then
+        setProperty('defaultCamZoom', 0.8)
+        noteBounce = true
+    end
+    if curStep == 2560 then
+        setProperty('defaultCamZoom', 0.8)
+    end
+    if curStep == 2816 then
+        cameraFlash('camOther', 'FFFFFF', 1)
+        setValue('reverse', 1, 0)
+    end
+    if curStep == 3040 then
+        doTweenAlpha('reveal', 'black', 0.9, stepCrochet*0.001*32, 'linear')
+    end
+    if curStep == 3072 then
+        doTweenAlpha('reveal', 'black', 0, stepCrochet*0.001*128, 'linear')
+    end
+    if curStep == 3328 then
+        cameraFlash('camOther', 'FFFFFF', 1)
+        setProperty('black.alpha', 1)
     end
 
-    if curStep >= 284 and curStep <= 347 then
-        effectSwitcher('basic')
-    elseif curStep >= 352 and curStep <= 411 or curStep >= 864 and curStep <= 987 then
-        effectSwitcher('basicAlt')
-    elseif curStep >= 480 and curStep <= 731 then
-        effectSwitcher('rotato')
+    if intro then
+        if curStep % 64 == 0 then
+            triggerEvent("Add Camera Zoom", 0, 0.05)
+        end
+        if curStep % 32 == 6 then
+            triggerEvent("Add Camera Zoom", 0, 0.05)
+        end
+        if curStep % 32 == 29 then
+            triggerEvent("Add Camera Zoom", 0, 0.05)
+        end
     end
-    
-    if curStep == 32 then
-        doTweenAlpha('reveal', 'black', 0, stepCrochet*0.001*128, 'sineInOut')
+    if kick1 then
+        if curStep % 32 == 0 then
+            triggerEvent("Add Camera Zoom", 0.05, 0.05)
+        end
+        if curStep % 32 == 6 then
+            triggerEvent("Add Camera Zoom", 0.05, 0.05)
+        end
+        if curStep % 32 == 10 then
+            triggerEvent("Add Camera Zoom", 0.05, 0.05)
+        end
+        if curStep % 32 == 16 then
+            triggerEvent("Add Camera Zoom", 0.05, 0.05)
+        end
+        if curStep % 32 == 22 then
+            triggerEvent("Add Camera Zoom", 0.05, 0.05)
+        end
+        if curStep % 32 == 26 then
+            triggerEvent("Add Camera Zoom", 0.05, 0.05)
+        end
+        if curStep % 32 == 30 then
+            triggerEvent("Add Camera Zoom", 0.05, 0.05)
+        end
     end
-    if (shadersEnabled) then
-        if curStep == 284 then
-            setObjectCamera('black', 'other')
-            setProperty('black.alpha', 1)
-            runHaxeCode([[
-                game.camGame.setFilters([]);
-                game.camHUD.setFilters([]);
-            ]]);
+    if growChant then
+        if curStep % 16 == 8 then
+            setValue('scale', 1.5)
+            setValue('noteAngle', 360)
+            setValue('receptorAngle', 360)
+            queueEase(curStep, curStep+4, 'scale', 1, 'quadOut')
+            queueEase(curStep, curStep+4, 'noteAngle', 0, 'quadOut')
+            queueEase(curStep, curStep+4, 'receptorAngle', 0, 'quadOut')
         end
-        if curStep == 288 then
-            cameraFlash('other', 'FFFFFF', 1)
-            setProperty('black.alpha', 0)
+    end
+end
+
+function onBeatHit()
+    if bopCam then
+        triggerEvent("Add Camera Zoom", 0.05, 0.05)
+    end
+    if bopCamLite then
+        triggerEvent("Add Camera Zoom", 0.02, 0.02)
+    end
+    if bopCamLiteH then
+        if curBeat % 4 == 2 then
+            triggerEvent("Add Camera Zoom", 0.02, 0.02)
         end
-        if curStep == 732 then
-            setProperty('black.alpha', 1)
-            runHaxeCode([[
-                game.camGame.setFilters([new ShaderFilter(game.getLuaObject("oldtimer").shader)]);
-                game.camHUD.setFilters([new ShaderFilter(game.getLuaObject("oldtimer").shader)]);
-            ]]);
-        end
-        if curStep == 736 then
-            cameraFlash('other', 'FFFFFF', 1)
-            setProperty('black.alpha', 0)
-        end
-        if curStep == 864 then
-            cameraFlash('other', 'FFFFFF', 1)
-            runHaxeCode([[
-                game.camGame.setFilters([]);
-                game.camHUD.setFilters([]);
-            ]]);
-        end
-        if curStep == 1120 then
-            setValue('centerrotateZ', 0, 0)
-            cameraFlash('other', 'FFFFFF', 1)
-            runHaxeCode([[
-                game.camGame.setFilters([new ShaderFilter(game.getLuaObject("oldtimer").shader)]);
-                game.camHUD.setFilters([new ShaderFilter(game.getLuaObject("oldtimer").shader)]);
-            ]]);
-        end
-        if curStep == 1184 then
-            setProperty('black.alpha', 1)
+    end
+    if noteBounce then
+        if curBeat % 2 == 0 then
+            setValue('transformY', -50)
+            setValue('noteAngle', 25)
+            setValue('receptorAngle', -25)
+            queueEase(curStep, curStep+4, 'split', 0, 'quadInOut')
+            queueEase(curStep, curStep+4, 'transformY', 0, 'quadInOut')
+            queueEase(curStep, curStep+4, 'noteAngle', 0, 'quadInOut')
+            queueEase(curStep, curStep+4, 'receptorAngle', 0, 'quadInOut')
+        elseif curBeat % 2 == 1 then
+            setValue('transformY', -50)
+            setValue('noteAngle', -25)
+            setValue('receptorAngle', 25)
+            queueEase(curStep, curStep+4, 'transformY', 0, 'quadInOut')
+            queueEase(curStep, curStep+4, 'noteAngle', 0, 'quadInOut')
+            queueEase(curStep, curStep+4, 'receptorAngle', 0, 'quadInOut')
         end
     end
 end
 
 function onDestroy()
-    if (shadersEnabled) then
-        runHaxeCode([[
-            trace('No More Shaders');
-            game.camGame.setFilters([]);
-            game.camHUD.setFilters([]);
-        ]]);
-    end
+
 end
