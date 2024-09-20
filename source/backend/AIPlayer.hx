@@ -26,7 +26,7 @@ class AIPlayer
 		{
             case 0: //First Time Playing FNF
 				{
-					var ratingChance:Array<Float> = [0, 0, 25, 70, 95];
+					var ratingChance:Array<Float> = [0, 0, 0, 70, 95];
 					var isolatedHits:Array<Array<Float>> = isolateHits(map);
 
 					for (section in isolatedHits)
@@ -74,7 +74,7 @@ class AIPlayer
 				}
 			case 1: //I Play Occasonally
 				{
-					var ratingChance:Array<Float> = [5, 10, 30, 3.3, 1.6];
+					var ratingChance:Array<Float> = [5, 10, 30, 60, 90];
 					var isolatedHits:Array<Array<Float>> = isolateHits(map);
 
 					for (section in isolatedHits)
