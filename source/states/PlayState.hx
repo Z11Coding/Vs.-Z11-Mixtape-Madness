@@ -4682,8 +4682,6 @@ if (result < 0 || result > mania) {
 		if (cpuControlled && !alreadyChanged && !playAsGF)
 		{
 			botplayTxt.color = FlxColor.RED;
-			botplayTxt.visible = true;
-			scoreTxt.visible = false;
 			alreadyChanged = true;
 			switch (FlxG.random.int(1, 5))
 			{
@@ -4702,8 +4700,6 @@ if (result < 0 || result > mania) {
 		else if (!cpuControlled && alreadyChanged && !playAsGF)
 		{
 			botplayTxt.color = FlxColor.fromInt(CoolUtil.dominantColor(iconP2));
-			scoreTxt.visible = true;
-			botplayTxt.visible = false;
 			switch (FlxG.random.int(1, 5))
 			{
 				case 1:
@@ -4719,24 +4715,27 @@ if (result < 0 || result > mania) {
 			}
 			alreadyChanged = false;
 		}
-		else if (playAsGF)
+		
+		if (playAsGF)
 		{
 			botplayTxt.color = Std.parseInt("0xFFFF0000");
-			scoreTxt.visible = true;
-			botplayTxt.visible = true;
 			botplayTxt.text = "GFPLAY";
 		}
 		else if (playAsGF && cpuControlled)
 		{
 			botplayTxt.color = FlxColor.fromInt(CoolUtil.dominantColor(iconP2));
-			scoreTxt.visible = true;
-			botplayTxt.visible = true;
 			botplayTxt.text = "GFPLAY\n(What song are you playing that you can't tap to the beat?)";
 		}
-		else
+		
+		if (!cpuControlled && !playAsGF || !cpuControlled && playAsGF)
 		{
 			scoreTxt.visible = true;
 			botplayTxt.visible = false;
+		}
+		else if (cpuControlled && !playAsGF || cpuControlled && playAsGF)
+		{
+			scoreTxt.visible = false;
+			botplayTxt.visible = true;
 		}
 
 		rotRateSh = curStep / 9.5;
