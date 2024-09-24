@@ -59,6 +59,9 @@ class SchoolEvil extends BaseStage
 				{
 					bgGhouls.dance(true);
 					bgGhouls.visible = true;
+					#if sys
+					ArtemisIntegration.triggerCustomEvent ("bgGhouls", "#00000000", 0);
+					#end
 				}
 		}
 	}

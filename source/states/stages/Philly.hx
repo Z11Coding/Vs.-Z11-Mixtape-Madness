@@ -104,6 +104,23 @@ class Philly extends BaseStage
 			curLight = FlxG.random.int(0, phillyLightsColors.length - 1, [curLight]);
 			phillyWindow.color = phillyLightsColors[curLight];
 			phillyWindow.alpha = 1;
+			#if sys
+			// man it would sure be a shame if all the philly lights were individual files rather than one desaturated image that's tinted the right color
+			// which i could just grab the tint color from and forward it to the client. that'd be so inconvenient, wouldn't it?
+			switch (curLight)
+			{
+				case 0:
+					ArtemisIntegration.triggerCustomEvent ("cityLights", "#FF31A2FD", curBeat);
+				case 1:
+					ArtemisIntegration.triggerCustomEvent ("cityLights", "#FF31FD8C", curBeat);
+				case 2:
+					ArtemisIntegration.triggerCustomEvent ("cityLights", "#FFFB33F5", curBeat);
+				case 3:
+					ArtemisIntegration.triggerCustomEvent ("cityLights", "#FFFD4531", curBeat);
+				case 4:
+					ArtemisIntegration.triggerCustomEvent ("cityLights", "#FFFBA633", curBeat);
+			}
+			#end
 		}
 	}
 
@@ -139,6 +156,9 @@ class Philly extends BaseStage
 								who.color = FlxColor.WHITE;
 							}
 							phillyStreet.color = FlxColor.WHITE;
+							#if sys
+							ArtemisIntegration.setBlammedLights (StringTools.hex (FlxColor.BLACK));
+							#end
 						}
 
 					case 1: //turn on
@@ -184,6 +204,10 @@ class Philly extends BaseStage
 
 						color.brightness *= 0.5;
 						phillyStreet.color = color;
+
+						#if sys
+						ArtemisIntegration.setBlammedLights (StringTools.hex (color));
+						#end
 
 					case 2: // spawn particles
 						if(!ClientPrefs.data.lowQuality)

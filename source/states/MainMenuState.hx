@@ -86,6 +86,11 @@ class MainMenuState extends MusicBeatState
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
+		#if sys
+		ArtemisIntegration.setGameState ("menu");
+		ArtemisIntegration.resetModName ();
+		#end
+
 		checker = new FlxBackdrop(Paths.image('mainmenu/Main_Checker'), XY, Std.int(0.2), Std.int(0.2));
 
 		debugKeys = ClientPrefs.keyBinds.get('debug_1').copy();
@@ -112,6 +117,10 @@ class MainMenuState extends MusicBeatState
 		bg.screenCenter();
 		bg.antialiasing = ClientPrefs.data.globalAntialiasing;
 		add(bg);
+
+		#if sys
+		ArtemisIntegration.setBackgroundColor (StringTools.hex(bg.color));
+		#end
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		add(camFollow);

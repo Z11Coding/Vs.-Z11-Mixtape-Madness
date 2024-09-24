@@ -40,6 +40,7 @@ import backend.MusicBeatState;
 import backend.MusicBeatSubstate;
 import backend.CustomFadeTransition;
 import backend.TransitionState;
+import backend.ArtemisIntegration;
 import backend.Language;
 
 import backend.util.ColorUtil; //Thanks, Jack Bass. Very Cool

@@ -79,6 +79,9 @@ class Spooky extends BaseStage
 		}
 
 		if(ClientPrefs.data.flashing) {
+			#if sys
+			ArtemisIntegration.triggerFlash ("#FFFFFFEF");
+			#end
 			halloweenWhite.alpha = 0.4;
 			FlxTween.tween(halloweenWhite, {alpha: 0.5}, 0.075);
 			FlxTween.tween(halloweenWhite, {alpha: 0}, 0.25, {startDelay: 0.15});

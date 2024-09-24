@@ -48,6 +48,7 @@ import states.FirstCheckState;
 	public var noteOffset:Int = 0;
 	public var progression:Int = 0;
 	public var videoPreload2:Bool = false;
+	public var enableArtemis:Bool = false;
 	public var arrowHSV:Array<Array<Int>> = [
 		[0, 0, 0], [0, 0, 0], 
 		[0, 0, 0], [0, 0, 0], 

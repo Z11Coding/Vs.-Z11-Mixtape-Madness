@@ -6,6 +6,7 @@ import flixel.input.keyboard.FlxKey;
 import states.UpdateState;
 import flixel.ui.FlxBar;
 import openfl.system.System;
+import lime.app.Application;
 class FirstCheckState extends MusicBeatState
 {
 	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
@@ -50,6 +51,21 @@ class FirstCheckState extends MusicBeatState
 		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
 
 		Highscore.load();
+
+		#if sys
+		ArtemisIntegration.initialize();
+		ArtemisIntegration.setGameState ("title");
+		ArtemisIntegration.resetModName ();
+		ArtemisIntegration.setFadeColor ("#FF000000");
+		ArtemisIntegration.sendProfileRelativePath ("assets/artemis/modpack-mixup.json");
+		ArtemisIntegration.resetAllFlags ();
+		ArtemisIntegration.autoUpdateControls ();
+		Application.current.onExit.add (function (exitCode) {
+			ArtemisIntegration.setBackgroundColor ("#00000000");
+			ArtemisIntegration.setGameState ("closed");
+			ArtemisIntegration.resetModName ();
+		});
+		#end
 
 		super.create();
 

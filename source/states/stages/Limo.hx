@@ -109,6 +109,9 @@ class Limo extends BaseStage
 							switch(i) {
 								case 0 | 3:
 									if(i == 0) FlxG.sound.play(Paths.sound('dancerdeath'), 0.5);
+									#if sys
+									ArtemisIntegration.triggerFlash ("#AFFF0000");
+									#end
 
 									var diffStr:String = i == 3 ? ' 2 ' : ' ';
 									var particle:BGSprite = new BGSprite('stages/limo/gore/noooooo', dancers[i].x + 200, dancers[i].y, 0.4, 0.4, ['hench leg spin' + diffStr + 'PINK'], false);
