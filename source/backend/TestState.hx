@@ -7,7 +7,11 @@ import objects.Character;
 
 import states.MainMenuState;
 import states.FreeplayState;
-@:build(backend.macros.FlxStateMacro.build())
+
+// import ct.CompileTime;
+
+import StateMap;
+// @:build(backend.macros.FlxStateMacro.build())
 class TestState extends MusicBeatState
 {
     public static var stateOptions:Array<String>;
@@ -23,10 +27,18 @@ class TestState extends MusicBeatState
 
     override function create()
     {
+        // ct.CompileTimeClassList.initialise();
+        // for (musicalState in CompileTime.getAllClasses(MusicBeatState))
+        // {
+        //    var name = (Type.getClassName(Type.getClass(FlxG.state)).split(".")[Lambda.count(Type.getClassName(Type.getClass(FlxG.state)).split(".")) - 1]);
+        //     stateMap.set(name, musicalState);
+        // }
+
+        stateMap = StateMap.getAllFlxStateClasses();
         FlxG.camera.bgColor = FlxColor.BLACK;
         #if DISCORD_ALLOWED
         // Updating Discord Rich Presence
-        DiscordClient.changePresence("Editors Main Menu", null);
+        DiscordClient.changePresence("Debug Menu", null);
         #end
 
         var bg:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
@@ -36,6 +48,12 @@ class TestState extends MusicBeatState
 
         grpTexts = new FlxTypedGroup<Alphabet>();
         add(grpTexts);
+
+        for (state in stateMap.keys())
+        {
+            stateOptions.push(state);
+        }
+
 
         options = stateOptions;
 

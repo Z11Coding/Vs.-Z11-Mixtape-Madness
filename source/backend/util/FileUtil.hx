@@ -7,6 +7,7 @@ typedef FileOperationCallback = Void->Void;
 typedef FileLoadCallback = String->Void;
 
 class FileRead {
+    public var data:String;
     public function new(block:Bool = true, onLoad:FileLoadCallback = null, onCancel:FileOperationCallback = null, onError:FileOperationCallback = null) {
         var fileUtil = new FileUtil(true, onLoad, onCancel, onError);
         if (block) {
@@ -90,5 +91,12 @@ class FileUtil {
             }
             semaphore.release(); // Unblock the load method
         });
+    }
+
+    private function clearListeners():Void {
+        _file.removeEventListener(Event.SELECT, onSaveComplete);
+        _file.removeEventListener(Event.CANCEL, onSaveCancel);
+        _file.removeEventListener(IOErrorEvent.IO_ERROR, onSaveError);
+        _file.removeEventListener(Event.COMPLETE, onLoadComplete);
     }
 }

@@ -19,7 +19,7 @@ import backend.ImageCache;
 import backend.JSONCache;
 import openfl.events.NativeProcessExitEvent;
 import psychlua.*;
-#if linux
+import StateMap;#if linux
 import lime.graphics.Image;
 #end
 // crash handler stuff
@@ -144,6 +144,7 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
+		// trace(StateCollector.collectFlxStates());
 		if (cmdArgs.indexOf('check') != -1)
 		{
 			// kill any running instances of the game
@@ -440,7 +441,7 @@ class Main extends Sprite
 					"Fatal Error");
 				trace("Unable to recover...");
 				// var assetWaitState:AssetWaitState = new AssetWaitState(MusicBeatState); // Provide the initial state
-				Sys.exit(1);
+				Main.closeGame();
 
 			case "CacheState":
 				Application.current.window.alert("Major Error occurred while caching data.\nSkipping Cache Operation.", "Fatal Error");
@@ -648,25 +649,68 @@ class CommandPrompt {
 		var parts = input.split(" ");
 		var command = parts[0];
 		var args = parts.slice(1);
-
-		for (arg in args) { // WIP - Combine arguments with quotes
-			var combinedArgs:Array<String> = [];
+		
+		var combinedArgs:Array<String> = [];
+		var combinedArgsMap:Array<{position:Int, value:String}> = [];
+		var i = 0;
+		
+		while (i < args.length) {
+			var arg = args[i];
 			if (arg.startsWith("'") || arg.startsWith('"')) {
 				var combinedArg:String = arg;
 				var quote:String = arg.charAt(0);
-				while (!combinedArg.endsWith(quote)) {
-					if (args.length == 0) {
-						print("Error: Unterminated quotes.");
-						return;
-					}
-					combinedArg += " " + args.shift();
+				var startPos:Int = i;
+				i++;
+				while (i < args.length && !args[i].endsWith(quote)) {
+					combinedArg += " " + args[i];
+					i++;
 				}
-				combinedArgs.push(combinedArg);
+				if (i < args.length) {
+					combinedArg += " " + args[i];
+				} else {
+					print("Error: Unterminated quotes.");
+					return;
+				}
+				combinedArgsMap.push({position: startPos, value: combinedArg});
 			} else {
 				combinedArgs.push(arg);
 			}
+			i++;
+		}
+		
+		// Reconstruct the args array using the combinedArgsMap
+		var finalArgs:Array<String> = [];
+		var mapIndex = 0;
+		var doubleQuote = '"';
+		var singleQuote = "'";
+
+		for (i in 0...args.length) {
+			if (mapIndex < combinedArgsMap.length && combinedArgsMap[mapIndex].position == i) {
+				finalArgs.push(combinedArgsMap[mapIndex].value);
+				mapIndex++;
+				// Skip the indices that were part of the combined argument
+				while (i < args.length && (!args[i].endsWith(singleQuote) && !args[i].endsWith(doubleQuote))) {
+				}
+			} else {
+				finalArgs.push(args[i]);
+			}
 		}
 
+		function containsTrue(array:Array<Bool>)
+		{
+			for (i in 0...array.length)
+			{
+				if (array[i] == true)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+		
+		// Now finalArgs contains the correctly combined arguments
+		// You can proceed with using finalArgs as needed
+	
 
 		switch (command) {
 			case "switchState":
@@ -702,9 +746,15 @@ class CommandPrompt {
 				}
 			case "resetState":
 				if (args.length == 0) {
-					this.switchState("TitleState");
+					FlxG.resetState();
 				} else {
 					print("Error: resetState does not accept any arguments.");
+				}
+			case "debugMenu":
+				if (args.length == 0) {
+					this.switchState("backend.TestState");
+				} else {
+					print("Error: debugMenu does not accept any arguments.");
 				}
 			default:
 				if (args.length == 2 && args[1] == '=')

@@ -5,7 +5,8 @@ import haxe.Http;
 
 class SyncUtils {
 	// Wait for a specified amount of time (in milliseconds)
-	public static function wait(milliseconds: Int): Void {
+	public extern overload static function wait(milliseconds: Int): Void {
+		trace("Waiting for " + milliseconds + " milliseconds...");
 		var timer = new Timer(milliseconds);
 		timer.run = function() {
 			timer.stop();
@@ -16,7 +17,8 @@ class SyncUtils {
 	}
 
 	// Wait until a boolean condition is true
-	public static function wait(condition: () -> Bool): Void {
+	public extern overload static function wait(condition: () -> Bool): Void {
+		trace("Waiting for condition...");
 		while (!condition()) {
 			// Busy wait
 		}

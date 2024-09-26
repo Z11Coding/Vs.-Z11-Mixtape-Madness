@@ -36,6 +36,11 @@ class MemoryManager {
         }
     }
 
+    public function isInUse(asset:Dynamic):Bool {
+        // Implement logic to check if asset is in use
+        return asset.isSprite() && asset.visible;
+    }
+
     public function isSprite(asset:Dynamic):Bool {
         if (Std.is(asset, FlxSprite)) {
             return true;
