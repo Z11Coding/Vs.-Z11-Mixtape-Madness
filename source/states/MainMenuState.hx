@@ -37,6 +37,7 @@ class MainMenuState extends MusicBeatState
 	public static var beta:Bool = false;
 	public static var curSelected:Int = 0;
 	public static var curColumn:MainMenuColumn = CENTER;
+	public static var secretOverride:String = null;
 	var allowMouse:Bool = true; //Turn this off to block mouse movement in menus
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -245,9 +246,14 @@ class MainMenuState extends MusicBeatState
 
 		trace(hh);
 
-		if (Achievements.isUnlocked('secretsuntold') && (FlxG.save.data.menuLocks != null && FlxG.save.data.menuLocks[3] == false)) 
-			h = ChanceSelector.selectOption(hh);
-		else h = 'nothing';
+		if (Achievements.isUnlocked('secretsuntold') && (FlxG.save.data.menuLocks != null && FlxG.save.data.menuLocks[3] == false)) {
+			if (secretOverride != null) 
+				h = secretOverride;
+			else 
+				h = ChanceSelector.selectOption(hh);
+		} else {
+			h = 'nothing';
+		}
 		
 		trace(h);
 

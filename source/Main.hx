@@ -756,6 +756,14 @@ class CommandPrompt {
 				} else {
 					print("Error: debugMenu does not accept any arguments.");
 				}
+			case "forceSecret":
+				if (args.length == 1) {
+					states.MainMenuState.secretOverride = args[0];
+					this.switchState("states.MainMenuState");
+				} else {
+					print("Error: forceSecret requires exactly one argument.");
+				}
+
 			default:
 				if (args.length == 2 && args[1] == '=')
 				{varChange(args[0], args[2]);}
