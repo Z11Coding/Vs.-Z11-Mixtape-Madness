@@ -2,10 +2,7 @@
 	"animations": [
 		{
 			"loop": false,
-			"offsets": [
-				-5,
-				-1
-			],
+			"offsets": [-5, -1],
 			"anim": "idle",
 			"fps": 24,
 			"name": "BF idle dance",
@@ -13,10 +10,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-39,
-				19
-			],
+			"offsets": [-39, 19],
 			"anim": "singLEFTmiss",
 			"fps": 24,
 			"name": "BF NOTE LEFT MISS",
@@ -24,10 +18,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-15,
-				-19
-			],
+			"offsets": [-15, -19],
 			"anim": "singDOWNmiss",
 			"fps": 24,
 			"name": "BF NOTE DOWN MISS",
@@ -35,10 +26,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-3,
-				26
-			],
+			"offsets": [-3, 26],
 			"anim": "singUPmiss",
 			"fps": 24,
 			"name": "BF NOTE UP MISS",
@@ -46,10 +34,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				38,
-				21
-			],
+			"offsets": [38, 21],
 			"anim": "singRIGHTmiss",
 			"fps": 24,
 			"name": "BF NOTE RIGHT MISS",
@@ -57,10 +42,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-3,
-				5
-			],
+			"offsets": [-3, 5],
 			"anim": "hey",
 			"fps": 24,
 			"name": "BF HEY",
@@ -68,20 +50,14 @@
 		},
 		{
 			"loop": true,
-			"offsets": [
-				-4,
-				0
-			],
+			"offsets": [-4, 0],
 			"anim": "scared",
 			"fps": 24,
 			"name": "BF idle shaking",
 			"indices": []
 		},
 		{
-			"offsets": [
-				-38,
-				-8
-			],
+			"offsets": [-38, -8],
 			"loop": false,
 			"fps": 24,
 			"anim": "singW",
@@ -89,10 +65,7 @@
 			"name": "BF NOTE W0"
 		},
 		{
-			"offsets": [
-				-27,
-				-50
-			],
+			"offsets": [-27, -50],
 			"loop": false,
 			"fps": 24,
 			"anim": "singS",
@@ -100,10 +73,7 @@
 			"name": "BF NOTE S0"
 		},
 		{
-			"offsets": [
-				3,
-				29
-			],
+			"offsets": [3, 29],
 			"loop": false,
 			"fps": 24,
 			"anim": "singN",
@@ -111,10 +81,7 @@
 			"name": "BF NOTE N0"
 		},
 		{
-			"offsets": [
-				34,
-				-7
-			],
+			"offsets": [34, -7],
 			"loop": false,
 			"fps": 24,
 			"anim": "singE",
@@ -122,10 +89,7 @@
 			"name": "BF NOTE E0"
 		},
 		{
-			"offsets": [
-				-37,
-				-29
-			],
+			"offsets": [-37, -29],
 			"loop": false,
 			"fps": 24,
 			"anim": "singWS",
@@ -133,10 +97,7 @@
 			"name": "BF NOTE WS0"
 		},
 		{
-			"offsets": [
-				9,
-				-25
-			],
+			"offsets": [9, -25],
 			"loop": false,
 			"fps": 24,
 			"anim": "singSE",
@@ -144,10 +105,7 @@
 			"name": "BF NOTE SE0"
 		},
 		{
-			"offsets": [
-				31,
-				16
-			],
+			"offsets": [31, 16],
 			"loop": false,
 			"fps": 24,
 			"anim": "singNE",
@@ -155,10 +113,7 @@
 			"name": "BF NOTE NE0"
 		},
 		{
-			"offsets": [
-				-17,
-				16
-			],
+			"offsets": [-17, 16],
 			"loop": false,
 			"fps": 24,
 			"anim": "singNW",
@@ -166,10 +121,7 @@
 			"name": "BF NOTE NW0"
 		},
 		{
-			"offsets": [
-				-5,
-				-4
-			],
+			"offsets": [-5, -4],
 			"loop": false,
 			"fps": 24,
 			"anim": "singWE",
@@ -177,10 +129,7 @@
 			"name": "BF NOTE WE0"
 		},
 		{
-			"offsets": [
-				-8,
-				-1
-			],
+			"offsets": [-8, -1],
 			"loop": false,
 			"fps": 24,
 			"anim": "singNS",
@@ -188,10 +137,7 @@
 			"name": "BF NOTE NS0"
 		},
 		{
-			"offsets": [
-				21,
-				-5
-			],
+			"offsets": [21, -5],
 			"loop": false,
 			"fps": 24,
 			"anim": "singNSE",
@@ -199,10 +145,7 @@
 			"name": "BF NOTE NSE0"
 		},
 		{
-			"offsets": [
-				9,
-				23
-			],
+			"offsets": [9, 23],
 			"loop": false,
 			"fps": 24,
 			"anim": "singWNE",
@@ -210,10 +153,7 @@
 			"name": "BF NOTE WNE0"
 		},
 		{
-			"offsets": [
-				-31,
-				-37
-			],
+			"offsets": [-31, -37],
 			"loop": false,
 			"fps": 24,
 			"anim": "singWSE",
@@ -221,10 +161,7 @@
 			"name": "BF NOTE WSE0"
 		},
 		{
-			"offsets": [
-				-29,
-				-3
-			],
+			"offsets": [-29, -3],
 			"loop": false,
 			"fps": 24,
 			"anim": "singWNS",
@@ -232,10 +169,7 @@
 			"name": "BF NOTE WNS0"
 		},
 		{
-			"offsets": [
-				-5,
-				1
-			],
+			"offsets": [-5, 1],
 			"loop": false,
 			"fps": 24,
 			"anim": "singNSWE",
@@ -243,23 +177,16 @@
 			"name": "BF NOTE NSWE"
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Boyfriend",
 	"image": "characters/bf-multi",
-	"position": [
-		0,
-		350
-	],
+	"position": [0, 350],
 	"healthicon": "bf",
 	"flip_x": true,
-	"healthbar_colors": [
-		49,
-		176,
-		209
-	],
-	"camera_position": [
-		0,
-		0
-	],
+	"healthbar_colors": [49, 176, 209],
+	"camera_position": [0, 0],
 	"sing_duration": 4,
-	"scale": 1
+	"scale": 1,
+	"_editor_isPlayer": false
 }

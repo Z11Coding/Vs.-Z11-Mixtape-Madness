@@ -831,7 +831,7 @@ class MainMenuState extends MusicBeatState
 		switch (daChoice)
 		{
 			case 'freeplay':
-				TransitionState.transitionState(CategoryState, {transitionType: "transparent fade"});
+				TransitionState.transitionState(CategoryState, {transitionType: "stickers"});
 			case 'socials':
 				MusicBeatState.switchState(new SocialsState());
 			#if MODS_ALLOWED

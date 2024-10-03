@@ -1,10 +1,7 @@
 {
 	"animations": [
 		{
-			"offsets": [
-				0,
-				0
-			],
+			"offsets": [0, 0],
 			"loop": false,
 			"fps": 24,
 			"anim": "idle",
@@ -12,10 +9,7 @@
 			"name": "idle"
 		},
 		{
-			"offsets": [
-				6,
-				-13
-			],
+			"offsets": [6, -13],
 			"loop": false,
 			"fps": 24,
 			"anim": "singLEFT",
@@ -23,10 +17,7 @@
 			"name": "left"
 		},
 		{
-			"offsets": [
-				-12,
-				-23
-			],
+			"offsets": [-12, -23],
 			"loop": false,
 			"fps": 24,
 			"anim": "singDOWN",
@@ -34,10 +25,7 @@
 			"name": "down"
 		},
 		{
-			"offsets": [
-				5,
-				-31
-			],
+			"offsets": [5, -31],
 			"loop": false,
 			"fps": 24,
 			"anim": "singUP",
@@ -45,10 +33,7 @@
 			"name": "up"
 		},
 		{
-			"offsets": [
-				-7,
-				-26
-			],
+			"offsets": [-7, -26],
 			"loop": false,
 			"fps": 24,
 			"anim": "singRIGHT",
@@ -56,23 +41,16 @@
 			"name": "right"
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Zenetta (Mio)",
 	"image": "characters/mio_assets",
-	"position": [
-		-200,
-		-450
-	],
+	"position": [-200, -450],
 	"healthicon": "mio",
 	"flip_x": false,
-	"healthbar_colors": [
-		255,
-		220,
-		122
-	],
-	"camera_position": [
-		310,
-		450
-	],
+	"healthbar_colors": [255, 220, 122],
+	"camera_position": [310, 450],
 	"sing_duration": 6.1,
-	"scale": 0.4
+	"scale": 0.4,
+	"_editor_isPlayer": false
 }

@@ -1,79 +1,55 @@
 {
 	"animations": [
 		{
+			"offsets": [-5, 0],
 			"loop": false,
-			"offsets": [
-				-5,
-				0
-			],
+			"fps": 24,
 			"anim": "idle",
-			"fps": 24,
-			"name": "idle",
-			"indices": []
+			"indices": [],
+			"name": "idle"
 		},
 		{
+			"offsets": [24, 9],
 			"loop": false,
-			"offsets": [
-				24,
-				9
-			],
+			"fps": 24,
 			"anim": "singLEFT",
-			"fps": 24,
-			"name": "left",
-			"indices": []
+			"indices": [],
+			"name": "left"
 		},
 		{
+			"offsets": [-20, 2],
 			"loop": false,
-			"offsets": [
-				-20,
-				2
-			],
+			"fps": 24,
 			"anim": "singDOWN",
-			"fps": 24,
-			"name": "down",
-			"indices": []
+			"indices": [],
+			"name": "down"
 		},
 		{
+			"offsets": [-24, 22],
 			"loop": false,
-			"offsets": [
-				-24,
-				22
-			],
+			"fps": 24,
 			"anim": "singUP",
-			"fps": 24,
-			"name": "up",
-			"indices": []
+			"indices": [],
+			"name": "up"
 		},
 		{
+			"offsets": [-42, -2],
 			"loop": false,
-			"offsets": [
-				-42,
-				-2
-			],
-			"anim": "singRIGHT",
 			"fps": 24,
-			"name": "right",
-			"indices": []
+			"anim": "singRIGHT",
+			"indices": [],
+			"name": "right"
 		}
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Zeventeen",
 	"image": "characters/11",
-	"position": [
-		40,
-		220
-	],
+	"position": [40, 220],
 	"healthicon": "Z_icon",
 	"flip_x": false,
-	"healthbar_colors": [
-		175,
-		102,
-		206
-	],
-	"camera_position": [
-		-160,
-		-80
-	],
+	"healthbar_colors": [175, 102, 206],
+	"camera_position": [-160, -80],
 	"sing_duration": 6.1,
 	"scale": 1.4,
 	"_editor_isPlayer": false

@@ -123,6 +123,7 @@
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Boyfriend",
 	"image": "characters/BOYFRIEND",
 	"position": [90, 410],
 	"healthicon": "bf",

@@ -75,6 +75,7 @@
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Ohagi",
 	"image": "characters/ohagi_p2",
 	"position": [-180, -150],
 	"healthicon": "icons-ohagi",

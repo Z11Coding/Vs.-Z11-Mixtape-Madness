@@ -2,10 +2,7 @@
 	"animations": [
 		{
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"offsets": [0, 0],
 			"anim": "idle",
 			"fps": 24,
 			"name": "idle",
@@ -13,10 +10,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-54,
-				63
-			],
+			"offsets": [-54, 63],
 			"anim": "singLEFT",
 			"fps": 24,
 			"name": "left",
@@ -24,10 +18,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-30,
-				60
-			],
+			"offsets": [-30, 60],
 			"anim": "singDOWN",
 			"fps": 24,
 			"name": "down",
@@ -35,10 +26,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-34,
-				65
-			],
+			"offsets": [-34, 65],
 			"anim": "singUP",
 			"fps": 24,
 			"name": "up",
@@ -46,10 +34,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-63,
-				80
-			],
+			"offsets": [-63, 80],
 			"anim": "singRIGHT",
 			"fps": 24,
 			"name": "right",
@@ -57,33 +42,23 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-50,
-				-10
-			],
+			"offsets": [-50, -10],
 			"anim": "attack",
 			"fps": 24,
 			"name": "hit",
 			"indices": []
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "RiceGod",
 	"image": "characters/sickman",
-	"position": [
-		0,
-		180
-	],
+	"position": [0, 180],
 	"healthicon": "ricegod",
 	"flip_x": true,
-	"healthbar_colors": [
-		255,
-		255,
-		255
-	],
-	"camera_position": [
-		0,
-		0
-	],
+	"healthbar_colors": [255, 255, 255],
+	"camera_position": [0, 0],
 	"sing_duration": 6.1,
-	"scale": 1
+	"scale": 1,
+	"_editor_isPlayer": false
 }

@@ -21,6 +21,8 @@ typedef CharacterFile = {
 	var sing_duration:Float;
 	var healthicon:String;
 
+	var score_name:String;
+
 	var position:Array<Float>;
 	var camera_position:Array<Float>;
 
@@ -53,7 +55,9 @@ class Character extends FlxSprite
 
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = DEFAULT_CHARACTER;
+	public var isMissing:Bool = false;
 
+	public var colorTween:FlxTween;
 	public var holdTimer:Float = 0;
 	public var heyTimer:Float = 0;
 	public var specialAnim:Bool = false;
@@ -63,6 +67,8 @@ class Character extends FlxSprite
 	public var idleSuffix:String = '';
 	public var danceIdle:Bool = false; //Character use "danceLeft" and "danceRight" instead of "idle"
 	public var skipDance:Bool = false;
+
+	public var scoreName:String = 'Boyfriend'; //The name for the scores in "Mixup Mode"
 
 	public var healthIcon:String = 'face';
 	public var animationsArray:Array<AnimArray> = [];
@@ -216,6 +222,7 @@ class Character extends FlxSprite
 
 		// data
 		healthIcon = json.healthicon;
+		scoreName = json.score_name;
 		singDuration = json.sing_duration;
 		flipX = (json.flip_x != isPlayer);
 		healthColorArray = (json.healthbar_colors != null && json.healthbar_colors.length > 2) ? json.healthbar_colors : [161, 161, 161];
@@ -294,7 +301,7 @@ class Character extends FlxSprite
 			specialAnim = false;
 			dance();
 		}
-		else if (getAnimationName().endsWith('miss') && isAnimationFinished())
+		else if ((getAnimationName().endsWith('miss') || isMissing) && isAnimationFinished())
 		{
 			dance();
 			finishAnimation();
@@ -454,7 +461,46 @@ class Character extends FlxSprite
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void
 	{
+		if (AnimName == null)
+			return;
+
+		colorTransform.redMultiplier = 1;
+		colorTransform.greenMultiplier = 1;
+		colorTransform.blueMultiplier = 1;
+
 		specialAnim = false;
+		isMissing = AnimName.endsWith("miss");
+
+		@:privateAccess
+		if (animation._animations.get(AnimName) == null) {
+			if (AnimName.endsWith("-alt")) {
+				AnimName = AnimName.substring(0, AnimName.length - "-alt".length);
+			}
+
+			if (AnimName.endsWith("miss")) {
+				AnimName = AnimName.substring(0, AnimName.length - "miss".length);
+				colorTransform.redMultiplier = 0.5;
+				colorTransform.greenMultiplier = 0.3;
+				colorTransform.blueMultiplier = 0.5;
+			}
+
+			if (AnimName == "taunt") {
+				AnimName = "hey";
+			}
+
+			if (AnimName == "hey" && curCharacter.startsWith("tankman") && animation._animations.get(AnimName) == null) {
+				AnimName = "singUP-alt";
+			}
+
+			if (animation._animations.get(AnimName) == null) {
+				if (AnimName == "hey") {
+					specialAnim = false;
+					heyTimer = 0;
+				}
+				return;
+			}
+		}
+
 		if(!isAnimateAtlas)
 		{
 			animation.play(AnimName, Force, Reversed, Frame);
@@ -466,12 +512,12 @@ class Character extends FlxSprite
 		}
 		_lastPlayedAnimation = AnimName;
 
-		if (hasAnimation(AnimName))
-		{
-			var daOffset = animOffsets.get(AnimName);
+		var daOffset = animOffsets.get(AnimName);
+		if (animOffsets.exists(AnimName)) {
 			offset.set(daOffset[0], daOffset[1]);
 		}
-		//else offset.set(0, 0);
+		else
+			offset.set(0, 0);
 
 		if (curCharacter.startsWith('gf-') || curCharacter == 'gf')
 		{

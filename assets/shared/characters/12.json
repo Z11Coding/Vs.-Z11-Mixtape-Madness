@@ -1,79 +1,55 @@
 {
 	"animations": [
 		{
-			"offsets": [
-				-20,
-				5
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [-20, 5],
 			"anim": "idle",
-			"indices": [],
-			"name": "idle"
+			"fps": 24,
+			"name": "idle",
+			"indices": []
 		},
 		{
-			"offsets": [
-				11,
-				14
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [11, 14],
 			"anim": "singLEFT",
-			"indices": [],
-			"name": "left"
+			"fps": 24,
+			"name": "left",
+			"indices": []
 		},
 		{
-			"offsets": [
-				40,
-				-18
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [40, -18],
 			"anim": "singDOWN",
-			"indices": [],
-			"name": "down"
+			"fps": 24,
+			"name": "down",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-22,
-				14
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [-22, 14],
 			"anim": "singUP",
-			"indices": [],
-			"name": "up"
+			"fps": 24,
+			"name": "up",
+			"indices": []
 		},
 		{
-			"offsets": [
-				-34,
-				14
-			],
 			"loop": false,
-			"fps": 24,
+			"offsets": [-34, 14],
 			"anim": "singRIGHT",
-			"indices": [],
-			"name": "right"
+			"fps": 24,
+			"name": "right",
+			"indices": []
 		}
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Zeonette",
 	"image": "characters/12",
-	"position": [
-		100,
-		120
-	],
+	"position": [100, 120],
 	"healthicon": "z12",
 	"flip_x": false,
-	"healthbar_colors": [
-		255,
-		255,
-		255
-	],
-	"camera_position": [
-		-160,
-		-80
-	],
+	"healthbar_colors": [255, 255, 255],
+	"camera_position": [-160, -80],
 	"sing_duration": 6.1,
 	"scale": 1.4,
 	"_editor_isPlayer": false

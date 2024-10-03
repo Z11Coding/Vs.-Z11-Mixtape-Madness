@@ -83,6 +83,7 @@
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Cassette Girl",
 	"image": "characters/cassetteGirl",
 	"position": [0, 60],
 	"healthicon": "cg",

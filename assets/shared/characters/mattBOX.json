@@ -2,10 +2,7 @@
 	"animations": [
 		{
 			"loop": true,
-			"offsets": [
-				3,
-				-255
-			],
+			"offsets": [3, -255],
 			"anim": "idle",
 			"fps": 24,
 			"name": "matt idle",
@@ -13,10 +10,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				20,
-				-289
-			],
+			"offsets": [20, -289],
 			"anim": "punchDOWN",
 			"fps": 24,
 			"name": "matt down note",
@@ -24,10 +18,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				20,
-				-266
-			],
+			"offsets": [20, -266],
 			"anim": "punchLEFT",
 			"fps": 24,
 			"name": "matt left note",
@@ -35,10 +26,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				20,
-				-255
-			],
+			"offsets": [20, -255],
 			"anim": "punchRIGHT",
 			"fps": 24,
 			"name": "matt right note",
@@ -46,10 +34,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				28,
-				-263
-			],
+			"offsets": [28, -263],
 			"anim": "punchUP",
 			"fps": 24,
 			"name": "matt up note",
@@ -57,10 +42,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				0,
-				-260
-			],
+			"offsets": [0, -260],
 			"anim": "blockDOWN",
 			"fps": 24,
 			"name": "matt block down",
@@ -68,10 +50,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				0,
-				-260
-			],
+			"offsets": [0, -260],
 			"anim": "blockLEFT",
 			"fps": 24,
 			"name": "matt block left",
@@ -79,10 +58,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				0,
-				-260
-			],
+			"offsets": [0, -260],
 			"anim": "blockRIGHT",
 			"fps": 24,
 			"name": "matt block right",
@@ -90,10 +66,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				0,
-				-260
-			],
+			"offsets": [0, -260],
 			"anim": "blockUP",
 			"fps": 24,
 			"name": "matt block up",
@@ -101,10 +74,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				131,
-				-238
-			],
+			"offsets": [131, -238],
 			"anim": "parry",
 			"fps": 24,
 			"name": "matt parry",
@@ -112,10 +82,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				29,
-				-244
-			],
+			"offsets": [29, -244],
 			"anim": "stand",
 			"fps": 24,
 			"name": "matt stando pose",
@@ -123,10 +90,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				2,
-				-270
-			],
+			"offsets": [2, -270],
 			"anim": "prepare",
 			"fps": 16,
 			"name": "proj throw",
@@ -134,33 +98,23 @@
 		},
 		{
 			"loop": true,
-			"offsets": [
-				125,
-				-141
-			],
+			"offsets": [125, -141],
 			"anim": "ora",
 			"fps": 24,
 			"name": "ora",
 			"indices": []
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Matt",
 	"image": "characters/mattangrybox",
-	"position": [
-		0,
-		0
-	],
+	"position": [0, 0],
 	"healthicon": "gf",
 	"flip_x": false,
-	"healthbar_colors": [
-		200,
-		80,
-		0
-	],
-	"camera_position": [
-		-20,
-		260
-	],
+	"healthbar_colors": [200, 80, 0],
+	"camera_position": [-20, 260],
 	"sing_duration": 6.1,
-	"scale": 1
+	"scale": 1,
+	"_editor_isPlayer": false
 }

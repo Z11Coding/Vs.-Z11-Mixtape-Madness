@@ -1,37 +1,15 @@
 {
 	"animations": [
 		{
-			"offsets": [
-				0,
-				0
-			],
+			"offsets": [0, 0],
 			"loop": false,
 			"fps": 24,
 			"anim": "danceLeft",
-			"indices": [
-				0,
-				1,
-				2,
-				3,
-				4,
-				5,
-				6,
-				7,
-				8,
-				9,
-				10,
-				11,
-				12,
-				13,
-				14
-			],
+			"indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14],
 			"name": "idle"
 		},
 		{
-			"offsets": [
-				6,
-				54
-			],
+			"offsets": [6, 54],
 			"loop": false,
 			"fps": 24,
 			"anim": "danceRight",
@@ -39,10 +17,7 @@
 			"name": "idle alt"
 		},
 		{
-			"offsets": [
-				1,
-				5
-			],
+			"offsets": [1, 5],
 			"loop": false,
 			"fps": 24,
 			"anim": "singLEFT",
@@ -50,10 +25,7 @@
 			"name": "left0"
 		},
 		{
-			"offsets": [
-				-38,
-				-33
-			],
+			"offsets": [-38, -33],
 			"loop": false,
 			"fps": 24,
 			"anim": "singRIGHT",
@@ -61,10 +33,7 @@
 			"name": "right0"
 		},
 		{
-			"offsets": [
-				-29,
-				-40
-			],
+			"offsets": [-29, -40],
 			"loop": false,
 			"fps": 24,
 			"anim": "singDOWN",
@@ -72,10 +41,7 @@
 			"name": "down0"
 		},
 		{
-			"offsets": [
-				49,
-				-26
-			],
+			"offsets": [49, -26],
 			"loop": false,
 			"fps": 24,
 			"anim": "singUP",
@@ -83,10 +49,7 @@
 			"name": "up0"
 		},
 		{
-			"offsets": [
-				20,
-				32
-			],
+			"offsets": [20, 32],
 			"loop": false,
 			"fps": 24,
 			"anim": "singLEFT-alt",
@@ -94,10 +57,7 @@
 			"name": "left alt"
 		},
 		{
-			"offsets": [
-				-11,
-				-8
-			],
+			"offsets": [-11, -8],
 			"loop": false,
 			"fps": 24,
 			"anim": "singRIGHT-alt",
@@ -105,10 +65,7 @@
 			"name": "right alt"
 		},
 		{
-			"offsets": [
-				-18,
-				-21
-			],
+			"offsets": [-18, -21],
 			"loop": false,
 			"fps": 24,
 			"anim": "singDOWN-alt",
@@ -116,10 +73,7 @@
 			"name": "down alt"
 		},
 		{
-			"offsets": [
-				64,
-				-12
-			],
+			"offsets": [64, -12],
 			"loop": false,
 			"fps": 24,
 			"anim": "singUP-alt",
@@ -127,23 +81,16 @@
 			"name": "up alt"
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Zenetta",
 	"image": "characters/Zenetta_assets",
-	"position": [
-		0,
-		0
-	],
+	"position": [0, 0],
 	"healthicon": "z12",
 	"flip_x": false,
-	"healthbar_colors": [
-		235,
-		135,
-		0
-	],
-	"camera_position": [
-		80,
-		40
-	],
+	"healthbar_colors": [235, 135, 0],
+	"camera_position": [80, 40],
 	"sing_duration": 6.1,
-	"scale": 1
+	"scale": 1,
+	"_editor_isPlayer": false
 }

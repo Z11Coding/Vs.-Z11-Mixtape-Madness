@@ -138,6 +138,27 @@ class OtherSettingsSubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
+		var option:Option = new Option('Mix-Up Mode',
+			"Have you ever hear of Funky Friday/Friday Night Bloxin'?\nWell is essentially that, except it's single player.",
+			'mixupMode',
+			'bool');
+		addOption(option);
+
+		var option:Option = new Option('Opp. Difficulty',
+			"ONLY WORKS IF MIX-UP MODE IS ON!!!\nSet the level of how badly the opponent beats your butt.",
+			'aiDifficulty',
+			'string', 
+			[
+			"Baby Mode",
+			"Easier",
+			"Normal",
+			"Harder",
+			"Hardest",
+			"Average FNF Player",
+			"Dont"]
+		);
+		addOption(option);
+
 		var option:Option = new Option('Break The Sticker Audio',
 			"Literally just locks the sound to a funny bug I found.",
 			'audioBreak',

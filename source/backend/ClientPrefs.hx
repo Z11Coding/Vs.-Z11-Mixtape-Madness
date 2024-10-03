@@ -49,6 +49,8 @@ import states.FirstCheckState;
 	public var progression:Int = 0;
 	public var videoPreload2:Bool = false;
 	public var enableArtemis:Bool = false;
+	public var mixupMode:Bool = false;
+	public var aiDifficulty:String = 'Average FNF Player';
 	public var arrowHSV:Array<Array<Int>> = [
 		[0, 0, 0], [0, 0, 0], 
 		[0, 0, 0], [0, 0, 0], 
@@ -136,9 +138,7 @@ import states.FirstCheckState;
 		'practice' => false,
 		'botplay' => false,
 		'opponentplay' => false,
-		'gfMode' => false,
-		'aiMode' => false,
-		'aiDifficulty' => 2,
+		'gfMode' => false
 	];
 	public var inputSystem:String = 'Native';
 	public var volUp:String = 'Volup';

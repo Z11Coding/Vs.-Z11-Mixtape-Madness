@@ -99,6 +99,7 @@
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Shaggy (Retribution)",
 	"image": "characters/retrishaggy",
 	"position": [0, 0],
 	"healthicon": "retshaggy",

@@ -114,39 +114,40 @@
 		},
 		{
 			"offsets": [-61, -22],
-			"indices": [],
+			"loop": false,
 			"fps": 24,
 			"anim": "singRIGHT",
-			"loop": false,
+			"indices": [],
 			"name": "GFleft"
 		},
 		{
 			"offsets": [83, -32],
-			"indices": [],
+			"loop": false,
 			"fps": 24,
 			"anim": "singLEFT",
-			"loop": false,
+			"indices": [],
 			"name": "GFright"
 		},
 		{
 			"offsets": [-59, -10],
-			"indices": [],
+			"loop": false,
 			"fps": 24,
 			"anim": "singRIGHTmiss",
-			"loop": false,
+			"indices": [],
 			"name": "left MISS"
 		},
 		{
 			"offsets": [94, -34],
-			"indices": [],
+			"loop": false,
 			"fps": 24,
 			"anim": "singLEFTmiss",
-			"loop": false,
+			"indices": [],
 			"name": "rightMISS"
 		}
 	],
 	"vocals_file": "gf",
 	"no_antialiasing": true,
+	"score_name": "Girlfriend",
 	"image": "characters/ChibiGF-V2",
 	"position": [-50, 240],
 	"healthicon": "gfchibi",

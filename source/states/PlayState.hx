@@ -323,6 +323,8 @@ class PlayState extends MusicBeatState
 	public var songMisses:Int = 0;
 	public var gfMisses:Int = 0;
 	public var scoreTxt:FlxText;
+	public var playerScoreTxt:FlxText;
+	public var opponentScoreTxt:FlxText;
 
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
@@ -508,7 +510,7 @@ class PlayState extends MusicBeatState
 
 	// AI things. You wouldn't get it.
 	var AIMode:Bool = false;
-	var AIDifficulty:Int = 2;
+	var AIDifficulty:String = 'Average FNF Player';
 
 	// WeedEnd My Beloved
 	public var rainIntensity:Float = 0;
@@ -721,14 +723,30 @@ class PlayState extends MusicBeatState
 		chartModifier = CacheMode ? "Normal" : (ClientPrefs.getGameplaySetting('chartModifier', 'Normal') ?? "Normal");
 		trace("Chart Modifier: " + chartModifier);
 		playAsGF = ClientPrefs.getGameplaySetting('gfMode', false); // dont do it to yourself its not worth it
-		AIMode = ClientPrefs.getGameplaySetting('aiMode', false);
-		AIDifficulty = ClientPrefs.getGameplaySetting('aiDifficulty', 1);
+		AIMode = ClientPrefs.data.mixupMode;
+		AIDifficulty = ClientPrefs.data.aiDifficulty;
 		opponentmode = ClientPrefs.getGameplaySetting('opponentplay', false);
 		gimmicksAllowed = ClientPrefs.data.gimmicksAllowed;
 		guitarHeroSustains = ClientPrefs.data.guitarHeroSustains;
 
 		AIPlayer.active = AIMode;
-		AIPlayer.diff = AIDifficulty;
+		switch (AIDifficulty)
+		{
+			case 'Baby Mode':
+				AIPlayer.diff = 0;
+			case 'Easier':
+				AIPlayer.diff = 1;
+			case 'Normal':
+				AIPlayer.diff = 2;
+			case 'Harder':
+				AIPlayer.diff = 3;
+			case 'Hardest':
+				AIPlayer.diff = 4;
+			case 'Average FNF Player':
+				AIPlayer.diff = 5;
+			case 'Dont':
+				AIPlayer.diff = 6;
+		}
 
 		// var gameCam:FlxCamera = FlxG.camera;
 		camGame = initPsychCamera();
@@ -1293,7 +1311,6 @@ class PlayState extends MusicBeatState
 			healthBar.screenCenter(X);
 			healthBar.leftToRight = false;
 			healthBar.scrollFactor.set();
-			healthBar.visible = !ClientPrefs.data.hideHud;
 			healthBar.alpha = ClientPrefs.data.healthBarAlpha;
 
 			healthBar2 = new Bar(0, FlxG.height * (!ClientPrefs.data.downScroll ? 0.89 : 0.11), 'healthBar', function() return health, 0, 2);
@@ -1301,7 +1318,6 @@ class PlayState extends MusicBeatState
 			healthBar2.leftToRight = false;
 			healthBar2.barHeight = Std.int(0.5);
 			healthBar2.scrollFactor.set();
-			healthBar2.visible = !ClientPrefs.data.hideHud;
 			healthBar2.alpha = ClientPrefs.data.healthBarAlpha;
 			add(healthBar);
 			add(healthBar2);
@@ -1314,7 +1330,6 @@ class PlayState extends MusicBeatState
 
 			iconP1 = new HealthIcon(boyfriend.healthIcon, true);
 			iconP1.y = healthBar.y - 75;
-			iconP1.visible = !ClientPrefs.data.hideHud;
 			iconP1.alpha = ClientPrefs.data.healthBarAlpha;
 			add(iconP1);
 
@@ -1322,7 +1337,6 @@ class PlayState extends MusicBeatState
 			{
 				iconP12 = new HealthIcon(bf2.healthIcon, true);
 				iconP12.y = healthBar.y - 115;
-				iconP12.visible = !ClientPrefs.data.hideHud;
 				iconP12.alpha = ClientPrefs.data.healthBarAlpha;
 				add(iconP12);
 			}
@@ -1331,7 +1345,6 @@ class PlayState extends MusicBeatState
 
 			iconP2 = new HealthIcon(dad.healthIcon, false);
 			iconP2.y = healthBar.y - 75;
-			iconP2.visible = !ClientPrefs.data.hideHud;
 			iconP2.alpha = ClientPrefs.data.healthBarAlpha;
 			add(iconP2);
 
@@ -1339,7 +1352,6 @@ class PlayState extends MusicBeatState
 			{
 				iconP22 = new HealthIcon(dad2.healthIcon, false);
 				iconP22.y = healthBar.y - 115;
-				iconP22.visible = !ClientPrefs.data.hideHud;
 				iconP22.alpha = ClientPrefs.data.healthBarAlpha;
 				add(iconP22);
 			}
@@ -1350,8 +1362,24 @@ class PlayState extends MusicBeatState
 		scoreTxt.setFormat(Paths.font("FridayNightFunkin.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.25;
-		scoreTxt.visible = !ClientPrefs.data.hideHud;
+		scoreTxt.visible = !ClientPrefs.data.mixupMode && (!cpuControlled || playAsGF && !cpuControlled);
 		add(scoreTxt);
+
+		playerScoreTxt = new FlxText(0, 0, FlxG.width, "", 20);
+		playerScoreTxt.setFormat(Paths.font("comboFont.ttf"), 20, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]));
+		playerScoreTxt.scrollFactor.set();
+		playerScoreTxt.borderSize = 1.25;
+		playerScoreTxt.screenCenter(Y);
+		playerScoreTxt.visible = ClientPrefs.data.mixupMode && (!cpuControlled || playAsGF && !cpuControlled);
+		add(playerScoreTxt);
+
+		opponentScoreTxt = new FlxText(0, 0, FlxG.width, "", 20);
+		opponentScoreTxt.setFormat(Paths.font("comboFont.ttf"), 20, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
+		opponentScoreTxt.scrollFactor.set();
+		opponentScoreTxt.borderSize = 1.25;
+		opponentScoreTxt.screenCenter(Y);
+		opponentScoreTxt.visible = ClientPrefs.data.mixupMode && (!cpuControlled || playAsGF && !cpuControlled);
+		add(opponentScoreTxt);
 
 		botplayTxt = new FlxText(400, timeBar.y + 155, FlxG.width - 800, Language.getPhrase("Botplay").toUpperCase(), 32);
 		botplayTxt.setFormat(Paths.font("FridayNightFunkin.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
@@ -1371,7 +1399,6 @@ class PlayState extends MusicBeatState
 			healthBarGF.screenCenter(X);
 			healthBarGF.leftToRight = false;
 			healthBarGF.scrollFactor.set();
-			healthBarGF.visible = !ClientPrefs.data.hideHud;
 			healthBarGF.alpha = ClientPrefs.data.healthBarAlpha;
 			add(healthBarGF);
 
@@ -1379,7 +1406,6 @@ class PlayState extends MusicBeatState
 			{
 				iconGF = new HealthIcon(gf.healthIcon, true);
 				iconGF.y = healthBarGF.y - 75;
-				iconGF.visible = !ClientPrefs.data.hideHud;
 				iconGF.alpha = ClientPrefs.data.healthBarAlpha;
 				add(iconGF);
 			}
@@ -1456,33 +1482,34 @@ class PlayState extends MusicBeatState
 
 		if (!CacheMode)
 		{
-		if (!playAsGF)
-		{
-			playerField.cameras = [camHUD];
-			dadField.cameras = [camHUD];
-			playfields.cameras = [camHUD];
-			strumLineNotes.cameras = [camHUD];
-				if (notes != null) notes.cameras = [camHUD];
-			healthBar.cameras = [camHUD];
-			healthBar2.cameras = [camHUD];
-			iconP1.cameras = [camHUD];
-			iconP2.cameras = [camHUD];
-			if (iconP12 != null)
-				iconP12.cameras = [camHUD];
-			if (dad2 != null)
-				iconP22.cameras = [camHUD];
+			if (!playAsGF)
+			{
+				playerField.cameras = [camHUD];
+				dadField.cameras = [camHUD];
+				playfields.cameras = [camHUD];
+				strumLineNotes.cameras = [camHUD];
+					if (notes != null) notes.cameras = [camHUD];
+				healthBar.cameras = [camHUD];
+				healthBar2.cameras = [camHUD];
+				iconP1.cameras = [camHUD];
+				iconP2.cameras = [camHUD];
+				if (iconP12 != null)
+					iconP12.cameras = [camHUD];
+				if (dad2 != null)
+					iconP22.cameras = [camHUD];
+			}
+			else
+			{
+				healthBarGF.cameras = [camHUD];
+				if (gf != null)
+					iconGF.cameras = [camHUD];
+			}
 			scoreTxt.cameras = [camHUD];
-		}
-		else
-		{
-			healthBarGF.cameras = [camHUD];
-			if (gf != null)
-				iconGF.cameras = [camHUD];
-			scoreTxt.cameras = [camHUD];
-		}
-		botplayTxt.cameras = [camHUD];
-		timeBar.cameras = [camHUD];
-		timeTxt.cameras = [camHUD];
+			playerScoreTxt.cameras = [camHUD];
+			opponentScoreTxt.cameras = [camHUD];
+			botplayTxt.cameras = [camHUD];
+			timeBar.cameras = [camHUD];
+			timeTxt.cameras = [camHUD];
 		}
 
 		// if (SONG.song == 'South')
@@ -2716,9 +2743,6 @@ class PlayState extends MusicBeatState
 			str += ' (${percentAI}%) - ${ratingFCAI}';
 		}
 
-		if (!miss && !cpuControlled)
-			doScoreBop();
-
 		callOnScripts('onUpdateScoreAI', [miss]);
 	}
 
@@ -2778,6 +2802,66 @@ class PlayState extends MusicBeatState
 		}
 		#if sys
 		ArtemisIntegration.setComboType (ratingFC);
+		ArtemisIntegration.setRating (ratingPercent * 100);
+		#end
+	}
+
+	public dynamic function fullComboFunctionAI()
+	{
+		ratingFCAI = "";
+
+		if (ClientPrefs.data.useMarvs)
+		{
+			marvs = ratingsData[0].hits;
+			sicks = ratingsData[1].hits;
+			goods = ratingsData[2].hits;
+			bads = ratingsData[3].hits;
+			shits = ratingsData[4].hits;
+
+			if (AIMisses == 0)
+			{
+				if (bads > 0 || shits > 0)
+					ratingFCAI = '[Full Combo]';
+				else if (goods > 0)
+					ratingFCAI = '[Good Full Combo]';
+				else if (sicks > 0)
+					ratingFCAI = '[Sick Full Combo]';
+				else if (marvs > 0)
+					ratingFCAI = '[Marvioulus Full Combo]';
+			}
+			else
+			{
+				if (AIMisses < 10)
+					ratingFCAI = '[Single Digit Combo Break]';
+				else
+					ratingFCAI = '[Ok I guess...]';
+			}
+		}
+		else
+		{
+			sicks = ratingsData[0].hits;
+			goods = ratingsData[1].hits;
+			bads = ratingsData[2].hits;
+			shits = ratingsData[3].hits;
+			if (AIMisses == 0)
+			{
+				if (bads > 0 || shits > 0)
+					ratingFCAI = '[Full Combo]';
+				else if (goods > 0)
+					ratingFCAI = '[Good Full Combo]';
+				else if (sicks > 0)
+					ratingFCAI = '[Sick Full Combo]';
+			}
+			else
+			{
+				if (AIMisses < 10)
+					ratingFCAI = '[Single Digit Combo Break]';
+				else
+					ratingFCAI = '[Ok I guess...]';
+			}
+		}
+		#if sys
+		ArtemisIntegration.setComboType (ratingFCAI);
 		ArtemisIntegration.setRating (ratingPercent * 100);
 		#end
 	}
@@ -4913,13 +4997,17 @@ if (result < 0 || result > mania) {
 			if (AIRank == '?')
 				curRank = '[Rating] ?';
 			else
-				curRank = AIRank + ' (' + CoolUtil.formatAccuracy(AIAccuracy) + '%)';
+				curRank = ratingNameAI + ' (' + CoolUtil.formatAccuracy(AIAccuracy) + '%)';
 
-			aiText = '\n [AI] // Score: ' + AIScore + ' // Misses: ' + AIMisses + ' // Rating: ' + ratingNameAI;
+			var daNameD = dad.scoreName != null ? dad.scoreName : '???';
+
+			aiText = '['+daNameD+']\nScore: ' + AIScore + '\nRating: ' + curRank + ' - ' + ratingFCAI;
 		}
 
 		setOnLuas('curDecStep', curDecStep);
 		setOnLuas('curDecBeat', curDecBeat);
+
+		var daNameB = boyfriend.scoreName != null ? boyfriend.scoreName : '???';
 
 		if (!playAsGF)
 		{
@@ -4927,27 +5015,49 @@ if (result < 0 || result > mania) {
 			{
 				scoreTxt.text = "DON'T MISS!";
 				scoreTxt.color = Std.parseInt("0xFFFF0000");
+				playerScoreTxt.text = "DON'T MISS!";
+				playerScoreTxt.color = Std.parseInt("0xFFFF0000");
+				if (AIPlayer.active)
+				{
+					opponentScoreTxt.text = "DON'T MISS!";
+					opponentScoreTxt.color = Std.parseInt("0xFFFF0000");
+				}
 			}
 			else if (ratingName == '?')
 			{
 				scoreTxt.color = Std.parseInt("0xFFFFE600");
-				scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' | NPS: ' + nps;
+				scoreTxt.text = ClientPrefs.data.mixupMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' | NPS: ' + nps;
+				scoreTxt.color = Std.parseInt("0xFFFFE600");
+				scoreTxt.text = 'Misses: ' + songMisses + ' | NPS: ' + nps; // peeps wanted no integer rating
+				if (AIPlayer.active)
+				{
+					opponentScoreTxt.color = Std.parseInt("0xFFFFE600");
+					opponentScoreTxt.text = aiText; // peeps wanted no integer rating
+				}
+				playerScoreTxt.color = Std.parseInt("0xFFFFE600");
+				playerScoreTxt.text = '['+daNameB+']\nScore: ' + songScore + '\nRating: ' + ratingName + ' ('
+					+ Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC; // peeps wanted no integer rating
 			}
 			else
 			{
 				scoreTxt.color = Std.parseInt("0xFFFFFFFF");
-				scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' ('
+				scoreTxt.text = ClientPrefs.data.mixupMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' ('
 					+ Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC + ' | NPS: ' + nps; // peeps wanted no integer rating
-			}
-			if (AIPlayer.active)
-			{
-				scoreTxt.y -= 50;
-				scoreTxt.text += aiText;
+				if (AIPlayer.active)
+				{
+					opponentScoreTxt.color = Std.parseInt("0xFFFFFFFF");
+					opponentScoreTxt.text = aiText; // peeps wanted no integer rating
+				}
+				playerScoreTxt.color = Std.parseInt("0xFFFFFFFF");
+				playerScoreTxt.text = '['+daNameB+']\nScore: ' + songScore + '\nRating: ' + ratingName + ' ('
+					+ Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC; // peeps wanted no integer rating
 			}
 		}
 		else
 		{
 			scoreTxt.text = 'Combo: ' + gfBopCombo + ' | Highest Combo: ' + gfBopComboBest + ' | Misses: ' + gfMisses;
+			opponentScoreTxt.visible = false;
+			playerScoreTxt.visible = false;
 		}
 
 		if (botplayTxt.visible)
@@ -7179,16 +7289,20 @@ if (result < 0 || result > mania) {
 			track.volume = 0;
 			track.pause();
 		}
-		if (ClientPrefs.data.noteOffset <= 0 || ignoreNoteOffset)
-		{
-			finishCallback();
-		}
+		if (AIScore > songScore) die();
 		else
-		{
-			finishTimer = new FlxTimer().start(ClientPrefs.data.noteOffset / 1000, function(tmr:FlxTimer)
+		{	
+			if (ClientPrefs.data.noteOffset <= 0 || ignoreNoteOffset)
 			{
 				finishCallback();
-			});
+			}
+			else
+			{
+				finishTimer = new FlxTimer().start(ClientPrefs.data.noteOffset / 1000, function(tmr:FlxTimer)
+				{
+					finishCallback();
+				});
+			}
 		}
 	}
 
@@ -7524,7 +7638,7 @@ if (result < 0 || result > mania) {
 		rating.acceleration.y = 550 * playbackRate * playbackRate;
 		rating.velocity.y -= FlxG.random.int(140, 175) * playbackRate;
 		rating.velocity.x -= FlxG.random.int(0, 10) * playbackRate;
-		rating.visible = (!ClientPrefs.data.hideHud && showRating);
+		rating.visible = showRating;
 		rating.x += ClientPrefs.data.comboOffset[0];
 		rating.y -= ClientPrefs.data.comboOffset[1];
 
@@ -7534,7 +7648,7 @@ if (result < 0 || result > mania) {
 		comboSpr.x = coolText.x;
 		comboSpr.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
 		comboSpr.velocity.y -= FlxG.random.int(140, 160) * playbackRate;
-		comboSpr.visible = (!ClientPrefs.data.hideHud && showCombo);
+		comboSpr.visible = showCombo;
 		comboSpr.x += ClientPrefs.data.comboOffset[0];
 		comboSpr.y -= ClientPrefs.data.comboOffset[1];
 		comboSpr.y += 60;
@@ -7620,7 +7734,6 @@ if (result < 0 || result > mania) {
 			numScore.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
 			numScore.velocity.y -= FlxG.random.int(140, 160) * playbackRate;
 			numScore.velocity.x = FlxG.random.float(-5, 5) * playbackRate;
-			numScore.visible = !ClientPrefs.data.hideHud;
 
 			// if (combo >= 10 || combo == 0)
 			if (showComboNum)
@@ -7721,7 +7834,7 @@ if (result < 0 || result > mania) {
 		rating.acceleration.y = 550 * playbackRate * playbackRate;
 		rating.velocity.y -= FlxG.random.int(140, 175) * playbackRate;
 		rating.velocity.x -= FlxG.random.int(0, 10) * playbackRate;
-		rating.visible = (!ClientPrefs.data.hideHud && showRating);
+		rating.visible = showRating;
 		rating.x += ClientPrefs.data.comboOffset[0] + 400;
 		rating.y -= ClientPrefs.data.comboOffset[1];
 
@@ -7731,7 +7844,7 @@ if (result < 0 || result > mania) {
 		comboSpr.x = coolText.x;
 		comboSpr.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
 		comboSpr.velocity.y -= FlxG.random.int(140, 160) * playbackRate;
-		comboSpr.visible = (!ClientPrefs.data.hideHud && showCombo);
+		comboSpr.visible = showCombo;
 		comboSpr.x += ClientPrefs.data.comboOffset[0] + 400;
 		comboSpr.y -= ClientPrefs.data.comboOffset[1];
 		comboSpr.y += 60;
@@ -7818,7 +7931,6 @@ if (result < 0 || result > mania) {
 			numScore.acceleration.y = FlxG.random.int(200, 300) * playbackRate * playbackRate;
 			numScore.velocity.y -= FlxG.random.int(140, 160) * playbackRate;
 			numScore.velocity.x = FlxG.random.float(-5, 5) * playbackRate;
-			numScore.visible = !ClientPrefs.data.hideHud;
 
 			// if (combo >= 10 || combo == 0)
 			if (showComboNum)
@@ -9669,7 +9781,7 @@ if (result < 0 || result > mania) {
 				// trace((totalNotesHit / totalPlayed) + ', Total: ' + totalPlayed + ', notes hit: ' + totalNotesHit);
 
 				// Rating Name
-				ratingName = ratingStuff[ratingStuff.length - 1][0]; // Uses last string
+				ratingNameAI = ratingStuff[ratingStuff.length - 1][0]; // Uses last string
 				if (ratingPercentAI < 1)
 					for (i in 0...ratingStuff.length - 1)
 						if (ratingPercentAI < ratingStuff[i][1])
@@ -9678,7 +9790,7 @@ if (result < 0 || result > mania) {
 							break;
 						}
 			}
-			fullComboFunction();
+			fullComboFunctionAI();
 		}
 		updateScoreAI(badHit); // score will only update after rating is calculated, if it's a badHit, it shouldn't bounce -Ghost
 		setOnScripts('ratingAI', ratingPercentAI);

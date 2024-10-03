@@ -83,6 +83,7 @@
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Z11",
 	"image": "characters/Z_assest",
 	"position": [-60, -50],
 	"healthicon": "Z_icon",

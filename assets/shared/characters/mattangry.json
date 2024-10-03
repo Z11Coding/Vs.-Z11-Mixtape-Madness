@@ -1,79 +1,55 @@
 {
 	"animations": [
 		{
-			"offsets": [
-				-6,
-				-4
-			],
-			"indices": [],
+			"offsets": [-6, -4],
+			"loop": false,
 			"fps": 24,
 			"anim": "idle",
-			"loop": false,
+			"indices": [],
 			"name": "matt idle"
 		},
 		{
-			"offsets": [
-				25,
-				-37
-			],
-			"indices": [],
+			"offsets": [25, -37],
+			"loop": false,
 			"fps": 24,
 			"anim": "singLEFT",
-			"loop": false,
+			"indices": [],
 			"name": "matt left"
 		},
 		{
-			"offsets": [
-				1,
-				-26
-			],
-			"indices": [],
+			"offsets": [1, -26],
+			"loop": false,
 			"fps": 24,
 			"anim": "singDOWN",
-			"loop": false,
+			"indices": [],
 			"name": "matt down"
 		},
 		{
-			"offsets": [
-				-8,
-				0
-			],
-			"indices": [],
+			"offsets": [-8, 0],
+			"loop": false,
 			"fps": 24,
 			"anim": "singUP",
-			"loop": false,
+			"indices": [],
 			"name": "matt up"
 		},
 		{
-			"offsets": [
-				10,
-				-24
-			],
-			"indices": [],
+			"offsets": [10, -24],
+			"loop": false,
 			"fps": 24,
 			"anim": "singRIGHT",
-			"loop": false,
+			"indices": [],
 			"name": "matt right"
 		}
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Matt",
 	"image": "characters/mattangry",
-	"position": [
-		70,
-		310
-	],
+	"position": [70, 310],
 	"healthicon": "matt",
 	"flip_x": false,
-	"healthbar_colors": [
-		255,
-		140,
-		0
-	],
-	"camera_position": [
-		0,
-		0
-	],
+	"healthbar_colors": [255, 140, 0],
+	"camera_position": [0, 0],
 	"sing_duration": 4,
 	"scale": 1,
 	"_editor_isPlayer": false

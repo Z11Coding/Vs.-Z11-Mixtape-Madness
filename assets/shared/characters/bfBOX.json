@@ -2,20 +2,14 @@
 	"animations": [
 		{
 			"loop": false,
-			"offsets": [
-				14,
-				18
-			],
+			"offsets": [14, 18],
 			"anim": "hurt",
 			"fps": 24,
 			"name": "BF hit",
 			"indices": []
 		},
 		{
-			"offsets": [
-				7,
-				19
-			],
+			"offsets": [7, 19],
 			"loop": false,
 			"fps": 24,
 			"anim": "singUPmiss",
@@ -23,10 +17,7 @@
 			"name": "bf miss"
 		},
 		{
-			"offsets": [
-				7,
-				19
-			],
+			"offsets": [7, 19],
 			"loop": false,
 			"fps": 24,
 			"anim": "singLEFTmiss",
@@ -34,10 +25,7 @@
 			"name": "bf miss"
 		},
 		{
-			"offsets": [
-				7,
-				19
-			],
+			"offsets": [7, 19],
 			"loop": false,
 			"fps": 24,
 			"anim": "singDOWNmiss",
@@ -45,10 +33,7 @@
 			"name": "bf miss"
 		},
 		{
-			"offsets": [
-				7,
-				19
-			],
+			"offsets": [7, 19],
 			"loop": false,
 			"fps": 24,
 			"anim": "singRIGHTmiss",
@@ -56,10 +41,7 @@
 			"name": "bf miss"
 		},
 		{
-			"offsets": [
-				-3,
-				-8
-			],
+			"offsets": [-3, -8],
 			"loop": false,
 			"fps": 24,
 			"anim": "dodge",
@@ -67,10 +49,7 @@
 			"name": "BF dodge"
 		},
 		{
-			"offsets": [
-				20,
-				-58
-			],
+			"offsets": [20, -58],
 			"loop": false,
 			"fps": 24,
 			"anim": "duck",
@@ -78,10 +57,7 @@
 			"name": "Duck"
 		},
 		{
-			"offsets": [
-				-3,
-				-14
-			],
+			"offsets": [-3, -14],
 			"loop": false,
 			"fps": 24,
 			"anim": "blockLEFT",
@@ -89,10 +65,7 @@
 			"name": "bf block left"
 		},
 		{
-			"offsets": [
-				-2,
-				-19
-			],
+			"offsets": [-2, -19],
 			"loop": false,
 			"fps": 24,
 			"anim": "blockDOWN",
@@ -100,10 +73,7 @@
 			"name": "bf block down"
 		},
 		{
-			"offsets": [
-				-2,
-				-19
-			],
+			"offsets": [-2, -19],
 			"loop": false,
 			"fps": 24,
 			"anim": "blockRIGHT",
@@ -111,10 +81,7 @@
 			"name": "bf block right"
 		},
 		{
-			"offsets": [
-				-2,
-				-23
-			],
+			"offsets": [-2, -23],
 			"loop": false,
 			"fps": 24,
 			"anim": "blockUP",
@@ -122,10 +89,7 @@
 			"name": "bf block up"
 		},
 		{
-			"offsets": [
-				-5,
-				0
-			],
+			"offsets": [-5, 0],
 			"loop": false,
 			"fps": 24,
 			"anim": "idle",
@@ -133,10 +97,7 @@
 			"name": "BF idle dance"
 		},
 		{
-			"offsets": [
-				228,
-				47
-			],
+			"offsets": [228, 47],
 			"loop": true,
 			"fps": 24,
 			"anim": "stand",
@@ -144,10 +105,7 @@
 			"name": "bf stando"
 		},
 		{
-			"offsets": [
-				50,
-				3
-			],
+			"offsets": [50, 3],
 			"loop": false,
 			"fps": 24,
 			"anim": "prepare",
@@ -155,10 +113,7 @@
 			"name": "images that precede unfortunate events"
 		},
 		{
-			"offsets": [
-				160,
-				158
-			],
+			"offsets": [160, 158],
 			"loop": true,
 			"fps": 24,
 			"anim": "ora",
@@ -166,67 +121,48 @@
 			"name": "ora"
 		},
 		{
-			"offsets": [
-				169,
-				12
-			],
-			"indices": [],
+			"offsets": [169, 12],
+			"loop": false,
 			"fps": 24,
 			"anim": "punchLEFT",
-			"loop": false,
+			"indices": [],
 			"name": "BF NOTE LEFT0"
 		},
 		{
-			"offsets": [
-				160,
-				-50
-			],
-			"indices": [],
+			"offsets": [160, -50],
+			"loop": false,
 			"fps": 24,
 			"anim": "punchDOWN",
-			"loop": false,
+			"indices": [],
 			"name": "BF NOTE DOWN0"
 		},
 		{
-			"offsets": [
-				144,
-				-9
-			],
-			"indices": [],
+			"offsets": [144, -9],
+			"loop": false,
 			"fps": 24,
 			"anim": "punchUP",
-			"loop": false,
+			"indices": [],
 			"name": "BF NOTE UP0"
 		},
 		{
-			"offsets": [
-				199,
-				-7
-			],
-			"indices": [],
+			"offsets": [199, -7],
+			"loop": false,
 			"fps": 24,
 			"anim": "punchRIGHT",
-			"loop": false,
+			"indices": [],
 			"name": "BF NOTE RIGHT0"
 		}
 	],
+	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Boyfriend",
 	"image": "characters/BOYFRIENDMIIBOX",
-	"position": [
-		0,
-		350
-	],
+	"position": [0, 350],
 	"healthicon": "bf",
 	"flip_x": true,
-	"healthbar_colors": [
-		49,
-		176,
-		209
-	],
-	"camera_position": [
-		0,
-		0
-	],
+	"healthbar_colors": [49, 176, 209],
+	"camera_position": [0, 0],
 	"sing_duration": 4,
-	"scale": 1
+	"scale": 1,
+	"_editor_isPlayer": true
 }

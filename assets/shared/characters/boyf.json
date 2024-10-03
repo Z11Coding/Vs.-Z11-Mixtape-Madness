@@ -2,10 +2,7 @@
 	"animations": [
 		{
 			"loop": false,
-			"offsets": [
-				10,
-				-2
-			],
+			"offsets": [10, -2],
 			"anim": "idle",
 			"fps": 24,
 			"name": "IDLE",
@@ -13,10 +10,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				2,
-				-6
-			],
+			"offsets": [2, -6],
 			"anim": "singRIGHT",
 			"fps": 24,
 			"name": "RIGHT",
@@ -24,10 +18,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				15,
-				-8
-			],
+			"offsets": [15, -8],
 			"anim": "singLEFT",
 			"fps": 24,
 			"name": "LEFT",
@@ -35,10 +26,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-6,
-				30
-			],
+			"offsets": [-6, 30],
 			"anim": "singUP",
 			"fps": 24,
 			"name": "UP",
@@ -46,10 +34,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				10,
-				-32
-			],
+			"offsets": [10, -32],
 			"anim": "singDOWN",
 			"fps": 24,
 			"name": "DOWN",
@@ -57,10 +42,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				3,
-				-5
-			],
+			"offsets": [3, -5],
 			"anim": "singRIGHTmiss",
 			"fps": 24,
 			"name": "misright",
@@ -68,10 +50,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				1,
-				29
-			],
+			"offsets": [1, 29],
 			"anim": "singUPmiss",
 			"fps": 24,
 			"name": "upmiss",
@@ -79,10 +58,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				10,
-				-10
-			],
+			"offsets": [10, -10],
 			"anim": "singLEFTmiss",
 			"fps": 24,
 			"name": "leftmiss",
@@ -90,10 +66,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				10,
-				-20
-			],
+			"offsets": [10, -20],
 			"anim": "singDOWNmiss",
 			"fps": 24,
 			"name": "downmiss",
@@ -102,22 +75,13 @@
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Boyfriend",
 	"image": "characters/boyfrind",
-	"position": [
-		0,
-		280
-	],
+	"position": [0, 280],
 	"healthicon": "boyf",
 	"flip_x": true,
-	"healthbar_colors": [
-		75,
-		147,
-		178
-	],
-	"camera_position": [
-		70,
-		0
-	],
+	"healthbar_colors": [75, 147, 178],
+	"camera_position": [70, 0],
 	"sing_duration": 6.1,
 	"scale": 1,
 	"_editor_isPlayer": true

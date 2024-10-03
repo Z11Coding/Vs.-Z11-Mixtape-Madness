@@ -2,10 +2,7 @@
 	"animations": [
 		{
 			"loop": false,
-			"offsets": [
-				0,
-				0
-			],
+			"offsets": [0, 0],
 			"anim": "idle",
 			"fps": 24,
 			"name": "idle",
@@ -13,10 +10,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				30,
-				1
-			],
+			"offsets": [30, 1],
 			"anim": "singLEFT",
 			"fps": 24,
 			"name": "left0",
@@ -24,10 +18,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				19,
-				-34
-			],
+			"offsets": [19, -34],
 			"anim": "singDOWN",
 			"fps": 24,
 			"name": "down0",
@@ -35,10 +26,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-3,
-				139
-			],
+			"offsets": [-3, 139],
 			"anim": "singUP",
 			"fps": 24,
 			"name": "up0",
@@ -46,10 +34,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-63,
-				94
-			],
+			"offsets": [-63, 94],
 			"anim": "singRIGHT",
 			"fps": 24,
 			"name": "right0",
@@ -57,10 +42,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				29,
-				2
-			],
+			"offsets": [29, 2],
 			"anim": "singLEFT-alt",
 			"fps": 24,
 			"name": "left alt",
@@ -68,10 +50,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				22,
-				-34
-			],
+			"offsets": [22, -34],
 			"anim": "singDOWN-alt",
 			"fps": 24,
 			"name": "down alt",
@@ -79,10 +58,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-3,
-				138
-			],
+			"offsets": [-3, 138],
 			"anim": "singUP-alt",
 			"fps": 24,
 			"name": "up alt",
@@ -90,10 +66,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-61,
-				94
-			],
+			"offsets": [-61, 94],
 			"anim": "singRIGHT-alt",
 			"fps": 24,
 			"name": "right alt",
@@ -102,22 +75,13 @@
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "kmili2113 (Fanta)",
 	"image": "characters/fanta",
-	"position": [
-		-80,
-		340
-	],
+	"position": [-80, 340],
 	"healthicon": "fanta",
 	"flip_x": false,
-	"healthbar_colors": [
-		254,
-		134,
-		29
-	],
-	"camera_position": [
-		0,
-		0
-	],
+	"healthbar_colors": [254, 134, 29],
+	"camera_position": [0, 0],
 	"sing_duration": 4,
 	"scale": 1,
 	"_editor_isPlayer": false

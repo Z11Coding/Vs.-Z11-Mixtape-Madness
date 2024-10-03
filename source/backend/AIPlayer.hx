@@ -52,8 +52,8 @@ class AIPlayer
 								var selectedRating:Int = FlxG.random.weightedPick(ratingChance);
 
 								if (selectedRating == 0)
-									strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(-ClientPrefs.data.sickWindow,
-										ClientPrefs.data.sickWindow);
+									strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(-(ClientPrefs.data.marvWindow / FlxG.random.float(1.5)),
+								(ClientPrefs.data.marvWindow / 1.5));
 								else
 								{
 									if (timingWindows[Std.int(selectedRating + 1)] != null)
@@ -68,7 +68,7 @@ class AIPlayer
 								}
 							}
 
-							trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
+							//trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
 						}
 					}
 				}
@@ -100,8 +100,8 @@ class AIPlayer
 								var selectedRating:Int = FlxG.random.weightedPick(ratingChance);
 
 								if (selectedRating == 0)
-									strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(-ClientPrefs.data.sickWindow,
-										ClientPrefs.data.sickWindow);
+									strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(-(ClientPrefs.data.marvWindow / FlxG.random.float(1.5)),
+								(ClientPrefs.data.marvWindow / 1.5));
 								else
 								{
 									if (timingWindows[Std.int(selectedRating + 1)] != null)
@@ -116,7 +116,7 @@ class AIPlayer
 								}
 							}
 
-							trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
+							//trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
 						}
 					}
 				}
@@ -148,8 +148,8 @@ class AIPlayer
 								var selectedRating:Int = FlxG.random.weightedPick(ratingChance);
 
 								if (selectedRating == 0)
-									strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(-(ClientPrefs.data.sickWindow / FlxG.random.float(1.5)),
-										(ClientPrefs.data.sickWindow / 1.5));
+									strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(-ClientPrefs.data.marvWindow,
+										ClientPrefs.data.marvWindow);
 								else
 								{
 									if (timingWindows[Std.int(selectedRating + 1)] != null)
@@ -165,7 +165,7 @@ class AIPlayer
 								}
 							}
 
-							trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
+							//trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
 						}
 					}
 				}
@@ -191,8 +191,8 @@ class AIPlayer
 							var selectedRating:Int = FlxG.random.weightedPick(ratingChance);
 
 							if (selectedRating == 0)
-								strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(-(ClientPrefs.data.sickWindow / FlxG.random.float(2.5)),
-									(ClientPrefs.data.sickWindow / 2.5));
+								strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(-ClientPrefs.data.marvWindow,
+									ClientPrefs.data.marvWindow);
 							else
 							{
 								if (timingWindows[Std.int(selectedRating + 1)] != null)
@@ -206,7 +206,7 @@ class AIPlayer
 								strumList[isolatedHits.indexOf(section)][section.indexOf(note)] *= FlxG.random.sign();
 							}
 
-							trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
+							//trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
 						}
 					}
 				}
@@ -232,8 +232,8 @@ class AIPlayer
 							var selectedRating:Int = FlxG.random.weightedPick(ratingChance);
 
 							if (selectedRating == 0)
-								strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(-(ClientPrefs.data.sickWindow / FlxG.random.float(2.5)),
-									(ClientPrefs.data.sickWindow / 2.5));
+								strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(-ClientPrefs.data.marvWindow,
+									ClientPrefs.data.marvWindow);
 							else
 							{
 								if (timingWindows[Std.int(selectedRating + 1)] != null)
@@ -247,11 +247,52 @@ class AIPlayer
 								strumList[isolatedHits.indexOf(section)][section.indexOf(note)] *= FlxG.random.sign();
 							}
 
-							trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
+							//trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
 						}
 					}
 				}
-            case 5: //Boyfriend getting freaky on a friday night:
+			case 5: //Average "Thanos if she didnt have a sucky computer" player:
+				{
+					var ratingChance:Array<Float> = [90, 10, 0.1, 0.01, 0.001];
+					var isolatedHits:Array<Array<Float>> = isolateHits(map);
+
+					for (section in isolatedHits)
+					{
+						strumList[isolatedHits.indexOf(section)] = [];
+
+						for (note in section)
+						{
+							var timingWindows:Array<Null<Float>> = [
+                                ClientPrefs.data.marvWindow,
+                                ClientPrefs.data.sickWindow,
+                                ClientPrefs.data.goodWindow,
+                                ClientPrefs.data.badWindow,
+                                Conductor.safeZoneOffset
+                            ];
+
+							var selectedRating:Int = FlxG.random.weightedPick(ratingChance);
+
+							if (selectedRating == 0)
+								strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(ClientPrefs.data.sickWindow,
+									ClientPrefs.data.marvWindow);
+							else
+							{
+								if (timingWindows[Std.int(selectedRating + 1)] != null)
+									strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(timingWindows[selectedRating] / 1.35,
+										timingWindows[Std.int(selectedRating + 1)] / 1.35);
+								else
+								{
+									strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(timingWindows[selectedRating - 1] / 1.35,
+										timingWindows[selectedRating] / 1.35);
+								}
+								strumList[isolatedHits.indexOf(section)][section.indexOf(note)] *= FlxG.random.sign();
+							}
+
+							//trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
+						}
+					}
+				}
+            case 6: //Boyfriend getting freaky on a friday night:
 				{
 					var ratingChance:Array<Float> = [100, 0, 0, 0, 0];
 					var isolatedHits:Array<Array<Float>> = isolateHits(map);
@@ -273,8 +314,7 @@ class AIPlayer
 							var selectedRating:Int = FlxG.random.weightedPick(ratingChance);
 
 							if (selectedRating == 0)
-								strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = FlxG.random.float(-(ClientPrefs.data.sickWindow / FlxG.random.float(2.5)),
-									(ClientPrefs.data.sickWindow / 2.5));
+								strumList[isolatedHits.indexOf(section)][section.indexOf(note)] = ClientPrefs.data.marvWindow;
 							else
 							{
 								if (timingWindows[Std.int(selectedRating + 1)] != null)
@@ -288,7 +328,7 @@ class AIPlayer
 								strumList[isolatedHits.indexOf(section)][section.indexOf(note)] *= FlxG.random.sign();
 							}
 
-							trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
+							//trace('section: ${isolatedHits.indexOf(section)}, id: ${section.indexOf(note)}, strum: ${strumList[isolatedHits.indexOf(section)][section.indexOf(note)]}ms');
 						}
 					}
 				}

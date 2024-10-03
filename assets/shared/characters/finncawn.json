@@ -2,10 +2,7 @@
 	"animations": [
 		{
 			"loop": false,
-			"offsets": [
-				21,
-				-19
-			],
+			"offsets": [21, -19],
 			"anim": "singLEFT",
 			"fps": 24,
 			"name": "FInn Left",
@@ -13,10 +10,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				0,
-				-17
-			],
+			"offsets": [0, -17],
 			"anim": "singDOWN",
 			"fps": 24,
 			"name": "FInn Down",
@@ -24,10 +18,7 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-4,
-				10
-			],
+			"offsets": [-4, 10],
 			"anim": "singUP",
 			"fps": 24,
 			"name": "FInn Up",
@@ -35,45 +26,30 @@
 		},
 		{
 			"loop": false,
-			"offsets": [
-				-10,
-				-7
-			],
+			"offsets": [-10, -7],
 			"anim": "singRIGHT",
 			"fps": 24,
 			"name": "FInn Right",
 			"indices": []
 		},
 		{
-			"offsets": [
-				0,
-				0
-			],
-			"indices": [],
+			"offsets": [0, 0],
+			"loop": false,
 			"fps": 24,
 			"anim": "idle",
-			"loop": false,
+			"indices": [],
 			"name": "FInn Idle"
 		}
 	],
 	"vocals_file": "",
 	"no_antialiasing": false,
+	"score_name": "Finn",
 	"image": "characters/CAWM_FINN",
-	"position": [
-		0,
-		50
-	],
+	"position": [0, 50],
 	"healthicon": "finn",
 	"flip_x": false,
-	"healthbar_colors": [
-		168,
-		160,
-		179
-	],
-	"camera_position": [
-		0,
-		100
-	],
+	"healthbar_colors": [168, 160, 179],
+	"camera_position": [0, 100],
 	"sing_duration": 6.1,
 	"scale": 1,
 	"_editor_isPlayer": false
