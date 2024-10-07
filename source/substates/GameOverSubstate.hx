@@ -107,7 +107,7 @@ class GameOverSubstate extends MusicBeatSubstate
 			else
 				TransitionState.transitionState(FreeplayState, {transitionType: "stickers"});
 
-			FlxG.sound.playMusic(Paths.music('freakyMenu'));
+			FlxG.sound.playMusic(Paths.music('panixPress'));
 			PlayState.instance.callOnScripts('onGameOverConfirm', [false]);
 		}
 		

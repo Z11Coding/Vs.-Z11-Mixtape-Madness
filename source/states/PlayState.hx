@@ -4483,6 +4483,8 @@ if (result < 0 || result > mania) {
 			allNotes.remove(note);
 			unspawnNotes.remove(note);
 			notes.remove(note);
+			if (field.AIPlayer && note.ignoreNote && !endingSong)
+				opponentMiss(note, field);
 		});
 		field.noteMissed.add((daNote:Note, field:PlayField) ->
 		{
@@ -4722,6 +4724,9 @@ if (result < 0 || result > mania) {
 			if (playfield.isPlayer)
 				playfield.autoPlayed = cpuControlled;
 		}
+
+		if (dad.color == 0xFF003BB9 && (dad.animation.curAnim.name == 'idle' || dad.animation.curAnim.name.startsWith('dance'))) 
+			dad.color = 0xFFFFFFFF;
 
 		if (cpuControlled) hadBotplayOn = true;
 
@@ -7585,7 +7590,7 @@ if (result < 0 || result > mania) {
 		note.rating = daRating.name;
 		score = daRating.score;
 
-		if (!practiceMode && !cpuControlled)
+		if (!practiceMode)
 		{
 			songScore += score;
 			if (!note.ratingDisabled)
@@ -8432,6 +8437,8 @@ if (result < 0 || result > mania) {
 		#end
 
 		if (note.wasGoodHit || (field.autoPlayed && (note.ignoreNote || note.breaksCombo)))
+
+		if (note.wasGoodHit || (field.autoPlayed && (note.ignoreNote || note.breaksCombo)))
 			return;
 
 		var noteDiff:Float = Math.abs(note.strumTime - Conductor.songPosition + ClientPrefs.data.ratingOffset);
@@ -8692,6 +8699,7 @@ if (result < 0 || result > mania) {
 			if (!practiceMode)
 				AIScore -= 10;
 		}
+		dad.color = 0xFF003BB9;
 		if (opponentVocals != null && opponentVocals.length <= 0)
 			opponentVocals.volume = 0;
 		if (gfVocals != null && gfVocals.length <= 0 && (daNote.gfNote || daNote.noteType == 'GF Duet'))
