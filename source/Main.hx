@@ -32,8 +32,8 @@ import sys.io.File;
 import sys.io.Process;
 #end
 // Gamejolt
-import gamejolt.GameJolt;
-import gamejolt.GameJolt.GJToastManager;
+import backend.gamejolt.GameJolt;
+import backend.gamejolt.GameJolt.GJToastManager;
 
 import backend.window.WindowUtils;
 class Main extends Sprite

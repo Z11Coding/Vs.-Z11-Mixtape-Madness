@@ -7,7 +7,7 @@ import flixel.addons.plugin.FlxMouseControl;
 import shaders.RGBPalette;
 import shaders.RGBPalette.RGBShaderReference;
 
-import math.Vector3;
+import backend.math.Vector3;
 
 using StringTools;
 

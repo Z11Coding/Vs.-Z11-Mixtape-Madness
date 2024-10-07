@@ -1,6 +1,6 @@
 // @author Nebula_Zorua
 
-package modchart.events;
+package backend.modchart.events;
 
 class StepCallbackEvent extends CallbackEvent {
     public var endStep:Float = 0;

@@ -1,4 +1,4 @@
-package modchart;
+package backend.modchart;
 
 class SubModifier extends Modifier { // also called an aux mod
     var name:String = 'unspecified';

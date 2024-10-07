@@ -1,4 +1,4 @@
-package playfields;
+package objects.playfields;
 
 import haxe.exceptions.NotImplementedException;
 

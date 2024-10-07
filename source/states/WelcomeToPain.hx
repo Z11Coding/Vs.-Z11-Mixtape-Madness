@@ -7,7 +7,7 @@ import flixel.text.FlxText;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
 import lime.app.Promise;
-import cutscenes.DialogueBoxPsych;
+import backend.cutscenes.DialogueBoxPsych;
 import flixel.FlxCamera;
 import openfl.filters.BitmapFilter;
 import openfl.utils.Assets as OpenFlAssets;

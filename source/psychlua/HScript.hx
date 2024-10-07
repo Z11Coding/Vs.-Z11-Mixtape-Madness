@@ -9,7 +9,7 @@ import psychlua.CustomSubstate;
 import psychlua.FunkinLua;
 #end
 
-import modchart.SubModifier;
+import backend.modchart.SubModifier;
 
 #if HSCRIPT_ALLOWED
 import tea.SScript;

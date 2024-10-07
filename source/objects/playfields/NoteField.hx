@@ -1,4 +1,4 @@
-package playfields;
+package objects.playfields;
 
 import math.*;
 import flixel.math.FlxMath;
@@ -10,8 +10,8 @@ import openfl.Vector;
 import openfl.geom.ColorTransform;
 import openfl.display.Shader;
 import flixel.graphics.FlxGraphic;
-import modchart.Modifier.RenderInfo;
-import modchart.ModManager;
+import backend.modchart.Modifier.RenderInfo;
+import backend.modchart.ModManager;
 import flixel.system.FlxAssets.FlxShader;
 import objects.NoteObject;
 

@@ -15,7 +15,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import lime.app.Application;
 import backend.Achievements;
-import cutscenes.DialogueBoxPsych;
+import backend.cutscenes.DialogueBoxPsych;
 import openfl.filters.BitmapFilter;
 import openfl.utils.Assets as OpenFlAssets;
 #if sys

@@ -9,8 +9,8 @@ import lime.system.Clipboard;
 
 import objects.TypedAlphabet;
 
-import cutscenes.DialogueBoxPsych;
-import cutscenes.DialogueCharacter;
+import backend.cutscenes.DialogueBoxPsych;
+import backend.cutscenes.DialogueCharacter;
 
 import states.editors.content.Prompt;
 

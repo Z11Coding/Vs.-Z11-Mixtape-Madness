@@ -4,7 +4,7 @@ import flixel.math.FlxPoint;
 import animateatlas.AtlasFrameMaker;
 
 import states.stages.objects.*;
-import cutscenes.CutsceneHandler;
+import backend.cutscenes.CutsceneHandler;
 import substates.GameOverSubstate;
 import objects.Character;
 

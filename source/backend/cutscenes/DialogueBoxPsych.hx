@@ -1,4 +1,4 @@
-package cutscenes;
+package backend.cutscenes;
 
 import haxe.Json;
 import openfl.utils.Assets;
@@ -12,7 +12,7 @@ import objects.TypedAlphabet;
 import backend.InputFormatter;
 import flixel.input.keyboard.FlxKey;
 
-import cutscenes.DialogueCharacter;
+import backend.cutscenes.DialogueCharacter;
 
 // Gonna try to kind of make it compatible to Forever Engine,
 // love u Shubs no homo :flushedh4:

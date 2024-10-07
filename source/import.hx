@@ -45,6 +45,7 @@ import backend.Language;
 
 import backend.util.ColorUtil; //Thanks, Jack Bass. Very Cool
 import backend.ui.*; //Psych-UI
+import backend.*; //Everything Else
 
 
 import objects.Note;
@@ -65,7 +66,7 @@ import flxanimate.PsychFlxAnimate as FlxAnimate;
 
 import shaders.ColorSwap;
 
-import math.Vector3;
+import backend.math.Vector3;
 
 import backend.util.MemoryUtil;
 import backend.Cursor;
@@ -93,7 +94,7 @@ import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.addons.transition.FlxTransitionableState;
 
-import playfields.*;
+import objects.playfields.*;
 
 // import backend.modules.MathSolver;
 import backend.modules.MathSolver2;

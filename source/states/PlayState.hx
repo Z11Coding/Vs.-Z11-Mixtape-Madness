@@ -24,8 +24,8 @@ import openfl.utils.Assets as OpenFlAssets;
 import openfl.events.KeyboardEvent;
 import haxe.Json;
 import psychlua.FunkinLua;
-import cutscenes.CutsceneHandler;
-import cutscenes.DialogueBoxPsych;
+import backend.cutscenes.CutsceneHandler;
+import backend.cutscenes.DialogueBoxPsych;
 import states.StoryMenuState;
 import states.FreeplayState;
 import states.editors.ChartingStateOG;
@@ -64,7 +64,7 @@ import tea.SScript;
 
 
 // Mixtape Stuff
-import modchart.ModManager;
+import backend.modchart.ModManager;
 import openfl.filters.BitmapFilter;
 import backend.STMetaFile.MetadataFile;
 import flixel.addons.effects.FlxTrail;

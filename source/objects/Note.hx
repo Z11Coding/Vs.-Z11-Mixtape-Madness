@@ -11,7 +11,7 @@ import shaders.RGBPalette.RGBShaderReference;
 
 import haxe.io.Path;
 import flixel.math.FlxPoint;
-import math.Vector3;
+import backend.math.Vector3;
 import openfl.utils.Assets;
 import scripts.*;
 

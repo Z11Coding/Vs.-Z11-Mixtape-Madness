@@ -1,4 +1,4 @@
-package gamejolt;
+package backend.gamejolt;
 
 class GJKeys
 {

@@ -2,8 +2,8 @@ package options;
 
 import states.MainMenuState;
 import backend.StageData;
-import gamejolt.GameJolt.GameJoltAPI;
-import gamejolt.GameJolt.GameJoltLogin;
+import backend.gamejolt.GameJolt.GameJoltAPI;
+import backend.gamejolt.GameJolt.GameJoltLogin;
 
 class OptionsState extends MusicBeatState
 {

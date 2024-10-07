@@ -1,4 +1,4 @@
-package cutscenes;
+package backend.cutscenes;
 
 import haxe.Json;
 import lime.utils.Assets;

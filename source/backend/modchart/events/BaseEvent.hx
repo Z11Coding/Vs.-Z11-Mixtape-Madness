@@ -1,4 +1,4 @@
-package modchart.events;
+package backend.modchart.events;
 
 class BaseEvent {
     public var manager:ModManager;

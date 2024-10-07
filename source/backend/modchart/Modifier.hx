@@ -1,11 +1,11 @@
-package modchart;
+package backend.modchart;
 // @author Nebula_Zorua
 
 
-import playfields.NoteField;
+import objects.playfields.NoteField;
 import flixel.math.FlxPoint;
 import flixel.FlxSprite;
-import math.Vector3;
+import backend.math.Vector3;
 // Based on Schmovin' and Andromeda's modifier systems
 
 enum ModifierType {
@@ -31,7 +31,7 @@ class RenderInfo {
 
 class Modifier {
 	public var modMgr:ModManager;
-	@:allow(modchart.ModManager)
+	@:allow(backend.modchart.ModManager)
 	var target_percents:Array<Float> = [0, 0];
     public var percents:Array<Float> = [0, 0];
 
@@ -194,7 +194,7 @@ class Modifier {
 			submods.set(submod, new SubModifier(submod, modMgr, this));
 	}
 
-    @:allow(modchart.ModManager)
+    @:allow(backend.modchart.ModManager)
     private function _internalUpdate(){
         for(pN in 0...target_percents.length){
 			percents[pN] = target_percents[pN];

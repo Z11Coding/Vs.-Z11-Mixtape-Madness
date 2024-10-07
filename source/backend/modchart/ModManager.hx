@@ -1,11 +1,11 @@
-package modchart;
+package backend.modchart;
 // @author Nebula_Zorua
 
-import playfields.NoteField;
-import modchart.Modifier;
-import modchart.modifiers.*;
-import modchart.events.*;
-import math.Vector3;
+import objects.playfields.NoteField;
+import backend.modchart.Modifier;
+import backend.modchart.modifiers.*;
+import backend.modchart.events.*;
+import backend.math.Vector3;
 import flixel.tweens.FlxEase;
 import flixel.math.FlxPoint;
 import flixel.FlxG;

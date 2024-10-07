@@ -3,7 +3,7 @@ package states.stages;
 import states.stages.objects.*;
 
 import flixel.math.FlxPoint;
-import cutscenes.DialogueBoxPsych;
+import backend.cutscenes.DialogueBoxPsych;
 import flixel.system.FlxSound;
 import flixel.util.FlxColor;
 import flixel.effects.particles.FlxEmitter;

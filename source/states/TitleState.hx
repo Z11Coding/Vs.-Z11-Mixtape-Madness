@@ -30,7 +30,7 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
-import gamejolt.GameJolt.GameJoltAPI;
+import backend.gamejolt.GameJolt.GameJoltAPI;
 import tentools.api.FlxGameJolt as GJApi;
 
 typedef TitleData =

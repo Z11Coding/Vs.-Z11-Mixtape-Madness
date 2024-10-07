@@ -1,6 +1,6 @@
 // @author Nebula_Zorua
 
-package modchart.events;
+package backend.modchart.events;
 
 class ModEvent extends BaseEvent {
 	public var modName:String = '';

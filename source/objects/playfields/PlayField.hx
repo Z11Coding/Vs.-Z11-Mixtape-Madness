@@ -1,11 +1,11 @@
-package playfields;
+package objects.playfields;
 
 import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
-import math.Vector3;
+import backend.math.Vector3;
 import openfl.Vector;
 import openfl.geom.Vector3D;
-import modchart.ModManager;
+import backend.modchart.ModManager;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxSort;
 import flixel.tweens.FlxTween;

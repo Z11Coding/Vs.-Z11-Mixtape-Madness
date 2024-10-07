@@ -1,4 +1,4 @@
-package cutscenes;
+package backend.cutscenes;
 
 import flixel.addons.text.FlxTypeText;
 

@@ -16,7 +16,7 @@ import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.display.FlxRuntimeShader;
 #end
 
-import cutscenes.DialogueBoxPsych;
+import backend.cutscenes.DialogueBoxPsych;
 
 import objects.StrumNote;
 import objects.Note;
@@ -43,7 +43,7 @@ import flixel.input.gamepad.FlxGamepadInputID;
 
 import haxe.Json;
 
-import modchart.SubModifier;
+import backend.modchart.SubModifier;
 
 class FunkinLua {
 	public var lua:State = null;

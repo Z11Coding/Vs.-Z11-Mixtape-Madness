@@ -1,4 +1,4 @@
-package modchart.events;
+package backend.modchart.events;
 
 class CallbackEvent extends BaseEvent {
 	public var callback:(CallbackEvent, Float)->Void;

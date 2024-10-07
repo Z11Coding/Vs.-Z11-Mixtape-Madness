@@ -1,7 +1,7 @@
-package modchart;
+package backend.modchart;
 
-import modchart.events.ModEvent;
-import modchart.events.BaseEvent;
+import backend.modchart.events.ModEvent;
+import backend.modchart.events.BaseEvent;
 
 class EventTimeline {
     public var modEvents:Map<String, Array<ModEvent>> = [];
@@ -33,7 +33,7 @@ class EventTimeline {
         
     }
 
-    @:allow(modchart.ModManager)
+    @:allow(backend.modchart.ModManager)
     function updateMods(step:Float){
 		for (modName in modEvents.keys())
 		{
@@ -60,7 +60,7 @@ class EventTimeline {
 		}
     }
 
-	@:allow(modchart.ModManager)
+	@:allow(backend.modchart.ModManager)
     function updateFuncs(step:Float){
 		var garbage:Array<BaseEvent> = [];
 		for (event in events)
