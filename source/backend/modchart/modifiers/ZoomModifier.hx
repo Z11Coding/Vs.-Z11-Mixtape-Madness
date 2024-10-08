@@ -1,6 +1,6 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 
-import playfields.NoteField;
+import objects.playfields.NoteField;
 
 class ZoomModifier extends Modifier {
     override public function getName()return 'mini';

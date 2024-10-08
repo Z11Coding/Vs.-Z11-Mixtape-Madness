@@ -1,12 +1,12 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 
-import modchart.Modifier.ModifierOrder;
-import modchart.*;
-import math.*;
+import backend.modchart.Modifier.ModifierOrder;
+import backend.modchart.*;
+import backend.math.*;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
-import playfields.NoteField;
+import objects.playfields.NoteField;
 import objects.NoteObject.ObjectType;
 class ReverseModifier extends NoteModifier 
 {
@@ -27,10 +27,10 @@ class ReverseModifier extends NoteModifier
         var kNum = Note.ammo[PlayState.mania];
         var val:Float = 0;
         if(dir>=kNum * 0.5)
-            val += getSubmodValue("split" ,player);
+            val += getSubmodValue("split", player);
 
         if((dir%2)==1)
-            val += getSubmodValue("alternate" ,player);
+            val += getSubmodValue("alternate", player);
 
         var first = kNum * 0.25;
         var last = kNum-1-first;
@@ -41,7 +41,7 @@ class ReverseModifier extends NoteModifier
         val += getValue(player) + getSubmodValue("reverse" + Std.string(dir), player);
 
 
-        if(getSubmodValue("unboundedReverse",player)==0){
+        if(getSubmodValue("unboundedReverse", player)==0){
             val %=2;
             if(val>1)val=2-val;
         }
@@ -54,11 +54,7 @@ class ReverseModifier extends NoteModifier
 
 	private inline function getCenterValue(player:Int){
 		var centerPercent = getSubmodValue("centered", player);
-		#if tgt
-		return (ClientPrefs.midScroll) ? 1 - centerPercent : centerPercent;
-		#else
 		return centerPercent;
-		#end
 	}
 
 	override function getPos(visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:NoteObject, field:NoteField)

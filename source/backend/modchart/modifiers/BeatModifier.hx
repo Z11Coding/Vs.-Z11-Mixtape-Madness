@@ -1,11 +1,11 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 import flixel.FlxSprite;
-import ui.*;
-import modchart.*;
+import backend.ui.*;
+import backend.modchart.*;
 import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
-import math.*;
-import playfields.NoteField;
+import backend.math.*;
+import objects.playfields.NoteField;
 
 class BeatModifier extends NoteModifier {
     override function getName()return 'beat';

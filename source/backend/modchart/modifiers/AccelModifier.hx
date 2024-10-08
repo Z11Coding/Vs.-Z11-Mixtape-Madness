@@ -1,13 +1,13 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 
-import ui.*;
-import modchart.*;
+import backend.ui.*;
+import backend.modchart.*;
 import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
 import flixel.FlxG;
-import math.Vector3;
-import math.*;
-import playfields.NoteField;
+import backend.math.Vector3;
+import backend.math.*;
+import objects.playfields.NoteField;
 
 class AccelModifier extends NoteModifier
 { // this'll be boost in ModManager

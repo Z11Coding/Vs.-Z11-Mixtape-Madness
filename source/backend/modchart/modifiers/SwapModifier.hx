@@ -1,8 +1,8 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 
 import flixel.FlxSprite;
-import math.Vector3;
-import playfields.NoteField;
+import backend.math.Vector3;
+import objects.playfields.NoteField;
 
 class SwapModifier extends NoteModifier
 {

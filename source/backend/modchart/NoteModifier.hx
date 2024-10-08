@@ -1,8 +1,8 @@
 // @author Nebula_Zorua
 
-package modchart;
+package backend.modchart;
 
-import modchart.Modifier.ModifierType;
+import backend.modchart.Modifier.ModifierType;
 
 class NoteModifier extends Modifier {
 	override function getModType()

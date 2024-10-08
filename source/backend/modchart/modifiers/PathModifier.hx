@@ -1,7 +1,7 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 
-import playfields.NoteField;
-import math.Vector3;
+import objects.playfields.NoteField;
+import backend.math.Vector3;
 import flixel.math.FlxMath;
 import flixel.FlxSprite;
 

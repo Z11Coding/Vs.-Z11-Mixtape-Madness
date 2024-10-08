@@ -1,6 +1,6 @@
 // @author Nebula_Zorua
 
-package modchart.events;
+package backend.modchart.events;
 
 class SetEvent extends ModEvent {
 	override function run(curStep:Float)

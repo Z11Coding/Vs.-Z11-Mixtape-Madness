@@ -1,8 +1,8 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 
 import flixel.math.FlxMath;
 import flixel.FlxG;
-import math.Vector3;
+import backend.math.Vector3;
 
 class InfinitePathModifier extends CustomPathModifier {
     override function getName()return 'infinite';

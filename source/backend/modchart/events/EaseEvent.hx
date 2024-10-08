@@ -1,5 +1,5 @@
 // @author Nebula_Zorua
-package modchart.events;
+package backend.modchart.events;
 
 import flixel.tweens.FlxEase.EaseFunction;
 

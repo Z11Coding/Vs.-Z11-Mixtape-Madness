@@ -1,7 +1,7 @@
 package backend;
 
 import flixel.math.FlxMath;
-import math.Vector3;
+import backend.math.Vector3;
 
 class VectorHelpers {
 	static var near = 0;

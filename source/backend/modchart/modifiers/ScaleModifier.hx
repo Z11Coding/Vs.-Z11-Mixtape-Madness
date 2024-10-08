@@ -1,10 +1,10 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 
-import modchart.Modifier.RenderInfo;
+import backend.modchart.Modifier.RenderInfo;
 import flixel.math.FlxPoint;
-import modchart.Modifier.ModifierOrder;
-import math.Vector3;
-import playfields.NoteField;
+import backend.modchart.Modifier.ModifierOrder;
+import backend.math.Vector3;
+import objects.playfields.NoteField;
 
 class ScaleModifier extends NoteModifier {
 	override function getName()return 'tiny';

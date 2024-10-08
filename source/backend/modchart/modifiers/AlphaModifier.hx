@@ -1,11 +1,11 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 
-import modchart.Modifier.RenderInfo;
-import ui.*;
-import modchart.*;
+import backend.modchart.Modifier.RenderInfo;
+import backend.ui.*;
+import backend.modchart.*;
 import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
-import math.*;
+import backend.math.*;
 import flixel.FlxG;
 
 class AlphaModifier extends NoteModifier 

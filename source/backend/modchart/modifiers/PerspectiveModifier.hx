@@ -1,16 +1,16 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 
 import flixel.math.FlxAngle;
 import flixel.FlxSprite;
-import ui.*;
-import modchart.*;
+import backend.ui.*;
+import backend.modchart.*;
 import flixel.math.FlxPoint;
-import math.Vector3;
+import backend.math.Vector3;
 import flixel.math.FlxMath;
 import flixel.FlxG;
 using StringTools;
-import math.*;
-import playfields.NoteField;
+import backend.math.*;
+import objects.playfields.NoteField;
 
 // NOTE: THIS SHOULDNT HAVE ITS PERCENTAGE MODIFIED
 // THIS IS JUST HERE TO ALLOW OTHER MODIFIERS TO HAVE PERSPECTIVE

@@ -1,8 +1,8 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 
-import modchart.*;
-import playfields.NoteField;
-import math.Vector3;
+import backend.modchart.*;
+import objects.playfields.NoteField;
+import backend.math.Vector3;
 import flixel.FlxSprite;
 
 typedef PathInfo = {

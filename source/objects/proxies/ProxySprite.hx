@@ -1,4 +1,4 @@
-package proxies;
+package objects.proxies;
 
 import flixel.math.FlxRect;
 import flixel.graphics.frames.FlxFrame.FlxFrameAngle;

@@ -311,20 +311,20 @@ class HScript extends SScript
 
 		//Troll Engine Hscript Functions
 		set("NoteObject", objects.NoteObject);
-		set("PlayField", playfields.PlayField);
-		set("NoteField", playfields.NoteField);
-		set("ProxyField", proxies.ProxyField);
-		set("ProxySprite", proxies.ProxySprite);
-		set("ModManager", modchart.ModManager);
-		set("Modifier", modchart.Modifier);
-		set("SubModifier", modchart.SubModifier);
-		set("NoteModifier", modchart.NoteModifier);
-		set("EventTimeline", modchart.EventTimeline);
-		set("StepCallbackEvent", modchart.events.StepCallbackEvent);
-		set("CallbackEvent", modchart.events.CallbackEvent);
-		set("ModEvent", modchart.events.ModEvent);
-		set("EaseEvent", modchart.events.EaseEvent);
-		set("SetEvent", modchart.events.SetEvent);
+		set("PlayField", objects.playfields.PlayField);
+		set("NoteField", objects.playfields.NoteField);
+		set("ProxyField", objects.proxies.ProxyField);
+		set("ProxySprite", objects.proxies.ProxySprite);
+		set("ModManager", backend.modchart.ModManager);
+		set("Modifier", backend.modchart.Modifier);
+		set("SubModifier", backend.modchart.SubModifier);
+		set("NoteModifier", backend.modchart.NoteModifier);
+		set("EventTimeline", backend.modchart.EventTimeline);
+		set("StepCallbackEvent", backend.modchart.events.StepCallbackEvent);
+		set("CallbackEvent", backend.modchart.events.CallbackEvent);
+		set("ModEvent", backend.modchart.events.ModEvent);
+		set("EaseEvent", backend.modchart.events.EaseEvent);
+		set("SetEvent", backend.modchart.events.SetEvent);
 
 		set("modMgr", PlayState.instance.modManager);
 

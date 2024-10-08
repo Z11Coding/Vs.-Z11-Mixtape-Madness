@@ -1,12 +1,12 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 import flixel.FlxSprite;
-import ui.*;
-import modchart.*;
+import backend.ui.*;
+import backend.modchart.*;
 import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
 import flixel.FlxG;
-import math.Vector3;
-import math.*;
+import backend.math.Vector3;
+import backend.math.*;
 
 class TransformModifier extends NoteModifier { // this'll be transformX in ModManager
     inline function lerp(a:Float,b:Float,c:Float){

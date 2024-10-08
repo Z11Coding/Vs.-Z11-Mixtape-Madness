@@ -1,9 +1,9 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 
 import flixel.FlxSprite;
-import modchart.*;
-import math.*;
-import playfields.NoteField;
+import backend.modchart.*;
+import backend.math.*;
+import objects.playfields.NoteField;
 
 class OpponentModifier extends NoteModifier {
 	override function getName()

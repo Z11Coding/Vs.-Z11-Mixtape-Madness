@@ -1,11 +1,11 @@
-package modchart.modifiers;
+package backend.modchart.modifiers;
 
-import playfields.NoteField;
-import ui.*;
-import modchart.*;
+import objects.playfields.NoteField;
+import backend.ui.*;
+import backend.modchart.*;
 import flixel.math.FlxPoint;
 import flixel.math.FlxMath;
-import math.*;
+import backend.math.*;
 import flixel.math.FlxAngle;
 
 class ConfusionModifier extends NoteModifier {

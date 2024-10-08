@@ -1,10 +1,10 @@
-package proxies;
+package objects.proxies;
 import openfl.geom.ColorTransform;
 import flixel.math.FlxPoint;
 import openfl.Vector;
 import flixel.graphics.FlxGraphic;
-import playfields.FieldBase;
-import playfields.NoteField;
+import objects.playfields.FieldBase;
+import objects.playfields.NoteField;
 
 
 /* 
