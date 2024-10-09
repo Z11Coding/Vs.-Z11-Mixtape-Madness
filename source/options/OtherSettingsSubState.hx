@@ -158,6 +158,7 @@ class OtherSettingsSubState extends BaseOptionsMenu
 			"Dont"]
 		);
 		addOption(option);
+		option.displayFormat = '< %v >';
 
 		var option:Option = new Option('Break The Sticker Audio',
 			"Literally just locks the sound to a funny bug I found.",

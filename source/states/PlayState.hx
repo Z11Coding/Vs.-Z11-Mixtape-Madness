@@ -1359,7 +1359,7 @@ class PlayState extends MusicBeatState
 		}
 
 		scoreTxt = new FlxText(0, healthBar.y + 36, FlxG.width, "", 20);
-		scoreTxt.setFormat(Paths.font("FridayNightFunkin.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		scoreTxt.setFormat(Paths.font("FridayNightFunkin.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, gf != null ? FlxColor.fromRGB(gf.healthColorArray[0], gf.healthColorArray[1], gf.healthColorArray[2]) : FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.25;
 		scoreTxt.visible = !ClientPrefs.data.mixupMode && (!cpuControlled || playAsGF && !cpuControlled);
@@ -5016,27 +5016,27 @@ if (result < 0 || result > mania) {
 
 		if (!playAsGF)
 		{
-			if (health <= 0)
+			if (health <= 0.0475)
 			{
 				scoreTxt.text = "DON'T MISS!";
-				scoreTxt.color = Std.parseInt("0xFFFF0000");
+				scoreTxt.borderColor = Std.parseInt("0xFFFF0000");
 				playerScoreTxt.text = "DON'T MISS!";
-				playerScoreTxt.color = Std.parseInt("0xFFFF0000");
+				playerScoreTxt.borderColor = Std.parseInt("0xFFFF0000");
 				if (AIPlayer.active)
 				{
 					opponentScoreTxt.text = "DON'T MISS!";
-					opponentScoreTxt.color = Std.parseInt("0xFFFF0000");
+					opponentScoreTxt.borderColor = Std.parseInt("0xFFFF0000");
 				}
 			}
 			else if (ratingName == '?')
 			{
-				scoreTxt.color = Std.parseInt("0xFFFFE600");
+				scoreTxt.borderColor = Std.parseInt("0xFFFFE600");
 				scoreTxt.text = ClientPrefs.data.mixupMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' | NPS: ' + nps;
-				scoreTxt.color = Std.parseInt("0xFFFFE600");
+				scoreTxt.borderColor = Std.parseInt("0xFFFFE600");
 				scoreTxt.text = 'Misses: ' + songMisses + ' | NPS: ' + nps; // peeps wanted no integer rating
 				if (AIPlayer.active)
 				{
-					opponentScoreTxt.color = Std.parseInt("0xFFFFE600");
+					opponentScoreTxt.borderColor = Std.parseInt("0xFFFFE600");
 					opponentScoreTxt.text = aiText; // peeps wanted no integer rating
 				}
 				playerScoreTxt.color = Std.parseInt("0xFFFFE600");
@@ -5045,15 +5045,15 @@ if (result < 0 || result > mania) {
 			}
 			else
 			{
-				scoreTxt.color = Std.parseInt("0xFFFFFFFF");
+				scoreTxt.borderColor = gf != null ? FlxColor.fromRGB(gf.healthColorArray[0], gf.healthColorArray[1], gf.healthColorArray[2]) : FlxColor.BLACK;
 				scoreTxt.text = ClientPrefs.data.mixupMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' ('
 					+ Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC + ' | NPS: ' + nps; // peeps wanted no integer rating
 				if (AIPlayer.active)
 				{
-					opponentScoreTxt.color = Std.parseInt("0xFFFFFFFF");
+					opponentScoreTxt.borderColor = FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]);
 					opponentScoreTxt.text = aiText; // peeps wanted no integer rating
 				}
-				playerScoreTxt.color = Std.parseInt("0xFFFFFFFF");
+				playerScoreTxt.borderColor = FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]);
 				playerScoreTxt.text = '['+daNameB+']\nScore: ' + songScore + '\nRating: ' + ratingName + ' ('
 					+ Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC; // peeps wanted no integer rating
 			}
@@ -5061,6 +5061,7 @@ if (result < 0 || result > mania) {
 		else
 		{
 			scoreTxt.text = 'Combo: ' + gfBopCombo + ' | Highest Combo: ' + gfBopComboBest + ' | Misses: ' + gfMisses;
+			scoreTxt.borderColor = gf != null ? FlxColor.fromRGB(gf.healthColorArray[0], gf.healthColorArray[1], gf.healthColorArray[2]) : FlxColor.BLACK;
 			opponentScoreTxt.visible = false;
 			playerScoreTxt.visible = false;
 		}
@@ -7514,6 +7515,10 @@ if (result < 0 || result > mania) {
 	public var showComboNum:Bool = true;
 	public var showRating:Bool = true;
 
+	public var showComboAI:Bool = false;
+	public var showComboNumAI:Bool = true;
+	public var showRatingAI:Bool = true;
+
 	private function cachePopUpScore()
 	{
 		/*var pixelShitPart1:String = '';
@@ -7839,7 +7844,7 @@ if (result < 0 || result > mania) {
 		rating.acceleration.y = 550 * playbackRate * playbackRate;
 		rating.velocity.y -= FlxG.random.int(140, 175) * playbackRate;
 		rating.velocity.x -= FlxG.random.int(0, 10) * playbackRate;
-		rating.visible = showRating;
+		rating.visible = showRatingAI;
 		rating.x += ClientPrefs.data.comboOffset[0] + 400;
 		rating.y -= ClientPrefs.data.comboOffset[1];
 

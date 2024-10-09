@@ -34,6 +34,7 @@ function onCreatePost()
    setObjectCamera('mattSTANDO', 'camGame')
    scaleObject('mattSTANDO', 1, 1)
    setProperty('mattSTANDO.alpha', 0)   
+   setProperty('mattSTANDO.visible', false)   
    addLuaSprite('mattSTANDO', true) 
    
    makeAnimatedLuaSprite('bfSTANDO', 'mechanics/matt/Stands/bfstando', 750, 460)
@@ -45,6 +46,7 @@ function onCreatePost()
    setObjectCamera('bfSTANDO', 'camGame')
    scaleObject('bfSTANDO', 1, 1)
    setProperty('bfSTANDO.alpha', 0)   
+   setProperty('bfSTANDO.visible', false)   
    addLuaSprite('bfSTANDO', true) 
    
    makeAnimatedLuaSprite('pie', 'mechanics/matt/HUD/pie', 40, 120)
@@ -54,7 +56,6 @@ function onCreatePost()
    setObjectCamera('pie', 'camHUD')
    scaleObject('pie', 0.75, 0.75)
    setProperty('pie.alpha', 0)   
-   addLuaSprite('pie', true)   
    
    makeLuaSprite('powerBarBG', nil, 1240, 60)
    makeGraphic('powerBarBG', 16, 600, '000000')
@@ -63,12 +64,12 @@ function onCreatePost()
    makeLuaSprite('powerBar', nil, 1242, 65)
    makeGraphic('powerBar', 12, 590, '005FFF')
    setObjectCamera('powerBar', 'camHUD')   
-   addLuaSprite('powerBar', true)
+   
    
    makeLuaText('powerTxt', 'Press Z!', 500, 390, 500)
    setTextSize('powerTxt', 35)
    setProperty('powerTxt.alpha', 0)
-   addLuaText('powerTxt', true)
+   
 end
 function onUpdate()   
    objectPlayAnimation('pie', 'health'..healthPie..'', false) 
