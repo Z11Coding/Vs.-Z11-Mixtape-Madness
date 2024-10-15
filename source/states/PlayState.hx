@@ -73,8 +73,8 @@ import openfl.Lib;
 import backend.AIPlayer;
 import objects.NoteObject.ObjectType;
 import shaders.ShadersHandler;
-
 import yutautil.Anomoly;
+import backend.window.CppAPI;
 
 /**
  * This is where all the Gameplay stuff happens and is managed
@@ -552,6 +552,7 @@ class PlayState extends MusicBeatState
 	
 
 	var backupGpu:Bool;
+	public static var nextReloadAll:Bool = false;
 	override public function create()
 	{
 		try
@@ -595,6 +596,9 @@ class PlayState extends MusicBeatState
 		if (!CacheMode)
 			PlayState.cachingSongs = [];
 
+		Paths.clearStoredMemory();
+		if(nextReloadAll) Paths.clearUnusedMemory();
+		nextReloadAll = false;
 		MemoryUtil.clearMajor();
 
 		if (!CacheMode)
@@ -783,6 +787,8 @@ class PlayState extends MusicBeatState
 			camDialogue.filtersEnabled = true;
 			filters.push(shaders.ShadersHandler.chromaticAberration);
 			camfilters2.push(shaders.ShadersHandler.chromaticAberration);
+			camfilters2.push(new ShaderFilter(ShadersHandler.rainShader));
+			ShadersHandler.setupRainShader();
 			// camfilters2.push(shaders.ShadersHandler.rainShader);
 			/*filters.push(ShadersHandler.fuckingTriangle); //this shader has a cool feature for all the wrong reasons >:)
 				camfilters.push(ShadersHandler.fuckingTriangle); */
@@ -847,7 +853,7 @@ class PlayState extends MusicBeatState
 				SONG = Song.loadFromJson('tutorial');
 
 			Conductor.mapBPMChanges(SONG);
-			Conductor.changeBPM(SONG.bpm);
+			Conductor.bpm = SONG.bpm;
 		}
 		}
 
@@ -1256,8 +1262,6 @@ class PlayState extends MusicBeatState
 
 		callOnScripts("onPlayfieldCreationPost");
 
-		backupGpu = ClientPrefs.data.cacheOnGPU;
-		ClientPrefs.data.cacheOnGPU = false;
 		if (!CacheMode) {
 			if (chartModifier == "Normal") {
 				var songExists = false;
@@ -3206,7 +3210,7 @@ if (result < 0 || result > mania) {
 		}
 
 		var songData = SONG;
-		Conductor.changeBPM(songData.bpm);
+		Conductor.bpm = songData.bpm;
 
 		curSong = songData.song;
 
@@ -3227,14 +3231,14 @@ if (result < 0 || result > mania) {
 			if (songData.needsVoices && songData.newVoiceStyle)
 			{
 				var playerVocals = Paths.voices(songData.song,
-					(boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) ? 'player' : boyfriend.vocalsFile);
+					(boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) ? 'Player' : boyfriend.vocalsFile);
 				if (playerVocals != null)
 				{
 					vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.music('empty'));
 					FlxG.sound.list.add(vocals);
 				}
 
-				var oppVocals = Paths.voices(songData.song, (dad.vocalsFile == null || dad.vocalsFile.length < 1) ? 'opponent' : dad.vocalsFile);
+				var oppVocals = Paths.voices(songData.song, (dad.vocalsFile == null || dad.vocalsFile.length < 1) ? 'Opponent' : dad.vocalsFile);
 				if (oppVocals != null)
 				{
 					opponentVocals.loadEmbedded(oppVocals != null ? oppVocals : Paths.music('empty'));
@@ -3244,7 +3248,7 @@ if (result < 0 || result > mania) {
 				if (((dad.vocalsFile == null || dad.vocalsFile.length < 1) && dad.vocalsFile != 'gf')
 					&& ((boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) && boyfriend.vocalsFile != 'gf'))
 				{
-					var gfVoc = Paths.voices(songData.song, (gf.vocalsFile == null || gf.vocalsFile.length < 1) ? 'gf' : gf.vocalsFile);
+					var gfVoc = Paths.voices(songData.song, (gf.vocalsFile == null || gf.vocalsFile.length < 1) ? 'GF' : gf.vocalsFile);
 					if (gfVoc != null)
 					{
 						gfVocals.loadEmbedded(gfVoc != null ? gfVoc : Paths.music('empty'));
@@ -3316,8 +3320,13 @@ if (result < 0 || result > mania) {
 
 		speedChanges.sort(svSort);
 
+		var ghostNotesCaught:Int = 0;
+		var daBpm:Float = Conductor.bpm;
 		for (section in noteData)
 		{
+			if (section.changeBPM != null && section.changeBPM && section.bpm != null && daBpm != section.bpm)
+				daBpm = section.bpm;
+
 			for (songNotes in section.sectionNotes)
 			{
 				var daStrumTime:Float = songNotes[0];
@@ -3754,10 +3763,11 @@ if (result < 0 || result > mania) {
 					continue;
 				}
 
-				var floorSus:Int = Math.round(susLength);
-				if (floorSus > 0)
+				var curStepCrochet:Float = 60 / daBpm * 1000 / 4.0;
+				final roundSus:Int = Math.round(swagNote.sustainLength / curStepCrochet);
+				if(roundSus > 0)
 				{
-					for (susNote in 0...floorSus)
+					for (susNote in 0...roundSus)
 					{
 						oldNote = allNotes[Std.int(allNotes.length - 1)];
 
@@ -4691,6 +4701,15 @@ if (result < 0 || result > mania) {
 	{
 		if (FlxG.keys.justPressed.NINE)
 			iconP1.swapOldIcon();
+
+		CppAPI.updateTitle();
+
+		if(ShadersHandler.rainShader != null)
+		{
+			ShadersHandler.rainShader.intensity = rainIntensity;
+			ShadersHandler.rainShader.updateViewInfo(FlxG.width, FlxG.height, camGame);
+			ShadersHandler.rainShader.update(elapsed);
+		}
 
 		if (!isStoryMode && playbackRate == 1)
 		{
@@ -6609,14 +6628,29 @@ if (result < 0 || result > mania) {
 				}
 
 			case 'Set Property':
-				var killMe:Array<String> = value1.split('.');
-				if (killMe.length > 1)
+				try
 				{
-					LuaUtils.setVarInArray(LuaUtils.getPropertyLoop(killMe, true, true), killMe[killMe.length - 1], value2);
+					var trueValue:Dynamic = value2.trim();
+					if (trueValue == 'true' || trueValue == 'false') trueValue = trueValue == 'true';
+					else if (flValue2 != null) trueValue = flValue2;
+					else trueValue = value2;
+
+					var split:Array<String> = value1.split('.');
+					if(split.length > 1) {
+						LuaUtils.setVarInArray(LuaUtils.getPropertyLoop(split), split[split.length-1], trueValue);
+					} else {
+						LuaUtils.setVarInArray(this, value1, trueValue);
+					}
 				}
-				else
+				catch(e:Dynamic)
 				{
-					LuaUtils.setVarInArray(this, value1, value2);
+					var len:Int = e.message.indexOf('\n') + 1;
+					if(len <= 0) len = e.message.length;
+					#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+					addTextToDebug('ERROR ("Set Property" Event) - ' + e.message.substr(0, len), FlxColor.RED);
+					#else
+					FlxG.log.warn('ERROR ("Set Property" Event) - ' + e.message.substr(0, len));
+					#end
 				}
 
 			case 'Change Mania':
@@ -7141,7 +7175,7 @@ if (result < 0 || result > mania) {
 		});
 	}
 
-	function moveCameraSection(?sec:Null<Int>):Void
+	public function moveCameraSection(?sec:Null<Int>):Void
 	{
 		if (sec == null)
 			sec = curSection;
@@ -9418,7 +9452,7 @@ if (result < 0 || result > mania) {
 
 			if (SONG.notes[curSection].changeBPM)
 			{
-				Conductor.changeBPM(SONG.notes[curSection].bpm);
+				Conductor.bpm = SONG.notes[curSection].bpm;
 				setOnScripts('curBpm', Conductor.bpm);
 				setOnScripts('crochet', Conductor.crochet);
 				setOnScripts('stepCrochet', Conductor.stepCrochet);

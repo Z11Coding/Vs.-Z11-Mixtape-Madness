@@ -85,6 +85,7 @@ class Highscore
 	public static function saveScore(song:String, score:Int = 0, ?diff:Int = 0, ?rating:Float = -1, ?misses:Int = 0):Void
 	{
 		//Score and Rating now save seperately and Misses now save as well.
+		if(song == null) return;
 		var daSong:String = formatSong(song, diff);
 		if (isOppMode)
 		{

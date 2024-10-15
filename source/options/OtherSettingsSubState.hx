@@ -214,7 +214,7 @@ class OtherSettingsSubState extends BaseOptionsMenu
 			FlxG.sound.playMusic(Paths.music(Paths.formatToSongPath(ClientPrefs.data.pauseMusic)));
 
 		changedMusic = true;
-		Conductor.changeBPM(curBPMList[indeed]);
+		Conductor.bpm = curBPMList[indeed];
 		ClientPrefs.data.pauseBPM = curBPMList[indeed];
 	}
 

@@ -22,6 +22,13 @@ typedef Achievement =
 	@:optional var ID:Int; 
 }
 
+enum abstract AchievementOp(String)
+{
+	var GET = 'get';
+	var SET = 'set';
+	var ADD = 'add';
+}
+
 class Achievements {
 	public static function init()
 	{
@@ -61,6 +68,7 @@ class Achievements {
 		createAchievement('lessismore',	        	{name: "Master of Less", description: "Beat any song in a mania of 1-3"});
 		createAchievement('toomanynotes',	        {name: "Master of Mania", description: "Beat any song in a mania higher than 4"});
 		createAchievement('h?',	                    {name: "h?", description: "h?"});
+		createAchievement('pessy_easter_egg',		{name: "Engine Gal Pal", description: "Teehee, you found me~!", hidden: true});
 		
 		//dont delete this thing below
 		_originalLength = _sortID + 1;
@@ -105,16 +113,15 @@ class Achievements {
 	}
 	
 	public static function getScore(name:String):Float
-		return _scoreFunc(name, 0);
+		return _scoreFunc(name, GET);
 
 	public static function setScore(name:String, value:Float, saveIfNotUnlocked:Bool = true):Float
-		return _scoreFunc(name, 1, value, saveIfNotUnlocked);
+		return _scoreFunc(name, SET, value, saveIfNotUnlocked);
 
 	public static function addScore(name:String, value:Float = 1, saveIfNotUnlocked:Bool = true):Float
-		return _scoreFunc(name, 2, value, saveIfNotUnlocked);
+		return _scoreFunc(name, ADD, value, saveIfNotUnlocked);
 
-	//mode 0 = get, 1 = set, 2 = add
-	static function _scoreFunc(name:String, mode:Int = 0, addOrSet:Float = 1, saveIfNotUnlocked:Bool = true):Float
+	static function _scoreFunc(name:String, mode:AchievementOp, addOrSet:Float = 1, saveIfNotUnlocked:Bool = true):Float
 	{
 		if(!variables.exists(name))
 			variables.set(name, 0);
@@ -129,8 +136,9 @@ class Achievements {
 			var val = addOrSet;
 			switch(mode)
 			{
-				case 0: return variables.get(name); //get
-				case 2: val += variables.get(name); //add
+				case GET: return variables.get(name); //get
+				case ADD: val += variables.get(name); //add
+				default:
 			}
 
 			if(val >= achievement.maxScore)
@@ -318,6 +326,7 @@ class Achievements {
 		}
 		return retVal;
 	}
+	#end
 
 	#if LUA_ALLOWED
 	public static function addLuaCallbacks(lua:State)
@@ -331,7 +340,7 @@ class Achievements {
 			}
 			return getScore(name);
 		});
-		Lua_helper.add_callback(lua, "setAchievementScore", function(name:String, ?value:Float = 1, ?saveIfNotUnlocked:Bool = true):Float
+		Lua_helper.add_callback(lua, "setAchievementScore", function(name:String, ?value:Float = 0, ?saveIfNotUnlocked:Bool = true):Float
 		{
 			if(!achievements.exists(name))
 			{
@@ -369,7 +378,6 @@ class Achievements {
 		});
 		Lua_helper.add_callback(lua, "achievementExists", function(name:String) return achievements.exists(name));
 	}
-	#end
 	#end
 }
 #end

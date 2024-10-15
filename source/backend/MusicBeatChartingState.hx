@@ -150,7 +150,7 @@ class MusicBeatChartingState extends FlxUIState
         FlxG.sound.playMusic(Paths.music(musicPath), volume);
 
         // Change the BPM in the Conductor
-        Conductor.changeBPM(bpm);
+        Conductor.bpm = bpm;
     }
 
 	private function updateBeat():Void

@@ -83,5 +83,33 @@ class CppAPI
 	public static function allowHighDPI() {
 		WindowsData.registerHighDpi();
 	}
+
+	public static function sendWindowsNotification(title:String = "", desc:String = "") {
+		PlatformUtil.sendWindowsNotification(title, desc, 0);
+	}
+
+	public static function setWinTitle(title:String = "") {
+		WindowUtils.winTitle = title;
+	}
+	
+	public static function setWinPrefix(title:String = "") {
+		WindowUtils.prefix = title;
+	}
+
+	public static function setWinSuffix(title:String = "") {
+		WindowUtils.suffix = title;
+	}
+
+	public static function resetTitle() {
+		WindowUtils.resetTitle();
+	}
+
+	public static function resetAffixes() {
+		WindowUtils.resetAffixes();
+	}
+
+	public static function updateTitle() {
+		WindowUtils.updateTitle();
+	}
 	#end
 }

@@ -27,7 +27,8 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 			position: [0, 0],
 			idle_anim: 'M Dad Idle',
 			confirm_anim: 'M Dad Idle',
-			flipX: false
+			flipX: false,
+			antialiasing: true
 		};
 		
 		#if DISCORD_ALLOWED
@@ -48,7 +49,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 		add(grpWeekCharacters);
 
 		txtOffsets = new FlxText(20, 10, 0, "[0, 0]", 32);
-		txtOffsets.setFormat("VCR OSD Mono", 32, FlxColor.WHITE, CENTER);
+		txtOffsets.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER);
 		txtOffsets.alpha = 0.7;
 		add(txtOffsets);
 
@@ -110,6 +111,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 	var confirmInputText:PsychUIInputText;
 	var scaleStepper:PsychUINumericStepper;
 	var flipXCheckbox:PsychUICheckBox;
+	var antialiasingCheckbox:PsychUICheckBox;
 	function addCharacterUI() {
 		var tab_group = UI_mainbox.getTab('Character').menu;
 		
@@ -124,6 +126,14 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 			characterFile.flipX = flipXCheckbox.checked;
 		};
 
+		antialiasingCheckbox = new PsychUICheckBox(10, flipXCheckbox.y + 30, "Antialiasing", 100);
+		antialiasingCheckbox.checked = grpWeekCharacters.members[characterTypeRadio.checked].antialiasing;
+		antialiasingCheckbox.onClick = function()
+		{
+			grpWeekCharacters.members[characterTypeRadio.checked].antialiasing = antialiasingCheckbox.checked;
+			characterFile.antialiasing = antialiasingCheckbox.checked;
+		};
+
 		var reloadImageButton:PsychUIButton = new PsychUIButton(140, confirmInputText.y + 30, "Reload Char", function() {
 			reloadSelectedCharacter();
 		});
@@ -135,6 +145,7 @@ class MenuCharacterEditorState extends MusicBeatState implements PsychUIEventHan
 		tab_group.add(new FlxText(10, idleInputText.y - 18, 0, 'Idle animation on the .XML:'));
 		tab_group.add(new FlxText(scaleStepper.x, scaleStepper.y - 18, 0, 'Scale:'));
 		tab_group.add(flipXCheckbox);
+		tab_group.add(antialiasingCheckbox);
 		tab_group.add(reloadImageButton);
 		tab_group.add(confirmDescText);
 		tab_group.add(imageInputText);

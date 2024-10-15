@@ -29,8 +29,8 @@ class StrumNote extends NoteObject
 	public var isQuant:Bool = false;
 	private var colorSwap:ColorSwap;
 	public var resetAnim:Float = 0;
-	public var direction:Float = 90;//plan on doing scroll directions soon -bb
-	public var downScroll:Bool = false;//plan on doing scroll directions soon -bb
+	public var direction:Float = 90;
+	public var downScroll:Bool = false;
 	public var sustainReduce:Bool = true;
 	private var player:Int;
 	
@@ -127,6 +127,7 @@ class StrumNote extends NoteObject
 		objType = STRUM;
 		noteData = leData;
 		this.noteData = leData;
+		this.ID = noteData;
 		// trace(noteData);
 
 		var skin:String = 'normal';
@@ -197,7 +198,7 @@ class StrumNote extends NoteObject
 		x += ((FlxG.width* 0.5) * player);
 		ID = noteData;
 	} */
-	public function postAddedToGroup()
+	public function playerPosition()
 	{
 		playAnim('static');
 		switch (PlayState.mania)
@@ -211,7 +212,6 @@ class StrumNote extends NoteObject
 	
 		x += 50;
 		x += ((FlxG.width / 2) * 1);
-		ID = noteData;
 		x -= Note.posRest[PlayState.mania];
 	}
 

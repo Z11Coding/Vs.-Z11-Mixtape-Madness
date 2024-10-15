@@ -1,4 +1,4 @@
-package debug;
+package backend.debug;
 
 import flixel.FlxG;
 import openfl.text.TextField;
@@ -37,6 +37,8 @@ class FPSCounter extends TextField
 		autoSize = LEFT;
 		multiline = true;
 		text = "FPS: ";
+		background = true;
+		backgroundColor = 0xFF000000;
 
 		times = [];
 	}
@@ -56,20 +58,21 @@ class FPSCounter extends TextField
 		times.push(now);
 		while (times[0] < now - 1000) times.shift();
 
-		currentFPS = times.length < FlxG.updateFramerate ? times.length : FlxG.updateFramerate;				
+		currentFPS = times.length < FlxG.updateFramerate ? times.length : FlxG.updateFramerate;		
 		updateText();
 		deltaTimeout += deltaTime;
 	}
 
 	public dynamic function updateText():Void { // so people can override it in hscript
-		text = 'FPS: ${currentFPS}'
-		+ '\nMemory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}';
-
+        text = 'FPS: $currentFPS • Memory: ${flixel.util.FlxStringUtil.formatBytes(memoryMegas)}';
+		
+		
 		textColor = 0xFFFFFFFF;
 		if (currentFPS < FlxG.drawFramerate * 0.5)
 			textColor = 0xFFFF0000;
 	}
 
-	inline function get_memoryMegas():Float
+	inline function get_memoryMegas():Float {
 		return cast(System.totalMemory, UInt);
+	}
 }

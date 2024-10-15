@@ -35,7 +35,16 @@ import sys.io.Process;
 import backend.gamejolt.GameJolt;
 import backend.gamejolt.GameJolt.GJToastManager;
 
+import backend.debug.FPSCounter;
+
 import backend.window.WindowUtils;
+
+#if linux
+@:cppInclude('./external/gamemode_client.h')
+@:cppFileCode('
+	#define GAMEMODE_AUTO
+')
+#end
 class Main extends Sprite
 {
 	var game = {
@@ -54,7 +63,7 @@ class Main extends Sprite
 	public static var forceGPUOnlyBitmapsOff:Bool = #if windows false #else true #end;
 
 	// public var initStuff = game;
-	public static var fpsVar:FPS;
+	public static var fpsVar:FPSCounter;
 
 	// You can pretty much ignore everything from here on - your code should go in your states.
 
@@ -177,6 +186,15 @@ class Main extends Sprite
 			game.height = Math.ceil(stageHeight / game.zoom);
 		}
 
+		#if LUA_ALLOWED
+		Mods.pushGlobalMods();
+		#end
+		Mods.loadTopMod();
+
+		FlxG.save.bind('Mixtape', CoolUtil.getSavePath());
+
+		Highscore.load();
+
 		MemoryUtil.init();
 		WindowUtils.init();
 		var commandPrompt = new CommandPrompt();
@@ -184,6 +202,7 @@ class Main extends Sprite
 		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
+		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
 		try
 		{
 			addChild(new FlxGame(game.width, game.height, game.initialState, #if (flixel < "5.0.0") game.zoom, #end game.framerate, game.framerate,
@@ -207,20 +226,20 @@ class Main extends Sprite
 		FlxG.signals.preStateSwitch.add(onStateSwitch);
 		FlxGraphic.defaultPersist = false;
 		#if !mobile
-		fpsVar = new FPS(10, 3, 0xFFFFFF);
+		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
 		addChild(fpsVar);
-		memoryCounter = new MemoryCounter(10, 3, 0xffffff);
-		addChild(memoryCounter);
+		//memoryCounter = new MemoryCounter(10, 3, 0xffffff);
+		//addChild(memoryCounter);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
 		if (fpsVar != null)
 		{
 			fpsVar.visible = ClientPrefs.data.showFPS;
 		}
-		if (memoryCounter != null)
+		/*if (memoryCounter != null)
 		{
 			memoryCounter.visible = ClientPrefs.data.showFPS;
-		}
+		}*/
 		#end
 
 		FlxG.scaleMode = scaleMode = new FunkinRatioScaleMode();

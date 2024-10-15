@@ -1,13 +1,7 @@
 package backend;
 
 import backend.Song;
-import backend.Section;
 import objects.Note;
-
-/**
- * ...
- * @author
- */
 
 typedef BPMChangeEvent =
 {
@@ -19,22 +13,18 @@ typedef BPMChangeEvent =
 
 class Conductor
 {
-	public static var bpm:Float = 100;
+	public static var bpm(default, set):Float = 100;
 	public static var crochet:Float = ((60 / bpm) * 1000); // beats in milliseconds
 	public static var stepCrochet:Float = crochet / 4; // steps in milliseconds
-	public static var songPosition:Float=0;
 	public static var visualPosition:Float = 0;
 	public static var lastSongPos:Float;
+	public static var songPosition:Float = 0;
 	public static var offset:Float = 0;
 
 	//public static var safeFrames:Int = 10;
 	public static var safeZoneOffset:Float = 0; // is calculated in create(), is safeFrames in milliseconds
 
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
-
-	public function new()
-	{
-	}
 
 	public static function judgeNote(arr:Array<Rating>, diff:Float=0):Rating // die
 	{
@@ -146,11 +136,11 @@ class Conductor
 		return (60/bpm)*1000;
 	}
 
-	public static function changeBPM(newBpm:Float)
-	{
-		bpm = newBpm;
-
+	public static function set_bpm(newBPM:Float):Float {
+		bpm = newBPM;
 		crochet = calculateCrochet(bpm);
 		stepCrochet = crochet / 4;
+
+		return bpm = newBPM;
 	}
 }

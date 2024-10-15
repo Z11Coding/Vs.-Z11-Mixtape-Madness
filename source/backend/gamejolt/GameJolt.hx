@@ -333,7 +333,7 @@ class GameJoltLogin extends MusicBeatState
         {
             FlxG.sound.playMusic(Paths.music('funky-genesis'), 0);
             FlxG.sound.music.fadeIn(2, 0, 0.85);
-            Conductor.changeBPM(100);
+            Conductor.bpm = 100;
         }
 
         trace(GJApi.initialized);
@@ -520,7 +520,7 @@ class GameJoltLogin extends MusicBeatState
             FlxG.switchState(GameJoltInfo.changeState);
             FlxG.sound.playMusic(Paths.music('panixPress'), 0);
 			FlxG.sound.music.fadeIn(4, 0, 0.7);
-            Conductor.changeBPM(states.TitleState.globalBPM);
+            Conductor.bpm = states.TitleState.globalBPM;
         }
 
         super.update(elapsed);

@@ -305,7 +305,7 @@ class PauseSubState extends MusicBeatSubstate
 					PlayState.instance.paused = true; // For lua
 					PlayState.instance.vocals.volume = 0;
 					FlxG.switchState(new OptionsState());
-					Conductor.changeBPM(ClientPrefs.data.pauseBPM);
+					Conductor.bpm = ClientPrefs.data.pauseBPM;
 					if(ClientPrefs.data.pauseMusic != 'None')
 					{
 						FlxG.sound.playMusic(Paths.music(Paths.formatToSongPath(ClientPrefs.data.pauseMusic)), pauseMusic.volume);

@@ -96,6 +96,8 @@ import flixel.addons.transition.FlxTransitionableState;
 
 import objects.playfields.*;
 
+import shop.*;
+
 // import backend.modules.MathSolver;
 import backend.modules.MathSolver2;
 import backend.modules.ArrayToMapConverter;

@@ -183,7 +183,7 @@ class TitleState extends MusicBeatState
 			GameJoltAPI.authDaUser(FlxG.save.data.gjUser, FlxG.save.data.gjToken);
 		}
 
-		Conductor.changeBPM(titleJSON.bpm);
+		Conductor.bpm = titleJSON.bpm;
 		globalBPM = titleJSON.bpm;
 		persistentUpdate = true;
 
@@ -323,9 +323,12 @@ class TitleState extends MusicBeatState
 
 	function getIntroTextShit():Array<Array<String>>
 	{
+		#if MODS_ALLOWED
+		var firstArray:Array<String> = Mods.mergeAllTextsNamed('data/introText.txt');
+		#else
 		var fullText:String = Assets.getText(Paths.txt('introText'));
-
 		var firstArray:Array<String> = fullText.split('\n');
+		#end
 		var swagGoodArray:Array<Array<String>> = [];
 
 		for (i in firstArray)
@@ -338,9 +341,12 @@ class TitleState extends MusicBeatState
 
 	function getMoreIntroTextShit():Array<Array<String>>
 	{
+		#if MODS_ALLOWED
+		var firstArray:Array<String> = Mods.mergeAllTextsNamed('data/thefunnie.txt');
+		#else
 		var fullText:String = Assets.getText(Paths.txt('thefunnie'));
-
 		var firstArray:Array<String> = fullText.split('\n');
+		#end
 		var swagGoodArray:Array<Array<String>> = [];
 
 		for (i in firstArray)

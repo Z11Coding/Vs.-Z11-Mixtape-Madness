@@ -205,7 +205,7 @@ class RTX extends FlxShader {
     }
 }
 
-class Light {
+class RTXLight {
     public var color:Array<Float>;
     public var brightness:Float;
     public var alpha:Float;

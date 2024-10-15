@@ -35,7 +35,7 @@ class MusicBeatState extends FlxState
 		super.create();
 
 		if(!skip) {
-			openSubState(new CustomFadeTransition(0.0000001, true));
+			openSubState(new CustomFadeTransition(0.5, true));
 		}
 		FlxTransitionableState.skipNextTransOut = false;
 		timePassedOnState = 0;
@@ -153,7 +153,7 @@ class MusicBeatState extends FlxState
         FlxG.sound.playMusic(Paths.music(musicPath), volume);
 
         // Change the BPM in the Conductor
-        Conductor.changeBPM(bpm);
+        Conductor.bpm = bpm;
     }
 
 	private function updateBeat():Void
@@ -274,7 +274,7 @@ class MusicBeatState extends FlxState
 		if(nextState == null)
 			nextState = FlxG.state;
 
-		FlxG.state.openSubState(new CustomFadeTransition(0.6, false));
+		FlxG.state.openSubState(new CustomFadeTransition(0.5, false));
 		if(nextState == FlxG.state)
 			CustomFadeTransition.finishCallback = function() FlxG.resetState();
 		else

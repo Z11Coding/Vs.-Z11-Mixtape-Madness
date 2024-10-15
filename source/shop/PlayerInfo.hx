@@ -6,8 +6,18 @@ class PlayerInfo {
 
     public static function saveInfo()
     {
+        trace(curMoney);
         curItems.set('money', curMoney);
         FlxG.save.data.curItems = curItems;
+        ShopData.saveShop();
+        FlxG.save.flush();
+    }
+
+    public static function loadInfo()
+    {
+        curItems = FlxG.save.data.curItems;
+
+        curMoney = curItems.get('money');
     }
 
 }

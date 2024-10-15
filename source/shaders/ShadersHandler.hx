@@ -14,8 +14,15 @@ class ShadersHandler
 	public static var fuckingTriangle:ShaderFilter = new ShaderFilter(new shaders.Shaders.FuckingTriangle());
 	public static var visualizer:ShaderFilter = new ShaderFilter(new shaders.VisualizerShader());
 	public static var heatwaveShader:ShaderFilter = new ShaderFilter(new shaders.HeatwaveShader().shader);
-	public static var rainShader:ShaderFilter = new ShaderFilter(new RainShader());
+	public static var rainShader:RainShader;
     // public static var rtxShader:RTX = new RTX();
+
+	public static function setupRainShader()
+	{
+		rainShader = new RainShader();
+		rainShader.scale = FlxG.height / 200;
+		rainShader.intensity = 0;
+	}
 
     public static function applyRTXShader(sprite:FlxSprite, overlayColor:Array<Float>, satinColor:Array<Float>, innerShadowColor:Array<Float>, innerShadowAngle:Float, innerShadowDistance:Float):Void {
         var rtxShader = new RTX();
@@ -29,11 +36,11 @@ class ShadersHandler
 		sprite.shader = rtxShader;
     }
 
-    public static function createLight(color:Array<Float>, brightness:Float, alpha:Float):Light {
-        return new Light(color, brightness, alpha);
+    public static function createLight(color:Array<Float>, brightness:Float, alpha:Float):RTXLight {
+        return new RTXLight(color, brightness, alpha);
     }
 
-    public static function applyLightToSprite(sprite:FlxSprite, light:Light):Void {
+    public static function applyLightToSprite(sprite:FlxSprite, light:RTXLight):Void {
 		var rtxShader = new RTX();
         var overlayColor = [light.color[0] * light.brightness, light.color[1] * light.brightness, light.color[2] * light.brightness, light.alpha];
         rtxShader.setOverlayColor(overlayColor);
@@ -67,20 +74,5 @@ class ShadersHandler
 	public static function updateHeat(curDate:Float):Void
 	{
 		heatwaveShader.shader.data.iTime.value = [curDate];
-	}
-
-	public static function updateRain(curDate:Float):Void
-	{
-		rainShader.shader.data.iTime.value = [curDate];
-	}
-
-	public static function setRainIntensity(curNum:Float):Void
-	{
-		rainShader.shader.data.iIntensity.value = [curNum];
-	}
-
-	public static function setRainScale(curNum:Float):Void
-	{
-		rainShader.shader.data.iTimescale.value = [curNum];
 	}
 }

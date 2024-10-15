@@ -301,7 +301,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 			babyArrow.handleRendering = false; // NoteField handles rendering
 			babyArrow.cameras = cameras;
 			strumNotes.push(babyArrow);
-			babyArrow.postAddedToGroup();
+			babyArrow.playerPosition();
 		}
 	}
 

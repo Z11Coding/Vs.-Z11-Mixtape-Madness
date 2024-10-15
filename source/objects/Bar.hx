@@ -14,8 +14,8 @@ class Bar extends FlxSpriteGroup
 	public var barCenter(default, null):Float = 0;
 
 	// you might need to change this if you want to use a custom bar
-	public var barWidth(default, set):Float = 1;
-	public var barHeight(default, set):Float = 1;
+	public var barWidth(default, set):Int = 1;
+	public var barHeight(default, set):Int = 1;
 	public var barOffset:FlxPoint = new FlxPoint(3, 3);
 
 	public function new(x:Float, y:Float, image:String = 'healthBar', valueFunction:Void->Float = null, boundX:Float = 0, boundY:Float = 1)
@@ -101,14 +101,6 @@ class Bar extends FlxSpriteGroup
 		// flixel is retarded
 		leftBar.clipRect = leftBar.clipRect;
 		rightBar.clipRect = rightBar.clipRect;
-
-		//so it can also be manually updated
-		if(valueFunction != null)
-		{
-			var value:Null<Float> = FlxMath.remapToRange(FlxMath.bound(valueFunction(), bounds.min, bounds.max), bounds.min, bounds.max, 0, 100);
-			percent = (value != null ? value : 0);
-		}
-		else percent = 0;
 	}
 
 	public function regenerateClips()
@@ -145,14 +137,14 @@ class Bar extends FlxSpriteGroup
 		return value;
 	}
 
-	private function set_barWidth(value:Float)
+	private function set_barWidth(value:Int)
 	{
 		barWidth = value;
 		regenerateClips();
 		return value;
 	}
 
-	private function set_barHeight(value:Float)
+	private function set_barHeight(value:Int)
 	{
 		barHeight = value;
 		regenerateClips();

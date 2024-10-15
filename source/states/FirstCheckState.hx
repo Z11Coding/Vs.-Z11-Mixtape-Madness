@@ -34,23 +34,14 @@ class FirstCheckState extends MusicBeatState
 		WindowUtil.disableCrashHandler();
 		FlxSprite.defaultAntialiasing = true;
 
-		#if LUA_ALLOWED
-		Mods.pushGlobalMods();
-		#end
-		Mods.loadTopMod();
-
+		FlxG.fixedTimestep = false;
 		FlxG.game.focusLostFramerate = 60;
-		FlxG.keys.preventDefaultKeys = [TAB, ALT];
+		FlxG.keys.preventDefaultKeys = [TAB];
 
-		FlxG.save.bind('Mixtape', CoolUtil.getSavePath());
 		ClientPrefs.loadPrefs();
 		ClientPrefs.reloadVolumeKeys();
 
 		Language.reloadPhrases();
-
-		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
-
-		Highscore.load();
 
 		#if sys
 		ArtemisIntegration.initialize();
@@ -66,6 +57,8 @@ class FirstCheckState extends MusicBeatState
 			ArtemisIntegration.resetModName ();
 		});
 		#end
+
+		PlayerInfo.loadInfo();
 
 		super.create();
 
