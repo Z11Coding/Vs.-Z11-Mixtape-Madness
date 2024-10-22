@@ -7,27 +7,27 @@ class WindowFunctions
 	{
 		var lua = funk.lua;
 		var game:PlayState = PlayState.instance;
-		Lua_helper.add_callback(lua, "setWindowOppacity", function(num:Float) {
+		Lua_helper.add_callback(lua, "setWindowOppacity", function(num:Float = 1) {
 			CppAPI.setWindowOppacity(num);
 		});
 
-		Lua_helper.add_callback(lua, "setWallpaper", function(path:String) {
+		Lua_helper.add_callback(lua, "setWallpaper", function(path:String = "old") {
 			CppAPI.setWallpaper(path);
 		});
 
-		Lua_helper.add_callback(lua, "hideTaskbar", function(path:String) {
+		Lua_helper.add_callback(lua, "hideTaskbar", function() {
 			CppAPI.hideTaskbar();
 		});
 
-		Lua_helper.add_callback(lua, "restoreTaskbar", function(path:String) {
+		Lua_helper.add_callback(lua, "restoreTaskbar", function() {
 			CppAPI.restoreTaskbar();
 		});
 
-		Lua_helper.add_callback(lua, "hideWindows", function(path:String) {
+		Lua_helper.add_callback(lua, "hideWindows", function() {
 			CppAPI.hideWindows();
 		});
 
-		Lua_helper.add_callback(lua, "restoreWindows", function(path:String) {
+		Lua_helper.add_callback(lua, "restoreWindows", function() {
 			CppAPI.restoreWindows();
 		});
 
@@ -68,23 +68,23 @@ class WindowFunctions
 			Window.setSize(width, height);
 		});
 
-		Lua_helper.add_callback(lua, "windowPopup", function(message:String, title:String) {
+		Lua_helper.add_callback(lua, "windowPopup", function(message:String = "", title:String = "") {
 			Window.alert(message, title);
 		});
 
-		Lua_helper.add_callback(lua, "setWindowTitle", function(title:String) {
+		Lua_helper.add_callback(lua, "setWindowTitle", function(title:String = "") {
 			WindowUtils.winTitle = title;
 		});
 
-		Lua_helper.add_callback(lua, "setWindowPrefix", function(title:String) {
+		Lua_helper.add_callback(lua, "setWindowPrefix", function(title:String = "") {
 			WindowUtils.prefix = title;
 		});
 
-		Lua_helper.add_callback(lua, "setWindowSuffix", function(title:String) {
+		Lua_helper.add_callback(lua, "setWindowSuffix", function(title:String = "") {
 			WindowUtils.suffix = title;
 		});
 
-		Lua_helper.add_callback(lua, "setWindowSuffix", function(title:String) {
+		Lua_helper.add_callback(lua, "sendNotification", function(title:String = "", desc:String = "") {
 			WindowUtils.suffix = title;
 		});
 	}

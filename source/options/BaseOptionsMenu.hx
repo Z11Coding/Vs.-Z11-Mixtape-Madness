@@ -1,5 +1,6 @@
 package options;
 
+import states.FirstCheckState;
 import flixel.input.keyboard.FlxKey;
 import flixel.input.gamepad.FlxGamepad;
 import flixel.input.gamepad.FlxGamepadInputID;
@@ -165,7 +166,12 @@ class BaseOptionsMenu extends MusicBeatSubstate
             changeSelection(1);
         }
         if (controls.BACK) {
-            if (title == 'Cache Settings.') {
+			if (title == "Misc. Settings." && ClientPrefs.data.enableArtemis)
+			{
+				MusicBeatState.switchState(new states.FirstCheckState());
+				ClientPrefs.saveSettings();
+			}
+            else if (title == 'Cache Settings.') {
                 ClientPrefs.saveSettings();
                 FlxG.sound.play(Paths.sound('cancelMenu'));
                 FlxG.switchState(new states.CacheState());
@@ -207,7 +213,7 @@ class BaseOptionsMenu extends MusicBeatSubstate
 						curOption.curOption = num;
 						curOption.setValue(curOption.options[num]); //lol
 						//trace(curOption.options[num]);
-}
+					}
 				}
 						
             } else if (curOption.type == 'bool') {

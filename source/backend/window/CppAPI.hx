@@ -85,7 +85,7 @@ class CppAPI
 	}
 
 	public static function sendWindowsNotification(title:String = "", desc:String = "") {
-		PlatformUtil.sendWindowsNotification(title, desc, 0);
+		PlatformUtil.sendWindowsNotification(title, desc);
 	}
 
 	public static function setWinTitle(title:String = "") {

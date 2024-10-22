@@ -137,6 +137,7 @@ class DaShop extends MusicBeatState
 
     function buyItem(item:Int)
     {
+        var itemName = itemArray[item][0];
         var cost = itemArray[item][2];
         var money = PlayerInfo.curMoney;
         trace(cost);
@@ -157,7 +158,7 @@ class DaShop extends MusicBeatState
             trace('Bought!');
             FlxG.sound.play(Paths.sound("confirmMenu"));
             PlayerInfo.curMoney -= cost;
-            itemArray[item][4] = true;
+            ShopData.items.get(itemName)[3] = true;
             reloadShop();
         }
     }

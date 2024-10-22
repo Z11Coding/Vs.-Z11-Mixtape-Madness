@@ -166,6 +166,13 @@ class OtherSettingsSubState extends BaseOptionsMenu
 			'bool');
 		addOption(option);
 
+		var option:Option = new Option('Enable Artemis', // even tho only one person asked, it here
+			"Got An RGB Keyboard Like A Razer Cynosa Chroma Gaming Keyboard?\n
+			Turn This Bad Boy On To Get Your Keyboard In The Action Too!\n
+			(YOU MUST HAVE ARTEMIS INSTALLED AND THE PROFILE SET TO MIXTAPE FOR IT TO WORK!)\n
+			(YOU WILL BE SENT TO THE TITLE SCREEN WHEN YOU LEAVE IF THIS IS ON!)", 'enableArtemis', 'bool');
+		addOption(option);
+
 		super();
 	}
 
