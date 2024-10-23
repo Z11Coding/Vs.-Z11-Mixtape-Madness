@@ -633,10 +633,12 @@ class CommandPrompt {
     public function new() {
         this.state = "default";
         this.variables = new Map();
+		// yutautil.VariableForCommands.generateVariableMap(true);
     }
 
     public function start():Void {
         print("Commands activated.");
+		print("Warning: Will not accept commands from regular PowerShell. Use Command Prompt, Terminal Command Prompt, or the VSCode terminal.");
 
         while (true) {
             // print("\nInput enabled.");
@@ -782,7 +784,71 @@ class CommandPrompt {
 				} else {
 					print("Error: forceSecret requires exactly one argument.");
 				}
+				// case "stopThread":
+				// 	if (args.length == 1) {
+				// 		Threader.stopThread(args[0]);
+				// 	} else {
+				// 		print("Error: stopThread requires exactly one argument.");
+				// 	}
+				// case "listThreads":
+				// 	var threads:Array<String> = Threader.listThreads();
+				// 	for (thread in threads) {
+				// 		print("Thread: " + thread);
+				// 	}
 
+				case "playSong":
+						var songName = args[0];
+						var song = Paths.formatToSongPath(songName);
+						var songChoices:Array<String> = [args[0]];
+						var listChoices:Array<String> = [args[0]];
+						var difficulties = backend.Paths.crawlDirectory("assets/data/" + songName, "json", []);
+						var filteredDifficulties = [];
+						var foundSong:Bool = false;
+						var dashCount = songName.split("-").length - 1; // Count dashes in the song name
+						for (difficulty in difficulties) {
+							var fileName = Path.withoutDirectory(difficulty);
+							if (fileName.startsWith(songName)) {
+								foundSong = true;
+								var parts = fileName.split("-");
+								if (parts.length > dashCount + 1) {
+									filteredDifficulties.push(fileName.replace(".json", ""));
+								} else if (fileName == songName + ".json") {
+									filteredDifficulties.push(fileName.replace(".json", ""));
+								}
+							}
+						}
+						if (!foundSong) {
+							GlobalException.throwGlobally("Song not found.", null, true);
+						}
+						difficulties = filteredDifficulties;
+						var temp = [];
+						for (difficulty in difficulties) {
+							difficulty = difficulty.replace(songName, "");
+							if (difficulty.startsWith("-")) {
+								difficulty = difficulty.substr(1);
+							}
+
+							if (difficulty == "") {
+								difficulty = "normal";
+							}
+							print(difficulty);
+							temp.push(difficulty);
+						}
+						difficulties = temp;
+						if (song != null) {
+							substates.DiffSubState.songChoices = songChoices;
+							substates.DiffSubState.listChoices = listChoices;
+							backend.Difficulty.list = difficulties;
+
+							// Check if the camera is in the default position
+							var defaultCameraPosition = {x: 0, y: 0};
+							if (FlxG.camera.scroll.x != defaultCameraPosition.x || FlxG.camera.scroll.y != defaultCameraPosition.y) {
+								// Tween quickly to the default position
+								FlxTween.tween(FlxG.camera.scroll, {x: defaultCameraPosition.x, y: defaultCameraPosition.y}, 0.5, {ease: FlxEase.quadOut});
+							}
+
+							FlxG.state.openSubState(new substates.DiffSubState());
+						}
 			default:
 				if (args.length == 2 && args[1] == '=')
 				{varChange(args[0], args[2]);}
@@ -911,3 +977,22 @@ class CommandPrompt {
     }
 }
 
+class GlobalException extends haxe.Exception {
+    public function new(message:String, ?previous:haxe.Exception) {
+        super(message, previous);
+    }
+
+    public static function throwGlobally(message:String, ?previous:haxe.Exception, ?allowHandle):Void {
+		WindowUtils.preventClosing = false;
+        var exception = new GlobalException(message, previous);
+        // Use a mechanism to throw the exception globally
+        haxe.Timer.delay(function() {
+			if (allowHandle) {
+				// Handle the exception
+				Main.onCrash(new UncaughtErrorEvent(UncaughtErrorEvent.UNCAUGHT_ERROR, exception));
+			} else {
+            throw exception;
+			}
+        }, 0);
+    }
+}

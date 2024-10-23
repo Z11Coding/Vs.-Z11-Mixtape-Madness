@@ -50,6 +50,8 @@ class DiffSubState extends MusicBeatSubstate
 	public function new()
 	{
 		super();
+		if (PlayState.instance != null)
+			PlayState.instance.paused = true;
 
 		if (!listChoices.contains('BACK'))
 		{
@@ -252,6 +254,8 @@ class DiffSubState extends MusicBeatSubstate
 				case 'BACK':
 					close();
 			}
+			if (PlayState.instance != null)
+				PlayState.instance.paused = false;
 		}
 	}
 

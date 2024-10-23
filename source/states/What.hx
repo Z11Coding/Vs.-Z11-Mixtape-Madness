@@ -25,6 +25,7 @@ class What extends MusicBeatState
 
     override public function create()
     {
+        states.FirstCheckState.gameInitialized = true;
         // var titleStateCheckFunc = EventFunc.createEventFunc(
         //     "CheckForTitleState", // eventName
         //     EventType.EqualTo(TitleState), // eventType, checking for equality with TitleState class

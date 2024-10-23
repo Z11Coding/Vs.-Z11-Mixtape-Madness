@@ -12,6 +12,7 @@ class FirstCheckState extends MusicBeatState
 	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
 	public static var volumeDownKeys:Array<FlxKey> = [FlxKey.NUMPADMINUS, FlxKey.MINUS];
 	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
+	public static var gameInitialized = false;
 
 	var updateAlphabet:Alphabet;
 	var updateIcon:FlxSprite;
@@ -25,6 +26,11 @@ class FirstCheckState extends MusicBeatState
 
 	override public function create()
 	{
+		if (gameInitialized)
+		{
+			lime.app.Application.current.window.alert("You cannot access this state. It is for initialization only.", "Debug");
+			throw new haxe.Exception("Invalid state access!");	
+		}
 		FlxG.mouse.visible = false;
 
 		Paths.clearStoredMemory();
@@ -218,7 +224,18 @@ class FirstCheckState extends MusicBeatState
 		if (currentVerPos+1 < versions.length)
 		{
 			trace("OLD VER!!!");
-			FlxG.switchState(new states.OutdatedState(files, versions[versions.length - 1], changeLog));
+			for (args in Sys.args()) {
+				if (args == "-livereload") {			switch (FlxG.random.bool(12) && !ClientPrefs.data.gotit && !FlxG.save.data.updated)
+					{
+						case false:
+							FlxG.switchState(new states.CacheState());
+						case true:
+							FlxG.switchState(new states.WelcomeToPain());
+					}}
+					else {
+						FlxG.switchState(new states.OutdatedState(files, versions[versions.length - 1], changeLog));
+				}
+			}
 		}
 		else
 		{

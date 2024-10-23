@@ -48,6 +48,7 @@ class FPS extends TextField
 		defaultTextFormat = new TextFormat("_sans", 14, color);
 		autoSize = LEFT;
 		multiline = true;
+		border = false;
 		text = "FPS: 0";
 
 		cacheCount = 0;
