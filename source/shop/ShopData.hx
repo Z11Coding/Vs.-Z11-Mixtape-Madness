@@ -106,12 +106,18 @@ class ShopData {
             items.set('Test', ['This is literally just to test the items description', 100, 'emptyAchievement', false, false]);
             items.set('h?', ['h?', 100, 'unknownMod', false, false]);
         }*/
-        //Test Item
-        items.set('Fanta Can', ['(Insert dylan line here)', 100, 'emptyAchievement', false, false]);
+        items.set('Fanta Can', ['(Insert dylan line here)', 100, 'unknownMod', false, false]);
+        items.set('Pico Plush', ['(Insert dylan line here)', 100, 'unknownMod', true, false]);
+        items.set('Bottle of Lean', ['(Insert dylan line here)', 100, 'unknownMod', true, false]);
+        items.set('Music Player', ['(Insert dylan line here)', 100, 'unknownMod', false, false]);
+        items.set('Lost Key', ['(Insert dylan line here)', 100, 'unknownMod', false, false]);
+        items.set('1UP Mushroom', ['(Insert dylan line here)', 100, 'unknownMod', false, false]);
+        items.set('SOUL', ['(Insert dylan line here)', 100, 'unknownMod', true, false]);
+        items.set('Tablet', ['(Insert dylan line here)', 100, 'unknownMod', false, false]);
+        items.set('Roof Access Card', ['(Insert dylan line here)', 100, 'unknownMod', true, false]);
+        items.set('Slushie Cup', ['(Insert dylan line here)', 100, 'unknownMod', false, false]);
+        items.set('Abyss Key', ['(Insert dylan line here)', 100, 'unknownMod', true, false]);
         items.set('h?', ['h?', 100, 'unknownMod', false, false]);
-        items.set('Test A', ['Space Test 1', 100, 'unknownMod', false, false]);
-        items.set('Test B', ['Space Test 2', 100, 'unknownMod', false, false]);
-        items.set('Test C', ['Space Test 3', 100, 'unknownMod', false, false]);
     }
 
     public static function saveShop() {

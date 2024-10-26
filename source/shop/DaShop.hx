@@ -55,6 +55,7 @@ class DaShop extends MusicBeatState
 	    add(icons);
 
         reloadShop();
+        changeItem();
 
         descBG = new FlxSprite(0, 600).makeGraphic(FlxG.width, 100, 0xF8000000);
 		descBG.scrollFactor.set(1,1);
@@ -62,7 +63,7 @@ class DaShop extends MusicBeatState
 
         desc = new undertale.UnderTextParser(250, descBG.y + 30, Std.int(FlxG.width * 0.6), '', 20);
         desc.font = Paths.font("fnf1.ttf");
-        desc.sounds = [FlxG.sound.load(Paths.sound('ut/monsterfont'), 0.6)];
+        desc.sounds = [FlxG.sound.load(Paths.sound('ut/monsterfont'))];
         desc.alignment = CENTER;
         desc.scrollFactor.set(1,1);
         add(desc);
