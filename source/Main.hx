@@ -19,9 +19,7 @@ import backend.ImageCache;
 import backend.JSONCache;
 import openfl.events.NativeProcessExitEvent;
 import psychlua.*;
-import StateMap;#if linux
-import lime.graphics.Image;
-#end
+import StateMap; #if linux import lime.graphics.Image; #end
 // crash handler stuff
 #if CRASH_HANDLER
 import openfl.events.UncaughtErrorEvent;
@@ -34,9 +32,7 @@ import sys.io.Process;
 // Gamejolt
 import backend.gamejolt.GameJolt;
 import backend.gamejolt.GameJolt.GJToastManager;
-
 import backend.debug.FPSCounter;
-
 import backend.window.WindowUtils;
 
 #if linux
@@ -165,11 +161,12 @@ class Main extends Sprite
 		Paths.crawlDirectory("assets/data", "json", GlobalResources.jsonFilePaths);
 		// trace(ChanceSelector.selectMultiple([1, 2, 3, {key: "value"}, [()=>4, ()=>5, ()=>6].map(f -> f()), new Map<String, Int>().set("a", 7)], 3, true).map(v -> switch v { case Array(f): f(); case Map(k, v): k + Std.string(v); case {key: k}: k; case _: Std.string(v); }));
 		var mathSolver:MathSolver2 = new MathSolver2();
-		var expression:String = Std.string(Std.random(10000)) + " + " + Std.string(Std.random(10000)) + " - " + Std.string(Std.random(10000)) + " * " + Std.string(Std.random(10000)) + " / " + Std.string(Std.random(10000)) + " & " + Std.string(Std.random(10000)) + " + (8 + 8)";
+		var expression:String = Std.string(Std.random(10000)) + " + " + Std.string(Std.random(10000)) + " - " + Std.string(Std.random(10000)) + " * "
+			+ Std.string(Std.random(10000)) + " / " + Std.string(Std.random(10000)) + " & " + Std.string(Std.random(10000)) + " + (8 + 8)";
 		trace("Expression: " + expression);
 		trace("Evaluated Result: " + mathSolver.evaluate(expression));
-		//trace(Paths.url("https://cdn.discordapp.com/attachments/631085887467421716/1260066510269845534/loading.xml?ex=668df7e2&is=668ca662&hm=7ff6c46036177698e1b10924bd42724f8636a6e24622a89fb054b00d84038649&"));
-		//trace(HoldableVariable.createVariable(FlxG.state).evaluate());
+		// trace(Paths.url("https://cdn.discordapp.com/attachments/631085887467421716/1260066510269845534/loading.xml?ex=668df7e2&is=668ca662&hm=7ff6c46036177698e1b10924bd42724f8636a6e24622a89fb054b00d84038649&"));
+		// trace(HoldableVariable.createVariable(FlxG.state).evaluate());
 		Toolkit.init();
 		Toolkit.theme = 'dark'; // don't be cringe
 		backend.Cursor.registerHaxeUICursors();
@@ -198,7 +195,7 @@ class Main extends Sprite
 		MemoryUtil.init();
 		WindowUtils.init();
 		var commandPrompt = new CommandPrompt();
-        backend.Threader.runInThread(commandPrompt.start());
+		backend.Threader.runInThread(commandPrompt.start());
 		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
@@ -218,18 +215,18 @@ class Main extends Sprite
 		AudioSwitchFix.init();
 		WindowUtils.onClosing = function()
 		{
-			if (commandPrompt != null) commandPrompt.active = false;
+			if (commandPrompt != null)
+				commandPrompt.active = false;
 			commandPrompt = null;
 			handleStateBasedClosing();
-
 		}
 		FlxG.signals.preStateSwitch.add(onStateSwitch);
 		FlxGraphic.defaultPersist = false;
 		#if !mobile
 		fpsVar = new FPSCounter(10, 3, 0xFFFFFF);
 		addChild(fpsVar);
-		//memoryCounter = new MemoryCounter(10, 3, 0xffffff);
-		//addChild(memoryCounter);
+		// memoryCounter = new MemoryCounter(10, 3, 0xffffff);
+		// addChild(memoryCounter);
 		Lib.current.stage.align = "tl";
 		Lib.current.stage.scaleMode = StageScaleMode.NO_SCALE;
 		if (fpsVar != null)
@@ -237,8 +234,8 @@ class Main extends Sprite
 			fpsVar.visible = ClientPrefs.data.showFPS;
 		}
 		/*if (memoryCounter != null)
-		{
-			memoryCounter.visible = ClientPrefs.data.showFPS;
+			{
+				memoryCounter.visible = ClientPrefs.data.showFPS;
 		}*/
 		#end
 
@@ -263,13 +260,10 @@ class Main extends Sprite
 		#end
 
 		Lib.current.loaderInfo.addEventListener(NativeProcessExitEvent.EXIT, onClosing); // help-
-		stage.window.onDropFile.add (function (path:String) {
-			trace ("user dropped file with path: " + path);
-
-		 });
-
-
-
+		stage.window.onDropFile.add(function(path:String)
+		{
+			trace("user dropped file with path: " + path);
+		});
 
 		// shader coords fix
 		FlxG.signals.gameResized.add(function(w, h)
@@ -299,9 +293,9 @@ class Main extends Sprite
 	}
 
 	public static function dummy():Void
-	{}
+	{
+	}
 
-	
 	static function resetSpriteCache(sprite:Sprite):Void
 	{
 		@:privateAccess {
@@ -331,43 +325,43 @@ class Main extends Sprite
 
 	public static function onClosing(e:Event):Void
 	{
-			e.preventDefault();
+		e.preventDefault();
 		trace("Closing...");
 	}
 
-		public static inline function closeGame():Void
-		{
-			// if (Main.commandPrompt != null)
-			// 	commandPrompt.remove();
+	public static inline function closeGame():Void
+	{
+		// if (Main.commandPrompt != null)
+		// 	commandPrompt.remove();
 
+		WindowUtils.preventClosing = false;
+		Lib.application.window.close();
 
-				WindowUtils.preventClosing = false;
-				Lib.application.window.close();
-
-				closeGame();
-			
-		}
-
+		closeGame();
+	}
 
 	public static var pressedOnce:Bool = false;
-	public static inline function handleStateBasedClosing() {
+
+	public static inline function handleStateBasedClosing()
+	{
 		if (!pressedOnce || WindowUtils.__triedClosing)
 		{
 			pressedOnce = true;
-			switch (Type.getClassName(Type.getClass(FlxG.state)).split(".")[Lambda.count(Type.getClassName(Type.getClass(FlxG.state)).split(".")) - 1]) {
+			switch (Type.getClassName(Type.getClass(FlxG.state)).split(".")[Lambda.count(Type.getClassName(Type.getClass(FlxG.state)).split(".")) - 1])
+			{
 				case "ChartingStateOG":
 					// new Prompt("Are you sure you want to exit? Your progress will not be saved.", function (result:Bool) {
 
 				default:
 					// Default behavior: close the window
-				TransitionState.transitionState(ExitState, {transitionType: "transparent close"});
+					TransitionState.transitionState(ExitState, {transitionType: "transparent close"});
 			}
 		}
 		else
 		{
 			Main.closeGame();
 		}
-    }
+	}
 
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
 	// very cool person for real they don't get enough credit for their work
@@ -493,7 +487,7 @@ class Main extends Sprite
 				}
 				trace("Recommended to recompile the game to fix the issue.");
 
-				case "ExitState":
+			case "ExitState":
 				{
 					// Show an error dialog and close the game
 					Application.current.window.alert("Somehow, a crash occurred during the exiting process. Forcing exit.", "???");
@@ -512,20 +506,21 @@ class Main extends Sprite
 
 		// Additional error handling or recovery mechanisms can be added here
 
-			for (stackItem in callStack)
-				{
-					switch (stackItem)
+		for (stackItem in callStack)
+		{
+			switch (stackItem)
+			{
+				case FilePos(s, file, line, column):
+					if (file.contains("FlxTween.hx"))
 					{
-						case FilePos(s, file, line, column):
-							if (file.contains("FlxTween.hx")) {
-								FlxTween.globalManager.clear();
-								trace("Tween Error occurred. Clearing all tweens.");
-							}
-							
-						default:
-							dummy();
+						FlxTween.globalManager.clear();
+						trace("Tween Error occurred. Clearing all tweens.");
 					}
-				}
+
+				default:
+					dummy();
+			}
+		}
 	}
 	#end
 
@@ -537,7 +532,8 @@ class Main extends Sprite
 		{
 			// Continuously add large objects to the list without ever clearing it
 			var array:Array<Int> = [];
-			for (i in 0...1000000) {
+			for (i in 0...1000000)
+			{
 				array.push(i);
 			}
 			list.push({data: array});
@@ -583,13 +579,13 @@ class Main extends Sprite
 	{
 		var numMaps:Int = Std.int(Math.random() * 10 + 1); // Random number of maps between 1 and 10
 		var maps:Array<Chance> = [];
-		
+
 		for (i in 0...numMaps)
 		{
 			var chance:Float = Math.random() * 99999999; // Random chance value between 0 and 99999999
 			maps.push({item: "Map" + i, chance: chance});
 		}
-		
+
 		var selectedMap = ChanceSelector.selectFromOptions(maps);
 		trace("Selected map from random maps:", selectedMap);
 	}
@@ -623,96 +619,120 @@ class GlobalResources
 {
 	public static var jsonFilePaths:Array<String> = [];
 }
+
 typedef Boolean = Bool;
-class CommandPrompt {
 
-    private var state:String;
-    private var variables:Map<String, Dynamic>;
-	public var active:Boolean = true; //I thought it'd be funny to add this.
+class CommandPrompt
+{
+	private var state:String;
+	private var variables:Map<String, Dynamic>;
 
-    public function new() {
-        this.state = "default";
-        this.variables = new Map();
+	public var active:Boolean = true; // I thought it'd be funny to add this.
+
+	public function new()
+	{
+		this.state = "default";
+		this.variables = new Map();
 		// yutautil.VariableForCommands.generateVariableMap(true);
-    }
+	}
 
-    public function start():Void {
-        print("Commands activated.");
+	public function start():Void
+	{
+		print("Commands activated.");
 		print("Warning: Will not accept commands from regular PowerShell. Use Command Prompt, Terminal Command Prompt, or the VSCode terminal.");
 
-        while (true) {
-            // print("\nInput enabled.");
-			if (!active) {
+		while (true)
+		{
+			// print("\nInput enabled.");
+			if (!active)
+			{
 				print("Commands disabled.\nTO re-enable, restart the game.");
 				break;
 			}
-            var input:String = Sys.stdin().readLine();
+			var input:String = Sys.stdin().readLine();
 
-            if (input == "$exit") {
-                print("Exiting...");
+			if (input == "$exit")
+			{
+				print("Exiting...");
 				Main.closeGame();
-				print("Killing CommandHook...");	
-                break;
-            }
+				print("Killing CommandHook...");
+				break;
+			}
 
-			if (input == "$reset") {
+			if (input == "$reset")
+			{
 				print("Resetting game...");
 				var processChecker = new Process("MixEngine.exe", ["check"]);
 			}
 
-            this.executeCommand(input);
-        }
-    }
+			this.executeCommand(input);
+		}
+	}
+
 	// public function remove()
 	// {this = null;}
 
-	private function executeCommand(input:String):Void {
+	private function executeCommand(input:String):Void
+	{
 		var parts = input.split(" ");
 		var command = parts[0];
 		var args = parts.slice(1);
-		
+
 		var combinedArgs:Array<String> = [];
 		var combinedArgsMap:Array<{position:Int, value:String}> = [];
 		var i = 0;
-		
-		while (i < args.length) {
+
+		while (i < args.length)
+		{
 			var arg = args[i];
-			if (arg.startsWith("'") || arg.startsWith('"')) {
+			if (arg.startsWith("'") || arg.startsWith('"'))
+			{
 				var combinedArg:String = arg;
 				var quote:String = arg.charAt(0);
 				var startPos:Int = i;
 				i++;
-				while (i < args.length && !args[i].endsWith(quote)) {
+				while (i < args.length && !args[i].endsWith(quote))
+				{
 					combinedArg += " " + args[i];
 					i++;
 				}
-				if (i < args.length) {
+				if (i < args.length)
+				{
 					combinedArg += " " + args[i];
-				} else {
+				}
+				else
+				{
 					print("Error: Unterminated quotes.");
 					return;
 				}
 				combinedArgsMap.push({position: startPos, value: combinedArg});
-			} else {
+			}
+			else
+			{
 				combinedArgs.push(arg);
 			}
 			i++;
 		}
-		
+
 		// Reconstruct the args array using the combinedArgsMap
 		var finalArgs:Array<String> = [];
 		var mapIndex = 0;
 		var doubleQuote = '"';
 		var singleQuote = "'";
 
-		for (i in 0...args.length) {
-			if (mapIndex < combinedArgsMap.length && combinedArgsMap[mapIndex].position == i) {
+		for (i in 0...args.length)
+		{
+			if (mapIndex < combinedArgsMap.length && combinedArgsMap[mapIndex].position == i)
+			{
 				finalArgs.push(combinedArgsMap[mapIndex].value);
 				mapIndex++;
 				// Skip the indices that were part of the combined argument
-				while (i < args.length && (!args[i].endsWith(singleQuote) && !args[i].endsWith(doubleQuote))) {
+				while (i < args.length && (!args[i].endsWith(singleQuote) && !args[i].endsWith(doubleQuote)))
+				{
 				}
-			} else {
+			}
+			else
+			{
 				finalArgs.push(args[i]);
 			}
 		}
@@ -728,271 +748,358 @@ class CommandPrompt {
 			}
 			return false;
 		}
-		
+
 		// Now finalArgs contains the correctly combined arguments
 		// You can proceed with using finalArgs as needed
-	
 
-		switch (command) {
+		switch (command)
+		{
 			case "switchState":
-				if (args.length == 1) {
+				if (args.length == 1)
+				{
 					this.switchState(args[0]);
-				} else {
+				}
+				else
+				{
 					print("Error: switchState requires exactly one argument.");
 				}
 			case "varChange":
-				if (args.length == 2) {
+				if (args.length == 2)
+				{
 					this.varChange(args[0], args[1]);
-				} else {
+				}
+				else
+				{
 					print("Error: varChange requires exactly two arguments.");
 				}
 			case "secretCode":
-				if (args.length == 1) {
+				if (args.length == 1)
+				{
 					this.secretCode(args[0]);
-				} else {
+				}
+				else
+				{
 					print("Error: secretCode requires exactly one argument.");
 				}
 			case "exit":
 				this.active = false;
 				print("Exiting game...");
-				if (args.length == 0) {
+				if (args.length == 0)
+				{
 					this.switchState("ExitState");
-				} else if (args.length == 1 && args[1] == "forced") {
+				}
+				else if (args.length == 1 && args[1] == "forced")
+				{
 					print("Forcing game to close...");
 					Main.closeGame();
 					print("Game closed.");
-				} else {
+				}
+				else
+				{
 					print("Warning: exit command only accepts 'forced' as an argument. Closing game...");
 					this.switchState("ExitState");
 				}
 			case "resetState":
-				if (args.length == 0) {
+				if (args.length == 0)
+				{
 					FlxG.resetState();
-				} else {
+				}
+				else
+				{
 					print("Error: resetState does not accept any arguments.");
 				}
 			case "debugMenu":
-				if (args.length == 0) {
+				if (args.length == 0)
+				{
 					this.switchState("backend.TestState");
-				} else {
+				}
+				else
+				{
 					print("Error: debugMenu does not accept any arguments.");
 				}
 			case "forceSecret":
-				if (args.length == 1) {
+				if (args.length == 1)
+				{
 					states.MainMenuState.secretOverride = args[0];
 					this.switchState("states.MainMenuState");
-				} else {
+				}
+				else
+				{
 					print("Error: forceSecret requires exactly one argument.");
 				}
-				// case "stopThread":
-				// 	if (args.length == 1) {
-				// 		Threader.stopThread(args[0]);
-				// 	} else {
-				// 		print("Error: stopThread requires exactly one argument.");
-				// 	}
-				// case "listThreads":
-				// 	var threads:Array<String> = Threader.listThreads();
-				// 	for (thread in threads) {
-				// 		print("Thread: " + thread);
-				// 	}
+			// case "stopThread":
+			// 	if (args.length == 1) {
+			// 		Threader.stopThread(args[0]);
+			// 	} else {
+			// 		print("Error: stopThread requires exactly one argument.");
+			// 	}
+			// case "listThreads":
+			// 	var threads:Array<String> = Threader.listThreads();
+			// 	for (thread in threads) {
+			// 		print("Thread: " + thread);
+			// 	}
 
-				case "playSong":
-						var songName = args[0];
-						var song = Paths.formatToSongPath(songName);
-						var songChoices:Array<String> = [args[0]];
-						var listChoices:Array<String> = [args[0]];
-						var difficulties = backend.Paths.crawlDirectory("assets/data/" + songName, "json", []);
-						var filteredDifficulties = [];
-						var foundSong:Bool = false;
-						var dashCount = songName.split("-").length - 1; // Count dashes in the song name
-						for (difficulty in difficulties) {
-							var fileName = Path.withoutDirectory(difficulty);
-							if (fileName.startsWith(songName)) {
-								foundSong = true;
-								var parts = fileName.split("-");
-								if (parts.length > dashCount + 1) {
-									filteredDifficulties.push(fileName.replace(".json", ""));
-								} else if (fileName == songName + ".json") {
-									filteredDifficulties.push(fileName.replace(".json", ""));
-								}
-							}
+			case "playSong":
+				var songName = args[0];
+				var song = Paths.formatToSongPath(songName);
+				var songChoices:Array<String> = [args[0]];
+				var listChoices:Array<String> = [args[0]];
+				var difficulties = backend.Paths.crawlMulti([
+					'assets/data/$songName',
+					'assets/shared/data/$songName',
+					'mods/data/$songName'
+				].concat(Mods.getModDirectories().map(dir -> '$dir/data/$songName')), 'json', []);
+				var filteredDifficulties = [];
+				var foundSong:Bool = false;
+				var dashCount = songName.split("-").length - 1; // Count dashes in the song name
+				for (difficulty in difficulties)
+				{
+					var fileName = Path.withoutDirectory(difficulty);
+					if (fileName.startsWith(songName))
+					{
+						foundSong = true;
+						var parts = fileName.split("-");
+						if (parts.length > dashCount + 1)
+						{
+							filteredDifficulties.push(fileName.replace(".json", ""));
 						}
-						if (!foundSong) {
-							GlobalException.throwGlobally("Song not found.", null, true);
+						else if (fileName == songName + ".json")
+						{
+							filteredDifficulties.push(fileName.replace(".json", ""));
 						}
-						difficulties = filteredDifficulties;
-						var temp = [];
-						for (difficulty in difficulties) {
-							difficulty = difficulty.replace(songName, "");
-							if (difficulty.startsWith("-")) {
-								difficulty = difficulty.substr(1);
-							}
+					}
+				}
+				if (!foundSong)
+				{
+					GlobalException.throwGlobally("Song not found.", null, true);
+				}
+				difficulties = filteredDifficulties;
+				var temp = [];
+				for (difficulty in difficulties)
+				{
+					difficulty = difficulty.replace(songName, "");
+					if (difficulty.startsWith("-"))
+					{
+						difficulty = difficulty.substr(1);
+					}
 
-							if (difficulty == "") {
-								difficulty = "normal";
-							}
-							print(difficulty);
-							temp.push(difficulty);
-						}
-						difficulties = temp;
-						if (song != null) {
-							substates.DiffSubState.songChoices = songChoices;
-							substates.DiffSubState.listChoices = listChoices;
-							backend.Difficulty.list = difficulties;
+					if (difficulty == "")
+					{
+						difficulty = "normal";
+					}
+					print(difficulty);
+					temp.push(difficulty);
+				}
+				difficulties = temp;
+				if (song != null)
+				{
+					substates.DiffSubState.songChoices = songChoices;
+					substates.DiffSubState.listChoices = listChoices;
+					backend.Difficulty.list = difficulties;
 
-							// Check if the camera is in the default position
-							var defaultCameraPosition = {x: 0, y: 0};
-							if (FlxG.camera.scroll.x != defaultCameraPosition.x || FlxG.camera.scroll.y != defaultCameraPosition.y) {
-								// Tween quickly to the default position
-								FlxTween.tween(FlxG.camera.scroll, {x: defaultCameraPosition.x, y: defaultCameraPosition.y}, 0.5, {ease: FlxEase.quadOut});
-							}
+					// Check if the camera is in the default position
+					var defaultCameraPosition = {x: 0, y: 0};
+					if (FlxG.camera.scroll.x != defaultCameraPosition.x || FlxG.camera.scroll.y != defaultCameraPosition.y)
+					{
+						// Tween quickly to the default position
+						FlxTween.tween(FlxG.camera.scroll, {x: defaultCameraPosition.x, y: defaultCameraPosition.y}, 0.5, {ease: FlxEase.quadOut});
+					}
 
-							FlxG.state.openSubState(new substates.DiffSubState());
-						}
+					FlxG.state.openSubState(new substates.DiffSubState());
+				}
 			default:
 				if (args.length == 2 && args[1] == '=')
-				{varChange(args[0], args[2]);}
+				{
+					varChange(args[0], args[2]);
+				}
 				else
-				print("Error: Unknown command.");
+					print("Error: Unknown command.");
 		}
 	}
 
-	private function switchState(newState:String):Void {
+	private function switchState(newState:String):Void
+	{
 		var stateType:Class<Dynamic> = Type.resolveClass(newState);
-		if (stateType != null) {
+		if (stateType != null)
+		{
 			FlxG.switchState(Type.createInstance(stateType, []));
 			print("State switched to: " + newState);
-		} else {
+		}
+		else
+		{
 			print("Error: Invalid state name.");
 		}
 	}
 
-	private function varChange(varName:String, newValue:String):Void {
+	private function varChange(varName:String, newValue:String):Void
+	{
 		var split:Array<String> = varName.split('.');
-		if (split.length == 0) {
+		if (split.length == 0)
+		{
 			print("Error: Invalid variable name.");
 			return;
 		}
-	
+
 		var context:String = split[0];
 		var remaining:Array<String> = split.slice(1);
-	
-		switch (context) {
+
+		switch (context)
+		{
 			case "class":
-				if (remaining.length >= 2) {
+				if (remaining.length >= 2)
+				{
 					var className:String = remaining[0];
 					var variable:String = remaining.slice(1).join('.');
 					this.setPropertyFromClass(className, variable, newValue);
-				} else {
+				}
+				else
+				{
 					print("Error: Invalid class variable name.");
 				}
 			case "group":
-				if (remaining.length >= 3) {
+				if (remaining.length >= 3)
+				{
 					var groupName:String = remaining[0];
 					var index:Int = Std.parseInt(remaining[1]);
 					var variable:String = remaining.slice(2).join('.');
 					this.setPropertyFromGroup(groupName, index, variable, newValue);
-				} else {
+				}
+				else
+				{
 					print("Error: Invalid group variable name.");
 				}
 			case "state":
-				if (remaining.length >= 1) {
+				if (remaining.length >= 1)
+				{
 					var variable:String = remaining.join('.');
 					this.setPropertyFromState(variable, newValue);
-				} else {
+				}
+				else
+				{
 					print("Error: Invalid state variable name.");
 				}
 			default:
 				print("Error: Unknown context.");
 		}
 	}
-	
-	private function setPropertyFromClass(className:String, variable:String, value:Dynamic):Void {
+
+	private function setPropertyFromClass(className:String, variable:String, value:Dynamic):Void
+	{
 		var myClass:Dynamic = Type.resolveClass(className);
-		if (myClass == null) {
+		if (myClass == null)
+		{
 			print("Error: Class " + className + " not found.");
 			return;
 		}
-	
+
 		var split:Array<String> = variable.split('.');
-		if (split.length > 1) {
+		if (split.length > 1)
+		{
 			var obj:Dynamic = Reflect.field(myClass, split[0]);
-			for (i in 1...split.length-1)
+			for (i in 1...split.length - 1)
 				obj = Reflect.field(obj, split[i]);
-	
-			Reflect.setProperty(obj, split[split.length-1], value);
-		} else {
+
+			Reflect.setProperty(obj, split[split.length - 1], value);
+		}
+		else
+		{
 			Reflect.setProperty(myClass, variable, value);
 		}
 		print("Variable " + variable + " in class " + className + " changed to: " + value);
 	}
-	private function setPropertyFromGroup(groupName:String, index:Int, variable:String, value:Dynamic):Void {
+
+	private function setPropertyFromGroup(groupName:String, index:Int, variable:String, value:Dynamic):Void
+	{
 		var realObject:Dynamic = Reflect.field(LuaUtils.getTargetInstance(), groupName);
-	
-		if (Std.isOfType(realObject, FlxTypedGroup)) {
+
+		if (Std.isOfType(realObject, FlxTypedGroup))
+		{
 			LuaUtils.setGroupStuff(realObject.members[index], variable, value);
 			print("Variable " + variable + " in group " + groupName + " at index " + index + " changed to: " + value);
-		} else {
+		}
+		else
+		{
 			var leArray:Dynamic = realObject[index];
-			if (leArray != null) {
-				if (Type.typeof(variable) == Type.ValueType.TInt) {
+			if (leArray != null)
+			{
+				if (Type.typeof(variable) == Type.ValueType.TInt)
+				{
 					leArray = value;
-				} else {
+				}
+				else
+				{
 					LuaUtils.setGroupStuff(leArray, variable, value);
 				}
 				print("Variable " + variable + " in group " + groupName + " at index " + index + " changed to: " + value);
-			} else {
+			}
+			else
+			{
 				print("Error: Object #" + index + " from group " + groupName + " doesn't exist!");
 			}
 		}
 	}
-	
-	private function setPropertyFromState(variable:String, value:Dynamic):Void {
+
+	private function setPropertyFromState(variable:String, value:Dynamic):Void
+	{
 		var currentState = FlxG.state;
-		if (currentState != null) {
+		if (currentState != null)
+		{
 			var split:Array<String> = variable.split('.');
-			if (split.length > 1) {
+			if (split.length > 1)
+			{
 				var obj:Dynamic = Reflect.field(currentState, split[0]);
-				for (i in 1...split.length-1)
+				for (i in 1...split.length - 1)
 					obj = Reflect.field(obj, split[i]);
-	
-				Reflect.setProperty(obj, split[split.length-1], value);
-			} else {
+
+				Reflect.setProperty(obj, split[split.length - 1], value);
+			}
+			else
+			{
 				Reflect.setProperty(currentState, variable, value);
 			}
 			print("Variable " + variable + " in state changed to: " + value);
-		} else {
+		}
+		else
+		{
 			print("Error: No active state.");
 		}
 	}
 
-    private function secretCode(code:String):Void {
-		
-        print("Secret code entered: " + code);
+	private function secretCode(code:String):Void
+	{
+		print("Secret code entered: " + code);
 		print("Not yet implemented.");
-    }
+	}
 
-    private function print(message:String):Void {
-        Sys.stdout().writeString(message + "\n");
-    }
+	private function print(message:String):Void
+	{
+		Sys.stdout().writeString(message + "\n");
+	}
 }
 
-class GlobalException extends haxe.Exception {
-    public function new(message:String, ?previous:haxe.Exception) {
-        super(message, previous);
-    }
+class GlobalException extends haxe.Exception
+{
+	public function new(message:String, ?previous:haxe.Exception)
+	{
+		super(message, previous);
+	}
 
-    public static function throwGlobally(message:String, ?previous:haxe.Exception, ?allowHandle):Void {
+	public static function throwGlobally(message:String, ?previous:haxe.Exception, ?allowHandle):Void
+	{
 		WindowUtils.preventClosing = false;
-        var exception = new GlobalException(message, previous);
-        // Use a mechanism to throw the exception globally
-        haxe.Timer.delay(function() {
-			if (allowHandle) {
+		var exception = new GlobalException(message, previous);
+		// Use a mechanism to throw the exception globally
+		haxe.Timer.delay(function()
+		{
+			if (allowHandle)
+			{
 				// Handle the exception
 				Main.onCrash(new UncaughtErrorEvent(UncaughtErrorEvent.UNCAUGHT_ERROR, exception));
-			} else {
-            throw exception;
 			}
-        }, 0);
-    }
+			else
+			{
+				throw exception;
+			}
+		}, 0);
+	}
 }

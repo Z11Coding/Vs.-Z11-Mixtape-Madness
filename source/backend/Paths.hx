@@ -143,6 +143,18 @@ class Paths
 		return result;
 	}
 
+	public static function crawlMulti(directoryPaths:Array<String>, fileExtension:String, ?targetArray:Array<String> = null, ?OG:Bool = false):Array<String> {
+		var result:Array<String> = targetArray != null ? targetArray : [];
+		for (directoryPath in directoryPaths) {
+			if (OG)
+				result = crawlDirectoryOG(directoryPath, fileExtension, result);
+			else {
+				result = crawlDirectory(directoryPath, fileExtension, result);
+			}
+		}
+		return result;
+	}
+
 
 	public static function url(url:String):String {
 		// Basic validation (consider more robust validation/sanitization)
