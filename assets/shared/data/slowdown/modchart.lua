@@ -26,6 +26,14 @@ function onSongStart()
     doTweenZoom('camZoom', 'camGame', 1, stepCrochet*0.001*(126*2), 'sineInOut')
 end
 
+function onSkipIntro()
+    cancelTween('reveal')
+    cancelTween('camZoom')
+    setProperty('black.alpha', 0)
+    setProperty('camGame.zoom', 1)
+    setProperty('defaultCamZoom', 1)
+end
+
 function onTweenCompleted(tag)
     if tag == 'camZoom' then
         setProperty('defaultCamZoom', getProperty("camGame.zoom"))
