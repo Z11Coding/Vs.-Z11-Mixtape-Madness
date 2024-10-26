@@ -907,6 +907,76 @@ class CommandPrompt
 
 					FlxG.state.openSubState(new substates.DiffSubState());
 				}
+				case "do":
+					if (args.length >= 2) {
+						var subCommand = args[0];
+						var code = args.slice(1).join(" ");
+						
+						switch (subCommand) {
+							case "hx", "haxe", "code":
+								try {
+									haxe.macro.Context.eval(code);
+									print("Executed code: " + code);
+								} catch (e:haxe.Exception) {
+									print("Error executing code: " + e.toString());
+								}
+								
+					// 		case "func":
+					// 			var funcName = args[1];
+					// 			var funcArgs = args.slice(2);
+								
+					// 			// Check for different function call formats
+					// 			if (funcArgs.length == 1 && funcArgs[0].startsWith("(") && funcArgs[0].endsWith(")")) {
+					// 				// Format: func(arg, arg)
+					// 				try {
+					// 					var func = Reflect.field(this, funcName);
+					// 					if (func != null && Reflect.isFunction(func)) {
+					// 						var callArgs = funcArgs[0].substring(1, funcArgs[0].length - 1).split(",");
+					// 						Reflect.callMethod(this, func, callArgs);
+					// 						print("Executed function: " + funcName + " with arguments: " + callArgs.join(", "));
+					// 					} else {
+					// 						print("Error: Function " + funcName + " not found.");
+					// 					}
+					// 				} catch (e:haxe.Exception) {
+					// 					print("Error executing function: " + e.toString());
+					// 				}
+					// 			} else if (funcArgs.length > 0 && funcArgs[0] == "()") {
+					// 				// Format: func() arg arg
+					// 				try {
+					// 					var func = Reflect.field(this, funcName);
+					// 					if (func != null && Reflect.isFunction(func)) {
+					// 						Reflect.callMethod(this, func, funcArgs.slice(1));
+					// 						print("Executed function: " + funcName + " with arguments: " + funcArgs.slice(1).join(", "));
+					// 					} else {
+					// 						print("Error: Function " + funcName + " not found.");
+					// 					}
+					// 				} catch (e:haxe.Exception) {
+					// 					print("Error executing function: " + e.toString());
+					// 				}
+					// 			} else if (funcArgs.length > 0) {
+					// 				// Format: func arg arg
+					// 				try {
+					// 					var func = Reflect.field(this, funcName);
+					// 					if (func != null && Reflect.isFunction(func)) {
+					// 						Reflect.callMethod(this, func, funcArgs);
+					// 						print("Executed function: " + funcName + " with arguments: " + funcArgs.join(", "));
+					// 					} else {
+					// 						print("Error: Function " + funcName + " not found.");
+					// 					}
+					// 				} catch (e:haxe.Exception) {
+					// 					print("Error executing function: " + e.toString());
+					// 				}
+					// 			} else {
+					// 				print("Error: Invalid function call format.");
+					// 			}
+								
+					// 		default:
+					// 			print("Error: Unknown sub-command for 'do'.");
+					// 	}
+					// } else {
+					// 	print("Error: 'do' requires at least two arguments.");
+					// }
+					
 			default:
 				if (args.length == 2 && args[1] == '=')
 				{
