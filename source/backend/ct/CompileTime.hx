@@ -8,7 +8,7 @@
 * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 *
 ****/
-package ct;
+package backend.ct;
 
 import haxe.macro.Context;
 import haxe.macro.Expr;
@@ -24,7 +24,7 @@ import yaml.util.ObjectMap;
 using StringTools;
 using Lambda;
 
-import ct.CompileTimeClassList;
+import backend.ct.CompileTimeClassList;
 
 class CompileTime
 {
@@ -148,9 +148,9 @@ class CompileTime
         };
 
         if (extendsBaseClass!=null)
-            return macro ct.CompileTimeClassList.getTyped($v{listID}, $extendsBaseClass);
+            return macro backend.ct.CompileTimeClassList.getTyped($v{listID}, $extendsBaseClass);
         else
-            return macro ct.CompileTimeClassList.get($v{listID});
+            return macro backend.ct.CompileTimeClassList.get($v{listID});
     }
 
     #if macro

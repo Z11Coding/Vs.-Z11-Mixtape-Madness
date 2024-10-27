@@ -149,6 +149,7 @@ class Main extends Sprite
 
 	private function setupGame():Void
 	{
+		// trace(StateCollector.collectStates());
 		// trace(StateCollector.collectFlxStates());
 		if (cmdArgs.indexOf('check') != -1)
 		{
@@ -907,19 +908,71 @@ class CommandPrompt
 
 					FlxG.state.openSubState(new substates.DiffSubState());
 				}
-				case "do":
-					if (args.length >= 2) {
-						var subCommand = args[0];
-						var code = args.slice(1).join(" ");
+
+			// case "playSongLoose":
+			// 	var songName = args[0];
+			// 	var song = Paths.formatToSongPath(songName);
+			// 	var songChoices:Array<String> = [];
+			// 	var listChoices:Array<String> = [];
+			// 	var difficulties = backend.Paths.crawlMulti([
+			// 		'assets/data/$songName',
+			// 		'assets/shared/data/$songName',
+			// 		'mods/data/$songName'
+			// 	].concat(Mods.getModDirectories().map(dir -> '$dir/data/$songName')), 'json', []);
+			// 	var foundSongs:Map<String, Array<String>> = new Map();
+			// 	for (difficulty in difficulties)
+			// 	{
+			// 		var fileName = Path.withoutDirectory(difficulty);
+			// 		var baseName = fileName.split("-")[0];
+			// 		if (!foundSongs.exists(baseName))
+			// 		{
+			// 			foundSongs.set(baseName, []);
+			// 		}
+			// 		foundSongs.get(baseName).push(fileName.replace(".json", ""));
+			// 	}
+			// 	if (foundSongs.keys().length == 0)
+			// 	{
+			// 		GlobalException.throwGlobally("No songs found.", null, true);
+			// 	}
+			// 	for (song in foundSongs.keys())
+			// 	{
+			// 		songChoices.push(song);
+			// 		listChoices.push(song);
+			// 		print("Song: " + song);
+			// 		for (difficulty in foundSongs.get(song))
+			// 		{
+			// 			print("  Difficulty: " + difficulty);
+			// 		}
+			// 	}
+			// 	if (song != null)
+			// 	{
+			// 		substates.DiffSubState.songChoices = songChoices;
+			// 		substates.DiffSubState.listChoices = listChoices;
+			// 		backend.Difficulty.list = foundSongs.get(songName);
+
+			// 		// Check if the camera is in the default position
+			// 		var defaultCameraPosition = {x: 0, y: 0};
+			// 		if (FlxG.camera.scroll.x != defaultCameraPosition.x || FlxG.camera.scroll.y != defaultCameraPosition.y)
+			// 		{
+			// 			// Tween quickly to the default position
+			// 			FlxTween.tween(FlxG.camera.scroll, {x: defaultCameraPosition.x, y: defaultCameraPosition.y}, 0.5, {ease: FlxEase.quadOut});
+			// 		}
+
+			// 		FlxG.state.openSubState(new substates.DiffSubState());
+			// 	}
+				// case "do":
+				// 	if (args.length >= 2) {
+				// 		var subCommand = args[0];
+				// 		var code = args.slice(1).join(" ");
 						
-						switch (subCommand) {
-							case "hx", "haxe", "code":
-								try {
-									haxe.macro.Context.eval(code);
-									print("Executed code: " + code);
-								} catch (e:haxe.Exception) {
-									print("Error executing code: " + e.toString());
-								}
+				// 		switch (subCommand) {
+				// 			case "hx", "haxe", "code":
+				// 				try {
+				// 					haxe.macro.Context.eval(code);
+				// 					print("Executed code: " + code);
+				// 				} catch (e:haxe.Exception) {
+				// 					print("Error executing code: " + e.toString());
+				// 				}
 								
 					// 		case "func":
 					// 			var funcName = args[1];
