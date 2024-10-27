@@ -19,6 +19,7 @@ class NoteMovement
     public static var arrowSize:Float = 112;
     public static var defaultStrumX:Array<Float> = [];
     public static var defaultStrumY:Array<Float> = [];
+    public static var defaultStrumZ:Array<Float> = [];
     public static var defaultSkewX:Array<Float> = [];
     public static var defaultSkewY:Array<Float> = [];
     public static var defaultScale:Array<Float> = [];
@@ -27,7 +28,8 @@ class NoteMovement
     public static function getDefaultStrumPos(game:PlayState)
     {
         defaultStrumX = []; //reset
-        defaultStrumY = []; 
+        defaultStrumY = [];
+        defaultStrumZ = []; 
         defaultSkewX = [];
         defaultSkewY = []; 
         defaultScale = [];
@@ -44,6 +46,7 @@ class NoteMovement
                 defaultSkewY.push(strum.skew.y);
                 defaultStrumX.push(strum.x);
                 defaultStrumY.push(strum.y);
+                defaultStrumZ.push(strum.z);
                 var s = Note.scales[PlayState.mania];
                 defaultScale.push(s);
                 arrowSizes.push(160*s);
@@ -56,6 +59,7 @@ class NoteMovement
         #if (PSYCH && !DISABLE_MODCHART_EDITOR)
         defaultStrumX = []; //reset
         defaultStrumY = []; 
+        defaultStrumZ = []; 
         defaultSkewX = [];
         defaultSkewY = [];
         defaultScale = [];
@@ -73,6 +77,7 @@ class NoteMovement
                 defaultSkewY.push(strum.skew.y);
                 defaultStrumX.push(strum.x);
                 defaultStrumY.push(strum.y);
+                defaultStrumZ.push(strum.z);
                 var s = Note.scales[PlayState.mania];
                 defaultScale.push(s);
                 arrowSizes.push(160*s);
@@ -84,7 +89,7 @@ class NoteMovement
     {
         daNote.x = defaultStrumX[lane];
         daNote.y = defaultStrumY[lane];
-        daNote.z = 0;
+        daNote.z = defaultStrumZ[lane];
 
         var pos = ModchartUtil.getCartesianCoords3D(incomingAngleX,incomingAngleY, curPos*noteDist);
         daNote.y += pos.y;

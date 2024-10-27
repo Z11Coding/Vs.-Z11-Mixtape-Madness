@@ -1499,7 +1499,7 @@ class PlayState extends MusicBeatState
 				dadField.cameras = [camHUD];
 				playfields.cameras = [camHUD];
 				strumLineNotes.cameras = [camHUD];
-					if (notes != null) notes.cameras = [camHUD];
+				if (notes != null) notes.cameras = [camHUD];
 				healthBar.cameras = [camHUD];
 				healthBar2.cameras = [camHUD];
 				iconP1.cameras = [camHUD];
@@ -4516,7 +4516,7 @@ if (result < 0 || result > mania) {
 			if (field.isPlayer && !field.autoPlayed && !daNote.ignoreNote && !endingSong && (daNote.tooLate || !daNote.wasGoodHit))
 				noteMiss(daNote, field);
 		});
-		field.noteSpawned.add((dunceNote:Note, field:PlayField) ->
+		field.noteSpawned.add((dunceNote:Note, field:PlayField) ->	
 		{
 			callOnScripts('onSpawnNote', [dunceNote]);
 			#if LUA_ALLOWED
@@ -4528,8 +4528,9 @@ if (result < 0 || result > mania) {
 				dunceNote.strumTime
 			]);
 			#end
+			notes.insert(0, dunceNote);
+			dunceNote.spawned = true;
 
-			notes.add(dunceNote);
 			var index:Int = unspawnNotes.indexOf(dunceNote);
 			unspawnNotes.splice(index, 1);
 
@@ -4714,6 +4715,9 @@ if (result < 0 || result > mania) {
 
 	override public function update(elapsed:Float)
 	{
+		playfieldRenderer.notes = notes;
+
+
 		if (FlxG.keys.justPressed.NINE)
 			iconP1.swapOldIcon();
 

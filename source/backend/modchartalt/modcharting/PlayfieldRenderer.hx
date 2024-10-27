@@ -206,16 +206,18 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
 
     private function getNoteCurPos(noteIndex:Int, strumTimeOffset:Float = 0)
     {
-        if (notes.members[noteIndex].isSustainNote && ModchartUtil.getDownscroll(instance))
+        if (notes.members[noteIndex] != null && notes.members[noteIndex].isSustainNote && ModchartUtil.getDownscroll(instance))
             strumTimeOffset -= Std.int(Conductor.stepCrochet/getCorrectScrollSpeed()); //psych does this to fix its sustains but that breaks the visuals so basically reverse it back to normal
         
-        var distance = (Conductor.songPosition - notes.members[noteIndex].strumTime) + strumTimeOffset;
+        var distance = (Conductor.songPosition - 1000) + strumTimeOffset; //default
+        if (notes.members[noteIndex] != null)
+            distance = (Conductor.songPosition - notes.members[noteIndex].strumTime) + strumTimeOffset;
         return distance*getCorrectScrollSpeed();
     }
     private function getLane(noteIndex:Int)
     {
         try {
-            return (notes.members[noteIndex].mustPress ? notes.members[noteIndex].noteData+NoteMovement.keyCount : notes.members[noteIndex].noteData);
+            return if (notes.members[noteIndex] != null) (notes.members[noteIndex].mustPress ? notes.members[noteIndex].noteData+NoteMovement.keyCount : notes.members[noteIndex].noteData) else 0;
         } catch(e) {
             if (notes.members[noteIndex] != null)
                 trace("mustPress: "+notes.members[noteIndex].mustPress+ '\nNoteData: '+notes.members[noteIndex].noteData);
@@ -271,7 +273,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
                 var curPos = getNoteCurPos(i, sustainTimeThingy);
                 curPos = modifierTable.applyCurPosMods(lane, curPos, pf);
 
-                if ((notes.members[i].wasGoodHit || (notes.members[i].prevNote.wasGoodHit)) && curPos >= 0 && notes.members[i].isSustainNote)
+                if (notes.members[i] != null && (notes.members[i].wasGoodHit || (notes.members[i].prevNote.wasGoodHit)) && curPos >= 0 && notes.members[i].isSustainNote)
                     curPos = 0; //sustain clip
 
                 var incomingAngle:Array<Float> = modifierTable.applyIncomingAngleMods(lane, curPos, pf);
