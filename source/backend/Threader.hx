@@ -7,6 +7,8 @@ import haxe.macro.Type;
 import haxe.macro.Printer;
 
 class Threader {
+    public static var cancellableThreads:Map<String, {thread:sys.thread.Thread, cancel:Void->Void}> = new Map();
+
     public static macro function runInThread(expr:Expr, ?sleepDuration:Float = 0, ?name:String = ""):Expr {
         var sleepExpr = Context.makeExpr(sleepDuration, Context.currentPos());
         var nameExpr = Context.makeExpr(name, Context.currentPos());
@@ -38,31 +40,50 @@ class Threader {
         trace("Threaded section of code prepared.");
     }
 
-    // public static macro function addLogging(expr:Expr):Expr {
-    //     return switch (expr.expr) {
-    //         case EFunction(args, body):
-    //             var newExprs = [];
-    //             newExprs.push(macro trace("Starting function..."));
-    //             for (e in body.exprs) {
-    //                 newExprs.push(addLogging(e));
-    //             }
-    //             newExprs.push(macro trace("Function execution completed."));
-    //             body.exprs = newExprs;
-    //             return macro $expr;
-    //         case EIf(cond, e1, e2):
-    //             return macro {
-    //                 trace("Evaluating condition: " + $cond.toString());
-    //                 if ($cond) {
-    //                     trace("Condition true");
-    //                     $addLogging(e1);
-    //                 } else {
-    //                     trace("Condition false");
-    //                     $addLogging(e2);
-    //                 }
-    //             };
-    //         default:
-    //             return expr;
-    //     }
-    // }
-}
+    public static macro function runInCancellableThread(expr:Expr, ?name:String = ""):Expr {
+        var nameExpr = Context.makeExpr(name, Context.currentPos());
+        var threadName = name != "" ? name : "thread_" + Std.string(Math.random());
+        nameExpr = Context.makeExpr(threadName, Context.currentPos());
+        trace("Preparing a cancellable threaded section of code:" + expr + " with name: " + name);
+        return macro {
+            #if sys
+            var thrd = Thread.create(function() {
+                try {
+                    trace("Set command to run in a cancellable thread...");
+                    if ($nameExpr != "") {
+                        trace("Thread name: " + $nameExpr);
+                    }
+                    $expr;
+                    trace("Thread finished running command.");
+                } catch (e:Dynamic) {
+                    trace("Exception in thread: " + e);
+                    if ($nameExpr != "") {
+                        trace("Errored Thread name: " + $nameExpr);
+                    }
+                }
+            });
 
+            Threader.cancellableThreads.set($nameExpr, {thread: thrd, cancel: function() {
+                try {
+                    thrd = null;
+                    trace("Thread " + $nameExpr + " cancelled.");
+                } catch (e:Dynamic) {
+                    trace("Exception while cancelling thread: " + e);
+                }
+            }});
+            #else
+            $expr;
+            #end
+        };
+        trace("Cancellable threaded section of code prepared.");
+    }
+
+    public static function cancelThread(name:String):Void {
+        if (cancellableThreads.exists(name)) {
+            cancellableThreads.get(name).cancel();
+            cancellableThreads.remove(name);
+        } else {
+            trace("No thread found with name: " + name);
+        }
+    }
+}

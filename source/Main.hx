@@ -79,7 +79,7 @@ class Main extends Sprite
 		#end
 		if (stage != null)
 		{
-			backend.Threader.runInThread(init(), 'init');
+			backend.Threader.runInCancellableThread(init(), 'init');
 		}
 		else
 		{
@@ -195,7 +195,7 @@ class Main extends Sprite
 		MemoryUtil.init();
 		WindowUtils.init();
 		var commandPrompt = new CommandPrompt();
-		backend.Threader.runInThread(commandPrompt.start());
+		backend.Threader.runInThread(commandPrompt.start(), 0, 'commandPrompt');
 		#if LUA_ALLOWED Lua.set_callbacks_function(cpp.Callable.fromStaticFunction(psychlua.CallbackHandler.call)); #end
 		Controls.instance = new Controls();
 		ClientPrefs.loadDefaultKeys();
@@ -263,6 +263,10 @@ class Main extends Sprite
 		stage.window.onDropFile.add(function(path:String)
 		{
 			trace("user dropped file with path: " + path);
+			var extension = path.split(".").pop();
+			var fileData = sys.io.File.getContent(path);
+			// yutautil.FileDropHandler.handleFileDrop(extension, fileData);
+			trace("file drop handled");
 		});
 
 		// shader coords fix
@@ -663,7 +667,41 @@ class CommandPrompt
 			{
 				print("Resetting game...");
 				var processChecker = new Process("MixEngine.exe", ["check"]);
+
+				// if (processChecker.exitCode == 0)
+				// {
+				// 	print("Game is not running. Restarting...");
+				// 	Main.closeGame();
+				// }
+				// else
+				// {
+				// 	print("Game is running. Killing process...");
+				// 	Sys.command("taskkill /f /im MixEngine.exe");
+				// 	print("Process killed. Restarting...");
+				// 	Main.closeGame();
+				// }
 			}
+
+			if (input == "$kill")
+			{
+				print("CommandHook killed.");
+				Threader.cancelThread("commandPrompt");
+			}
+
+			if (input == "$cThreads")
+			{
+				var threads:Array<String> = [];
+				for (key in Threader.cancellableThreads.keys()) {
+					threads.push(key);
+				}
+				for (thread in threads)
+				{
+					print("Thread: " + thread);
+				}
+				print("Total threads: " + threads.length);
+			}
+
+
 
 			this.executeCommand(input);
 		}
@@ -907,6 +945,30 @@ class CommandPrompt
 
 					FlxG.state.openSubState(new substates.DiffSubState());
 				}
+				case "saveState":
+					if (args.length == 1) {
+						backend.modules.SaveState.saveState(args[0], FlxG.state);
+						print("State saved as: " + args[0]);
+					} else {
+						print("Error: saveState requires exactly one argument.");
+					}
+				case "loadState":
+					if (args.length == 1) {
+						var loadedState = backend.modules.SaveState.loadState(args[0]);
+						if (loadedState != null) {
+							FlxG.switchState(loadedState);
+							print("State loaded: " + args[0]);
+						} else {
+							print("Error: No saved state found with name: " + args[0]);
+						}
+					} else {
+						print("Error: loadState requires exactly one argument.");
+					}
+					case "listStates":
+						for (state in backend.modules.SaveState.listStates()) {
+							print(state);
+						}
+						print("Total saved states: " + backend.modules.SaveState.listStates().length);
 			default:
 				if (args.length == 2 && args[1] == '=')
 				{
