@@ -148,7 +148,7 @@ class Paths
 		var skipList:Array<String> = [];
 		
 		for (directoryPath in directoryPaths) {
-			var skip:Boolean = false;
+			var skip:Bool = false;
 			
 			// Check if the directoryPath is a subdirectory of any path in result
 			for (existingPath in result) {
