@@ -2163,8 +2163,11 @@ class PlayState extends MusicBeatState
 				{
 					if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null && !endingSong && !isCameraOnForcedPos)
 					{
-						moveCameraSection();
-						FlxG.camera.snapToTarget();
+						if (FlxG.camera != null) 
+						{
+							moveCameraSection();
+							FlxG.camera.snapToTarget();
+						}
 					}
 					startAndEnd();
 				};
@@ -4715,7 +4718,7 @@ if (result < 0 || result > mania) {
 
 	override public function update(elapsed:Float)
 	{
-		playfieldRenderer.notes = notes;
+		PlayfieldRenderer.pubNotes = notes;
 
 
 		if (FlxG.keys.justPressed.NINE)
