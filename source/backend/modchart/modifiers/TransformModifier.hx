@@ -8,7 +8,7 @@ import flixel.FlxG;
 import backend.math.Vector3;
 import backend.math.*;
 
-class TransformModifier extends NoteModifier { // this'll be transformX in ModManager
+class TransformModifier extends source.backend.modchart.NoteModifier { // this'll be transformX in ModManager
     inline function lerp(a:Float,b:Float,c:Float){
         return a+(b-a)*c;
     }
@@ -17,7 +17,7 @@ class TransformModifier extends NoteModifier { // this'll be transformX in ModMa
 		return 'transformX';
 
     override function getOrder()
-        return Modifier.ModifierOrder.LAST;
+        return source.backend.modchart.Modifier.ModifierOrder.LAST;
 
     override function getPos( visualDiff:Float, timeDiff:Float, beat:Float, pos:Vector3, data:Int, player:Int, obj:FlxSprite, field:NoteField)
     {

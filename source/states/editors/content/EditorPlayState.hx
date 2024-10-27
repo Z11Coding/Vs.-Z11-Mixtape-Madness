@@ -1,6 +1,6 @@
 package states.editors.content;
 
-import backend.modchart.ModManager;
+import source.backend.modchart.ModManager;
 
 import backend.Song;
 import backend.Rating;

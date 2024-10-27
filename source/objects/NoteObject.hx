@@ -1,5 +1,6 @@
 package objects;
 
+import flixel.addons.effects.FlxSkewedSprite;
 import flixel.util.FlxDestroyUtil;
 import flixel.math.FlxPoint;
 
@@ -11,7 +12,7 @@ enum abstract ObjectType(#if cpp cpp.UInt8 #else Int #end)
 	var SPLASH;
 }
 
-class NoteObject extends FlxSprite {
+class NoteObject extends FlxSkewedSprite {
 	public var objType:ObjectType = UNKNOWN;
 
     public var column:Int = 0;

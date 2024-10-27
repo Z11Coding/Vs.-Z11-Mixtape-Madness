@@ -9,7 +9,7 @@ import backend.math.Vector3;
 import backend.math.*;
 import objects.playfields.NoteField;
 
-class AccelModifier extends NoteModifier
+class AccelModifier extends source.backend.modchart.NoteModifier
 { // this'll be boost in ModManager
 	inline function lerp(a:Float, b:Float, c:Float)
 	{

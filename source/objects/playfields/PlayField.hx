@@ -5,7 +5,7 @@ import flixel.math.FlxMath;
 import backend.math.Vector3;
 import openfl.Vector;
 import openfl.geom.Vector3D;
-import backend.modchart.ModManager;
+import source.backend.modchart.ModManager;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.util.FlxSort;
 import flixel.tweens.FlxTween;
@@ -17,8 +17,6 @@ import backend.MusicBeatState;
 import backend.Rating;
 import objects.Character;
 import objects.NoteSplash;
-
-using StringTools;
 
 /*
 The system is seperated into 3 classes:
@@ -79,6 +77,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 	public var spawnedByData:Array<Array<Note>> = [[], [], [], [], [], [], [], [],[], [], [], [],[], [], [], [], [], []]; // spawned notes by data. Used for input
 	public var noteQueue:Array<Array<Note>> = [[], [], [], [], [], [], [], [],[], [], [], [],[], [], [], [], [], []]; // unspawned notes
 	public var strumNotes:Array<StrumNote> = []; // receptors
+	public static var publicStrums:FlxTypedGroup<StrumNote>; // receptors for other states
 	public var characters:Array<Character> = []; // characters that sing when field is hit
 	public var noteField:NoteField; // renderer
 	public var modNumber:Int = 0; // used for the mod manager. can be set to a different number to give it a different set of modifiers. can be set to 0 to sync the modifiers w/ bf's, and 1 to sync w/ the opponent's
@@ -138,6 +137,8 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 		strumAttachments = new FlxTypedGroup<NoteObject>();
 		strumAttachments.visible = false;
 		add(strumAttachments);
+
+		publicStrums = new FlxTypedGroup<StrumNote>();
 
 		/*var splash:NoteSplash = new NoteSplash(100, 100, 0);
 		splash.handleRendering = false;
@@ -301,6 +302,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 			babyArrow.handleRendering = false; // NoteField handles rendering
 			babyArrow.cameras = cameras;
 			strumNotes.push(babyArrow);
+			publicStrums.add(babyArrow);
 			babyArrow.playerPosition();
 		}
 	}
@@ -380,6 +382,8 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 		super.update(elapsed);
 
 		for(obj in strumNotes)
+			modManager.updateObject(curDecBeat, obj, modNumber);
+		for(obj in publicStrums)
 			modManager.updateObject(curDecBeat, obj, modNumber);
 
 		//spawnedNotes.sort(sortByOrderNote);

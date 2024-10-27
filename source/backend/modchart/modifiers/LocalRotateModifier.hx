@@ -11,18 +11,18 @@ import backend.math.Vector3;
 import backend.math.*;
 import objects.playfields.NoteField;
 
-class LocalRotateModifier extends NoteModifier { // this'll be rotateX in ModManager
+class LocalRotateModifier extends source.backend.modchart.NoteModifier { // this'll be rotateX in ModManager
 	override function getName()
 		return '${prefix}rotateX';
 
 	override function getOrder()
-		return Modifier.ModifierOrder.POST_REVERSE;
+		return source.backend.modchart.Modifier.ModifierOrder.POST_REVERSE;
 
     inline function lerp(a:Float,b:Float,c:Float){
         return a+(b-a)*c;
     }
     var prefix:String;
-	public function new(modMgr:ModManager, ?prefix:String = '', ?parent:Modifier){
+	public function new(modMgr:source.backend.modchart.ModManager, ?prefix:String = '', ?parent:source.backend.modchart.Modifier){
         this.prefix=prefix;
         super(modMgr, parent);
 

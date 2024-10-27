@@ -8,7 +8,7 @@ import flixel.math.FlxMath;
 import backend.math.*;
 import flixel.math.FlxAngle;
 
-class ConfusionModifier extends NoteModifier {
+class ConfusionModifier extends source.backend.modchart.NoteModifier {
     override function getName()return 'confusion';
 	override function shouldExecute(player:Int, val:Float)return true;
 	override function isRenderMod()return true;

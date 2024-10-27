@@ -8,7 +8,7 @@ import substates.StickerSubState;
 import backend.Song;
 import flixel.tweens.FlxTween;
 
-class MusicBeatState extends FlxState
+class MusicBeatState extends backend.modchartalt.modcharting.ModchartMusicBeatState
 {
 	private var curSection:Int = 0;
 	private var stepsToDo:Int = 0;

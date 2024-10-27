@@ -7,7 +7,7 @@ import flixel.math.FlxMath;
 import flixel.FlxG;
 import backend.math.*;
 
-class ReceptorScrollModifier extends NoteModifier {
+class ReceptorScrollModifier extends source.backend.modchart.NoteModifier {
   inline function lerp(a:Float,b:Float,c:Float){
     return a+(b-a)*c;
   }

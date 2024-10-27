@@ -94,7 +94,11 @@ import flixel.group.FlxSpriteGroup;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.addons.transition.FlxTransitionableState;
 
+//Modcharting stuff
 import objects.playfields.*;
+import backend.modchart.*;
+import backend.modchartalt.*;
+import backend.modchartalt.modcharting.*;
 
 import shop.*;
 

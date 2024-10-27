@@ -277,7 +277,7 @@ class CategoryState extends MusicBeatState
 				}
 				else
 				{
-					TransitionState.transitionState(FreeplayState, {transitionType: "instant"});
+					TransitionState.transitionState(FreeplayState, {transitionType: "stickers"});
 				}
 			}
 		}

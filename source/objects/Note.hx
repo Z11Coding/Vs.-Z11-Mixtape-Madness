@@ -269,7 +269,8 @@ class Note extends NoteObject
 	];
 
 	public var extraData:Map<String, Dynamic> = new Map<String, Dynamic>();
-
+	// modchart
+	public var mesh:backend.modchartalt.modcharting.SustainStrip = null;
 	public var noteDiff:Float = 1000;
 	
 	// basic stuff
@@ -357,7 +358,7 @@ class Note extends NoteObject
     inline function set_realNoteData(v:Int)
         return realColumn = v;
 
-	public static var swagWidth:Float = 160 * 0.6;
+	public static var swagWidth:Float = 160 * 0.7;
 	public static var swagWidthAlt:Float = 160; //For ModManager
 	public static var colArray:Array<String> = ['purple', 'blue', 'green', 'red'];
 	public static var colArrayAlt:Array<String> = ['purple', 'blue', 'green', 'red', 'white', 'yellow', 'violet', 'black', 'dark'];

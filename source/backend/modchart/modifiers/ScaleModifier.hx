@@ -1,12 +1,12 @@
 package backend.modchart.modifiers;
 
-import backend.modchart.Modifier.RenderInfo;
+import source.backend.modchart.Modifier.RenderInfo;
 import flixel.math.FlxPoint;
-import backend.modchart.Modifier.ModifierOrder;
+import source.backend.modchart.Modifier.ModifierOrder;
 import backend.math.Vector3;
 import objects.playfields.NoteField;
 
-class ScaleModifier extends NoteModifier {
+class ScaleModifier extends source.backend.modchart.NoteModifier {
 	override function getName()return 'tiny';
 	override function getOrder()return PRE_REVERSE;
 	inline function lerp(a:Float, b:Float, c:Float)

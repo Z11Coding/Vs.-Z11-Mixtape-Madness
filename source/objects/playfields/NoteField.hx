@@ -10,8 +10,8 @@ import openfl.Vector;
 import openfl.geom.ColorTransform;
 import openfl.display.Shader;
 import flixel.graphics.FlxGraphic;
-import backend.modchart.Modifier.RenderInfo;
-import backend.modchart.ModManager;
+import source.backend.modchart.Modifier.RenderInfo;
+import source.backend.modchart.ModManager;
 import flixel.system.FlxAssets.FlxShader;
 import objects.NoteObject;
 

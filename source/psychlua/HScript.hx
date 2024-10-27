@@ -9,7 +9,7 @@ import psychlua.CustomSubstate;
 import psychlua.FunkinLua;
 #end
 
-import backend.modchart.SubModifier;
+import source.backend.modchart.SubModifier;
 
 #if HSCRIPT_ALLOWED
 import tea.SScript;
@@ -315,11 +315,11 @@ class HScript extends SScript
 		set("NoteField", objects.playfields.NoteField);
 		set("ProxyField", objects.proxies.ProxyField);
 		set("ProxySprite", objects.proxies.ProxySprite);
-		set("ModManager", backend.modchart.ModManager);
-		set("Modifier", backend.modchart.Modifier);
-		set("SubModifier", backend.modchart.SubModifier);
-		set("NoteModifier", backend.modchart.NoteModifier);
-		set("EventTimeline", backend.modchart.EventTimeline);
+		set("ModManager", source.backend.modchart.ModManager);
+		set("Modifier", source.backend.modchart.Modifier);
+		set("SubModifier", source.backend.modchart.SubModifier);
+		set("NoteModifier", source.backend.modchart.NoteModifier);
+		set("EventTimeline", source.backend.modchart.EventTimeline);
 		set("StepCallbackEvent", backend.modchart.events.StepCallbackEvent);
 		set("CallbackEvent", backend.modchart.events.CallbackEvent);
 		set("ModEvent", backend.modchart.events.ModEvent);

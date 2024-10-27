@@ -18,7 +18,7 @@ import haxe.Json;
 import objects.Character;
 import openfl.utils.Assets as OpenFlAssets;
 
-import backend.modchart.ModManager;
+import source.backend.modchart.ModManager;
 
 class EditorPlayState extends MusicBeatSubstate
 {

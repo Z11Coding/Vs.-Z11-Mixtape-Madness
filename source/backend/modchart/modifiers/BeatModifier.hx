@@ -7,7 +7,7 @@ import flixel.math.FlxMath;
 import backend.math.*;
 import objects.playfields.NoteField;
 
-class BeatModifier extends NoteModifier {
+class BeatModifier extends source.backend.modchart.NoteModifier {
     override function getName()return 'beat';
     override function doesUpdate(){
         return true;

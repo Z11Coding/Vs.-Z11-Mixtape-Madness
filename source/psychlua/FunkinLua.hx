@@ -43,7 +43,7 @@ import flixel.input.gamepad.FlxGamepadInputID;
 
 import haxe.Json;
 
-import backend.modchart.SubModifier;
+import source.backend.modchart.SubModifier;
 
 class FunkinLua {
 	public var lua:State = null;
@@ -1607,6 +1607,8 @@ class FunkinLua {
 		#if HSCRIPT_ALLOWED HScript.implement(this); #end
 		#if ACHIEVEMENTS_ALLOWED Achievements.addLuaCallbacks(lua); #end
 		#if flxanimate FlxAnimateFunctions.implement(this); #end
+		ModchartFuncs.loadLuaFunctions(lua);
+		ModchartFuncs.loadHaxeFunctions(this);
 		ReflectionFunctions.implement(this);
 		TextFunctions.implement(this);
 		ExtraFunctions.implement(this);

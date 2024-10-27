@@ -244,7 +244,7 @@ class DiffSubState extends MusicBeatSubstate
 				PlayState.isStoryMode = false;
 				PlayState.storyDifficulty = curDifficulty;
 				TransitionState.transitionState(PlayState, {transitionType: "stickers"});
-				FlxG.sound.music.volume = 0;
+				if (FlxG.sound.music != null && FlxG.sound.music.playing) FlxG.sound.music.volume = 0;
 				PlayState.chartingMode = false;
 				return;
 			}

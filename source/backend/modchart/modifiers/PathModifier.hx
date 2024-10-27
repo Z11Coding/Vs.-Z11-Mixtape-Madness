@@ -5,7 +5,7 @@ import backend.math.Vector3;
 import flixel.math.FlxMath;
 import flixel.FlxSprite;
 
-class PathModifier extends NoteModifier
+class PathModifier extends source.backend.modchart.NoteModifier
 {
 	override function getName()
 		return 'tornado';

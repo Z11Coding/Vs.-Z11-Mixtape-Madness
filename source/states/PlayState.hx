@@ -64,7 +64,7 @@ import tea.SScript;
 
 
 // Mixtape Stuff
-import backend.modchart.ModManager;
+import source.backend.modchart.ModManager;
 import openfl.filters.BitmapFilter;
 import backend.STMetaFile.MetadataFile;
 import flixel.addons.effects.FlxTrail;
@@ -75,6 +75,11 @@ import objects.NoteObject.ObjectType;
 import shaders.ShadersHandler;
 import yutautil.Anomoly;
 import backend.window.CppAPI;
+// modchart bullshit
+import backend.modchartalt.modcharting.ModchartFuncs;
+import backend.modchartalt.modcharting.NoteMovement;
+import backend.modchartalt.modcharting.PlayfieldRenderer;
+import backend.modchartalt.modcharting.ModchartEditorState;
 
 /**
  * This is where all the Gameplay stuff happens and is managed
@@ -553,6 +558,8 @@ class PlayState extends MusicBeatState
 
 	var backupGpu:Bool;
 	public static var nextReloadAll:Bool = false;
+
+	public var trueStrumLineNotes:FlxTypedGroup<StrumNote>; //Stores the strums in both playfields for the other renderer
 	override public function create()
 	{
 		try
@@ -1207,7 +1214,7 @@ class PlayState extends MusicBeatState
 		add(timeTxt);
 
 		strumLineNotes = new FlxTypedGroup<StrumNote>();
-		add(strumLineNotes);
+		//add(strumLineNotes);
 
 		if (ClientPrefs.data.timeBarType == 'Song Name')
 		{
@@ -1569,6 +1576,14 @@ class PlayState extends MusicBeatState
 			RecalculateRating();
 			if (AIPlayer.active)
 				RecalculateRatingAI();
+		}
+
+		if (ClientPrefs.data.modcharts)
+		{
+			playfieldRenderer = new PlayfieldRenderer(objects.playfields.PlayField.publicStrums, notes, this);
+			playfieldRenderer.cameras = [camHUD];
+			add(objects.playfields.PlayField.publicStrums);
+			add(playfieldRenderer);
 		}
 		add(middlecircle);
 

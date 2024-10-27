@@ -1,4 +1,4 @@
-package backend.modchart;
+package source.backend.modchart;
 // @author Nebula_Zorua
 
 
@@ -30,13 +30,13 @@ class RenderInfo {
 }
 
 class Modifier {
-	public var modMgr:ModManager;
-	@:allow(backend.modchart.ModManager)
+	public var modMgr:source.backend.modchart.ModManager;
+	@:allow(source.backend.modchart.ModManager)
 	var target_percents:Array<Float> = [0, 0];
     public var percents:Array<Float> = [0, 0];
 
 	public var submods:Map<String, Modifier> = [];
-	public var parent:Modifier; // for submods
+	public var parent:source.backend.modchart.Modifier; // for submods
 
 	public function affectsField()
 		return false;
@@ -186,15 +186,15 @@ class Modifier {
 	inline public function setOtherValue(modName:String, endValue:Float, player:Int)
 		return modMgr.setValue(modName, endValue, player);
     
-	public function new(modMgr:ModManager, ?parent:Modifier)
+	public function new(modMgr:source.backend.modchart.ModManager, ?parent:source.backend.modchart.Modifier)
 	{
 		this.modMgr = modMgr;
 		this.parent = parent;
 		for (submod in getSubmods())
-			submods.set(submod, new SubModifier(submod, modMgr, this));
+			submods.set(submod, new source.backend.modchart.SubModifier(submod, modMgr, this));
 	}
 
-    @:allow(backend.modchart.ModManager)
+    @:allow(source.backend.modchart.ModManager)
     private function _internalUpdate(){
         for(pN in 0...target_percents.length){
 			percents[pN] = target_percents[pN];

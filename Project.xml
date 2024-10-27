@@ -66,6 +66,9 @@
 	<define name="SHOW_LOADING_SCREEN" />
 	<define name="IRIS_DEBUG"/>
 	<define name="test"/>
+
+	<define name="PSYCH" />
+	<define name="PSYCHVERSION" value="0.7.3"/> <!-- With a hint of 1.0 -->
 	<!-- <define name="UNDERTALE"/> -->
 
 	<section if="officialBuild">

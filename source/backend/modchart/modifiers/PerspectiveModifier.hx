@@ -8,7 +8,6 @@ import flixel.math.FlxPoint;
 import backend.math.Vector3;
 import flixel.math.FlxMath;
 import flixel.FlxG;
-using StringTools;
 import backend.math.*;
 import objects.playfields.NoteField;
 
@@ -25,10 +24,10 @@ import objects.playfields.NoteField;
 // either way
 // perspective projection woo
 
-class PerspectiveModifier extends NoteModifier 
+class PerspectiveModifier extends source.backend.modchart.NoteModifier 
 {
 	override function getName() return 'perspectiveDONTUSE';
-	override function getOrder() return Modifier.ModifierOrder.LAST + 1000; // should ALWAYS go last
+	override function getOrder() return source.backend.modchart.Modifier.ModifierOrder.LAST + 1000; // should ALWAYS go last
 	override function shouldExecute(player:Int, val:Float) return true;
 	override function isRenderMod() return true;
 

@@ -1,6 +1,6 @@
 package backend.modchart.modifiers;
 
-import backend.modchart.Modifier.ModifierOrder;
+import source.backend.modchart.Modifier.ModifierOrder;
 import backend.modchart.*;
 import backend.math.*;
 
@@ -8,7 +8,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import objects.playfields.NoteField;
 import objects.NoteObject.ObjectType;
-class ReverseModifier extends NoteModifier 
+class ReverseModifier extends source.backend.modchart.NoteModifier 
 {
 	inline function lerp(a:Float, b:Float, c:Float) 
 		return a + (b - a) * c;

@@ -10,7 +10,7 @@ class ModEaseEvent extends ModEvent {
 	public var startVal:Null<Float>;
     public var easeFunc:EaseFunction;
     public var length:Float = 0;
-	public function new(step:Float, endStep:Float, modName:String, target:Float, easeFunc:EaseFunction, player:Int = 0, modMgr:ModManager, ?startVal:Float) {
+	public function new(step:Float, endStep:Float, modName:String, target:Float, easeFunc:EaseFunction, player:Int = 0, modMgr:source.backend.modchart.ModManager, ?startVal:Float) {
 		super(step, modName, target, player, modMgr);
         this.endStep = endStep; 
 		this.easeFunc = easeFunc;

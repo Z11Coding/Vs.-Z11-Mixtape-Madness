@@ -12,7 +12,7 @@ class EaseEvent extends BaseEvent
     public var value:Float = 0;
     public var length:Float = 0;
 
-	public function new(step:Float, endStep:Float, easeFunc:EaseFunction, callback:(EaseEvent, Float, Float) -> Void, modMgr:ModManager)
+	public function new(step:Float, endStep:Float, easeFunc:EaseFunction, callback:(EaseEvent, Float, Float) -> Void, modMgr:source.backend.modchart.ModManager)
 	{
 		super(step, modMgr);
 		this.callback = callback;

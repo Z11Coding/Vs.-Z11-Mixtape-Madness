@@ -8,7 +8,7 @@ import flixel.FlxG;
 import backend.math.*;
 import objects.playfields.NoteField;
 
-class DrunkModifier extends NoteModifier {
+class DrunkModifier extends source.backend.modchart.NoteModifier {
     override function getName()return 'drunk';
 
 	inline function applyDrunk(axis:String, player:Int, time:Float, visualDiff:Float, data:Float){

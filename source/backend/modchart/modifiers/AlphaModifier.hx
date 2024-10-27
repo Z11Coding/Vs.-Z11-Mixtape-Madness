@@ -1,6 +1,6 @@
 package backend.modchart.modifiers;
 
-import backend.modchart.Modifier.RenderInfo;
+import source.backend.modchart.Modifier.RenderInfo;
 import backend.ui.*;
 import backend.modchart.*;
 import flixel.math.FlxPoint;
@@ -8,7 +8,7 @@ import flixel.math.FlxMath;
 import backend.math.*;
 import flixel.FlxG;
 
-class AlphaModifier extends NoteModifier 
+class AlphaModifier extends source.backend.modchart.NoteModifier 
 {
 	override function getName()
 		return 'stealth';

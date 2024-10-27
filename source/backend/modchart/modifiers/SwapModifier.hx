@@ -4,7 +4,7 @@ import flixel.FlxSprite;
 import backend.math.Vector3;
 import objects.playfields.NoteField;
 
-class SwapModifier extends NoteModifier
+class SwapModifier extends source.backend.modchart.NoteModifier
 {
 	override function getName()
 		return 'flip';

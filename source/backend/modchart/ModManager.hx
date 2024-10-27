@@ -1,8 +1,8 @@
-package backend.modchart;
+package source.backend.modchart;
 // @author Nebula_Zorua
 
 import objects.playfields.NoteField;
-import backend.modchart.Modifier;
+import source.backend.modchart.Modifier;
 import backend.modchart.modifiers.*;
 import backend.modchart.events.*;
 import backend.math.Vector3;
@@ -10,6 +10,7 @@ import flixel.tweens.FlxEase;
 import flixel.math.FlxPoint;
 import flixel.FlxG;
 import flixel.FlxState;
+import source.backend.modchart.EventTimeline;
 
 // Weird amalgamation of Schmovin' modifier system, Andromeda modifier system and my own new shit -neb
 // NEW: Now also has some features of mirin (aliases, nodes)
@@ -55,7 +56,7 @@ class ModManager {
     }
 
 	public function registerAux(name:String)
-		return quickRegister(new SubModifier(name, this));
+		return quickRegister(new source.backend.modchart.SubModifier(name, this));
     
 	public function registerDefaultModifiers()
 	{

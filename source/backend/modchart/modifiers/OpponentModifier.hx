@@ -5,7 +5,7 @@ import backend.modchart.*;
 import backend.math.*;
 import objects.playfields.NoteField;
 
-class OpponentModifier extends NoteModifier {
+class OpponentModifier extends source.backend.modchart.NoteModifier {
 	override function getName()
 		return 'opponentSwap';
 
