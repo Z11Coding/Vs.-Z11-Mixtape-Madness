@@ -29,5 +29,15 @@ class SaveState {
 			FlxG.switchState(state);
 		}
 	}
+
+	// Delete a saved state
+	public static function deleteState(stateName:String):Void {
+		savedStates.remove(stateName);
+	}
+
+	// List all saved states
+	public static function listStates():Array<Dynamic> {
+		return backend.DynamicIterator.toArray(savedStates.keys());
+	}
 }
 
