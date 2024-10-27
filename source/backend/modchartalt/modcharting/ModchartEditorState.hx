@@ -53,6 +53,7 @@ import MusicBeatSubstate;
 import backend.modchartalt.modcharting.*;
 import backend.modchartalt.modcharting.Modifier;
 import backend.modchartalt.modcharting.ModchartFile;
+import source.backend.modchart.ModManager;
 
 class ModchartEditorEvent extends FlxSprite {
 	#if ((PSYCH || LEATHER))
@@ -263,6 +264,14 @@ class ModchartEditorState extends backend.MusicBeatState
 
 	private var strumLine:FlxSprite;
 
+	public var modManager:ModManager;
+	public var playerField:PlayField;
+	public var dadField:PlayField;
+
+	public var notefields = new NotefieldManager();
+	public var playfields = new FlxTypedGroup<PlayField>();
+	public var allNotes:Array<Note> = []; // all notes
+
 	public var strumLineNotes:FlxTypedGroup<StrumNote>;
 	public var opponentStrums:FlxTypedGroup<StrumNote>;
 	public var playerStrums:FlxTypedGroup<StrumNote>;
@@ -357,13 +366,21 @@ class ModchartEditorState extends backend.MusicBeatState
 		#end
 
 		if (PlayState.SONG == null)
-			PlayState.SONG = Song.loadFromJson('tutorial');
+			PlayState.SONG = Song.loadFromJson('beat-battle-2-hard', 'beat-battle-2');
 		Conductor.mapBPMChanges(PlayState.SONG);
 		#if (PSYCH && PSYCHVERSION >= "0.7")
 		Conductor.bpm = PlayState.SONG.bpm;
 		#else
 		Conductor.changeBPM(PlayState.SONG.bpm);
 		#end
+
+		speedChanges.push({
+			position: 0,
+			songTime: 0,
+			startTime: 0,
+			startSpeed: 1,
+			speed: 1,
+		});
 
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
@@ -384,17 +401,49 @@ class ModchartEditorState extends backend.MusicBeatState
 
 		strumLine.scrollFactor.set();
 
-		strumLineNotes = new FlxTypedGroup<StrumNote>();
-		add(strumLineNotes);
+		//strumLineNotes = new FlxTypedGroup<StrumNote>();
+		//add(strumLineNotes);
 
-		opponentStrums = new FlxTypedGroup<StrumNote>();
-		playerStrums = new FlxTypedGroup<StrumNote>();
+		//opponentStrums = new FlxTypedGroup<StrumNote>();
+		//playerStrums = new FlxTypedGroup<StrumNote>();
+
+		modManager = new ModManager(this);
+		playerField = new PlayField(modManager);
+		playerField.modNumber = 0;
+		playerField.characters = [];
+		playerField.noteField.isEditor = true;
+		playerField.isPlayer = true;
+		playerField.autoPlayed = true;
+		//playerField.noteHitCallback = opponentmode ? opponentNoteHit : goodNoteHit;
+
+		dadField = new PlayField(modManager);
+		dadField.isPlayer = false;
+		dadField.autoPlayed = true;
+		dadField.modNumber = 1;
+		dadField.characters = [];
+		dadField.noteField.isEditor = true;
+		//dadField.noteHitCallback = opponentmode ? goodNoteHit : opponentNoteHit;
+
+		playfields.add(dadField);
+		playfields.add(playerField);
+
+		initPlayfield(dadField);
+		initPlayfield(playerField);
 
 		generateSong(PlayState.SONG);
 
-		playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
+		for (field in playfields.members)
+		{
+			field.keyCount = Note.ammo[3];
+			field.generateStrums();
+		}
+
+		modManager.registerDefaultModifiers();
+
+		playfieldRenderer = new PlayfieldRenderer(objects.playfields.PlayField.publicStrums, notes, this);
 		playfieldRenderer.cameras = [camHUD];
 		playfieldRenderer.inEditor = true;
+		add(objects.playfields.PlayField.publicStrums);
 		add(playfieldRenderer);
 
 		// strumLineNotes.cameras = [camHUD];
@@ -438,12 +487,14 @@ class ModchartEditorState extends backend.MusicBeatState
 		line.color = FlxColor.BLACK;
 		add(line);
 
-		generateStaticArrows(0);
-		generateStaticArrows(1);
 		NoteMovement.getDefaultStrumPosEditor(this);
 
 		// gridGap = FlxMath.remapToRange(Conductor.stepCrochet, 0, Conductor.stepCrochet, 0, gridSize); //idk why i even thought this was how i do it
 		// trace(gridGap);
+
+		//playerField.cameras = [camHUD];
+		//dadField.cameras = [camHUD];
+		//playfields.cameras = [camHUD];
 
 		debugText = new FlxText(0, gridSize * 2, 0, "", 16);
 		debugText.alignment = FlxTextAlign.LEFT;
@@ -495,6 +546,42 @@ class ModchartEditorState extends backend.MusicBeatState
 		hideUI.y -= hideUI.height;
 		hideUI.x -= hideUI.width;
 		add(hideUI);
+
+		add(playfields);
+		add(notefields);
+
+		Cursor.cursorMode = Default;
+	}
+
+	public inline function getTimeFromSV(time:Float, event:SpeedEvent)
+		return event.position + (modManager.getBaseVisPosD(time - event.songTime, 1) * event.speed);
+
+	public inline function getVisualPosition()
+		return getTimeFromSV(Conductor.songPosition, currentSV);
+
+	// good to call this whenever you make a playfield
+	public function initPlayfield(field:PlayField)
+	{
+		notefields.add(field.noteField);
+
+		//field.judgeManager = PlayState.instance.ratingsData[0];
+		//field.holdPressCallback = stepHold;
+		//field.holdReleaseCallback = dropHold;
+
+		field.noteRemoved.add((note:Note, field:PlayField) ->
+		{
+			allNotes.remove(note);
+			unspawnNotes.remove(note);
+			notes.remove(note);
+		});
+		field.noteSpawned.add((dunceNote:Note, field:PlayField) ->	
+		{
+			notes.insert(0, dunceNote);
+			dunceNote.spawned = true;
+
+			var index:Int = unspawnNotes.indexOf(dunceNote);
+			unspawnNotes.splice(index, 1);
+		});
 	}
 
 	#if (!SCEModchartingTools && (PSYCH && PSYCHVERSION >= "0.7.1"))
@@ -510,6 +597,9 @@ class ModchartEditorState extends backend.MusicBeatState
 	var totalElapsed:Float = 0;
 
 	override public function update(elapsed:Float) {
+		modManager.update(elapsed, curDecBeat, curDecStep);
+		for (field in playfields)
+			field.noteField.songSpeed = 3.3;
 		totalElapsed += elapsed;
 		highlight.alpha = 0.8 + FlxMath.fastSin(totalElapsed * 5) * 0.15;
 		super.update(elapsed);
@@ -521,6 +611,8 @@ class ModchartEditorState extends backend.MusicBeatState
 			inst.time = 0;
 		}
 		Conductor.songPosition = inst.time;
+		Conductor.visualPosition = getVisualPosition();
+		currentSV = getSV(Conductor.songPosition);
 
 		var songPosPixelPos = (((Conductor.songPosition / Conductor.stepCrochet) % 4) * gridSize);
 		grid.x = -curDecStep * gridSize;
@@ -684,54 +776,6 @@ class ModchartEditorState extends backend.MusicBeatState
 		#end
 		#end
 
-		if (unspawnNotes[0] != null) {
-			var time:Float = 2000;
-			if (PlayState.SONG.speed < 1)
-				time /= PlayState.SONG.speed;
-
-			while (unspawnNotes.length > 0 && unspawnNotes[0].strumTime - Conductor.songPosition < time) {
-				var dunceNote:Note = unspawnNotes[0];
-				notes.insert(0, dunceNote);
-				#if PSYCH
-				dunceNote.spawned = true;
-				#end
-				var index:Int = unspawnNotes.indexOf(dunceNote);
-				unspawnNotes.splice(index, 1);
-			}
-		}
-
-		var noteKillOffset = 350 / PlayState.SONG.speed;
-
-		notes.forEachAlive(function(daNote:Note) {
-			if (Conductor.songPosition >= daNote.strumTime) {
-				daNote.wasGoodHit = true;
-				#if (PSYCH && PSYCHVERSION >= "0.7")
-				var spr:StrumNote = null;
-				if (!daNote.mustPress) {
-					spr = opponentStrums.members[daNote.noteData];
-				} else {
-					spr = playerStrums.members[daNote.noteData];
-				}
-				spr.playAnim("confirm", true);
-				spr.resetAnim = Conductor.stepCrochet * 1.25 / 1000 / playbackSpeed;
-				#end
-				if (!daNote.isSustainNote) {
-					// daNote.kill();
-					notes.remove(daNote, true);
-					// daNote.destroy();
-				}
-			}
-
-			if (Conductor.songPosition > noteKillOffset + daNote.strumTime) {
-				daNote.active = false;
-				daNote.visible = false;
-
-				// daNote.kill();
-				notes.remove(daNote, true);
-				// daNote.destroy();
-			}
-		});
-
 		if (FlxG.mouse.y < grid.y + grid.height && FlxG.mouse.y > grid.y) // not using overlap because the grid would go out of world bounds
 		{
 			if (FlxG.keys.pressed.SHIFT)
@@ -771,9 +815,10 @@ class ModchartEditorState extends backend.MusicBeatState
 		}
 
 		if (dirtyUpdateNotes) {
-			clearNotesAfter(Conductor.songPosition + 2000); // so scrolling back doesnt lag shit
-			unspawnNotes = loadedNotes.copy();
-			clearNotesBefore(Conductor.songPosition);
+			//clearNotesAfter(Conductor.songPosition + 2000); // so scrolling back doesnt lag shit
+			//unspawnNotes = loadedNotes.copy();
+			//allNotes = loadedNotes.copy();
+			//clearNotesBefore(Conductor.songPosition);
 			dirtyUpdateNotes = false;
 		}
 		if (dirtyUpdateModifiers) {
@@ -937,49 +982,30 @@ class ModchartEditorState extends backend.MusicBeatState
 	}
 
 	public function clearNotesBefore(time:Float) {
-		var i:Int = unspawnNotes.length - 1;
+		var i:Int = allNotes.length - 1;
 		while (i >= 0) {
-			var daNote:Note = unspawnNotes[i];
+			var daNote:Note = allNotes[i];
 			if (daNote.strumTime + 350 < time) {
 				daNote.active = false;
 				daNote.visible = false;
-				// daNote.ignoreNote = true;
-
-				// daNote.kill();
-				unspawnNotes.remove(daNote);
-				// daNote.destroy();
-			}
-			--i;
-		}
-
-		i = notes.length - 1;
-		while (i >= 0) {
-			var daNote:Note = notes.members[i];
-			if (daNote.strumTime + 350 < time) {
-				daNote.active = false;
-				daNote.visible = false;
-				// daNote.ignoreNote = true;
-
-				// daNote.kill();
-				notes.remove(daNote, true);
-				// daNote.destroy();
+				daNote.ignoreNote = true;
+				for (field in playfields)
+					field.removeNote(daNote);
 			}
 			--i;
 		}
 	}
 
 	public function clearNotesAfter(time:Float) {
-		var i = notes.length - 1;
-		while (i >= 0) {
-			var daNote:Note = notes.members[i];
-			if (daNote.strumTime > time) {
-				daNote.active = false;
-				daNote.visible = false;
-				// daNote.ignoreNote = true;
-
-				// daNote.kill();
-				notes.remove(daNote, true);
-				// daNote.destroy();
+		var i:Int = allNotes.length - 1;
+		while (i >= 0)
+		{
+			var daNote:Note = allNotes[i];
+			if (daNote.strumTime > time)
+			{
+				daNote.ignoreNote = true;
+				for (field in playfields)
+					field.removeNote(daNote);
 			}
 			--i;
 		}
@@ -1064,13 +1090,13 @@ class ModchartEditorState extends backend.MusicBeatState
 					gottaHitNote = !section.mustHitSection;
 				
 				var oldNote:Note;
-				if (unspawnNotes.length > 0)
-					oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
+				if (allNotes.length > 0)
+					oldNote = allNotes[Std.int(allNotes.length - 1)];
 				else
 					oldNote = null;
 
 				#if (PSYCH && PSYCHVERSION >= "0.7")
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, false);
+				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, false, true, this);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.mustPress = gottaHitNote;
 				swagNote.gfNote = (section.gfSection && (songNotes[1] < 4));
@@ -1081,23 +1107,43 @@ class ModchartEditorState extends backend.MusicBeatState
 
 				swagNote.scrollFactor.set();
 
-				unspawnNotes.push(swagNote);
+				if (swagNote.fieldIndex == -1 && swagNote.field == null)
+					swagNote.field = swagNote.mustPress ? playerField : dadField;
+
+				if (swagNote.field != null)
+					swagNote.fieldIndex = playfields.members.indexOf(swagNote.field);
+
+				var playfield:PlayField = playfields.members[swagNote.fieldIndex];
+
+				if (playfield != null)
+				{
+					playfield.queue(swagNote); // queues the note to be spawned
+					allNotes.push(swagNote); // just for the sake of convenience
+				}
+				else
+				{
+					swagNote.destroy();
+					continue;
+				}
 
 				final susLength:Float = swagNote.sustainLength / Conductor.stepCrochet;
 				final floorSus:Int = Math.floor(susLength);
 
 				if (floorSus > 0) {
 					for (susNote in 0...floorSus + 1) {
-						oldNote = unspawnNotes[Std.int(unspawnNotes.length - 1)];
+						oldNote = allNotes[Std.int(allNotes.length - 1)];
 
-						var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote), daNoteData, oldNote, true);
+						var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote), daNoteData, oldNote, true, true, this);
 						sustainNote.mustPress = gottaHitNote;
 						sustainNote.gfNote = (section.gfSection && (songNotes[1] < 4));
 						sustainNote.noteType = swagNote.noteType;
 						swagNote.tail.push(sustainNote);
+						swagNote.unhitTail.push(sustainNote);
 						sustainNote.parent = swagNote;
 						sustainNote.scrollFactor.set();
-						unspawnNotes.push(sustainNote);
+						sustainNote.fieldIndex = swagNote.fieldIndex;
+						playfield.queue(sustainNote);
+						allNotes.push(sustainNote);
 
 						#if (PSYCHVERSION >= "0.7")
 						sustainNote.correctionOffset = swagNote.height / 2;
@@ -1144,68 +1190,50 @@ class ModchartEditorState extends backend.MusicBeatState
 			daBeats += 1;
 		}
 
-		unspawnNotes.sort(sortByTime);
-		loadedNotes = unspawnNotes.copy();
+		allNotes.sort(sortByTime);
+		for (fuck in allNotes)
+			unspawnNotes.push(fuck);
+
+		for (field in playfields.members)
+		{
+			var goobaeg:Array<Note> = [];
+			for (column in field.noteQueue)
+			{
+				if (column.length >= Note.ammo[3])
+				{
+					for (nIdx in 1...column.length)
+					{
+						var last = column[nIdx - 1];
+						var current = column[nIdx];
+
+						if (last == null || current == null)
+							continue;
+						if (last.isSustainNote || current.isSustainNote)
+							continue; // holds only get fukt if their parents get fukt
+						if (!last.alive || !current.alive)
+							continue; // just incase
+						if (Math.abs(last.strumTime - current.strumTime) <= Conductor.stepCrochet / (192 / 16))
+						{
+							if (last.sustainLength < current.sustainLength) // keep the longer hold
+								field.removeNote(last);
+							else
+							{
+								current.kill();
+								goobaeg.push(current); // mark to delete after, cant delete here because otherwise it'd fuck w/ stuff
+							}
+						}
+					}
+				}
+			}
+			for (note in goobaeg)
+				field.removeNote(note);
+		}
+		loadedNotes = allNotes.copy();
 		generatedMusic = true;
 	}
 
 	function sortByTime(Obj1:Dynamic, Obj2:Dynamic):Int {
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.strumTime, Obj2.strumTime);
-	}
-
-	private function generateStaticArrows(player:Int):Void {
-		var usedKeyCount = 4;
-		usedKeyCount = 4;
-
-		var strumLineX:Float = #if (PSYCH && PSYCHVERSION >= "0.7") ClientPrefs.data.middleScroll #elseif (PSYCH && PSYCHVERSION < "0.7") ClientPrefs.middleScroll #elseif LEATHER utilities.Options.getData("middlescroll") #end#if PSYCH ?PlayState.STRUM_X_MIDDLESCROLL:PlayState.STRUM_X #end;
-
-		var TRUE_STRUM_X:Float = strumLineX;
-
-		#if (PSYCH && PSYCHVERSION >= "0.7")
-		if (PlayState.SONG.arrowSkin.contains('pixel')) {
-			(ClientPrefs.data.middleScroll ? TRUE_STRUM_X += 3 : TRUE_STRUM_X += 2);
-		}
-		#end
-
-		for (i in 0...usedKeyCount) {
-			// FlxG.log.add(i);
-			var targetAlpha:Float = 1;
-			if (player < 1) {
-				#if (PSYCH && PSYCHVERSION >= "0.7")
-				if (ClientPrefs.data.middleScroll)
-					targetAlpha = 0.35;
-				#end
-			}
-
-			#if (PSYCH && PSYCHVERSION >= "0.7")
-			var babyArrow:StrumNote = new StrumNote(TRUE_STRUM_X, strumLine.y, i); #end
-			babyArrow.downScroll = ClientPrefs.data.downScroll;
-			babyArrow.alpha = targetAlpha;
-			#end
-
-			var middleScroll:Bool = false;
-
-			#if (PSYCHVERSION >= "0.7" && PSYCH)
-				middleScroll = ClientPrefs.data.middleScroll;
-			#end
-
-			if (player == 1) {
-				playerStrums.add(babyArrow);
-			} else {
-				#if (PSYCH && PSYCHVERSION >= "0.7")
-				if (middleScroll) {
-					babyArrow.x += 310;
-					if (i > 1) { // Up and Right
-						babyArrow.x += FlxG.width / 2 + 25;
-					}
-				}
-				#end
-				opponentStrums.add(babyArrow);
-			}
-
-			strumLineNotes.add(babyArrow);
-			babyArrow.playerPosition();
-		}
 	}
 
 	#if (PSYCH && PSYCHVERSION >= "0.7.3")
@@ -1384,7 +1412,7 @@ class ModchartEditorState extends backend.MusicBeatState
 
 		var modClassList:Array<String> = [];
 		for (i in 0...modifierList.length) {
-			modClassList.push(Std.string(modifierList[i]).replace("modchartalt.modcharting.", ""));
+			modClassList.push(Std.string(modifierList[i]).replace("modchartalt.modcharting.", "").replace("backend.", ""));
 		}
 
 		var modClassDropDown = new
@@ -2166,7 +2194,7 @@ class ModchartEditorState extends backend.MusicBeatState
 		var tab_group = new FlxUI(null, UI_box);
 		tab_group.name = "Editor";
 
-		sliderRate = new FlxUISlider(this, 'playbackSpeed', 20, 120, 0.1, 3, 250, null, 5, FlxColor.WHITE, FlxColor.BLACK);
+		sliderRate = new FlxUISlider(this, 'playbackSpeed', 20, 120, 0.5, 3, 250, null, 5, FlxColor.WHITE, FlxColor.BLACK);
 		sliderRate.nameLabel.text = 'Playback Rate';
 		sliderRate.callback = function(val:Float) {
 			dirtyUpdateEvents = true;
@@ -2323,6 +2351,7 @@ class ModchartEditorState extends backend.MusicBeatState
 		_file = null;
 	}
 }
+#end
 
 class ModchartEditorExitSubstate extends MusicBeatSubstate {
 	var exitFunc:Void->Void;

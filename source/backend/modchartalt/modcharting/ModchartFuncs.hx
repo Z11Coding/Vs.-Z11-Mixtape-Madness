@@ -41,7 +41,6 @@ class ModchartFuncs
         #end
             Lua_helper.add_callback(funkin, 'startMod', function(name:String, modClass:String, type:String = '', pf:Int = -1){
                 startMod(name,modClass,type,pf);
-
                 PlayState.instance.playfieldRenderer.modifierTable.reconstructTable(); //needs to be reconstructed for lua modcharts
             });
             Lua_helper.add_callback(funkin, 'setMod', function(name:String, value:Float){
@@ -201,8 +200,8 @@ class ModchartFuncs
                 return;
             }
 
-        var mod = Type.resolveClass('modchartalt.modcharting.'+modClass);
-        if (mod == null) {mod = Type.resolveClass('modchartalt.modcharting.'+modClass+"Modifier");} //dont need to add "Modifier" to the end of every mod
+        var mod = Type.resolveClass('backend.modchartalt.modcharting.'+modClass);
+        if (mod == null) {mod = Type.resolveClass('backend.modchartalt.modcharting.'+modClass+"Modifier");} //dont need to add "Modifier" to the end of every mod
 
         if (mod != null)
         {

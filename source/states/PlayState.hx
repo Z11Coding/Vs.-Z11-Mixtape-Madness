@@ -219,6 +219,7 @@ class PlayState extends MusicBeatState
 	public var bf2:Character = null;
 
 	public var notes:FlxTypedGroup<Note>;
+	public var allNotesGroup:FlxTypedGroup<Note>;
 	public var unspawnNotes:Array<Note> = [];
 	public var curChart:Array<Note> = [];
 	public var eventNotes:Array<EventNote> = [];
@@ -470,16 +471,6 @@ class PlayState extends MusicBeatState
 
 	public var noteHits:Array<Float> = [];
 	public var nps:Int = 0;
-
-	var speedChanges:Array<SpeedEvent> = [];
-
-	public var currentSV:SpeedEvent = {
-		position: 0,
-		startTime: 0,
-		songTime: 0,
-		speed: 1,
-		startSpeed: 1
-	};
 
 	// stores the last judgement object
 	public static var lastRating:FlxSprite;
@@ -1228,6 +1219,7 @@ class PlayState extends MusicBeatState
 
 		// startCountdown();
 
+		NoteField.instance = this;
 		modManager = new ModManager(this);
 
 		callOnScripts("prePlayfieldCreation"); // backwards compat
@@ -1582,9 +1574,9 @@ class PlayState extends MusicBeatState
 		{
 			playfieldRenderer = new PlayfieldRenderer(objects.playfields.PlayField.publicStrums, notes, this);
 			playfieldRenderer.cameras = [camHUD];
-			add(objects.playfields.PlayField.publicStrums);
 			add(playfieldRenderer);
 		}
+		
 		add(middlecircle);
 
 		FlxG.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
@@ -3315,6 +3307,8 @@ if (result < 0 || result > mania) {
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
 
+		allNotesGroup = new FlxTypedGroup<Note>();
+
 		var noteData:Array<SwagSection>;
 
 		// NEW SHIT
@@ -3847,6 +3841,7 @@ if (result < 0 || result > mania) {
 		{
 			unspawnNotes.push(fuck);
 			curChart.push(fuck);
+			allNotesGroup.add(fuck);
 		}
 		for (field in playfields.members)
 		{
@@ -4039,28 +4034,6 @@ if (result < 0 || result > mania) {
 
 	public inline function getTimeFromSV(time:Float, event:SpeedEvent)
 		return event.position + (modManager.getBaseVisPosD(time - event.songTime, 1) * event.speed);
-
-	public function getSV(time:Float)
-	{
-		var event:SpeedEvent = {
-			position: 0,
-			songTime: 0,
-			startTime: 0,
-			startSpeed: 1,
-			speed: 1
-		};
-		for (shit in speedChanges)
-		{
-			if (shit.startTime <= time && shit.startTime >= event.startTime)
-			{
-				if (shit.startSpeed == null)
-					shit.startSpeed = event.speed;
-				event = shit;
-			}
-		}
-
-		return event;
-	}
 
 	public inline function getVisualPosition()
 		return getTimeFromSV(Conductor.songPosition, currentSV);
@@ -4718,9 +4691,6 @@ if (result < 0 || result > mania) {
 
 	override public function update(elapsed:Float)
 	{
-		PlayfieldRenderer.pubNotes = notes;
-
-
 		if (FlxG.keys.justPressed.NINE)
 			iconP1.swapOldIcon();
 
@@ -4808,11 +4778,7 @@ if (result < 0 || result > mania) {
 		setOnScripts('curDecStep', curDecStep);
 		setOnScripts('curDecBeat', curDecBeat);
 
-		if (dad.curCharacter.startsWith('gf'))
-		{
-			// Do Nothing
-		}
-		else
+		if (!dad.curCharacter.startsWith('gf'))
 		{
 			if (gf != null)
 			{

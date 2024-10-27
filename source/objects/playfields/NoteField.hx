@@ -35,6 +35,8 @@ class NoteField extends FieldBase
 	public var holdSubdivisions:Int = Std.int(ClientPrefs.data.holdSubdivs) + 1;
 	public var optimizeHolds = ClientPrefs.data.optimizeHolds;
 
+	public static var instance:MusicBeatState; //so that getsv stops breaking
+
 	public function new(field:PlayField, modManager:ModManager)
 	{
 		super(0, 0);
@@ -418,8 +420,8 @@ class NoteField extends FieldBase
 		var visualDiff = (Conductor.visualPosition - hold.visualTime); // TODO: get the start and end visualDiff and interpolate so that changing speeds mid-hold will look better
 		var zIndex:Float = basePos.z;
 		var sv;
-		if (isEditor) sv = states.editors.EditorPlayState.instance.getSV(hold.strumTime).speed / 2;
-		else sv = PlayState.instance.getSV(hold.strumTime).speed;
+		if (isEditor) sv = PlayState.SONG.speed;
+		else sv = instance.getSV(hold.strumTime).speed;
 		var scalePoint = FlxPoint.weak(1, 1);
 
 		for (sub in 0...holdSubdivisions)

@@ -104,6 +104,36 @@ class MusicBeatState extends backend.modchartalt.modcharting.ModchartMusicBeatSt
 		super.update(elapsed);
 	}
 
+	var speedChanges:Array<SpeedEvent> = [];
+	public var currentSV:SpeedEvent = {
+		position: 0,
+		startTime: 0,
+		songTime: 0,
+		speed: 1,
+		startSpeed: 1
+	};
+	public function getSV(time:Float) //got tired of dealing with it
+	{
+		var event:SpeedEvent = {
+			position: 0,
+			songTime: 0,
+			startTime: 0,
+			startSpeed: 1,
+			speed: 1
+		};
+		for (shit in speedChanges)
+		{
+			if (shit.startTime <= time && shit.startTime >= event.startTime)
+			{
+				if (shit.startSpeed == null)
+					shit.startSpeed = event.speed;
+				event = shit;
+			}
+		}
+
+		return event;
+	}
+
 	private function updateSection():Void
 	{
 		if(stepsToDo < 1) stepsToDo = Math.round(getBeatsOnSection() * 4);

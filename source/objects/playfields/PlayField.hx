@@ -294,15 +294,15 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 		publicStrums = new FlxTypedGroup<StrumNote>();
 		Note.swagWidth = 160 * 0.7;
 		for(i in 0...keyCount){
-			var babyArrow:StrumNote = new StrumNote(ClientPrefs.data.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X, PlayState.strumLine.y, i, this);
+			var babyArrow:StrumNote = new StrumNote(ClientPrefs.data.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X, 50, i, this);
 			babyArrow.downScroll = ClientPrefs.data.downScroll;
 			babyArrow.alpha = 1;
 			insert(0, babyArrow);
 			babyArrow.handleRendering = false; // NoteField handles rendering
 			babyArrow.cameras = cameras;
 			strumNotes.push(babyArrow);
-			publicStrums.add(babyArrow);
 			babyArrow.playerPosition();
+			publicStrums.add(strumNotes[i]);
 		}
 	}
 

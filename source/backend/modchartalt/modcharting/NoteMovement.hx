@@ -68,7 +68,7 @@ class NoteMovement
         playerKeyCount = Note.ammo[PlayState.mania];
 
 
-        for (field in PlayState.instance.playfields.members)
+        for (field in game.playfields.members)
         {   
             for (i in 0...(Note.ammo[PlayState.mania]))
             {
@@ -77,8 +77,8 @@ class NoteMovement
                 defaultSkewY.push(strum.skew.y);
                 defaultStrumX.push(strum.x);
                 defaultStrumY.push(strum.y);
-                defaultStrumZ.push(strum.z);
-                var s = Note.scales[PlayState.mania];
+                var s = 0.7;
+
                 defaultScale.push(s);
                 arrowSizes.push(160*s);
             }
@@ -91,7 +91,8 @@ class NoteMovement
         daNote.y = defaultStrumY[lane];
         daNote.z = defaultStrumZ[lane];
 
-        var pos = ModchartUtil.getCartesianCoords3D(incomingAngleX,incomingAngleY, curPos*noteDist);
+        var pos = ModchartUtil.getCartesianCoords3D(incomingAngleX,incomingAngleY, curPos*noteDist*2);
+        //trace(ClientPrefs.data.drawDistanceModifier);
         daNote.y += pos.y;
         daNote.x += pos.x;
         daNote.z += pos.z;

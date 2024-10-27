@@ -104,7 +104,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
             eventManager.update(elapsed);
             tweenManager.update(elapsed); //should be automatically paused when you pause in game
             timerManager.update(elapsed);
-            notes = pubNotes;
+            //notes = pubNotes;
         } catch(e) {
             trace(e);
         }
@@ -215,7 +215,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
         var distance = (Conductor.songPosition - 1000) + strumTimeOffset; //default
         if (notes.members[noteIndex] != null)
             distance = (Conductor.songPosition - notes.members[noteIndex].strumTime) + strumTimeOffset;
-        return (distance*getCorrectScrollSpeed())*ClientPrefs.data.drawDistanceModifier;
+        return distance*getCorrectScrollSpeed();
     }
     private function getLane(noteIndex:Int)
     {
@@ -233,8 +233,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
         var noteDist = -0.45;
         if (ModchartUtil.getDownscroll(instance))
             noteDist *= -1;
-        noteDist *= ClientPrefs.data.drawDistanceModifier;
-        return noteDist;
+        return noteDist * ClientPrefs.data.drawDistanceModifier;
     }
 
 

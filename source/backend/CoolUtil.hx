@@ -295,6 +295,27 @@ class CoolUtil
 		#end
 	}
 
+	public static function getNoteAmount(song:backend.Song.SwagSong, ?bothSides:Bool = true, ?oppNotes:Bool = false):Int
+	{
+		var total:Int = 0;
+		for (section in song.notes)
+		{
+			if (bothSides)
+				total += section.sectionNotes.length;
+			else
+			{
+				for (songNotes in section.sectionNotes)
+				{
+					if (!oppNotes && (songNotes[1] < 4 ? section.mustHitSection : !section.mustHitSection))
+						total += 1;
+					if (oppNotes && (songNotes[1] < 4 ? !section.mustHitSection : section.mustHitSection))
+						total += 1;
+				}
+			}
+		}
+		return total;
+	}
+
 	// could probably use a macro
 	public static function getEaseFromString(?name:String):EaseFunction
 	{
