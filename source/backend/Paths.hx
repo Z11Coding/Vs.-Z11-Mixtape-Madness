@@ -145,13 +145,33 @@ class Paths
 
 	public static function crawlMulti(directoryPaths:Array<String>, fileExtension:String, ?targetArray:Array<String> = null, ?OG:Bool = false):Array<String> {
 		var result:Array<String> = targetArray != null ? targetArray : [];
+		var skipList:Array<String> = [];
+		
 		for (directoryPath in directoryPaths) {
+			var skip:Boolean = false;
+			
+			// Check if the directoryPath is a subdirectory of any path in result
+			for (existingPath in result) {
+				if (directoryPath.startsWith(existingPath)) {
+					skipList.push(directoryPath);
+					trace('Adding to skiplist: ' + directoryPath);
+					skip = true;
+					break;
+				}
+			}
+			
+			if (skip) {
+				trace('Skipping: ' + directoryPath);
+				continue;
+			}
+			
 			if (OG)
 				result = crawlDirectoryOG(directoryPath, fileExtension, result);
 			else {
 				result = crawlDirectory(directoryPath, fileExtension, result);
 			}
 		}
+		
 		return result;
 	}
 
