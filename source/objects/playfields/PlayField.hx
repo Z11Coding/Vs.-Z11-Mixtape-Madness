@@ -138,8 +138,6 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 		strumAttachments.visible = false;
 		add(strumAttachments);
 
-		publicStrums = new FlxTypedGroup<StrumNote>();
-
 		/*var splash:NoteSplash = new NoteSplash(100, 100, 0);
 		splash.handleRendering = false;
 		grpNoteSplashes.add(splash);
@@ -293,6 +291,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 
 	// generates the receptors
 	public function generateStrums(){
+		publicStrums = new FlxTypedGroup<StrumNote>();
 		Note.swagWidth = 160 * 0.7;
 		for(i in 0...keyCount){
 			var babyArrow:StrumNote = new StrumNote(ClientPrefs.data.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X, PlayState.strumLine.y, i, this);

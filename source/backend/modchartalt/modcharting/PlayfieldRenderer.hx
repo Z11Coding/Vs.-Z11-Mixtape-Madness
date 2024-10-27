@@ -44,6 +44,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
 {
     public var strumGroup:FlxTypedGroup<StrumNote>;
     public var notes:FlxTypedGroup<Note>;
+    public static var pubNotes:FlxTypedGroup<Note>;
     public var instance:ModchartMusicBeatState;
     public var playStateInstance:PlayState;
     public var playfields:Array<Playfield> = []; //adding an extra playfield will add 1 for each player
@@ -88,6 +89,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
         modifierTable = new ModTable(instance, this);
         addNewPlayfield(0,0,0);
         modchart = new ModchartFile(this);
+
     }
 
 
@@ -102,6 +104,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
             eventManager.update(elapsed);
             tweenManager.update(elapsed); //should be automatically paused when you pause in game
             timerManager.update(elapsed);
+            notes = pubNotes;
         } catch(e) {
             trace(e);
         }
@@ -117,12 +120,11 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
         strumGroup.cameras = this.cameras;
         notes.cameras = this.cameras;
         
-        drawStuff(getNotePositions());
-        /*try {
+        try {
             drawStuff(getNotePositions());
         } catch(e) {
-            trace(e);
-        }*/
+            //trace(e); there's no issue if we pretend there's no issue
+        }
         //draw notes to screen
     }
 
@@ -179,6 +181,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
     
     private function createDataFromNote(noteIndex:Int, playfieldIndex:Int, curPos:Float, noteDist:Float, incomingAngle:Array<Float>)
     {
+        //trace(notes.members[noteIndex]);
         var noteX = notes.members[noteIndex].x;
         var noteY = notes.members[noteIndex].y;
         var noteZ = notes.members[noteIndex].z;
@@ -212,7 +215,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
         var distance = (Conductor.songPosition - 1000) + strumTimeOffset; //default
         if (notes.members[noteIndex] != null)
             distance = (Conductor.songPosition - notes.members[noteIndex].strumTime) + strumTimeOffset;
-        return distance*getCorrectScrollSpeed();
+        return (distance*getCorrectScrollSpeed())*ClientPrefs.data.drawDistanceModifier;
     }
     private function getLane(noteIndex:Int)
     {
@@ -230,6 +233,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
         var noteDist = -0.45;
         if (ModchartUtil.getDownscroll(instance))
             noteDist *= -1;
+        noteDist *= ClientPrefs.data.drawDistanceModifier;
         return noteDist;
     }
 
@@ -245,7 +249,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
                 notePositions.push(strumData);
             }
 
-            for (i in 0...notes.members.length)
+            for (i in 0...(notes.members.length+Note.ammo[PlayState.mania])) //the fact that adding +Note.ammo[PlayState.mania] fixed it makes me unreasonably mad  
             {
                 var songSpeed = getCorrectScrollSpeed();
 
@@ -416,24 +420,12 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
     {
         for (noteData in notePositions)
         {
-            try {
-                if (noteData.isStrum) //draw strum
-                    drawStrum(noteData);
-            } catch(e) {
-                trace("Strum Broke");
-            }
-            try {
-                if (!noteData.isStrum && !notes.members[noteData.index].isSustainNote) //draw regular note
-                    drawNote(noteData);
-            } catch(e) {
-                trace("Note Broke");
-            }
-            try {
-                if (notes.members[noteData.index].isSustainNote) //draw sustain
-                    drawSustainNote(noteData);
-            } catch(e) {
-                trace("Sustains Broke");
-            }
+            if (noteData.isStrum) //draw strum
+                drawStrum(noteData);
+            if (!notes.members[noteData.index].isSustainNote) //draw regular note
+                drawNote(noteData);
+            if (notes.members[noteData.index].isSustainNote) //draw sustain
+                drawSustainNote(noteData);
         }
     }
 

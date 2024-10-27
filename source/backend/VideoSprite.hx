@@ -42,7 +42,7 @@ class VideoSprite extends FlxSpriteGroup {
 
 		// initialize sprites
 		videoSprite = new FlxVideoSprite();
-		videoSprite.antialiasing = ClientPrefs.data.globalAntialiasing;
+		videoSprite.antialiasing = ClientPrefs.data.antialiasing;
 		add(videoSprite);
 		if(canSkip) this.canSkip = true;
 
@@ -59,11 +59,7 @@ class VideoSprite extends FlxSpriteGroup {
 					cover.destroy();
 				}
 		
-				if (PlayState.instance != null && PlayState.instance.exists(this)) {
-					if (PlayState.instance != null && PlayState.instance.exists(this)) {
-						PlayState.instance.remove(this);
-					}
-				}
+				PlayState.instance.remove(this);
 				destroy();
 				alreadyDestroyed = true;
 			});
@@ -108,11 +104,7 @@ class VideoSprite extends FlxSpriteGroup {
 			finishCallback();
 		onSkip = null;
 
-		if (PlayState.instance != null && PlayState.instance.exists(this)) {
-			if (PlayState.instance != null && PlayState.instance.exists(this)) {
-				PlayState.instance.remove(this);
-			}
-		}
+		PlayState.instance.remove(this);
 		super.destroy();
 	}
 

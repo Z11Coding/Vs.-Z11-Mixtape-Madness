@@ -23,7 +23,6 @@ class StrumNote extends NoteObject
 	
 	override function destroy()
 	{
-		defScale.put();
 		super.destroy();
 	}	
 	public var isQuant:Bool = false;
@@ -182,7 +181,6 @@ class StrumNote extends NoteObject
 			animation.addByPrefix('pressed', animationArray[1] + ' press', 24, false);
 			animation.addByPrefix('confirm', animationArray[1] + ' confirm', 24, false);
 		}
-		defScale.copyFrom(scale);
 		updateHitbox();
 
 		if(lastAnim != null)
