@@ -969,6 +969,23 @@ class CommandPrompt
 							print(state);
 						}
 						print("Total saved states: " + backend.modules.SaveState.listStates().length);
+					case "editor":
+						if (args.length == 1) {
+							switch (args[0]) {
+								case "charting":
+									this.switchState(new states.editors.ChartingStateOG());
+								case "dialogue":
+									this.switchState(new states.editors.DialogueEditorState());
+								case "modchart":
+									this.switchState(new backend.modchartalt.modcharting.ModchartEditorState());
+								case "week":
+									this.switchState(new states.editors.WeekEditorState());
+								default:
+									print("Error: Unknown editor type.");
+							}
+						} else {
+							print("Error: editor requires 1 or 2 arguments.");
+						}
 			default:
 				if (args.length == 2 && args[1] == '=')
 				{

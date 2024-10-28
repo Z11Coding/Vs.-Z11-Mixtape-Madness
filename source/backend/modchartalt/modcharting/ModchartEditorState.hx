@@ -271,6 +271,7 @@ class ModchartEditorState extends backend.MusicBeatState
 	public var notefields = new NotefieldManager();
 	public var playfields = new FlxTypedGroup<PlayField>();
 	public var allNotes:Array<Note> = []; // all notes
+	public var mania:Int = 0;
 
 	public var strumLineNotes:FlxTypedGroup<StrumNote>;
 	public var opponentStrums:FlxTypedGroup<StrumNote>;
@@ -1069,9 +1070,13 @@ class ModchartEditorState extends backend.MusicBeatState
 		add(notes);
 
 		var noteData:Array<SwagSection>;
+		var songMania:Int = songData.startMania;
+		mania = songMania;
+		PlayState.mania = songMania;
 
 		// NEW SHIT
 		noteData = songData.notes;
+
 
 		var playerCounter:Int = 0;
 
