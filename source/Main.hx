@@ -973,13 +973,14 @@ class CommandPrompt
 						if (args.length == 1) {
 							switch (args[0]) {
 								case "charting":
-									this.switchState(new states.editors.ChartingStateOG());
+									this.switchState("states.editors.ChartingStateOG");
 								case "dialogue":
-									this.switchState(new states.editors.DialogueEditorState());
+									this.switchState("states.editors.DialogueEditorState");
 								case "modchart":
-									this.switchState(new backend.modchartalt.modcharting.ModchartEditorState());
+									this.switchState("backend.modchartalt.modcharting.ModchartEditorState");
 								case "week":
-									this.switchState(new states.editors.WeekEditorState());
+									this.switchState("states.editors.WeekEditorState");
+															
 								default:
 									print("Error: Unknown editor type.");
 							}
