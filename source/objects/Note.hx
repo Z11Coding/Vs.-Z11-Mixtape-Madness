@@ -24,33 +24,6 @@ typedef EventNote = {
 	value2:String
 }
 
-typedef PreloadedChartNote = {
-	strumTime:Float,
-	noteData:Int,
-	mustPress:Bool,
-	oppNote:Bool,
-	noteType:String,
-	animSuffix:String,
-	noteskin:String,
-	texture:String,
-	noAnimation:Bool,
-	noMissAnimation:Bool,
-	gfNote:Bool,
-	isSustainNote:Bool,
-	isSustainEnd:Bool,
-	sustainLength:Float,
-	parentST:Float,
-	hitHealth:Float,
-	missHealth:Float,
-	hitCausesMiss:Null<Bool>,
-	wasHit:Bool,
-	multSpeed:Float,
-	noteDensity:Float,
-	ignoreNote:Bool,
-	blockHit:Bool,
-	lowPriority:Bool
-}
-
 class Note extends NoteObject
 {
 	public var vec3Cache:Vector3 = new Vector3(); // for vector3 operations in modchart code
@@ -527,7 +500,7 @@ class Note extends NoteObject
 		return value;
 	}
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false, ?createdFrom:Dynamic = null)
+	public function new(?strumTime:Float, ?noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?inEditor:Bool = false, ?createdFrom:Dynamic = null)
 	{
 		super();
 		objType = NOTE;
@@ -545,14 +518,17 @@ class Note extends NoteObject
 		this.moves = false;
 		if(createdFrom == null) createdFrom = PlayState.instance;
 
-		beat = Conductor.getBeat(strumTime);
+		if (!Math.isNaN(strumTime)) beat = Conductor.getBeat(strumTime);
 
 		x += (ClientPrefs.data.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X) + 50;
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
-		this.strumTime = strumTime;
-		if(!inEditor) this.strumTime += ClientPrefs.data.noteOffset;
-		if(!inEditor) visualTime = createdFrom.getNoteInitialTime(this.strumTime);
+		if (!Math.isNaN(strumTime)) 
+		{
+			this.strumTime = strumTime;
+			if(!inEditor) this.strumTime += ClientPrefs.data.noteOffset;
+			if(!inEditor) visualTime = createdFrom.getNoteInitialTime(this.strumTime);
+		}
 
 		if (isSustainNote && prevNote != null) {
 			parentNote = prevNote;
@@ -872,88 +848,5 @@ class Note extends NoteObject
 			if (alpha > 0.3)
 				alpha = 0.3;
 		}
-	}
-
-	// this is used for note recycling
-	var firstOffX = false;
-	var shouldCenterOffsets:Bool = true;
-	public function setupNoteData(chartNoteData:PreloadedChartNote):Void 
-	{
-		wasGoodHit = hitByOpponent = tooLate = canBeHit = false; // Don't make an update call of this for the note group
-
-		if (chartNoteData.noteskin.length > 0 && chartNoteData.noteskin != '' && chartNoteData.noteskin != texture) 
-		{
-			texture = 'noteskins/' + chartNoteData.noteskin;
-		}
-		if (chartNoteData.texture.length > 0 && chartNoteData.texture != texture) 
-		{
-			texture = chartNoteData.texture;
-			shouldCenterOffsets = false;
-		}
-
-		strumTime = chartNoteData.strumTime;
-		if(!inEditor) strumTime += ClientPrefs.data.noteOffset;
-		noteData = chartNoteData.noteData % 4;
-		noteType = chartNoteData.noteType;
-		animSuffix = chartNoteData.animSuffix;
-		noAnimation = noMissAnimation = chartNoteData.noAnimation;
-		mustPress = chartNoteData.mustPress;
-		gfNote = chartNoteData.gfNote;
-		isSustainNote = chartNoteData.isSustainNote;
-		lowPriority = chartNoteData.lowPriority;
-		
-		hitHealth = chartNoteData.hitHealth;
-		missHealth = chartNoteData.missHealth;
-		hitCausesMiss = chartNoteData.hitCausesMiss;
-		ignoreNote = chartNoteData.ignoreNote;
-		blockHit = chartNoteData.blockHit;
-		multSpeed = chartNoteData.multSpeed;
-
-		if (noteType == 'Hurt Note')
-		{
-			texture = 'HURTNOTE_assets';
-		}
-
-		if (PlayState.isPixelStage)
-		{
-			@:privateAccess reloadNote(texture);
-			if (isSustainNote && !firstOffX) 
-			{
-				firstOffX = true;
-				offsetX += 30;
-			}
-		}
-
-		if (isSustainNote) {
-			offsetX += width / 2;
-			copyAngle = false;
-			animation.play(colArray[noteData % 4] + (chartNoteData.isSustainEnd ? 'holdend' : 'hold'));
-			updateHitbox();
-			offsetX -= width / 2;
-		}
-		else {
-			animation.play(colArray[noteData % 4] + 'Scroll');
-			if (!copyAngle) copyAngle = true;
-			offsetX = 0; //Juuuust in case we recycle a sustain note to a regular note
-			if (shouldCenterOffsets)
-			{
-				centerOffsets();
-				centerOrigin();
-			}
-		}
-		angle = 0;
-
-		clipRect = null;
-		if (!mustPress) 
-		{
-			visible = true;
-			alpha = ClientPrefs.data.middleScroll ? 0.3 : 1;
-		}
-		else
-		{
-			if (!visible) visible = true;
-			if (alpha != 1) alpha = 1;
-		}
-		if (flipY) flipY = false;
 	}
 }
