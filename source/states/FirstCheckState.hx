@@ -72,7 +72,7 @@ class FirstCheckState extends MusicBeatState
 		});
 		#end
 
-		PlayerInfo.loadInfo();
+		//PlayerInfo.loadInfo();
 
 		super.create();
 
