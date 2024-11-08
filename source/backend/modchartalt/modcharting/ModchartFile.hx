@@ -377,6 +377,7 @@ class CustomModifierScript
         }
         init();
     }
+    
     private function init()
     {
         if (interp == null)

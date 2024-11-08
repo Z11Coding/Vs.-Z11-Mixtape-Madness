@@ -464,37 +464,39 @@ class ModManager {
 
 	public function updateObject(beat:Float, obj:NoteObject, player:Int){
 		if (obj.active)
-		for (name in getActiveMods(player))
 		{
-			/*if (!obj.active)
-				continue;*/
+			for (name in getActiveMods(player))
+			{
+				/*if (!obj.active)
+					continue;*/
 
-			var mod:Modifier = notemodRegister.get(name);
-			if (mod==null) continue;
+				var mod:Modifier = notemodRegister.get(name);
+				if (mod==null) continue;
+				
+				if(obj.objType == NOTE){
+					if (mod.ignoreUpdateNote()) continue;
+					mod.updateNote(beat, cast obj, player);
+				}
+				else if(obj.objType == STRUM){
+					if (mod.ignoreUpdateReceptor()) continue;
+					mod.updateReceptor(beat, cast obj, player);
+				}
+			}
 			
-			if(obj.objType == NOTE){
-				if (mod.ignoreUpdateNote()) continue;
-				mod.updateNote(beat, cast obj, player);
-			}
-			else if(obj.objType == STRUM){
-				if (mod.ignoreUpdateReceptor()) continue;
-				mod.updateReceptor(beat, cast obj, player);
-			}
-		}
-		
-		if (obj.objType == NOTE){
-			obj.updateHitbox();
+			if (obj.objType == NOTE){
+				obj.updateHitbox();
 
-			var cum:Note = cast obj;
-			if(!cum.isSustainNote){
+				var cum:Note = cast obj;
+				if(!cum.isSustainNote){
+					obj.centerOrigin();
+					obj.centerOffsets();
+				}
+				cum.offset.x += cum.typeOffsetX;
+				cum.offset.y += cum.typeOffsetY;
+			}else{
 				obj.centerOrigin();
 				obj.centerOffsets();
 			}
-			cum.offset.x += cum.typeOffsetX;
-			cum.offset.y += cum.typeOffsetY;
-		}else{
-			obj.centerOrigin();
-			obj.centerOffsets();
 		}
     }
 

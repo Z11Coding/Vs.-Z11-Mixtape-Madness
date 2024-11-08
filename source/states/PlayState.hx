@@ -884,25 +884,7 @@ class PlayState extends MusicBeatState
 		if (stageData == null)
 		{ // Stage couldn't be found, create a dummy stage for preventing a crash
 			stageData = StageData.dummy();
-			#if sys
-			ArtemisIntegration.setBackgroundColor ("#00000000");
-			#end
 		}
-
-		#if sys
-		ArtemisIntegration.setStageName (curStage);
-		ArtemisIntegration.setSongName (songName);
-		ArtemisIntegration.setDifficulty (Difficulty.getString());
-		if (isStoryMode) ArtemisIntegration.setGameState ("in-game story");
-		else ArtemisIntegration.setGameState ("in-game freeplay");
-		ArtemisIntegration.sendBoyfriendHealth (health);
-		ArtemisIntegration.setIsPixelStage (isPixelStage);
-		ArtemisIntegration.autoUpdateControlColors (isPixelStage);
-		ArtemisIntegration.setBackgroundColor ("#00000000"); // in case there's no set background in the artemis profile, hide the background and just show the overlays over the user's default artemis layout
-		ArtemisIntegration.resetAllFlags ();
-		
-		ArtemisIntegration.startSong ();
-		#end
 
 		defaultCamZoom = stageData.defaultZoom;
 
@@ -1205,7 +1187,7 @@ class PlayState extends MusicBeatState
 		add(timeTxt);
 
 		strumLineNotes = new FlxTypedGroup<StrumNote>();
-		//add(strumLineNotes);
+		add(strumLineNotes);
 
 		if (ClientPrefs.data.timeBarType == 'Song Name')
 		{
@@ -1572,7 +1554,7 @@ class PlayState extends MusicBeatState
 
 		if (ClientPrefs.data.modcharts)
 		{
-			playfieldRenderer = new PlayfieldRenderer(objects.playfields.PlayField.publicStrums, notes, this);
+			playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
 			playfieldRenderer.cameras = [camHUD];
 			add(playfieldRenderer);
 		}
@@ -1596,18 +1578,10 @@ class PlayState extends MusicBeatState
 
 		resetRPC();
 
-		#if sys
-		ArtemisIntegration.setDadName (SONG.player2);
-		if (SONG.player4 != null) ArtemisIntegration.setDad2Name (SONG.player4);
-		ArtemisIntegration.setBfName (SONG.player1);
-		if (SONG.player5 != null) ArtemisIntegration.setBf2Name (SONG.player5);
-		ArtemisIntegration.setGfName (gfVersion);
-		#end
-
 		callOnScripts('onCreatePost');
 
-		add(playfields);
-		add(notefields);
+		//add(playfields);
+		//add(notefields);
 
 		if (gf != null && !Crashed)
 		{
@@ -1617,10 +1591,6 @@ class PlayState extends MusicBeatState
 				if (playAsGF && gf != null) iconGF.getCharacter() else iconP2.getCharacter());
 			#end
 		}
-
-		#if sys
-			ArtemisIntegration.autoUpdateControls();
-		#end
 
 		super.create();
 
@@ -1942,7 +1912,6 @@ class PlayState extends MusicBeatState
 				bf2.healthColorArray[2]) else FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]);
 			if (healthBar2 != null)
 				healthBar2.setColors(dCol, bCol);
-			ArtemisIntegration.setHealthbarFlxColors(dCol, bCol);
 		}
 		else
 		{
@@ -2369,7 +2338,6 @@ class PlayState extends MusicBeatState
 			changeMania(chartModifier != 'ManiaConverter' ? SONG.startMania : convertMania, isStoryMode || skipArrowStartTween);
 
 			var swagCounter:Int = 0;
-
 			if (startOnTime < 0)
 				startOnTime = 0;
 
@@ -2814,10 +2782,6 @@ class PlayState extends MusicBeatState
 					ratingFC = '[Ok I guess...]';
 			}
 		}
-		#if sys
-		ArtemisIntegration.setComboType (ratingFC);
-		ArtemisIntegration.setRating (ratingPercent * 100);
-		#end
 	}
 
 	public dynamic function fullComboFunctionAI()
@@ -2874,10 +2838,6 @@ class PlayState extends MusicBeatState
 					ratingFCAI = '[Ok I guess...]';
 			}
 		}
-		#if sys
-		ArtemisIntegration.setComboType (ratingFCAI);
-		ArtemisIntegration.setRating (ratingPercent * 100);
-		#end
 	}
 
 	public function doScoreBop():Void
@@ -4151,13 +4111,13 @@ if (result < 0 || result > mania) {
 
 	private function generateStaticArrows(player:Int):Void
 	{
-		/* 		var targetAlpha:Float = 1;
+			/*var targetAlpha:Float = 1;
 			if (player < 1){
 				if(!ClientPrefs.opponentStrums) targetAlpha = 0;
 				else if(ClientPrefs.middleScroll) targetAlpha = 0.35;
 			}
 
-			for (i in 0...4){
+			for (i in 0...Note.ammo[mania]){
 				var babyArrow:StrumNote = new StrumNote(
 					ClientPrefs.middleScroll ? STRUM_X_MIDDLESCROLL : STRUM_X,
 					ClientPrefs.downScroll ? FlxG.height - 162 : 50,
@@ -4192,9 +4152,6 @@ if (result < 0 || result > mania) {
 					}
 					opponentStrums.add(babyArrow);
 				}
-
-				strumLineNotes.add(babyArrow);
-				babyArrow.postAddedToGroup();
 		}*/
 	}
 
@@ -4338,9 +4295,6 @@ if (result < 0 || result > mania) {
 
 		for (field in playfields.members)
 			field.fadeIn(skipStrumFadeOut); // TODO: check if its the first song so it should fade the notes in on song 1 of story mode
-		#if sys
-			ArtemisIntegration.autoUpdateControls();
-		#end
 	}
 
 	override function openSubState(SubState:FlxSubState)
@@ -4682,9 +4636,6 @@ if (result < 0 || result > mania) {
 		doDeathCheck(true);
 		health = 0;
 		noteMissPress(3); // just to make sure you actually die
-		#if sys
-			ArtemisIntegration.sendBoyfriendHealth (health);
-		#end
 	}
 
 	var didntPress:Bool = false;
@@ -4693,6 +4644,8 @@ if (result < 0 || result > mania) {
 	{
 		if (FlxG.keys.justPressed.NINE)
 			iconP1.swapOldIcon();
+
+		if (playfieldRenderer != null) playfieldRenderer.notes = notes;
 
 		CppAPI.updateTitle();
 
@@ -6070,9 +6023,6 @@ if (result < 0 || result > mania) {
 						if (playAsGF && gf != null) iconGF.getCharacter() else iconP2.getCharacter());
 					#end
 				}
-				#if sys
-				ArtemisIntegration.setGameState ("dead");
-				#end
 				isDead = true;
 				return true;
 			}
@@ -6982,9 +6932,6 @@ if (result < 0 || result > mania) {
 					FlxTween.tween(gf.colorTransform, {blueOffset: -220, redOffset: -220, greenOffset: -220}, 0.1, {ease: FlxEase.sineInOut});
 				FlxG.camera.zoom += 0.030;
 				camHUD.zoom += 0.04;
-				#if sys
-				ArtemisIntegration.setBackgroundFlxColor (whiteBG.color);
-				#end
 				// boyfriend.color = FlxColor.BLACK;
 				// gf.color = FlxColor.BLACK;
 				// dad.color = FlxColor.BLACK;
@@ -7001,9 +6948,6 @@ if (result < 0 || result > mania) {
 					FlxTween.tween(gf.colorTransform, {blueOffset: 220, redOffset: 220, greenOffset: 220}, 0.1, {ease: FlxEase.sineInOut});
 				FlxG.camera.zoom += 0.030;
 				camHUD.zoom += 0.04;
-				#if sys
-        		ArtemisIntegration.setBackgroundFlxColor (blackOverlay.color);
-        		#end
 				// boyfriend.color = 0xffffffff;
 				// gf.color = 0xffffffff;
 				// dad.color = 0xffffffff;
@@ -7020,9 +6964,6 @@ if (result < 0 || result > mania) {
 					FlxTween.tween(gf.colorTransform, {blueOffset: 0, redOffset: 0, greenOffset: 0}, 0.1, {ease: FlxEase.sineInOut});
 				FlxG.camera.zoom += 0.030;
 				camHUD.zoom += 0.04;
-				#if sys
-				ArtemisIntegration.setBackgroundColor ("#00000000");
-				#end
 				// boyfriend.color = FlxColor.WHITE;
 				// gf.color = FlxColor.WHITE;
 				// dad.color = FlxColor.WHITE;
@@ -7627,10 +7568,6 @@ if (result < 0 || result > mania) {
 				RecalculateRating(false);
 			}
 		}
-
-		#if sys
-		ArtemisIntegration.noteHit(note.noteData, note.noteType, daRating.name);
-		#end
 
 		/*var pixelShitPart1:String = "";
 			var pixelShitPart2:String = '';
@@ -8285,12 +8222,6 @@ if (result < 0 || result > mania) {
 
 		bfkilledcheck = true;
 
-		#if sys
-		ArtemisIntegration.noteMiss (daNote.noteData, daNote.noteType);
-		ArtemisIntegration.sendBoyfriendHealth (health);
-		ArtemisIntegration.breakCombo ();
-		#end
-
 		health -= daNote.missHealth * healthLoss;
 		if (instakillOnMiss)
 		{
@@ -8371,10 +8302,6 @@ if (result < 0 || result > mania) {
 			}
 			combo = 0;
 
-			#if sys
-			ArtemisIntegration.sendBoyfriendHealth (health);
-			ArtemisIntegration.breakCombo ();
-			#end
 
 			if (!practiceMode && !playAsGF)
 				songScore -= 10;
@@ -8458,10 +8385,6 @@ if (result < 0 || result > mania) {
 			if (result != LuaUtils.Function_Stop && result != LuaUtils.Function_StopHScript && result != LuaUtils.Function_StopAll)
 				callOnHScript('opponentNoteHitPre', [note]);
 		}
-
-		#if sys
-		ArtemisIntegration.sendBoyfriendHealth (health);
-		#end
 
 		if (note.wasGoodHit || (field.autoPlayed && (note.ignoreNote || note.breaksCombo)))
 
@@ -8962,15 +8885,9 @@ if (result < 0 || result > mania) {
 		{
 			combo += 1;
 			popUpScore(note);
-			#if sys
-			ArtemisIntegration.setCombo (combo);
-			#end
 			// if(combo > 9999) combo = 9999;
 		}
 		health += note.hitHealth * healthGain;
-		#if sys
-		ArtemisIntegration.sendBoyfriendHealth (health);
-		#end
 		bfkilledcheck = false;
 		vocals.volume = 1;
 		var isSus:Bool = note.isSustainNote; // GET OUT OF MY HEAD, GET OUT OF MY HEAD, GET OUT OF MY HEAD
@@ -9233,11 +9150,6 @@ if (result < 0 || result > mania) {
 	{
 		super.beatHit();
 
-		#if sys
-		ArtemisIntegration.setBeat (curBeat);
-		ArtemisIntegration.setSongProgress ((Conductor.songPosition - ClientPrefs.data.noteOffset) / songLength * 100);
-		#end
-
 		if (lastBeatHit >= curBeat)
 		{
 			// trace('BEAT HIT: ' + curBeat + ', LAST HIT: ' + lastBeatHit);
@@ -9315,42 +9227,6 @@ if (result < 0 || result > mania) {
 				rave.members[curLight].visible = true;
 				rave.members[curLight].alpha = 1;
 				FlxTween.tween(rave.members[curLight], {alpha: 0}, 0.3, {});
-				switch (curLight)
-				{
-					case 0:
-						#if sys
-						ArtemisIntegration.triggerFlash ("#ff0000");
-						#end
-					case 1:
-						#if sys
-						ArtemisIntegration.triggerFlash ("#00ff00");
-						#end
-					case 2:
-						#if sys
-						ArtemisIntegration.triggerFlash ("#00ffff");
-						#end
-					case 3:
-						#if sys
-						ArtemisIntegration.triggerFlash ("#ff00ff");
-						#end
-					case 4:
-						#if sys
-						ArtemisIntegration.triggerFlash ("#ffff00");
-						#end
-					case 5:
-						#if sys
-						ArtemisIntegration.triggerFlash ("#000000");
-						#end
-					case 6:
-						#if sys
-						ArtemisIntegration.triggerFlash ("#ffffff");
-						#end
-					case 7:
-						#if sys
-						ArtemisIntegration.triggerFlash ("#ffffff");
-						#end
-					
-				}
 			}
 
 			FlxG.camera.zoom += 0.030;

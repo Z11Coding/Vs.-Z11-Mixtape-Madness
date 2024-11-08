@@ -35,16 +35,15 @@ class ModchartFuncs
         #if !(PSYCHVERSION >= "0.7")
         for (funkin in PlayState.instance.luaArray)
         {
-            #if hscript
-            funkin.initHaxeModule();
-            #end
         #end
             Lua_helper.add_callback(funkin, 'startMod', function(name:String, modClass:String, type:String = '', pf:Int = -1){
                 startMod(name,modClass,type,pf);
                 PlayState.instance.playfieldRenderer.modifierTable.reconstructTable(); //needs to be reconstructed for lua modcharts
+                trace('Started Mod: '+name);
             });
             Lua_helper.add_callback(funkin, 'setMod', function(name:String, value:Float){
                 setMod(name, value);
+                trace('Set Mod: '+name);
             });
             Lua_helper.add_callback(funkin, 'setSubMod', function(name:String, subValName:String, value:Float){
                 setSubMod(name, subValName,value);

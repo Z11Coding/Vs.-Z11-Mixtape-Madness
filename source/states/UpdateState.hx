@@ -216,7 +216,7 @@ class UpdateState extends MusicBeatState
 	inline function getUpdateLink()
 	{
 		var fileEnd = #if android 'apk' #else 'zip' #end;
-		online_url = "https://github.com/Z11Coding/Vs.-Z11-Mixtape-Madness/releases/download/" + MainMenuState.updateVersion + '/Mixtape-Madness-${getPlatform()}.$fileEnd';
+		online_url = "https://github.com/Z11Coding/Vs.-Z11-Mixtape-Madness/releases/download/" + FirstCheckState.updateVersion + '/Mixtape-Madness-${getPlatform()}.$fileEnd';
 		trace("update url: " + online_url);
 	}
 
@@ -344,11 +344,10 @@ class UpdateState extends MusicBeatState
 		var fileBytes:Bytes = cast(zip.data, ByteArray);
 		text.text = "Update downloaded successfully, saving update file...";
 		text.screenCenter(X);
-		File.saveBytes(path + "Mixtape Madness v" + TitleState.updateVersion + ".zip", fileBytes);
+		File.saveBytes(path + "Mixtape Madness v" + FirstCheckState.updateVersion + ".zip", fileBytes);
 		text.text = "Unpacking update file...";
 		text.screenCenter(X);
-		// Uncompress.run(File.getBytes(path + "JS Engine v" + TitleState.updateVersion + ".zip"))
-		JSEZip.unzip(path + "Mixtape Madness v" + TitleState.updateVersion + ".zip", "./update/raw/");
+		JSEZip.unzip(path + "Mixtape Madness v" + FirstCheckState.updateVersion + ".zip", "./update/raw/");
 		text.text = "Update has finished! The update will be installed shortly..";
 		text.screenCenter(X);
 

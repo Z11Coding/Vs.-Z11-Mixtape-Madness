@@ -172,7 +172,7 @@ class ModTable
                     var modifierTag:String = (tag != null ? tag : modifier);
                     #if PSYCH
                         #if (PSYCHVERSION >= "0.7")
-                        PlayState.instance.callOnScripts("onModifierComplete", [modifierTag]);
+                        //PlayState.instance.callOnScripts("onModifierComplete", [modifierTag]);
                         #else
                         PlayState.instance.callOnLuas("onModifierComplete", [modifierTag]);
                         #end

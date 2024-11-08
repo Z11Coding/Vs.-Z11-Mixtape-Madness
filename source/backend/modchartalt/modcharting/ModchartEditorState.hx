@@ -62,7 +62,7 @@ class ModchartEditorEvent extends FlxSprite {
 	public function new(data:Array<Dynamic>) {
 		this.data = data;
 		super(-300, 0);
-		frames = Paths.getSparrowAtlas('eventArrowModchart');
+		frames = Paths.getSparrowAtlas('editors/eventArrowModchart');
 		animation.addByPrefix('note', 'idle0');
 		// makeGraphic(48, 48);
 
@@ -402,8 +402,8 @@ class ModchartEditorState extends backend.MusicBeatState
 
 		strumLine.scrollFactor.set();
 
-		//strumLineNotes = new FlxTypedGroup<StrumNote>();
-		//add(strumLineNotes);
+		strumLineNotes = new FlxTypedGroup<StrumNote>();
+		add(strumLineNotes);
 
 		//opponentStrums = new FlxTypedGroup<StrumNote>();
 		//playerStrums = new FlxTypedGroup<StrumNote>();
@@ -415,6 +415,7 @@ class ModchartEditorState extends backend.MusicBeatState
 		playerField.noteField.isEditor = true;
 		playerField.isPlayer = true;
 		playerField.autoPlayed = true;
+		playerField.instance = this;
 		//playerField.noteHitCallback = opponentmode ? opponentNoteHit : goodNoteHit;
 
 		dadField = new PlayField(modManager);
@@ -423,6 +424,7 @@ class ModchartEditorState extends backend.MusicBeatState
 		dadField.modNumber = 1;
 		dadField.characters = [];
 		dadField.noteField.isEditor = true;
+		dadField.instance = this;
 		//dadField.noteHitCallback = opponentmode ? goodNoteHit : opponentNoteHit;
 
 		playfields.add(dadField);
@@ -437,18 +439,19 @@ class ModchartEditorState extends backend.MusicBeatState
 		{
 			field.keyCount = Note.ammo[3];
 			field.generateStrums();
+			field.fadeIn(true);
 		}
 
 		modManager.registerDefaultModifiers();
 
-		playfieldRenderer = new PlayfieldRenderer(objects.playfields.PlayField.publicStrums, notes, this);
+		playfieldRenderer = new PlayfieldRenderer(strumLineNotes, notes, this);
 		playfieldRenderer.cameras = [camHUD];
 		playfieldRenderer.inEditor = true;
-		add(objects.playfields.PlayField.publicStrums);
+		//add(objects.playfields.PlayField.publicStrums);
 		add(playfieldRenderer);
 
-		// strumLineNotes.cameras = [camHUD];
-		// notes.cameras = [camHUD];
+		strumLineNotes.cameras = [camHUD];
+		notes.cameras = [camHUD];
 
 		#if ("flixel-addons" >= "3.0.0")
 		grid = new FlxBackdrop(FlxGraphic.fromBitmapData(createGrid(gridSize, gridSize, FlxG.width, gridSize)), FlxAxes.X, 0, 0);
@@ -560,6 +563,12 @@ class ModchartEditorState extends backend.MusicBeatState
 	public inline function getVisualPosition()
 		return getTimeFromSV(Conductor.songPosition, currentSV);
 
+	public function getNoteInitialTime(time:Float)
+	{
+		var event:SpeedEvent = getSV(time);
+		return getTimeFromSV(time, event);
+	} 
+
 	// good to call this whenever you make a playfield
 	public function initPlayfield(field:PlayField)
 	{
@@ -568,13 +577,6 @@ class ModchartEditorState extends backend.MusicBeatState
 		//field.judgeManager = PlayState.instance.ratingsData[0];
 		//field.holdPressCallback = stepHold;
 		//field.holdReleaseCallback = dropHold;
-
-		field.noteRemoved.add((note:Note, field:PlayField) ->
-		{
-			allNotes.remove(note);
-			unspawnNotes.remove(note);
-			notes.remove(note);
-		});
 		field.noteSpawned.add((dunceNote:Note, field:PlayField) ->	
 		{
 			notes.insert(0, dunceNote);
@@ -816,10 +818,10 @@ class ModchartEditorState extends backend.MusicBeatState
 		}
 
 		if (dirtyUpdateNotes) {
-			//clearNotesAfter(Conductor.songPosition + 2000); // so scrolling back doesnt lag shit
-			//unspawnNotes = loadedNotes.copy();
-			//allNotes = loadedNotes.copy();
-			//clearNotesBefore(Conductor.songPosition);
+			clearNotesAfter(Conductor.songPosition + 2000); // so scrolling back doesnt lag shit
+			unspawnNotes = loadedNotes.copy();
+			allNotes = loadedNotes.copy();
+			clearNotesBefore(Conductor.songPosition);
 			dirtyUpdateNotes = false;
 		}
 		if (dirtyUpdateModifiers) {
@@ -995,6 +997,36 @@ class ModchartEditorState extends backend.MusicBeatState
 			}
 			--i;
 		}
+
+		i = unspawnNotes.length - 1;
+		while (i >= 0) {
+			var daNote:Note = unspawnNotes[i];
+			if (daNote.strumTime + 350 < time) {
+				daNote.active = false;
+				daNote.visible = false;
+				// daNote.ignoreNote = true;
+
+				// daNote.kill();
+				unspawnNotes.remove(daNote);
+				// daNote.destroy();
+			}
+			--i;
+		}
+
+		i = notes.length - 1;
+		while (i >= 0) {
+			var daNote:Note = notes.members[i];
+			if (daNote.strumTime + 350 < time) {
+				daNote.active = false;
+				daNote.visible = false;
+				// daNote.ignoreNote = true;
+
+				// daNote.kill();
+				notes.remove(daNote, true);
+				// daNote.destroy();
+			}
+			--i;
+		}
 	}
 
 	public function clearNotesAfter(time:Float) {
@@ -1007,6 +1039,21 @@ class ModchartEditorState extends backend.MusicBeatState
 				daNote.ignoreNote = true;
 				for (field in playfields)
 					field.removeNote(daNote);
+			}
+			--i;
+		}
+
+		i = notes.length - 1;
+		while (i >= 0) {
+			var daNote:Note = notes.members[i];
+			if (daNote.strumTime > time) {
+				daNote.active = false;
+				daNote.visible = false;
+				// daNote.ignoreNote = true;
+
+				// daNote.kill();
+				notes.remove(daNote, true);
+				// daNote.destroy();
 			}
 			--i;
 		}
@@ -1101,7 +1148,7 @@ class ModchartEditorState extends backend.MusicBeatState
 					oldNote = null;
 
 				#if (PSYCH && PSYCHVERSION >= "0.7")
-				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, false, true, this);
+				var swagNote:Note = new Note(daStrumTime, daNoteData, oldNote, false, false, this);
 				swagNote.sustainLength = songNotes[2];
 				swagNote.mustPress = gottaHitNote;
 				swagNote.gfNote = (section.gfSection && (songNotes[1] < 4));
@@ -1138,7 +1185,7 @@ class ModchartEditorState extends backend.MusicBeatState
 					for (susNote in 0...floorSus + 1) {
 						oldNote = allNotes[Std.int(allNotes.length - 1)];
 
-						var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote), daNoteData, oldNote, true, true, this);
+						var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote), daNoteData, oldNote, true, false, this);
 						sustainNote.mustPress = gottaHitNote;
 						sustainNote.gfNote = (section.gfSection && (songNotes[1] < 4));
 						sustainNote.noteType = swagNote.noteType;

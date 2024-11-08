@@ -77,7 +77,6 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 	public var spawnedByData:Array<Array<Note>> = [[], [], [], [], [], [], [], [],[], [], [], [],[], [], [], [], [], []]; // spawned notes by data. Used for input
 	public var noteQueue:Array<Array<Note>> = [[], [], [], [], [], [], [], [],[], [], [], [],[], [], [], [], [], []]; // unspawned notes
 	public var strumNotes:Array<StrumNote> = []; // receptors
-	public static var publicStrums:FlxTypedGroup<StrumNote>; // receptors for other states
 	public var characters:Array<Character> = []; // characters that sing when field is hit
 	public var noteField:NoteField; // renderer
 	public var modNumber:Int = 0; // used for the mod manager. can be set to a different number to give it a different set of modifiers. can be set to 0 to sync the modifiers w/ bf's, and 1 to sync w/ the opponent's
@@ -88,6 +87,9 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 	public var keyCount(default, set):Int = 4; // How many lanes are in this field
 	public var autoPlayed(default, set):Bool = false; // if this playfield should be played automatically (botplay, opponent, etc)
 	public var isEditor:Bool = false;
+	public var instance:ModchartMusicBeatState;
+	public var playStateInstance:PlayState;
+	public var modEditorInstance:ModchartEditorState;
 
     public var x:Float = 0;
     public var y:Float = 0;
@@ -175,9 +177,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 		if(noteQueue[note.column]==null)
 			noteQueue[note.column] = [];
 		noteQueue[note.column].push(note);
-
 		noteQueue[note.column].sort((a, b) -> Std.int(a.strumTime - b.strumTime));
-		
 	}
 
 	// unqueues a note
@@ -291,9 +291,8 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 
 	// generates the receptors
 	public function generateStrums(){
-		publicStrums = new FlxTypedGroup<StrumNote>();
 		Note.swagWidth = 160 * 0.7;
-		for(i in 0...keyCount){
+		for(i in 0...keyCount) {
 			var babyArrow:StrumNote = new StrumNote(ClientPrefs.data.middleScroll ? PlayState.STRUM_X_MIDDLESCROLL : PlayState.STRUM_X, 50, i, this);
 			babyArrow.downScroll = ClientPrefs.data.downScroll;
 			babyArrow.alpha = 1;
@@ -302,7 +301,8 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 			babyArrow.cameras = cameras;
 			strumNotes.push(babyArrow);
 			babyArrow.playerPosition();
-			publicStrums.add(strumNotes[i]);
+			if (modEditorInstance != null) modEditorInstance.strumLineNotes.add(strumNotes[i]);
+			if (playStateInstance != null) playStateInstance.strumLineNotes.add(strumNotes[i]);
 		}
 	}
 
@@ -329,16 +329,6 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 	{
 		return FlxSort.byValues(FlxSort.ASCENDING, Obj1.zIndex, Obj2.zIndex);
 	}
-
-	// spawns a notesplash w/ specified skin. optional note to derive the skin and colours from.
-
-	/*public function spawnSplash(note:Note, splashSkin:String){
-		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
-		splash.setupNoteSplash(0, 0, note.column);
-		splash.handleRendering = false;
-		grpNoteSplashes.add(splash);
-		return splash;
-	}*/
 
 	// spawns notes, deals w/ hold inputs, etc.
 	override public function update(elapsed:Float){
@@ -373,7 +363,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 				var time:Float = noteSpawnTime == null ? spawnTime : noteSpawnTime.getValue(modNumber); // no longer averages the spawn times
 				if (time <= 0)time = spawnTime;
                 
-                while (column.length > 0 && column[0].strumTime - Conductor.songPosition < time)
+                while (column.length > 0 && column[0].strumTime - Conductor.songPosition < time * ClientPrefs.data.drawDistanceModifier)
 					spawnNote(column[0]);
 			}
 		}
@@ -382,10 +372,6 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 
 		for(obj in strumNotes)
 			modManager.updateObject(curDecBeat, obj, modNumber);
-		for(obj in publicStrums)
-			modManager.updateObject(curDecBeat, obj, modNumber);
-
-		//spawnedNotes.sort(sortByOrderNote);
 
 		var garbage:Array<Note> = [];
 		for (daNote in spawnedNotes)
@@ -394,7 +380,6 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 				spawnedNotes.remove(daNote);
 				continue;
 			}
-			//modManager.updateObject(curDecBeat, daNote, modNumber);
 
 			// check for hold inputs
 			if(!daNote.isSustainNote){
