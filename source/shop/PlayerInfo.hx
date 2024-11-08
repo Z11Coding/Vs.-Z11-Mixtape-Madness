@@ -17,7 +17,7 @@ class PlayerInfo {
     {
         curItems = FlxG.save.data.curItems;
 
-        curMoney = curItems.get('money');
+        if (curItems != null) curMoney = curItems.get('money');
     }
 
 }

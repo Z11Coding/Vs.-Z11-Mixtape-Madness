@@ -36,7 +36,7 @@ import states.FirstCheckState;
 	public var camZooms:Bool = true;
 	public var hideHud:Bool = false;
 	public var wife3:Bool = true;
-	public var cacheOnGPU:Bool = true;
+	public var cacheOnGPU:Bool = false;
 	public var checkForUpdates:Bool = true;
 	public var gimmicksAllowed:Bool = true;
 	public var opponentStrums:Bool = true;
