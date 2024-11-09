@@ -236,6 +236,11 @@ class MainMenuState extends MusicBeatState
 		Achievements.reloadList();
 		#end
 		#end
+		if (FlxG.save.data.PBTBM == null) FlxG.save.data.PBTBM = false;
+		if (FlxG.save.data.FF == null) FlxG.save.data.FF = false;
+		if (FlxG.save.data.TL == null) FlxG.save.data.TL = false;
+		FlxG.save.flush();
+
 
 		var hh:Array<Chance> = [
 		];
@@ -249,7 +254,7 @@ class MainMenuState extends MusicBeatState
 			if (secretOverride != null) 
 				h = secretOverride;
 			else 
-				h = ChanceSelector.selectOption(hh);
+				h = ChanceSelector.selectOption(hh, false, true, true);
 		} else {
 			h = 'nothing';
 		}

@@ -7,59 +7,64 @@ typedef Chance = {
 typedef ChanceFunction = {
     func: Void -> Dynamic, // Function to execute
     chance: Float // Chance of execution, assumed to be between 0 and 100
-};
-class ChanceSelector {
-    public static function selectOption(options:Array<Chance>, strict:Bool = false, downsize:Bool = true):Dynamic {
+}
+  class ChanceSelector {
+    public static function selectOption(options:Array<Chance>, strict:Bool = false, downsize:Bool = true, allowNull:Bool = false):Dynamic {
         //trace("Entering selectOption function");
         //trace("Input options: " + options);
 
         // Validate total probability
         var totalChance:Float = 0;
         for (o in options) {
-            if (o.chance < 0 || o.chance > 100) throw 'Chance must be between 0 and 100';
+            if (o.chance < 0 || o.chance > 100) throw "Chance must be between 0 and 100";
             totalChance += o.chance;
         }
         //trace("Total probability: " + totalChance);
 
-        if (totalChance > 100 && strict) throw 'Total chance exceeds 100%';
+        // If strict mode is enabled, throw an error if total chance exceeds 100%
+        if (totalChance > 100 && strict) throw "Total chance exceeds 100%";
         
+        // If downsize is enabled and total chance exceeds 100%, scale down the chances
         if (downsize && totalChance > 100) {
             var scaleFactor:Float = 100 / totalChance;
+            var scaledOptions:Array<Chance> = [];
             for (o in options) {
-                o.chance *= scaleFactor;
+                scaledOptions.push({item: o.item, chance: o.chance * scaleFactor});
             }
+            options = scaledOptions;
             totalChance = 100;
         }
 
-
-
-        // Create a weighted list ensuring unique items
+        // Create a weighted list ensuring the number of items is dependent on the chance
         var weightedList:Array<Dynamic> = [];
-        var totalWeight:Float = 0;
         for (o in options) {
-            totalWeight += o.chance;
-        }
-        var normalizationFactor:Float = 100 / totalWeight; // Adjust based on total weight to ensure representation
-        
-        for (o in options) {
-            // Adjust the count based on the normalization factor to ensure representation
-            var count:Float = Math.max(1, Math.round(o.chance * normalizationFactor));
-            for (i in 0...Math.floor(count)) {
+            var itemCount:Int = Math.round(o.chance); // Number of items based on the chance
+            for (i in 0...itemCount) {
             weightedList.push(o.item);
             }
         }
-        // Convert weighted list into a structured list of potential
+
+        // Convert weighted list into a structured list of potential items
         var potentialList:Array<{ item: Dynamic, potential: Float }> = [];
         for (o in options) {
             var potential: Float = o.chance / totalChance;
             potentialList.push({ item: o.item, potential: potential });
         }
-        //trace("Potential list: " + potentialList);
+        trace("Potential list: " + potentialList);
 
         // Random selection from the weighted list
+        if (weightedList.length == 0) {
+            if (allowNull) return null;
+            throw "No valid options to select from";
+        }
         var randomIndex = Std.random(weightedList.length);
         var selectedOption = weightedList[randomIndex];
         //trace("Selected option: " + selectedOption);
+
+        // Ensure selectedOption is not null
+        if (selectedOption == null && !allowNull) {
+            throw "Selected option is null";
+        }
 
         return selectedOption;
     }
@@ -108,7 +113,7 @@ class ChanceSelector {
         trace("Input chances: " + chances);
 
         if (chances != null && items.length != chances.length) {
-            throw 'Items and chances arrays must be of the same length';
+            throw "Items and chances arrays must be of the same length";
         }
 
         var options:Array<Chance> = [];
@@ -307,7 +312,7 @@ class ChanceExtensions {
     
         // Ensure count is not greater than the array length when duplicates are not allowed
         if (!allowDuplicates && count > availableItems.length) {
-            throw 'Count cannot be greater than the number of unique items when duplicates are not allowed.';
+            throw "Count cannot be greater than the number of unique items when duplicates are not allowed.";
         }
     
         while (selectedItems.length < count) {
