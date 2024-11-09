@@ -47,6 +47,10 @@ class FirstCheckState extends MusicBeatState
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.keys.preventDefaultKeys = [TAB];
 
+		FlxG.save.bind('Mixtape', CoolUtil.getSavePath());
+
+		Highscore.load();
+
 		ClientPrefs.loadPrefs();
 		ClientPrefs.reloadVolumeKeys();
 
@@ -68,7 +72,7 @@ class FirstCheckState extends MusicBeatState
 		});
 		#end
 
-		PlayerInfo.loadInfo();
+		//PlayerInfo.loadInfo();
 
 		super.create();
 

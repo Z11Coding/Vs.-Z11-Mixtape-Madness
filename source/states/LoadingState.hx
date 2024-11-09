@@ -389,7 +389,7 @@ class LoadingState extends MusicBeatState
 		});
 
 		Thread.create(() -> {
-			preloadScript();
+			//preloadScript();
 
 			if (song.stage == null || song.stage.length < 1)
 				song.stage = StageData.vanillaSongStage(folder);

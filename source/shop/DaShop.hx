@@ -12,6 +12,7 @@ class DaShop extends MusicBeatState
     var popupBG:FlxSprite;
     var theText:FlxText;
     var lerpScore:Int = 0;
+    var noItems:FlxText;
 
     //Item Stuff
     var itemArray:Array<Dynamic> = [];
@@ -50,6 +51,16 @@ class DaShop extends MusicBeatState
         theText.scrollFactor.set(1,1);
         theText.antialiasing = true;
         add(theText);
+
+        noItems = new FlxText(0, 0, 200, 'NO ITEMS TO BUY!', 35);
+		noItems.setFormat(Paths.font("comboFont.ttf"), 35, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        noItems.screenCenter();
+        noItems.updateHitbox();
+		noItems.borderSize = 3;
+        noItems.scrollFactor.set(1,1);
+        noItems.antialiasing = true;
+        noItems.visible = false;
+        add(noItems);
 
         icons = new FlxTypedGroup<FlxSprite>();
 	    add(icons);
@@ -174,9 +185,13 @@ class DaShop extends MusicBeatState
 
 
 
-        itemName = itemArray[curItem][0];
-        itemCost = itemArray[curItem][2];
-        itemDesc = itemArray[curItem][1];
+        if (itemArray[curItem] != null)
+        {
+            itemName = itemArray[curItem][0];
+            itemCost = itemArray[curItem][2];
+            itemDesc = itemArray[curItem][1];
+        }
+        else noItems.visible = true;
 
         desc.resetText(itemDesc);
         desc.start(0.05, true);

@@ -110,7 +110,7 @@ class RankingSubstate extends MusicBeatSubstate
 
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 
-		if (PlayState.isStoryMode)
+		/*if (PlayState.isStoryMode)
 		{
 			var stichValue:Int = Std.int(PlayState.campaignScore / 600);
 			add(new MoneyPopup(stichValue, cameras[0]));
@@ -119,7 +119,7 @@ class RankingSubstate extends MusicBeatSubstate
 		{
 			var stichValue:Int = Std.int(PlayState.instance.songScore / 600);
 			add(new MoneyPopup(stichValue, cameras[0]));
-		}
+		}*/
 	}
 
 	override function update(elapsed:Float)

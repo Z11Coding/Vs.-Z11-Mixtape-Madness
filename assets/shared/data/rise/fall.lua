@@ -1,5 +1,5 @@
 function postModifierRegister()
-    if getPropertyFromClass('backend.CLientPrefs', 'data.modcharts') then
+    if getPropertyFromClass('backend.ClientPrefs', 'data.modcharts') then
         queueEase(1311, 1316, 'reverse', 1, 'expoInOut', 1, 0)
         queueEase(1375, 1380, 'reverse', 1, 'expoInOut', 0, 0)
         queueSetP(1407, 'drunk', 75, -1)
@@ -10,7 +10,7 @@ end
 
 
 function onStepHit()
-    if getPropertyFromClass('backend.CLientPrefs', 'data.modcharts') then
+    if getPropertyFromClass('backend.ClientPrefs', 'data.modcharts') then
         if curStep == 1 then
             setValue('boost', 1, -1)
         end

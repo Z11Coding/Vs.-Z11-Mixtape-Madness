@@ -189,10 +189,6 @@ class Main extends Sprite
 		#end
 		Mods.loadTopMod();
 
-		FlxG.save.bind('Mixtape', CoolUtil.getSavePath());
-
-		Highscore.load();
-
 		MemoryUtil.init();
 		WindowUtils.init();
 		var commandPrompt = new CommandPrompt();

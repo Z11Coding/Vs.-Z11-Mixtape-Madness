@@ -36,7 +36,7 @@ import states.FirstCheckState;
 	public var camZooms:Bool = true;
 	public var hideHud:Bool = false;
 	public var wife3:Bool = true;
-	public var cacheOnGPU:Bool = true;
+	public var cacheOnGPU:Bool = false;
 	public var checkForUpdates:Bool = true;
 	public var gimmicksAllowed:Bool = true;
 	public var opponentStrums:Bool = true;
@@ -446,15 +446,12 @@ class ClientPrefs {
 		#if ACHIEVEMENTS_ALLOWED Achievements.save(); #end
 		FlxG.save.flush();
 
-		// // Save options file
-		// if (data.saveFormat == "ini") {
-		// 	saveOptionsIni();
-		// } else if (data.saveFormat == "json") {
-		// 	saveOptionsJson();
-		// } else {
-		// 	FlxG.log.add("Invalid save format specified!");
-		// }
-
+		//Placing this in a separate save so that it can be manually deleted without removing your Score and stuff
+		var save:FlxSave = new FlxSave();
+		save.bind('controls_v3', CoolUtil.getSavePath());
+		save.data.keyboard = keyBinds;
+		save.data.gamepad = gamepadBinds;
+		save.flush();
 		FlxG.log.add("Settings saved!");
 	}
 
