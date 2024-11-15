@@ -264,7 +264,7 @@ class CacheState extends MusicBeatState
 
 		totalToDo = totalthing.length;
 
-		if (allowMusic) FlxG.sound.playMusic(Paths.music('greetings'), 1, true);
+		if (allowMusic && !cacheInit) FlxG.sound.playMusic(Paths.music('greetings'), 1, true);
 
 		super.create();
 	}
