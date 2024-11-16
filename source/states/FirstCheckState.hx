@@ -47,10 +47,6 @@ class FirstCheckState extends MusicBeatState
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.keys.preventDefaultKeys = [TAB];
 
-		FlxG.save.bind('Mixtape', CoolUtil.getSavePath());
-
-		Highscore.load();
-
 		ClientPrefs.loadPrefs();
 		ClientPrefs.reloadVolumeKeys();
 
@@ -199,22 +195,12 @@ class FirstCheckState extends MusicBeatState
 			{
 				thrd = Thread.create(function()
 				{
-					try
+					switch (FlxG.random.bool(25) && !ClientPrefs.data.gotit && !FlxG.save.data.updated)
 					{
-						var data = Http.requestUrl("https://raw.githubusercontent.com/Z11Coding/Z11-s-Modpack-Mixup-RELEASE/main/versions/list.txt");
-						onUpdateData(data);
-					}
-					catch (e)
-					{
-						trace(e.details());
-						trace(e.stack.toString());
-						switch (FlxG.random.bool(12) && !ClientPrefs.data.gotit && !FlxG.save.data.updated)
-						{
-							case false:
-								FlxG.switchState(new states.CacheState());
-							case true:
-								FlxG.switchState(new states.WelcomeToPain());
-						}
+						case false:
+							FlxG.switchState(new states.CacheState());
+						case true:
+							FlxG.switchState(new states.WelcomeToPain());
 					}
 				});
 				updateIcon.visible = true;
@@ -267,7 +253,7 @@ class FirstCheckState extends MusicBeatState
 			{
 				if (args == "-livereload")
 				{
-					switch (FlxG.random.bool(12) && !ClientPrefs.data.gotit && !FlxG.save.data.updated)
+					switch (FlxG.random.bool(25) && !ClientPrefs.data.gotit && !FlxG.save.data.updated)
 					{
 						case false:
 							FlxG.switchState(new states.CacheState());
@@ -285,7 +271,7 @@ class FirstCheckState extends MusicBeatState
 		}
 		else
 		{
-			switch (FlxG.random.bool(12) && !ClientPrefs.data.gotit && !FlxG.save.data.updated)
+			switch (FlxG.random.bool(25) && !ClientPrefs.data.gotit && !FlxG.save.data.updated)
 			{
 				case false:
 					FlxG.switchState(new states.CacheState());

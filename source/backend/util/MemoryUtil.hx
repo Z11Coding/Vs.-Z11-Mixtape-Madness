@@ -44,6 +44,7 @@ class MemoryUtil {
 		#if cpp
 		Gc.run(true);
 		Gc.compact();
+		System.gc();
 		#elseif hl
 		Gc.major();
 		#elseif (java || neko)

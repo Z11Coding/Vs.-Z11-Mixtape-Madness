@@ -86,6 +86,7 @@ class FreeplayState extends MusicBeatState
 
 	override function create()
 	{
+		MemoryUtil.clearMajor();
 		curSelected = 0; //so it doesn't do weird things. might rework later
 		//Paths.clearStoredMemory();
 		//Paths.clearUnusedMemory();

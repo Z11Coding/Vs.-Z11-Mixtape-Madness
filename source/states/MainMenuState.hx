@@ -242,8 +242,7 @@ class MainMenuState extends MusicBeatState
 		FlxG.save.flush();
 
 
-		var hh:Array<Chance> = [
-		];
+		var hh:Array<Chance> = [];
 		if (FlxG.save.data.PBTBM != null && FlxG.save.data.PBTBM == false) hh.push({item: "PBTBM", chance: 99}); //56% chance to get the "Possessed by the Blood Moon" secret
 		if (FlxG.save.data.FF != null && FlxG.save.data.FF == false) hh.push({item: "FF", chance: 99}); // 39% chance to get the "Fangirl Frenzy" secret
 		if (FlxG.save.data.TL != null && FlxG.save.data.TL == false) hh.push({item: "TL", chance: 99}); // 53% chance to get the "Truly Lost" secret
