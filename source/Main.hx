@@ -355,6 +355,7 @@ class Main extends Sprite
 
 				default:
 					// Default behavior: close the window
+					FlxG.autoPause = false;
 					TransitionState.transitionState(ExitState, {transitionType: "transparent close"});
 			}
 		}
