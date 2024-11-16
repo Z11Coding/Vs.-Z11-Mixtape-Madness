@@ -86,7 +86,7 @@ class DaShop extends MusicBeatState
         max = 0;
         for (i in ShopData.items.keys())
         {
-            if (!ShopData.items.get(i)[3])
+            if (!ShopData.items.get(i)[3] || !ShopData.items.get(i)[4])
             {
                 trace(i);
                 var imageFile:String = ShopData.items.get(i)[2];
