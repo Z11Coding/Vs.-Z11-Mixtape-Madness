@@ -1204,62 +1204,7 @@ class PlayState extends MusicBeatState
 		timeBar.visible = showTime;
 		add(timeBar);
 		add(timeTxt);
-
-		strumLineNotes = new FlxTypedGroup<StrumNote>();
-		add(strumLineNotes);
-
-		if (ClientPrefs.data.timeBarType == 'Song Name')
-		{
-			timeTxt.size = 24;
-			timeTxt.y += 3;
-		}
-
-		opponentStrums = new FlxTypedGroup<StrumNote>();
-		opponentStrums2 = new FlxTypedGroup<StrumNote>();
-		playerStrums = new FlxTypedGroup<StrumNote>();
-
-		// startCountdown();
-
-		modManager = new ModManager(this);
-
-		callOnScripts("prePlayfieldCreation"); // backwards compat
-
-		callOnScripts("onPlayfieldCreation"); // you should use this
-		playerField = new PlayField(modManager);
-		playerField.modNumber = 0;
-		playerField.characters = [];
-		playerField.noteField.isEditor = false;
-		for (n => ch in boyfriendMap)
-			playerField.characters.push(ch);
-		for (n => ch in boyfriendMap2)
-			playerField.characters.push(ch);
-
-		playerField.isPlayer = !opponentmode && !playAsGF;
-		playerField.autoPlayed = opponentmode || cpuControlled || playAsGF;
-		playerField.noteHitCallback = opponentmode ? opponentNoteHit : goodNoteHit;
-
-		dadField = new PlayField(modManager);
-		dadField.isPlayer = opponentmode && !playAsGF;
-		dadField.autoPlayed = !opponentmode || (opponentmode && cpuControlled) || playAsGF;
-		dadField.AIPlayer = AIMode;
-		dadField.modNumber = 1;
-		dadField.characters = [];
-		dadField.noteField.isEditor = false;
-		for (n => ch in dadMap)
-			dadField.characters.push(ch);
-		for (n => ch in dadMap2)
-			dadField.characters.push(ch);
-		dadField.noteHitCallback = opponentmode ? goodNoteHit : opponentNoteHit;
-
-		playfields.add(dadField);
-		playfields.add(playerField);
-
-		initPlayfield(dadField);
-		initPlayfield(playerField);
-
-		callOnScripts("postPlayfieldCreation"); // backwards compat
-
-		callOnScripts("onPlayfieldCreationPost");
+		backend.Threader.runInThread(strumInit(), 3, "playfieldCreation");
 
 		if (!CacheMode) {
 			if (chartModifier == "Normal") {
@@ -1487,11 +1432,11 @@ class PlayState extends MusicBeatState
 		{
 			if (!playAsGF)
 			{
-				playerField.cameras = [camHUD];
-				dadField.cameras = [camHUD];
-				playfields.cameras = [camHUD];
-				strumLineNotes.cameras = [camHUD];
-					if (notes != null) notes.cameras = [camHUD];
+				// playerField.cameras = [camHUD];
+				// dadField.cameras = [camHUD];
+				// playfields.cameras = [camHUD];
+				// strumLineNotes.cameras = [camHUD];
+				// 	if (notes != null) notes.cameras = [camHUD];
 				healthBar.cameras = [camHUD];
 				healthBar2.cameras = [camHUD];
 				iconP1.cameras = [camHUD];
@@ -1646,6 +1591,74 @@ class PlayState extends MusicBeatState
 		if (eventNotes.length < 1)
 			checkEventNote();
 	}
+
+	public function strumInit()
+		{
+			strumLineNotes = new FlxTypedGroup<StrumNote>();
+			add(strumLineNotes);
+	
+			if (ClientPrefs.data.timeBarType == 'Song Name')
+			{
+				timeTxt.size = 24;
+				timeTxt.y += 3;
+			}
+	
+			opponentStrums = new FlxTypedGroup<StrumNote>();
+			opponentStrums2 = new FlxTypedGroup<StrumNote>();
+			playerStrums = new FlxTypedGroup<StrumNote>();
+	
+			// startCountdown();
+	
+			modManager = new ModManager(this);
+	
+			callOnScripts("prePlayfieldCreation"); // backwards compat
+	
+			callOnScripts("onPlayfieldCreation"); // you should use this
+			playerField = new PlayField(modManager);
+			playerField.modNumber = 0;
+			playerField.characters = [];
+			playerField.noteField.isEditor = false;
+			for (n => ch in boyfriendMap)
+				playerField.characters.push(ch);
+			for (n => ch in boyfriendMap2)
+				playerField.characters.push(ch);
+	
+			playerField.isPlayer = !opponentmode && !playAsGF;
+			playerField.autoPlayed = opponentmode || cpuControlled || playAsGF;
+			playerField.noteHitCallback = opponentmode ? opponentNoteHit : goodNoteHit;
+	
+			dadField = new PlayField(modManager);
+			dadField.isPlayer = opponentmode && !playAsGF;
+			dadField.autoPlayed = !opponentmode || (opponentmode && cpuControlled) || playAsGF;
+			dadField.AIPlayer = AIMode;
+			dadField.modNumber = 1;
+			dadField.characters = [];
+			dadField.noteField.isEditor = false;
+			for (n => ch in dadMap)
+				dadField.characters.push(ch);
+			for (n => ch in dadMap2)
+				dadField.characters.push(ch);
+			dadField.noteHitCallback = opponentmode ? goodNoteHit : opponentNoteHit;
+	
+			playfields.add(dadField);
+			playfields.add(playerField);
+	
+			initPlayfield(dadField);
+			initPlayfield(playerField);
+
+			if (!playAsGF)
+				{
+					playerField.cameras = [camHUD];
+					dadField.cameras = [camHUD];
+					playfields.cameras = [camHUD];
+					strumLineNotes.cameras = [camHUD];
+				}
+	
+			callOnScripts("postPlayfieldCreation"); // backwards compat
+	
+			callOnScripts("onPlayfieldCreationPost");
+			return true;
+	}		
 
 	function doStaticSign(lestatic:Int = 0)
 	{
@@ -3186,6 +3199,7 @@ if (result < 0 || result > mania) {
 	{
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
+		if (notes != null) notes.cameras = [camHUD];
 
 		var noteData:Array<SwagSection>;
 
