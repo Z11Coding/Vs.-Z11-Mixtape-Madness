@@ -1523,21 +1523,7 @@ class PlayState extends MusicBeatState
 		// cameras = [FlxG.cameras.list[1]];
 		startingSong = true;
 
-		#if LUA_ALLOWED
-		for (notetype in noteTypes)
-			startLuasNamed('custom_notetypes/' + notetype + '.lua');
-		for (event in eventsPushed)
-			startLuasNamed('custom_events/' + event + '.lua');
-		#end
 
-		#if HSCRIPT_ALLOWED
-		for (notetype in noteTypes)
-			startHScriptsNamed('custom_notetypes/' + notetype + '.hx');
-		for (event in eventsPushed)
-			startHScriptsNamed('custom_events/' + event + '.hx');
-		#end
-		noteTypes = null;
-		eventsPushed = null;
 
 		if (eventNotes.length > 1)
 		{
@@ -3197,103 +3183,8 @@ if (result < 0 || result > mania) {
 	private var noteTypes:Array<String> = [];
 	private var eventsPushed:Array<String> = [];
 
-	private function generateSong(dataPath:String):Void
+	public function generateNotes(songData:SwagSong, AIPlayMap:Array<Array<Float>>)
 	{
-		songSpeedType = ClientPrefs.getGameplaySetting('scrolltype', 'multiplicative');
-
-		switch (songSpeedType)
-		{
-			case "multiplicative":
-				songSpeed = SONG.speed * ClientPrefs.getGameplaySetting('scrollspeed', 1);
-			case "constant":
-				songSpeed = ClientPrefs.getGameplaySetting('scrollspeed', 1);
-		}
-
-		var songData = SONG;
-		Conductor.bpm = songData.bpm;
-
-		curSong = songData.song;
-
-		var AIPlayMap = [];
-
-		if (AIPlayer.active)
-			AIPlayMap = AIPlayer.GeneratePlayMap(SONG, AIPlayer.diff);
-
-		Paths.inst(curSong.toLowerCase());
-		Paths.voices(curSong.toLowerCase());
-
-		vocals = new FlxSound();
-		opponentVocals = new FlxSound();
-		gfVocals = new FlxSound();
-
-		try
-		{
-			if (songData.needsVoices && songData.newVoiceStyle)
-			{
-				var playerVocals = Paths.voices(songData.song,
-					(boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) ? 'Player' : boyfriend.vocalsFile);
-				if (playerVocals != null)
-				{
-					vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.music('empty'));
-					FlxG.sound.list.add(vocals);
-				}
-
-				var oppVocals = Paths.voices(songData.song, (dad.vocalsFile == null || dad.vocalsFile.length < 1) ? 'Opponent' : dad.vocalsFile);
-				if (oppVocals != null)
-				{
-					opponentVocals.loadEmbedded(oppVocals != null ? oppVocals : Paths.music('empty'));
-					FlxG.sound.list.add(opponentVocals);
-				}
-
-				if (((dad.vocalsFile == null || dad.vocalsFile.length < 1) && dad.vocalsFile != 'gf')
-					&& ((boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) && boyfriend.vocalsFile != 'gf'))
-				{
-					var gfVoc = Paths.voices(songData.song, (gf.vocalsFile == null || gf.vocalsFile.length < 1) ? 'GF' : gf.vocalsFile);
-					if (gfVoc != null)
-					{
-						gfVocals.loadEmbedded(gfVoc != null ? gfVoc : Paths.music('empty'));
-						FlxG.sound.list.add(gfVocals);
-					}
-				}
-			}
-			else if (songData.needsVoices && !songData.newVoiceStyle)
-			{
-				var playerVocals = Paths.voices(songData.song);
-				if (playerVocals != null)
-				{
-					vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.voices(songData.song));
-					FlxG.sound.list.add(vocals);
-				}
-			}
-		}
-		catch (e)
-		{
-		}
-
-		inst = new FlxSound();
-		try
-		{
-			inst.loadEmbedded(Paths.inst(songData.song));
-		}
-		catch (e:Dynamic)
-		{
-			inst.loadEmbedded(Paths.music('empty'));
-		}
-		FlxG.sound.list.add(inst);
-
-		if (SONG.extraTracks != null)
-		{
-			for (trackName in SONG.extraTracks)
-			{
-				var newTrack = Paths.track(songData.song, trackName);
-				if (newTrack != null)
-				{
-					tracks.push(newTrack);
-					FlxG.sound.list.add(newTrack);
-				}
-			}
-		}
-
 		notes = new FlxTypedGroup<Note>();
 		add(notes);
 
@@ -4005,6 +3896,121 @@ if (result < 0 || result > mania) {
 				}
 			}
 		}
+		#if LUA_ALLOWED
+		for (notetype in noteTypes)
+			startLuasNamed('custom_notetypes/' + notetype + '.lua');
+		for (event in eventsPushed)
+			startLuasNamed('custom_events/' + event + '.lua');
+		#end
+
+		#if HSCRIPT_ALLOWED
+		for (notetype in noteTypes)
+			startHScriptsNamed('custom_notetypes/' + notetype + '.hx');
+		for (event in eventsPushed)
+			startHScriptsNamed('custom_events/' + event + '.hx');
+		#end
+		noteTypes = null;
+		eventsPushed = null;
+	}
+
+	private function generateSong(dataPath:String):Void
+	{
+		songSpeedType = ClientPrefs.getGameplaySetting('scrolltype', 'multiplicative');
+
+		switch (songSpeedType)
+		{
+			case "multiplicative":
+				songSpeed = SONG.speed * ClientPrefs.getGameplaySetting('scrollspeed', 1);
+			case "constant":
+				songSpeed = ClientPrefs.getGameplaySetting('scrollspeed', 1);
+		}
+
+		var songData = SONG;
+		Conductor.bpm = songData.bpm;
+
+		curSong = songData.song;
+
+		var AIPlayMap = [];
+
+		if (AIPlayer.active)
+			AIPlayMap = AIPlayer.GeneratePlayMap(SONG, AIPlayer.diff);
+
+		Paths.inst(curSong.toLowerCase());
+		Paths.voices(curSong.toLowerCase());
+
+		vocals = new FlxSound();
+		opponentVocals = new FlxSound();
+		gfVocals = new FlxSound();
+
+		try
+		{
+			if (songData.needsVoices && songData.newVoiceStyle)
+			{
+				var playerVocals = Paths.voices(songData.song,
+					(boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) ? 'Player' : boyfriend.vocalsFile);
+				if (playerVocals != null)
+				{
+					vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.music('empty'));
+					FlxG.sound.list.add(vocals);
+				}
+
+				var oppVocals = Paths.voices(songData.song, (dad.vocalsFile == null || dad.vocalsFile.length < 1) ? 'Opponent' : dad.vocalsFile);
+				if (oppVocals != null)
+				{
+					opponentVocals.loadEmbedded(oppVocals != null ? oppVocals : Paths.music('empty'));
+					FlxG.sound.list.add(opponentVocals);
+				}
+
+				if (((dad.vocalsFile == null || dad.vocalsFile.length < 1) && dad.vocalsFile != 'gf')
+					&& ((boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) && boyfriend.vocalsFile != 'gf'))
+				{
+					var gfVoc = Paths.voices(songData.song, (gf.vocalsFile == null || gf.vocalsFile.length < 1) ? 'GF' : gf.vocalsFile);
+					if (gfVoc != null)
+					{
+						gfVocals.loadEmbedded(gfVoc != null ? gfVoc : Paths.music('empty'));
+						FlxG.sound.list.add(gfVocals);
+					}
+				}
+			}
+			else if (songData.needsVoices && !songData.newVoiceStyle)
+			{
+				var playerVocals = Paths.voices(songData.song);
+				if (playerVocals != null)
+				{
+					vocals.loadEmbedded(playerVocals != null ? playerVocals : Paths.voices(songData.song));
+					FlxG.sound.list.add(vocals);
+				}
+			}
+		}
+		catch (e)
+		{
+		}
+
+		inst = new FlxSound();
+		try
+		{
+			inst.loadEmbedded(Paths.inst(songData.song));
+		}
+		catch (e:Dynamic)
+		{
+			inst.loadEmbedded(Paths.music('empty'));
+		}
+		FlxG.sound.list.add(inst);
+
+		if (SONG.extraTracks != null)
+		{
+			for (trackName in SONG.extraTracks)
+			{
+				var newTrack = Paths.track(songData.song, trackName);
+				if (newTrack != null)
+				{
+					tracks.push(newTrack);
+					FlxG.sound.list.add(newTrack);
+				}
+			}
+		}
+			backend.Threader.runInThread(generateNotes(songData, AIPlayMap), 0, "generateNotes");
+
 	}
 
 	public function getNoteInitialTime(time:Float)

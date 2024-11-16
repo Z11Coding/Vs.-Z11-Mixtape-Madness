@@ -23,9 +23,10 @@ class Threader {
                     if ($sleepExpr > 0) {
                         Sys.sleep($sleepExpr);
                     }
-                    trace("Thread finished running command.");
+                    trace("Thread finished running command: " + $nameExpr);
+                    trace($expr);
                 } catch (e:Dynamic) {
-                    trace("Exception in thread: " + e);
+                    trace("Exception in thread: " + e + " ... " + haxe.CallStack.toString(haxe.CallStack.exceptionStack()));
                     if ($nameExpr != "") {
                         trace("Errored Thread name: " + $nameExpr);
                     }
