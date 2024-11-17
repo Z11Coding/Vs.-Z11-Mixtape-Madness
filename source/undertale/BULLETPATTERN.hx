@@ -1,32 +1,7 @@
 package undertale;
 import flixel.FlxSprite;
-import flixel.tweens.FlxTween;
-import openfl.display.Shader;
-import flixel.util.FlxColor;
-import openfl.geom.Vector3D;
-import flixel.math.FlxPoint;
-import flixel.math.FlxMath;
-import math.Vector3;
-import flixel.system.FlxAssets.FlxShader;
-import modchart.ModManager;
-import flixel.group.FlxGroup.FlxTypedGroup;
-import flixel.group.FlxSpriteGroup;
-import lime.math.Vector2;
-import lime.math.Vector4;
-import openfl.Vector;
 import flixel.tweens.FlxEase;
-import flixel.util.FlxSort;
 import flixel.tweens.FlxTween;
-import lime.app.Event;
-import flixel.math.FlxAngle;
-import backend.Conductor;
-import objects.Note;
-import objects.NoteObject;
-import objects.StrumNote;
-import objects.Character;
-import objects.NoteSplash;
-import undertale.BATTLEFIELD;
-
 abstract DamageType(Float) {
     public static inline var NONE = 0;
     public static inline var NORMAL = 1;

@@ -43,7 +43,9 @@ class MainMenuState extends MusicBeatState
 	var menuItems:FlxTypedGroup<FlxSprite>;
 	var optionShit:Array<String> = [
 		'freeplay',
-		'credits'
+		'credits',
+		'shop',
+		'battle'
 	];
 	public var iconBG:FlxSprite;
 	var leftItem:FlxSprite;
@@ -844,6 +846,10 @@ class MainMenuState extends MusicBeatState
 				MusicBeatState.switchState(new CreditsState());
 			case 'options':
 				MusicBeatState.switchState(new options.OptionsState());
+			case 'shop':
+				MusicBeatState.switchState(new shop.DaShop());
+			case 'battle':
+				MusicBeatState.switchState(new undertale.BATTLEFIELD());
 		}
 	}
 

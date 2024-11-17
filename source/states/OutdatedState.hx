@@ -27,27 +27,32 @@ class OutdatedState extends MusicBeatState
 
 	override function update(elapsed:Float)
 	{
-		if (FlxG.keys.justPressed.ENTER)
+		if (ClientPrefs.data.checkForUpdates)
 		{
-			//leftState = true;
-			#if windows FlxG.switchState(new UpdateState());
-			#else
-			CoolUtil.browserLoad("https://github.com/Z11Coding/Vs.-Z11-Mixtape-Madness/releases/");
-			#end
-		}
-		else if(controls.BACK) {
-			leftState = true;
-		}
+			if (FlxG.keys.justPressed.ENTER)
+			{
+				//leftState = true;
+				#if windows FlxG.switchState(new UpdateState());
+				#else
+				CoolUtil.browserLoad("https://github.com/Z11Coding/Vs.-Z11-Mixtape-Madness/releases/");
+				#end
+			}
+			else if(controls.BACK) {
+				leftState = true;
+			}
 
-		if(leftState)
-		{
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-			FlxTween.tween(warnText, {alpha: 0}, 1, {
-				onComplete: function (twn:FlxTween) {
-					MusicBeatState.switchState(new MainMenuState());
-				}
-			});
+			if(leftState)
+			{
+				leftState = false;
+				FlxG.sound.play(Paths.sound('cancelMenu'));
+				FlxTween.tween(warnText, {alpha: 0}, 1, {
+					onComplete: function (twn:FlxTween) {
+						MusicBeatState.switchState(new What());
+					}
+				});
+			}
 		}
+		else MusicBeatState.switchState(new What());
 		super.update(elapsed);
 	}
 }

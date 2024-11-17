@@ -86,6 +86,24 @@ class UnderTextParser extends FlxTypeText {
             }
         }
 
+        if (sounds != null && !useDefaultSound)
+        {
+            if (!finishSounds || _finalText.charAt(_length) == ' ')
+            {
+                for (sound in sounds)
+                {
+                    sound.stop();
+                }
+            }
+
+            if (_finalText.charAt(_length) != ' ' && _finalText.charAt(_length) != ',' && _finalText.charAt(_length) != '.')
+                FlxG.random.getObject(sounds).play(!finishSounds);
+        }
+        else if (useDefaultSound)
+        {
+            _sound.play(!finishSounds);
+        }
+
         super.update(elapsed);
     }
 

@@ -5,7 +5,6 @@ import objects.Bar;
 import backend.Highscore;
 import backend.Achievements;
 import objects.TypedAlphabet;
-import cutscenes.DialogueBox;
 import backend.util.WindowUtil;
 import flixel.input.keyboard.FlxKey;
 import flixel.FlxState;
@@ -155,19 +154,15 @@ class BATTLEFIELD extends MusicBeatState
 		FlxG.game.focusLostFramerate = 60;
 		FlxG.keys.preventDefaultKeys = [TAB, ALT];
 
-		FlxG.save.bind('Mixtape' #if (flixel < "5.0.0"), 'Z11Gaming' #end);
 		ClientPrefs.loadPrefs();
 		ClientPrefs.reloadVolumeKeys();
         Language.reloadPhrases();
 
-		#if ACHIEVEMENTS_ALLOWED Achievements.load(); #end
-
-		Highscore.load();
-        #end
+		#end
         //simply for testing
         if (isGenocide)
         {
-            human = new SOUL(RED, 'Chara', 20);
+            human = new SOUL(RED, 'Boyfriend', 20);
             monster = new MSOUL('Z11Tale', (4*7), 7, 100000, 9999, 500, false, true, isGenocide);
             monster.initFlavorText = '[set:0.05]Battle against the truly determined...[pause:1][slow:0.6]\n[pitch:0.1]Let\'s see how much he\'ll take before he breaks...[tpitch:1]';
             monster.flavorTextList = [
@@ -182,7 +177,7 @@ class BATTLEFIELD extends MusicBeatState
         }
         else
         {
-            human = new SOUL(RED, 'Frisk', 1);
+            human = new SOUL(RED, 'Boyfriend', 1);
             monster = new MSOUL('Z11Tale', 4, 1, 100, 9999, 500, false, true, isGenocide);
             monster.initFlavorText = '[set:0.05]Z11Tale prepares for a fun battle.';
             monster.flavorTextList = [
@@ -214,7 +209,7 @@ class BATTLEFIELD extends MusicBeatState
         name.setFormat(Paths.font("determination-extended.ttf"), 30, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         add(name);
 
-        hp = new Bar(620, name.y - 5, 'hp', function() return health, 0, human.maxHealth);
+        hp = new Bar(620, name.width - 5, 'hp', function() return health, 0, human.maxHealth);
         hp.barWidth = 50 * (human.LOVE/5);
         hp.barHeight = 30;
         add(hp);
@@ -227,7 +222,7 @@ class BATTLEFIELD extends MusicBeatState
 	    hpTxt.scale.y = 1.8;
         add(hpTxt);
 
-        LOVETxt = new FlxText(name.x + 130, 600, 0, "LV "+human.LOVE, 30);
+        LOVETxt = new FlxText(name.width + 130, 600, 0, "LV "+human.LOVE, 30);
         LOVETxt.scrollFactor.set();
         LOVETxt.setFormat(Paths.font("determination-extended.ttf"), 30, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         add(LOVETxt);
@@ -945,7 +940,7 @@ class BATTLEFIELD extends MusicBeatState
             {
                 speechFunc('empty');
                 canMove = true;
-                setAttack('test 2');
+                setAttack('test 1');
                 curMenu = 'main';
             }
             

@@ -496,9 +496,9 @@ class ModchartEditorState extends backend.MusicBeatState
 		// gridGap = FlxMath.remapToRange(Conductor.stepCrochet, 0, Conductor.stepCrochet, 0, gridSize); //idk why i even thought this was how i do it
 		// trace(gridGap);
 
-		//playerField.cameras = [camHUD];
-		//dadField.cameras = [camHUD];
-		//playfields.cameras = [camHUD];
+		playerField.cameras = [camHUD];
+		dadField.cameras = [camHUD];
+		playfields.cameras = [camHUD];
 
 		debugText = new FlxText(0, gridSize * 2, 0, "", 16);
 		debugText.alignment = FlxTextAlign.LEFT;

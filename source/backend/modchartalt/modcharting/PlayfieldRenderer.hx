@@ -75,7 +75,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
 
     public var modifiers(get, default):Map<String, Modifier>;
 
-    private function get_modifiers() : Map<String, Modifier>
+    private function get_modifiers():Map<String, Modifier>
     {
         return modifierTable.modifiers; //back compat with lua modcharts
     }
@@ -89,7 +89,9 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
         if (Std.isOfType(instance, PlayState))
             playStateInstance = cast instance; //so it just casts once
 
-        this.notes = playStateInstance.notes;
+        if (playStateInstance != null)
+            this.notes = playStateInstance.notes;
+        else this.notes = notes;
         strumGroup.visible = false; //drawing with renderer instead
         notes.visible = false;
 
@@ -136,7 +138,7 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
         }
         catch (e)
         {
-            //trace(e); shhhhhhh
+            trace("ERROR: ATTEMPTED TO DRAW. RETURNED " + e); 
         }
         //draw notes to screen
     }
@@ -146,7 +148,6 @@ class PlayfieldRenderer extends FlxSprite //extending flxsprite just so i can ed
     {
         strum.x = strumData.x;
         strum.y = strumData.y;
-        //Add Z to your strumNoteType if you want it youself!
         strum.z = strumData.z;
         strum.angle = strumData.angle;
         strum.alpha = strumData.alpha;

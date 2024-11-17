@@ -163,7 +163,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 		retard.color = 0xFF000000; // just to make it a bit harder to see
 		retard.alpha = 0.9; // just to make it a bit harder to see
 		retard.scale.set(0.002, 0.002);
-		retard.handleRendering = false;
+		retard.handleRendering = true;
 		retard.updateHitbox();
 		retard.x = 400;
 		retard.y = 400;
@@ -240,7 +240,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 		
 		noteSpawned.dispatch(note, this);
 		spawnedNotes.push(note);
-		note.handleRendering = false;
+		note.handleRendering = true;
 		note.spawned = true;
 
 		insert(0, note);
@@ -297,18 +297,51 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 			babyArrow.downScroll = ClientPrefs.data.downScroll;
 			babyArrow.alpha = 1;
 			insert(0, babyArrow);
-			babyArrow.handleRendering = false; // NoteField handles rendering
+			babyArrow.handleRendering = true; // NoteField handles rendering
 			babyArrow.cameras = cameras;
 			strumNotes.push(babyArrow);
+			if (modEditorInstance != null) modEditorInstance.strumLineNotes.add(babyArrow);
+			if (playStateInstance != null) playStateInstance.strumLineNotes.add(babyArrow);
 			babyArrow.playerPosition();
-			if (modEditorInstance != null) modEditorInstance.strumLineNotes.add(strumNotes[i]);
-			if (playStateInstance != null) playStateInstance.strumLineNotes.add(strumNotes[i]);
 		}
 	}
 
 	// does the introduction thing for the receptors. story mode usually sets skip to true. OYT uses this when mario comes in
 	public function fadeIn(skip:Bool = false)
 	{
+		if (modEditorInstance != null) 
+		{
+			for (data in 0...modEditorInstance.strumLineNotes.length)
+			{
+				var babyArrow:StrumNote = modEditorInstance.strumLineNotes.members[data];
+				if (skip)
+					babyArrow.alpha = 1;
+				else
+				{
+					babyArrow.alpha = 0;
+					var daY = babyArrow.downScroll ? -10 : 10;
+					babyArrow.offsetY -= daY;
+					FlxTween.tween(babyArrow, {offsetY: babyArrow.offsetY + daY, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (Conductor.crochet / 1000) * data * PlayState.instance.playbackRate});
+				}
+			}
+		}
+		if (playStateInstance != null) 
+		{
+			for (data in 0...playStateInstance.strumLineNotes.length)
+			{
+				var babyArrow:StrumNote = playStateInstance.strumLineNotes.members[data];
+				if (skip)
+					babyArrow.alpha = 1;
+				else
+				{
+					babyArrow.alpha = 0;
+					var daY = babyArrow.downScroll ? -10 : 10;
+					babyArrow.offsetY -= daY;
+					FlxTween.tween(babyArrow, {offsetY: babyArrow.offsetY + daY, alpha: 1}, 1, {ease: FlxEase.circOut, startDelay: 0.5 + (Conductor.crochet / 1000) * data * PlayState.instance.playbackRate});
+				}
+			}
+		}
+
 		for (data in 0...strumNotes.length)
 		{
 			var babyArrow:StrumNote = strumNotes[data];
@@ -370,6 +403,14 @@ class PlayField extends FlxTypedGroup<FlxBasic>
 
 		super.update(elapsed);
 
+		if (modEditorInstance != null)
+			for(obj in modEditorInstance.strumLineNotes)
+				modManager.updateObject(curDecBeat, obj, modNumber);
+
+		if (playStateInstance != null)
+			for(obj in playStateInstance.strumLineNotes)
+				modManager.updateObject(curDecBeat, obj, modNumber);
+
 		for(obj in strumNotes)
 			modManager.updateObject(curDecBeat, obj, modNumber);
 
@@ -401,7 +442,7 @@ class PlayField extends FlxTypedGroup<FlxBasic>
                                 holdReleaseCallback(daNote, this);
                         }
 
-						var receptor = strumNotes[daNote.column];
+						var receptor = playStateInstance != null ? playStateInstance.strumLineNotes.members[daNote.column] : modEditorInstance != null ? modEditorInstance.strumLineNotes.members[daNote.column] : strumNotes[daNote.column];
 						daNote.holdingTime = Conductor.songPosition - daNote.strumTime;
 
                         

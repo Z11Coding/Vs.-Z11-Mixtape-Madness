@@ -12,6 +12,20 @@ class DaShop extends MusicBeatState
     var popupBG:FlxSprite;
     var theText:FlxText;
     var lerpScore:Int = 0;
+    var noItems:FlxText;
+    var cantAfford:Array<String> = [
+    '[reset]Nope',
+    '[reset]Nu Uh',
+    '[reset]Not Happening',
+    '[reset]Lmao, [pause:0.5]your too broke.',
+    '[reset]Have you tried not being broke?',
+    '[reset]Can\'t Afford!',
+    '[reset]Looks like someone forgot their wallet...',
+    '[reset]Maybe ask Girlfriend for some money.',
+    '[reset]This isn\'t a charity.',
+    '[reset]Use money, not rapping.',
+    '[reset]Can\'t rap battle your way out of paying.',
+    ];
 
     //Item Stuff
     var itemArray:Array<Dynamic> = [];
@@ -61,7 +75,7 @@ class DaShop extends MusicBeatState
 		descBG.scrollFactor.set(1,1);
         add(descBG);
 
-        desc = new undertale.UnderTextParser(250, descBG.y + 30, Std.int(FlxG.width * 0.6), '', 20);
+        desc = new undertale.UnderTextParser(250, descBG.y /*+ 30*/, Std.int(FlxG.width * 0.7), '', 20);
         desc.font = Paths.font("fnf1.ttf");
         desc.sounds = [FlxG.sound.load(Paths.sound('ut/monsterfont'))];
         desc.alignment = CENTER;
@@ -153,6 +167,8 @@ class DaShop extends MusicBeatState
             {
                 if (spr.ID == item) FlxTween.color(spr, 1, 0xffcc0002, 0xffffffff, {ease: FlxEase.sineIn});
             });
+            desc.resetText(cantAfford[FlxG.random.int(cantAfford.length-1)]);
+            desc.start(0.05, true);
         }
         else if (cost <= money)
         {
@@ -160,6 +176,8 @@ class DaShop extends MusicBeatState
             FlxG.sound.play(Paths.sound("confirmMenu"));
             PlayerInfo.curMoney -= cost;
             ShopData.items.get(itemName)[3] = true;
+            desc.resetText(ShopData.items.get(itemName)[1][1]);
+            desc.start(0.05, true);
             reloadShop();
         }
     }
@@ -175,9 +193,13 @@ class DaShop extends MusicBeatState
 
 
 
-        itemName = itemArray[curItem][0];
-        itemCost = itemArray[curItem][2];
-        itemDesc = itemArray[curItem][1];
+        if (itemArray[curItem] != null)
+        {
+            itemName = itemArray[curItem][0];
+            itemCost = itemArray[curItem][2];
+            itemDesc = itemArray[curItem][1][0];
+        }
+        else noItems.visible = true;
 
         desc.resetText(itemDesc);
         desc.start(0.05, true);

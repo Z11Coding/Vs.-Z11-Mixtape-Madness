@@ -109,7 +109,7 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 
 		final refreshRate:Int = FlxG.stage.application.window.displayMode.refreshRate;
 		option.minValue = 1;
-		option.maxValue = 9999;
+		option.maxValue = 999;
 		option.defaultValue = Std.int(FlxMath.bound(refreshRate, option.minValue, option.maxValue));
 		option.displayFormat = '%v FPS';
 		option.onChange = onChangeFramerate;
@@ -160,7 +160,7 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 		super.changeSelection(change);
 		if(noteOptionID < 0) return;
 		boyfriend.visible = (antialiasingOption == BaseOptionsMenu.curSelected);
-
+		
 	}
 
 	public static function getUiSkin(?uiSkin:String = 'base', ?file:String = '', ?alt:String = '', ?numSkin:Bool = false, ?num:Int = 0)
@@ -341,6 +341,7 @@ class GraphicsSettingsSubState extends BaseOptionsMenu
 
 	override function update(e:Float)
 	{
+		if (noteOptionID == BaseOptionsMenu.curSelected && FlxG.keys.justPressed.SPACE) popUpScore();
 		super.update(e);
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
