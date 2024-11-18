@@ -217,6 +217,85 @@ class RTXLight {
     }
 }
 
+class MotionBlurr extends FlxShader
+{
+    @:glFragmentSource('
+
+#define PI 3.14159265359
+#define rot(a) mat2(cos(a + PI*0.5*vec4(0,1,3,0)))
+
+float hash13(vec3 p3) {
+    p3  = fract(p3 * .1031);
+    p3 += dot(p3, p3.yzx + 19.19);
+    return fract((p3.x + p3.y) * p3.z);
+}
+
+vec3 scene(vec2 fragCoord, float time) {
+    vec2 uv = fragCoord - iResolution.xy*0.5;
+    uv /= iResolution.y;
+    uv *= 3.0;
+    uv *= rot(time*10.0 + (sin(time*2.0)*0.5+0.5)*10.0);
+    uv = abs(uv);
+    float sd = max(uv.x-0.5, uv.y-1.5);
+    return vec3(smoothstep(0.0, 0.04, sd));
+}
+
+uniform bool uMotionBlur;
+uniform int uBlurAmount;
+uniform float uTime;
+uniform int uFrame;
+
+void mainImage(out vec4 fragColor, in vec2 fragCoord) {
+    vec3 result = vec3(0);
+    
+    bool motionBlur = uMotionBlur; // use uniform variable
+    int blurAmount = uBlurAmount; // use uniform variable
+    float time = uTime; // use uniform variable
+    int frame = uFrame; // use uniform variable
+
+    if (motionBlur) {
+        for (int i = 0; i < blurAmount; i++) {
+            float rnd = hash13(vec3(fragCoord, frame*100+i));
+            float t = time + rnd / 60.0;
+            result += scene(fragCoord, t);
+        }
+        result /= float(blurAmount);
+    } else {
+        result = scene(fragCoord, time);
+    }
+    
+    fragColor.rgb = pow(result, vec3(1.0/2.2));
+    fragColor.a = 1.0;
+}
+    ')
+    public function new()
+    {
+        super();
+        setDefaults();
+    }
+
+    private function setDefaults():Void
+    {
+        setUniform('uMotionBlur', true);
+        setUniform('uBlurAmount', 30);
+        setUniform('uTime', 0.0);
+        setUniform('uFrame', 0);
+		setUniform('iResolution', [FlxG.width, FlxG.height]);
+    }
+
+	public function setUniform(name:String, value:Dynamic):Void
+	{
+		if (Reflect.hasField(this.data, name))
+		{
+			Reflect.field(this.data, name).value = value;
+		}
+		else
+		{
+			trace('Uniform ' + name + ' does not exist.');
+		}
+	}
+}
+
 class BuildingShader extends FlxShader
 {
 	@:glFragmentSource('
