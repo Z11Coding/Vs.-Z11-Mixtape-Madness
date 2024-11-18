@@ -217,6 +217,7 @@ class PlayState extends MusicBeatState
 	public var unspawnNotes:Array<Note> = [];
 	public var curChart:Array<Note> = [];
 	public var eventNotes:Array<EventNote> = [];
+	public var curEvents:Array<EventNote> = [];
 
 	public static var strumLine:FlxSprite;
 
@@ -275,6 +276,8 @@ class PlayState extends MusicBeatState
 	public var chartModifier:String = 'Normal';
 	public var convertMania:Int = ClientPrefs.getGameplaySetting('convertMania', 3);
 	public var opponentmode:Bool = ClientPrefs.getGameplaySetting('opponentplay', false);
+	public var loopMode:Bool = ClientPrefs.getGameplaySetting('loopMode', false);
+	public var loopModeChallenge:Bool = ClientPrefs.getGameplaySetting('loopModeC', false);
 
 	//Anticheat
 	var hadBotplayOn:Bool = false;
@@ -553,6 +556,8 @@ class PlayState extends MusicBeatState
 
 	var backupGpu:Bool;
 	public static var nextReloadAll:Bool = false;
+	var lastUpdateTime:Float = 0.0;
+	var endingTimeLimit:Int = 20;
 	override public function create()
 	{
 		try
@@ -1593,71 +1598,69 @@ class PlayState extends MusicBeatState
 	}
 
 	public function strumInit()
-		{
-			strumLineNotes = new FlxTypedGroup<StrumNote>();
-			add(strumLineNotes);
-	
-			if (ClientPrefs.data.timeBarType == 'Song Name')
-			{
-				timeTxt.size = 24;
-				timeTxt.y += 3;
-			}
-	
-			opponentStrums = new FlxTypedGroup<StrumNote>();
-			opponentStrums2 = new FlxTypedGroup<StrumNote>();
-			playerStrums = new FlxTypedGroup<StrumNote>();
-	
-			// startCountdown();
-	
-			modManager = new ModManager(this);
-	
-			callOnScripts("prePlayfieldCreation"); // backwards compat
-	
-			callOnScripts("onPlayfieldCreation"); // you should use this
-			playerField = new PlayField(modManager);
-			playerField.modNumber = 0;
-			playerField.characters = [];
-			playerField.noteField.isEditor = false;
-			for (n => ch in boyfriendMap)
-				playerField.characters.push(ch);
-			for (n => ch in boyfriendMap2)
-				playerField.characters.push(ch);
-	
-			playerField.isPlayer = !opponentmode && !playAsGF;
-			playerField.autoPlayed = opponentmode || cpuControlled || playAsGF;
-			playerField.noteHitCallback = opponentmode ? opponentNoteHit : goodNoteHit;
-	
-			dadField = new PlayField(modManager);
-			dadField.isPlayer = opponentmode && !playAsGF;
-			dadField.autoPlayed = !opponentmode || (opponentmode && cpuControlled) || playAsGF;
-			dadField.AIPlayer = AIMode;
-			dadField.modNumber = 1;
-			dadField.characters = [];
-			dadField.noteField.isEditor = false;
-			for (n => ch in dadMap)
-				dadField.characters.push(ch);
-			for (n => ch in dadMap2)
-				dadField.characters.push(ch);
-			dadField.noteHitCallback = opponentmode ? goodNoteHit : opponentNoteHit;
-	
-			playfields.add(dadField);
-			playfields.add(playerField);
-	
-			initPlayfield(dadField);
-			initPlayfield(playerField);
+	{
+		strumLineNotes = new FlxTypedGroup<StrumNote>();
+		add(strumLineNotes);
 
-			if (!playAsGF)
-				{
-					playerField.cameras = [camHUD];
-					dadField.cameras = [camHUD];
-					playfields.cameras = [camHUD];
-					strumLineNotes.cameras = [camHUD];
-				}
-	
-			callOnScripts("postPlayfieldCreation"); // backwards compat
-	
-			callOnScripts("onPlayfieldCreationPost");
-			return true;
+		if (ClientPrefs.data.timeBarType == 'Song Name')
+		{
+			timeTxt.size = 24;
+			timeTxt.y += 3;
+		}
+
+		opponentStrums = new FlxTypedGroup<StrumNote>();
+		opponentStrums2 = new FlxTypedGroup<StrumNote>();
+		playerStrums = new FlxTypedGroup<StrumNote>();
+
+		// startCountdown();
+
+		modManager = new ModManager(this);
+
+		callOnScripts("prePlayfieldCreation"); // backwards compat
+		callOnScripts("onPlayfieldCreation"); // you should use this
+		playerField = new PlayField(modManager);
+		playerField.modNumber = 0;
+		playerField.characters = [];
+		playerField.noteField.isEditor = false;
+		for (n => ch in boyfriendMap)
+			playerField.characters.push(ch);
+		for (n => ch in boyfriendMap2)
+			playerField.characters.push(ch);
+
+		playerField.isPlayer = !opponentmode && !playAsGF;
+		playerField.autoPlayed = opponentmode || cpuControlled || playAsGF;
+		playerField.noteHitCallback = opponentmode ? opponentNoteHit : goodNoteHit;
+
+		dadField = new PlayField(modManager);
+		dadField.isPlayer = opponentmode && !playAsGF;
+		dadField.autoPlayed = !opponentmode || (opponentmode && cpuControlled) || playAsGF;
+		dadField.AIPlayer = AIMode;
+		dadField.modNumber = 1;
+		dadField.characters = [];
+		dadField.noteField.isEditor = false;
+		for (n => ch in dadMap)
+			dadField.characters.push(ch);
+		for (n => ch in dadMap2)
+			dadField.characters.push(ch);
+		dadField.noteHitCallback = opponentmode ? goodNoteHit : opponentNoteHit;
+
+		playfields.add(dadField);
+		playfields.add(playerField);
+
+		initPlayfield(dadField);
+		initPlayfield(playerField);
+
+		if (!playAsGF)
+		{
+			playerField.cameras = [camHUD];
+			dadField.cameras = [camHUD];
+			playfields.cameras = [camHUD];
+			strumLineNotes.cameras = [camHUD];
+		}
+
+		callOnScripts("postPlayfieldCreation"); // backwards compat
+		callOnScripts("onPlayfieldCreationPost");
+		return true;
 	}		
 
 	function doStaticSign(lestatic:Int = 0)
@@ -2888,9 +2891,6 @@ class PlayState extends MusicBeatState
 
 	public function setSongTime(time:Float)
 	{
-		if (time < 0)
-			time = 0;
-
 		FlxG.sound.music.pause();
 		vocals.pause();
 		opponentVocals.pause();
@@ -2898,49 +2898,45 @@ class PlayState extends MusicBeatState
 		for (track in tracks)
 			track.pause();
 
-		FlxG.sound.music.time = time;
-		FlxG.sound.music.pitch = playbackRate;
+		FlxG.sound.music.time = time - Conductor.offset;
+		#if FLX_PITCH FlxG.sound.music.pitch = playbackRate; #end
 		FlxG.sound.music.play();
 
-		// I don't trust 0.7.3's new resync system...
-		if (Conductor.songPosition <= vocals.length)
+		if (Conductor.songPosition < vocals.length)
 		{
-			vocals.time = time;
-			#if FLX_PITCH
-			vocals.pitch = playbackRate;
-			#end
+			vocals.time = time - Conductor.offset;
+			#if FLX_PITCH vocals.pitch = playbackRate; #end
+			vocals.play();
 		}
-		if (Conductor.songPosition <= opponentVocals.length)
+		else vocals.pause();
+
+		if (Conductor.songPosition < opponentVocals.length)
 		{
-			opponentVocals.time = time;
-			#if FLX_PITCH
-			opponentVocals.pitch = playbackRate;
-			#end
+			opponentVocals.time = time - Conductor.offset;
+			#if FLX_PITCH opponentVocals.pitch = playbackRate; #end
+			opponentVocals.play();
 		}
-		if (Conductor.songPosition <= gfVocals.length)
+		else opponentVocals.pause();
+
+		if (Conductor.songPosition < gfVocals.length)
 		{
-			gfVocals.time = time;
-			#if FLX_PITCH
-			gfVocals.pitch = playbackRate;
-			#end
+			gfVocals.time = time - Conductor.offset;
+			#if FLX_PITCH gfVocals.pitch = playbackRate; #end
+			gfVocals.play();
 		}
+		else gfVocals.pause();
+
 		for (track in tracks)
 		{
-			if (Conductor.songPosition <= track.length)
+			if (Conductor.songPosition < track.length)
 			{
-				track.time = time;
-				#if FLX_PITCH
-				track.pitch = playbackRate;
-				#end
+				track.time = time - Conductor.offset;
+				#if FLX_PITCH track.pitch = playbackRate; #end
+				track.play();
 			}
+			else track.pause();
 		}
-		vocals.play();
-		opponentVocals.play();
-		gfVocals.play();
-		for (track in tracks)
-			track.play();
 		Conductor.songPosition = time;
-		songTime = time;
 	}
 
 	public function startNextDialogue()
@@ -3192,6 +3188,7 @@ if (result < 0 || result > mania) {
 	var debugNum:Int = 0;
 	var stair:Int = 0;
 	var noteIndex:Int = -1;
+	var reGenerating:Bool = false;
 	private var noteTypes:Array<String> = [];
 	private var eventsPushed:Array<String> = [];
 
@@ -3716,17 +3713,24 @@ if (result < 0 || result > mania) {
 						swagNote.x += FlxG.width / 2 + 25;
 					}
 				}
-				if (!noteTypes.contains(swagNote.noteType))
+
+				if (!reGenerating)
 				{
-					noteTypes.push(swagNote.noteType);
+					if (!noteTypes.contains(swagNote.noteType))
+					{
+						noteTypes.push(swagNote.noteType);
+					}
 				}
 			}
 			daBeats += 1;
 		}
 
-		for (event in songData.events) // Event Notes
-			for (i in 0...event[1].length)
-				makeEvent(event, i);
+		if (!reGenerating)
+		{
+			for (event in songData.events) // Event Notes
+				for (i in 0...event[1].length)
+					makeEvent(event, i);
+		}
 		// playerCounter += 1;
 		allNotes.sort(sortByNotes);
 		for (fuck in allNotes)
@@ -3909,21 +3913,25 @@ if (result < 0 || result > mania) {
 				}
 			}
 		}
-		#if LUA_ALLOWED
-		for (notetype in noteTypes)
-			startLuasNamed('custom_notetypes/' + notetype + '.lua');
-		for (event in eventsPushed)
-			startLuasNamed('custom_events/' + event + '.lua');
-		#end
 
-		#if HSCRIPT_ALLOWED
-		for (notetype in noteTypes)
-			startHScriptsNamed('custom_notetypes/' + notetype + '.hx');
-		for (event in eventsPushed)
-			startHScriptsNamed('custom_events/' + event + '.hx');
-		#end
-		noteTypes = null;
-		eventsPushed = null;
+		if (!reGenerating)
+		{
+			#if LUA_ALLOWED
+			for (notetype in noteTypes)
+				startLuasNamed('custom_notetypes/' + notetype + '.lua');
+			for (event in eventsPushed)
+				startLuasNamed('custom_events/' + event + '.lua');
+			#end
+
+			#if HSCRIPT_ALLOWED
+			for (notetype in noteTypes)
+				startHScriptsNamed('custom_notetypes/' + notetype + '.hx');
+			for (event in eventsPushed)
+				startHScriptsNamed('custom_events/' + event + '.hx');
+			#end
+			noteTypes = null;
+			eventsPushed = null;
+		}
 	}
 
 	private function generateSong(dataPath:String):Void
@@ -4161,6 +4169,7 @@ if (result < 0 || result > mania) {
 			value2: event[1][i][2]
 		};
 		eventNotes.push(subEvent);
+		curEvents.push(subEvent);
 		eventPushed(subEvent);
 		callOnScripts('onEventPushed', [
 			subEvent.event,
@@ -4715,7 +4724,6 @@ if (result < 0 || result > mania) {
 	}
 
 	var didntPress:Bool = false;
-
 	override public function update(elapsed:Float)
 	{
 		if (FlxG.keys.justPressed.NINE)
@@ -4730,7 +4738,7 @@ if (result < 0 || result > mania) {
 			ShadersHandler.rainShader.update(elapsed);
 		}
 
-		if (!isStoryMode && playbackRate == 1)
+		if (!isStoryMode)
 		{
 			var daNote:Note = allNotes[0];
 			if (daNote != null && daNote.strumTime > 100)
@@ -5307,6 +5315,17 @@ if (result < 0 || result > mania) {
 			Conductor.songPosition += FlxG.elapsed * 1000 * playbackRate;
 		}
 
+		if ((loopMode || loopModeChallenge) && startedCountdown && !endingSong) {
+			if (FlxG.sound.music.length - Conductor.songPosition <= endingTimeLimit) {
+				if (FlxG.sound.music.time < 0 || Conductor.songPosition < 0)
+				{
+					FlxG.sound.music.time = 0;
+					resyncVocals();
+				}
+				loopCallback(0);
+			}
+		}
+
 		if (skipActive && Conductor.songPosition >= skipTo)
 		{
 			remove(skipText);
@@ -5373,6 +5392,9 @@ if (result < 0 || result > mania) {
 					// Conductor.songPosition += FlxG.elapsed * 1000;
 					// trace('MISSED FRAME');
 				}
+
+				if (Conductor.songPosition - lastUpdateTime >= 1.0) lastUpdateTime = Conductor.songPosition;
+
 
 				if (updateTime)
 				{
@@ -5527,8 +5549,7 @@ if (result < 0 || result > mania) {
 		}
 		checkEventNote();
 
-		#if debug
-		if (!endingSong && !startingSong)
+		if (allowDebugKeys && !endingSong && !startingSong)
 		{
 			if (FlxG.keys.justPressed.ONE)
 			{
@@ -5536,12 +5557,16 @@ if (result < 0 || result > mania) {
 				FlxG.sound.music.onComplete();
 			}
 			if (FlxG.keys.justPressed.TWO)
-			{ // Go 10 seconds into the future :O
+			{ // Go 10 seconds into the future :D
 				setSongTime(Conductor.songPosition + 10000);
 				clearNotesBefore(Conductor.songPosition);
 			}
+			if (FlxG.keys.justPressed.THREE)
+			{ // Go 10 seconds into the past >:(
+				setSongTime(Conductor.songPosition - 10000);
+				clearNotesBefore(Conductor.songPosition);
+			}
 		}
-		#end
 
 		setOnScripts('cameraX', camFollow.x);
 		setOnScripts('cameraY', camFollow.y);
@@ -6053,6 +6078,79 @@ if (result < 0 || result > mania) {
 			FlxG.sound.music.stop();
 		#if DISCORD_ALLOWED DiscordClient.resetClientID(); #end
 		FlxG.switchState(new CharacterEditorState());
+	}
+
+	public function loopCallback(startingPoint:Float = 0) // this took so much effort to get working I really hope people use this
+	{
+		KillNotes(); //kill any existing notes
+		FlxG.sound.music.time = startingPoint;
+		if (SONG.needsVoices) setVocalsTime(startingPoint);
+		lastUpdateTime = startingPoint;
+		Conductor.songPosition = startingPoint;
+		Conductor.visualPosition = startingPoint;
+		curStep = lastStepHit = curBeat = lastBeatHit = curSection = stepsToDo = 0;
+		Conductor.mapBPMChanges(SONG);
+		Conductor.bpm = SONG.bpm;
+
+		reGenerating = true;
+		endingSong = false;
+
+		var AIPlayMap = [];
+
+		if (AIPlayer.active)
+			AIPlayMap = AIPlayer.GeneratePlayMap(SONG, AIPlayer.diff);
+
+		backend.Threader.runInThread(generateNotes(SONG, AIPlayMap), 0, "generateNotes");
+
+		if (!isStoryMode)
+		{
+			var daNote:Note = allNotes[0];
+			if (daNote != null && daNote.strumTime > 100)
+			{
+				needSkip = true;
+				skipTo = daNote.strumTime - 500;
+			}
+			else
+			{
+				needSkip = false;
+			}
+			
+		}
+
+		if (loopModeChallenge) playbackRate *= 1.05;
+
+		/*
+		allNotes = curChart.copy();
+		unspawnNotes = curChart.copy();
+		eventNotes = curEvents.copy();
+		for (n in unspawnNotes)
+			if (n.strumTime <= startingPoint)
+				notesToKill++;
+
+		for (e in eventNotes)
+			if (e.strumTime <= startingPoint)
+				eventsToRemove++;
+
+		if (notesToKill > 0)
+			unspawnNotes.splice(0, notesToKill);
+
+		if (eventsToRemove > 0)
+			eventNotes.splice(0, eventsToRemove);
+
+		var noteIndex:Int = 0;
+		while (unspawnNotes.length > 0 && unspawnNotes[noteIndex] != null)
+		{
+			var playfield:PlayField = playfields.members[unspawnNotes[noteIndex].fieldIndex];
+			//unspawnNotes[noteIndex].wasHit = false;
+			if (playfield != null)
+			{
+				playfield.queue(curChart[noteIndex]);
+				//trace("NOTE QUEUED!");
+			}
+			else trace("NOTE QUEUE FAILED!");
+			noteIndex++;
+		}
+		*/
 	}
 
 	public var isDead:Bool = false; // Don't mess with this on Lua!!!
@@ -7331,6 +7429,36 @@ if (result < 0 || result > mania) {
 		finishSong(false);
 	}
 
+	//Simple yet convenent functions frim JS-engine my belovid
+	public function unpauseVocals()
+	{
+		for (i in [vocals, opponentVocals, gfVocals])
+			if (i != null && i.time <= FlxG.sound.music.length)
+				i.resume();
+		for (track in tracks)
+			if (track != null && track.time <= FlxG.sound.music.length)
+				track.resume();
+	}
+	public function pauseVocals()
+	{
+		for (i in [vocals, opponentVocals, gfVocals])
+			if (i != null && i.time <= FlxG.sound.music.length)
+				i.pause();
+		for (track in tracks)
+			if (track != null && track.time <= FlxG.sound.music.length)
+				track.pause();
+	}
+	public function setVocalsTime(time:Float)
+	{
+		for (i in [vocals, opponentVocals, gfVocals])
+			if (i != null && i.time < vocals.length)
+				i.time = time;
+		for (track in tracks)
+			if (track != null && track.time < vocals.length)
+				track.time = time;
+	}
+	
+
 	public function finishSong(?ignoreNoteOffset:Bool = false):Void
 	{
 		var finishCallback:Void->Void = endSong; // In case you want to change it in a specific song.
@@ -7537,19 +7665,23 @@ if (result < 0 || result > mania) {
 
 	public function KillNotes()
 	{
-		while (allNotes.length > 0)
-		{
+		while(allNotes.length > 0) {
 			var daNote:Note = allNotes[0];
 			daNote.active = false;
 			daNote.visible = false;
 
 			daNote.kill();
-			allNotes.remove(daNote);
 			notes.remove(daNote, true);
 			// daNote.destroy();
 		}
 		allNotes = [];
 		unspawnNotes = [];
+		for(field in playfields){
+			field.clearDeadNotes();
+			field.spawnedNotes = [];
+			field.noteQueue = [[], [], [], []];
+		}
+
 		eventNotes = [];
 	}
 
@@ -9143,13 +9275,47 @@ if (result < 0 || result > mania) {
 	{
 		if (finishTimer != null) return;
 
-		//trace('resynced vocals at ' + Math.floor(Conductor.songPosition));
+		//Based JS-Engine code
+		FlxG.sound.music.pitch = vocals.pitch = opponentVocals.pitch = gfVocals.pitch = playbackRate;
+		for (track in tracks)
+			track.pitch = playbackRate;
+
+		if(!(Conductor.songPosition > 20 && FlxG.sound.music.time < 20))
+		{
+			pauseVocals();
+			FlxG.sound.music.pause();
+
+			if(FlxG.sound.music.time >= FlxG.sound.music.length)
+				Conductor.songPosition = FlxG.sound.music.length;
+			else
+				Conductor.songPosition = FlxG.sound.music.time;
+
+			setVocalsTime(Conductor.songPosition);
+
+			FlxG.sound.music.play();
+			for (i in [vocals, opponentVocals])
+				if (i != null && i.time <= i.length) i.play();
+		}
+		else
+		{
+			while(Conductor.songPosition > 20 && FlxG.sound.music.time < 20)
+			{
+				FlxG.sound.music.time = Conductor.songPosition;
+				setVocalsTime(Conductor.songPosition);
+
+				FlxG.sound.music.play();
+				for (i in [vocals, opponentVocals])
+					if (i != null && i.time <= i.length) i.play();
+			}
+		}
+
+		/*
+
+		* stinky old dodo code
 
 		vocals.pause();
 		opponentVocals.pause();
 		gfVocals.pause();
-		for (track in tracks)
-			track.pause();
 
 		FlxG.sound.music.play();
 		#if FLX_PITCH FlxG.sound.music.pitch = playbackRate; #end
@@ -9182,6 +9348,7 @@ if (result < 0 || result > mania) {
 		gfVocals.play();
 		for (track in tracks)
 			track.play();
+		*/
 	}
 
 	var lastStepHit:Int = -1;
@@ -9268,12 +9435,6 @@ if (result < 0 || result > mania) {
 		ArtemisIntegration.setBeat (curBeat);
 		ArtemisIntegration.setSongProgress ((Conductor.songPosition - ClientPrefs.data.noteOffset) / songLength * 100);
 		#end
-
-		if (lastBeatHit >= curBeat)
-		{
-			// trace('BEAT HIT: ' + curBeat + ', LAST HIT: ' + lastBeatHit);
-			return;
-		}
 
 		/*if (generatedMusic)
 			{
@@ -9446,6 +9607,13 @@ if (result < 0 || result > mania) {
 		{
 			lightningStrikeShitAlt();
 		}
+
+		if (lastBeatHit >= curBeat)
+		{
+			// trace('BEAT HIT: ' + curBeat + ', LAST HIT: ' + lastBeatHit);
+			return;
+		}
+
 		lastBeatHit = curBeat;
 
 		setOnScripts('curBeat', curBeat);

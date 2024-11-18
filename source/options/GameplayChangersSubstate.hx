@@ -76,7 +76,6 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		optionsArray.push(new GameplayOption('GF Mode', 'gfMode', 'bool', false));
 		optionsArray.push(new GameplayOption('Opponent Mode', 'opponentplay', 'bool', false));
 		optionsArray.push(new GameplayOption('"AI" Opponent', 'aiMode', 'bool', false));
-
 		var option:GameplayOption = new GameplayOption('"AI" Difficulty', 'aiDifficulty', 'int', 1);
 		option.scrollSpeed = 1;
 		option.minValue = 0;
@@ -84,6 +83,9 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		option.changeValue = 1;
 		option.displayFormat = '%v';
 		optionsArray.push(option);
+
+		optionsArray.push(new GameplayOption('Loop Mode', 'loopMode', 'bool', false));
+		optionsArray.push(new GameplayOption('Loop Challenge Mode', 'loopModeC', 'bool', false));
 	}
 
 	public function getOptionByName(name:String)
