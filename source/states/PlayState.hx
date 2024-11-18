@@ -104,6 +104,7 @@ typedef SpeedEvent =
 
 class PlayState extends MusicBeatState
 {
+	public var motionBlur:shaders.Shaders.MotionBlurr;
 	public var modManager:ModManager;
 
 	public static var songCache:Map<SwagSong, Array<Note>> = [];
@@ -599,6 +600,7 @@ class PlayState extends MusicBeatState
 		if(nextReloadAll) Paths.clearUnusedMemory();
 		nextReloadAll = false;
 		MemoryUtil.clearMajor();
+		motionBlur = new shaders.Shaders.MotionBlurr();
 
 		if (!CacheMode)
 		{
@@ -787,6 +789,7 @@ class PlayState extends MusicBeatState
 			filters.push(shaders.ShadersHandler.chromaticAberration);
 			camfilters2.push(shaders.ShadersHandler.chromaticAberration);
 			camfilters2.push(new ShaderFilter(ShadersHandler.rainShader));
+			// camfilters2.push(new ShaderFilter(motionBlur));
 			ShadersHandler.setupRainShader();
 			// camfilters2.push(shaders.ShadersHandler.rainShader);
 			/*filters.push(ShadersHandler.fuckingTriangle); //this shader has a cool feature for all the wrong reasons >:)
@@ -1204,7 +1207,8 @@ class PlayState extends MusicBeatState
 		timeBar.visible = showTime;
 		add(timeBar);
 		add(timeTxt);
-		backend.Threader.runInThread(strumInit(), 3, "playfieldCreation");
+		// backend.Threader.runInThread(strumInit(), 3, "playfieldCreation");
+		strumInit();
 
 		if (!CacheMode) {
 			if (chartModifier == "Normal") {
@@ -4022,7 +4026,8 @@ if (result < 0 || result > mania) {
 				}
 			}
 		}
-			backend.Threader.runInThread(generateNotes(songData, AIPlayMap), 0, "generateNotes");
+			// backend.Threader.runInThread(generateNotes(songData, AIPlayMap), 0, "generateNotes");
+			generateNotes(songData, AIPlayMap);
 
 	}
 

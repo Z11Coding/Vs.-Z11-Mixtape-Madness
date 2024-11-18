@@ -36,6 +36,7 @@ class ShadersHandler
 		sprite.shader = rtxShader;
     }
 
+
     public static function createLight(color:Array<Float>, brightness:Float, alpha:Float):RTXLight {
         return new RTXLight(color, brightness, alpha);
     }
