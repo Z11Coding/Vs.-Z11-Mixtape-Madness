@@ -462,7 +462,12 @@ class Main extends Sprite
 				Application.current.window.alert("Major Error occurred while caching data.\nSkipping Cache Operation.", "Fatal Error");
 				FlxG.switchState(new states.What());
 
-			case "OptionsState", "GameJoltState", "What":
+			case "What":
+				trace("Restarting Game...");
+				FlxG.switchState(new states.TitleState());
+
+
+			case "OptionsState", "GameJoltState":
 				// Show an error dialog and restart the game
 				if (Sys.args().indexOf("-livereload") != -1)
 				{

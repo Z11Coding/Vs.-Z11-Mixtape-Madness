@@ -1,202 +1,113 @@
 package states;
+import openfl.display.BlendMode;
+import flixel.util.FlxAxes;
+import flixel.addons.display.FlxBackdrop;
 import substates.Prompt;
-import flixel.math.FlxMath;
-import flixel.FlxSprite;
-import openfl.events.IOErrorEvent;
-import openfl.events.ErrorEvent;
-import flixel.util.FlxColor;
-import flixel.util.FlxColor;
-import flixel.text.FlxText;
-import openfl.system.System;
-import sys.io.Process;
-import openfl.events.Event;
+import lime.app.Application;
+import flixel.util.FlxTimer;
+import haxe.zip.Compress;
+import haxe.zip.Entry;
+import haxe.zip.Reader;
+import backend.util.JSEZip;
+import haxe.zip.Uncompress;
+import sys.io.File;
+import openfl.utils.ByteArray;
+import lime.utils.Bytes;
+import openfl.net.URLRequest;
+import lime.app.Event;
 import openfl.events.ProgressEvent;
-import sys.Http;
-import cpp.vm.Thread;
+import openfl.net.URLLoader;
+import haxe.zip.Writer;
+import flixel.math.FlxMath;
+import sys.FileSystem;
+import haxe.Http;
 import flixel.ui.FlxBar;
 import flixel.FlxG;
-import openfl.net.URLLoader;
-import openfl.net.URLLoaderDataFormat;
-import openfl.net.URLStream;
-import openfl.net.URLRequest;
-import openfl.utils.ByteArray;
-import sys.FileSystem;
-import sys.io.File;
-import sys.io.FileOutput;
+import flixel.util.FlxColor;
+import flixel.text.FlxText;
+import flixel.FlxSprite;
+import sys.io.Process;
+import flixel.util.FlxGradient;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
-
-using StringTools;
 
 class UpdateState extends MusicBeatState
 {
-	public var fileList:Array<String> = [];
-	public var baseURL:String;
-	public var downloadedFiles:Int = 0;
-	public var percentLabel:FlxText;
-	public var currentFileLabel:FlxText;
-	public var totalFiles:Int = 0;
-	
-    var bg:FlxTypedSpriteGroup<FlxSprite> = new FlxTypedSpriteGroup<FlxSprite>();
+	var progressText:FlxText;
+	var progBar_bg:FlxSprite;
+	var progressBar:FlxBar;
+	var entire_progress:Float = 0; // 0 to 100;
+	var download_info:FlxText;
 
-	var bf:FlxSprite;
+	public var online_url:String = "";
 
-	var error:Bool = false;
-	
-	public function new(baseURL:String = "http://raw.githubusercontent.com/Z11Coding/Z11-s-Modpack-Mixup-RELEASE/main/", fileList:Array<String>) 
-	{
-		super();
-		this.baseURL = baseURL;
-		this.fileList = fileList;
-		totalFiles = fileList.length;
-	}
+	var downloadedSize:Float = 0;
+	var content:String = "";
+	var maxFileSize:Float = 0;
 
-	var currentLoadedStream:URLLoader = null;
-	var currentFile:String;
-    
-    var w = 775;
+	var zip:URLLoader;
+	var text:FlxText;
+
+	var currentTask:String = "download_update"; // download_update,install_update
+
+	var loadingL:FlxSprite;
+	var w = 775;
     var h = 550;
 
-	function alright() {
-		downloadedFiles++;
-		percentLabel.text = '${Math.floor(downloadedFiles / totalFiles * 100)}%';
-		if (fileList.length > 0) {
-			doFile();
-		} else {
-			applyUpdate();
-		}
-	}
+	var listoSongs:Array<String> = [
+		'Breakfast', 
+		'Tea Time', 
+		'Celebration', 
+		'Drippy Genesis', 
+		'Reglitch', 
+		'False Memory', 
+		'Funky Genesis', 
+		'Late Night Cafe', 
+		'Late Night Jersey', 
+		'Silly Little Sample Song'
+	];
 
-	function doFile() {
-		oldBytesLoaded = 0;
-		var f = fileList.shift();
-		currentFile = f;
-		if (f == null) {
-			applyUpdate();
-			return;
-		}
-		if (FileSystem.exists('./_cache/$f')) { // prevents redownloading of the entire thing after it failed
-			sys.thread.Thread.create(function()
-				{
-			alright();
-				});
-			return;
-		}
-		if (!FileSystem.exists('./_cache/$f') && f != null)
-		{
-			var downloadStream = new URLLoader();
-			currentLoadedStream = downloadStream;
-			downloadStream.dataFormat = BINARY;
-	
-			//dumbass
-			var request = new URLRequest('$baseURL/$f'.replace(" ", "%20"));
-			var good = true;
-			var label1 = '(${totalFiles - fileList.length}/${totalFiles})';
-			var label2 = '( - / - )';
-			var maxLength:Int = Std.int(Math.max(label1.length, label2.length));
-			while(label1.length < maxLength) label1 = " " + label1;
-			while(label2.length < maxLength) label2 += " ";
-			currentFileLabel.text = 'Downloading File: $f\n$label1 | $label2';
-			downloadStream.addEventListener(IOErrorEvent.IO_ERROR, function(e) {
-				if (e.text.contains("404")) {
-					trace('File not found: $f');
-					alright();
-				} else {
-					openSubState(new substates.Prompt('Failed to download $f. \nMake sure you have a working internet connection,\nand try again.\n\nError ID: ${e.errorID}\n${e.text}', 
-					0, 
-					function() {
-						fileList.insert(0, f);
-						doFile();
-					},
-					function() {
-						doFile();
-					},
-					false,
-					'Retry',
-					'Skip'
-					));
-					persistentUpdate = false;
-				}
-			});
-			downloadStream.addEventListener(Event.COMPLETE, function(e) {
-				var array = [];
-				var dir = [for (k => e in (array = f.replace("\\", "/").split("/"))) if (k < array.length - 1) e].join("/");
-				FileSystem.createDirectory('./_cache/$dir');
-				var fileOutput:FileOutput = File.write('./_cache/$f', true);
-	
-				var data:ByteArray = new ByteArray();
-				downloadStream.data.readBytes(data, 0, downloadStream.data.length - downloadStream.data.position);
-				fileOutput.writeBytes(data, 0, data.length);
-				fileOutput.flush();
-				fileOutput.close();
-				alright();
-			});
-			downloadStream.addEventListener(ProgressEvent.PROGRESS, function(e) {
-				var label1 = '(${totalFiles - fileList.length}/${totalFiles})';
-				var label2 = '(${CoolUtil.getSizeLabel(Std.int(e.bytesLoaded))} / ${CoolUtil.getSizeLabel(Std.int(e.bytesTotal))})';
-				
-				var ll = CoolUtil.getSizeLabel(Std.int((e.bytesLoaded - oldBytesLoaded) / (t - oldTime)));
-				percentLabel.text = '${[for(i in 0...ll.length) " "].join("")}     ${Math.floor(((downloadedFiles / totalFiles) + (e.bytesLoaded / e.bytesTotal / totalFiles)) * 100)}% (${ll}/s)';
-				var maxLength:Int = Std.int(Math.max(label1.length, label2.length));
-				while(label1.length < maxLength) label1 = " " + label1;
-				while(label2.length < maxLength) label2 += " ";
-				currentFileLabel.text = 'Downloading File: $f\n$label1 | $label2';
-				
-				oldTime = t;
-				oldBytesLoaded = e.bytesLoaded;
-			});
-	
-	
-			downloadStream.load(request);
-		}
-	}
+	var gradientBar:FlxSprite;
+	var bg:FlxSprite;
+	var checker:FlxBackdrop;
 
-	public function applyUpdate() {
-		// apply update
-		FlxG.save.data.updated = true;
-		FlxG.save.flush();
-		// copy file to prevent overriding issues
-		File.copy('MixEngine.exe', 'temp.exe');
-
-		// launch that file
-		new Process('start /B temp.exe update', null);
-		System.exit(0);
-	}
 	public override function create() {
 		super.create();
 		FlxG.autoPause = false;
 
-		var loadingThingy = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK, true);
-        loadingThingy.pixels.lock();
-        var color1 = FlxColor.fromRGB(0, 0, 0);
-        var color2 = FlxColor.fromRGB(0, 0, 0);
-        for(x in 0...loadingThingy.pixels.width) {
-            for(y in 0...loadingThingy.pixels.height) {
-                loadingThingy.pixels.setPixel32(x, y, FlxColor.fromRGB(
-                    Std.int(FlxMath.remapToRange(((y / loadingThingy.pixels.height) * 1), 0, 1, color1.red, color2.red)),
-                    Std.int(FlxMath.remapToRange(((y / loadingThingy.pixels.height) * 1), 0, 1, color1.green, color2.green)),
-                    Std.int(FlxMath.remapToRange(((y / loadingThingy.pixels.height) * 1), 0, 1, color1.blue, color2.blue))
-                ));
-            }
-        }
-        loadingThingy.pixels.unlock();
-        add(loadingThingy);
-		
+		FlxG.sound.playMusic(Paths.music(listoSongs[FlxG.random.int(0, 10)]), 0);
+		FlxG.sound.music.pitch = 1;
 
-		for(x in 0...Math.ceil(FlxG.width / w)+1) {
-            for(y in 0...(Math.ceil(FlxG.height / h)+1)) {
-                // bg pattern
-                var pattern = new FlxSprite(x * w, y * h);
-                pattern.loadGraphic(Paths.image("loading/bgpattern", "preload"));
-                pattern.antialiasing = true;
-                bg.add(pattern);
-            }
-        }
-        add(bg);
+		FlxG.sound.music.fadeIn(4, 0, 0.7);
 
-		bf = new FlxSprite(337.60, 27.30).loadGraphic(Paths.image("loading/loading", "preload"));
-		bf.antialiasing = true;
-        bf.screenCenter(X);
-        add(bf);
+		bg = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
+		bg.scrollFactor.set(0, 0);
+		bg.setGraphicSize(Std.int(bg.width * 1.175));
+		bg.color = 0xff270138;
+		bg.updateHitbox();
+		bg.screenCenter();
+		bg.antialiasing = ClientPrefs.data.globalAntialiasing;
+		add(bg);
+
+		gradientBar = FlxGradient.createGradientFlxSprite(Math.round(FlxG.width), 512, [0x00ff0000, 0x55AE59E4, 0xAAFFA319], 1, 90, true);
+		gradientBar.y = FlxG.height - gradientBar.height;
+		add(gradientBar);
+		gradientBar.scrollFactor.set(0, 0);
+
+		checker = new FlxBackdrop(Paths.image('loading/bgpattern'), XY, Std.int(0.2), Std.int(0.2));
+		checker.blend = BlendMode.LAYER;
+		add(checker);
+		checker.scrollFactor.set(0, 0.07);
+
+		text = new FlxText(0, 0, 0, "Updating Your Mixtape...", 18);
+		text.setFormat(Paths.font('funkin.ttf'), 18, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
+		add(text);
+		text.screenCenter(X);
+		text.y = 290;
+
+		loadingL = new FlxSprite(337.60, 27.30).loadGraphic(Paths.image("loading/loading"));
+		loadingL.antialiasing = true;
+        loadingL.screenCenter(X);
+        add(loadingL);
 
         var loading = new FlxSprite().loadGraphic(Paths.image("loading/updating"));
         loading.scale.set(0.85, 0.85);
@@ -205,41 +116,252 @@ class UpdateState extends MusicBeatState
         loading.screenCenter(X);
         loading.antialiasing = true;
         add(loading);
+		
+		progBar_bg = new FlxSprite(FlxG.width / 2, text.y + 50).makeGraphic(500, 20, FlxColor.BLACK);
+		add(progBar_bg);
+		progBar_bg.x -= 250;
+		progressBar = new FlxBar(progBar_bg.x + 5, progBar_bg.y + 5, LEFT_TO_RIGHT, Std.int(progBar_bg.width - 10), Std.int(progBar_bg.height - 10), this,
+			"entire_progress", 0, 100);
+		progressBar.numDivisions = 3000;
+		progressBar.createFilledBar(0xFF4E2796, 0xFFFF7300);
+		add(progressBar);
 
+		progressText = new FlxText(progressBar.x, progressBar.y - 20, 0, "0%", 16);
+		progressText.setFormat(Paths.font('fnf1.ttf'), 16, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
+		add(progressText);
 
-		
-		var downloadBar = new FlxBar(0, 0, LEFT_TO_RIGHT, Std.int(FlxG.width * 0.75), 30, this, "downloadedFiles", 0, fileList.length);
-		downloadBar.createGradientBar([0x88222222], [0xFFFF9900, 0xFF6200FF], 1, 90, true, 0xFF000000);
-		downloadBar.screenCenter(X);
-		downloadBar.y = FlxG.height - 45;
-		downloadBar.scrollFactor.set(0, 0);
-		add(downloadBar);
-		
-		percentLabel = new FlxText(downloadBar.x, downloadBar.y + (downloadBar.height / 2), downloadBar.width, "0%");
-		percentLabel.setFormat(Paths.font("vcr.ttf"), 22, FlxColor.WHITE, CENTER, OUTLINE, 0xFF000000);
-		percentLabel.y -= percentLabel.height / 2;
-		add(percentLabel);
-		
-		currentFileLabel = new FlxText(0, downloadBar.y - 10, FlxG.width, "");
-		currentFileLabel.setFormat(Paths.font("vcr.ttf"), 22, FlxColor.WHITE, CENTER, OUTLINE, 0xFF000000);
-		currentFileLabel.y -= percentLabel.height * 2;
-		add(currentFileLabel);
-	
-		doFile();
+		download_info = new FlxText(progressBar.x + progBar_bg.width, progressBar.y + progBar_bg.height, 0, "0B / 0B", 16);
+		download_info.setFormat(Paths.font('fnf1.ttf'), 16, FlxColor.WHITE, CENTER, OUTLINE, FlxColor.BLACK);
+		add(download_info);
+
+		zip = new URLLoader();
+		zip.dataFormat = BINARY;
+		zip.addEventListener(ProgressEvent.PROGRESS, onDownloadProgress);
+		zip.addEventListener(openfl.events.Event.COMPLETE, onDownloadComplete);
+
+		getUpdateLink();
+		prepareUpdate();
+		startDownload();
 	}
 
 	var t:Float = 0;
-	var oldTime:Float = 0;
-	var oldBytesLoaded:Float = 0;
+	var lastVare:Float = 0;
+	var lastTrackedBytes:Float = 0;
+	var lastTime:Float = 0;
+	var time:Float = 0;
+	var speed:Float = 0;
+	var downloadTime:Float = 0;
+	var currentFile:String = "";
 	public override function update(elapsed:Float) {
 		t += elapsed; // for speed calculations
+		checker.x -= 0.45 / (ClientPrefs.data.framerate / 60);
+		checker.y -= 0.16 / (ClientPrefs.data.framerate / 60);
+		loadingL.angle = Math.sin(t / 10) * 10;
 
-		bg.x = -(w * t / 4) % w;
-		bg.y = -(h * t / 4) % h;
-        super.update(elapsed);
+		switch (currentTask)
+		{
+			case "download_update":
+				time += elapsed;
+				if (time > 1)
+				{
+					speed = downloadedSize - lastTrackedBytes;
+					lastTime = time;
+					lastTrackedBytes = downloadedSize;
+					time = 0;
 
-		bf.angle = Math.sin(t / 10) * 10;
+					// Divide file size by data speed to obtain download time.
+					downloadTime = ((maxFileSize-downloadedSize) / (speed));
+				}
+
+				if (downloadedSize != lastVare)
+				{
+					lastVare = downloadedSize;
+					download_info.text = convert_size(Std.int(downloadedSize)) + " / " + convert_size(Std.int(maxFileSize));
+					download_info.x = (progBar_bg.x + progBar_bg.width) - download_info.width;
+
+					entire_progress = (downloadedSize / maxFileSize) * 100;
+				}
+
+				progressText.text = FlxMath.roundDecimal(entire_progress, 2) + "%" + " - " + convert_size(Std.int(speed)) + "/s" + " - "
+					+ convert_time(downloadTime) + " remaining";
+			case "install_update":
+				entire_progress = (downloadedSize / maxFileSize) * 100;
+				progressText.text = FlxMath.roundDecimal(entire_progress, 2) + "%";
+				download_info.text = currentFile;
+				download_info.x = (progBar_bg.x + progBar_bg.width) - download_info.width;
+		}
 		
 		super.update(elapsed);
 	}
+
+	inline function getPlatform():String
+	{
+		#if windows
+		return 'windows';
+		#elseif mac
+		return 'macOS';
+		#elseif linux
+		return 'linux';
+		#elseif android
+		return 'android';
+		/*
+		#elseif ios
+		return 'iOS';
+		*/
+		#else
+		return '';
+		#end
+	}
+
+	inline function getUpdateLink()
+	{
+		var fileEnd = #if android 'apk' #else 'zip' #end;
+		online_url = "https://github.com/Z11Coding/Vs.-Z11-Mixtape-Madness/releases/download/" + FirstCheckState.updateVersion + '/Mixtape-Madness-${getPlatform()}.$fileEnd';
+		trace("update url: " + online_url);
+	}
+
+	function prepareUpdate()
+	{
+		trace("preparing update...");
+		trace("checking if update folder exists...");
+
+		if (!FileSystem.exists("./update/"))
+		{
+			trace("update folder not found, creating the directory...");
+			FileSystem.createDirectory("./update");
+			FileSystem.createDirectory("./update/temp/");
+			FileSystem.createDirectory("./update/raw/");
+		}
+		else
+		{
+			trace("update folder found");
+		}
+	}
+
+	var httpHandler:Http;
+	var fatalError:Bool = false;
+
+	public function startDownload()
+	{
+		trace("starting download process...");
+
+		final url:String = requestUrl(online_url);
+		if (url != null && url.indexOf('Not Found') != -1)
+		{
+			trace('File not found error!');
+			fatalError = true;
+		}
+
+		zip.load(new URLRequest(online_url));
+		if (fatalError)
+		{
+			// trace('File size is small! Assuming it couldn\'t find the url!');
+			lime.app.Application.current.window.alert('Couldn\'t find the URL for the file! Cancelling download!');
+			FlxG.resetGame();
+			return;
+		}
+
+		/*var aa = new Http(online_url);
+			aa.request();
+			trace(aa.responseHeaders);
+			trace(aa.responseHeaders.get("size"));
+
+			maxFileSize = Std.parseInt(aa.responseHeaders.get("size")); 
+
+			content = requestUrl(online_url);
+			sys.io.File.write(path, true).writeString(content);
+			trace(content.length + " bytes downloaded"); */
+	}
+
+	public function requestUrl(url:String):String
+	{
+		httpHandler = new Http(url);
+		var r = null;
+		httpHandler.onData = function(d)
+		{
+			r = d;
+		}
+		httpHandler.onError = function(e)
+		{
+			trace("error while downloading file, error: " + e);
+			fatalError = true;
+		}
+		httpHandler.request(false);
+		return r;
+	}
+
+	function convert_size(bytes:Int)
+	{
+		// public static String readableFileSize(long size) {
+		//	if(size <= 0) return "0";
+		//	final String[] units = new String[] { "B", "kB", "MB", "GB", "TB" };
+		//	int digitGroups = (int) (Math.log10(size)/Math.log10(1024));
+		//	return new DecimalFormat("#,##0.#").format(size/Math.pow(1024, digitGroups)) + " " + units[digitGroups];
+		// }
+		if (bytes == 0)
+		{
+			return "0B";
+		}
+
+		var size_name:Array<String> = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+		var digit:Int = Std.int(Math.log(bytes) / Math.log(1024));
+		return FlxMath.roundDecimal(bytes / Math.pow(1024, digit), 2) + " " + size_name[digit];
+	}
+
+	function convert_time(time:Float)
+	{
+		var seconds = Std.int(time % 60);
+		var minutes = Std.int((time / 60) % 60);
+		var hours = Std.int((time / (60 * 60)) % 24);
+
+		var secStr:String = (seconds < 10) ? "0" + seconds : Std.string(seconds);
+		var minStr:String = (minutes < 10) ? "0" + minutes : Std.string(minutes);
+		var hoeStr:String = (hours < 10) ? "0" + hours : Std.string(hours);
+
+		return hoeStr + ':' + minStr + ':' + secStr;
+	}
+
+	function onDownloadProgress(result:ProgressEvent)
+	{
+		downloadedSize = result.bytesLoaded;
+		maxFileSize = result.bytesTotal;
+	}
+
+	function onDownloadComplete(result:openfl.events.Event)
+	{
+		var path:String = './update/temp/'; // JS Engine ' + TitleState.onlineVer + ".zip";
+
+		if (!FileSystem.exists(path))
+		{
+			FileSystem.createDirectory(path);
+		}
+
+		if (!FileSystem.exists("./update/raw/"))
+		{
+			FileSystem.createDirectory("./update/raw/");
+		}
+
+		var fileBytes:Bytes = cast(zip.data, ByteArray);
+		text.text = "Update downloaded successfully, saving update file...";
+		text.screenCenter(X);
+		File.saveBytes(path + "Mixtape Madness v" + FirstCheckState.updateVersion + ".zip", fileBytes);
+		text.text = "Unpacking update file...";
+		text.screenCenter(X);
+		JSEZip.unzip(path + "Mixtape Madness v" + FirstCheckState.updateVersion + ".zip", "./update/raw/");
+		text.text = "Update has finished! The update will be installed shortly..";
+		text.screenCenter(X);
+
+		FlxG.sound.play(Paths.sound('confirmMenu'));
+
+		new FlxTimer().start(3, function(e:FlxTimer)
+		{
+			installUpdate("./update/raw/");
+		});
+	}
+
+	function installUpdate(updateFolder:String)
+	{
+		CoolUtil.updateTheEngine();
+	}
+
 }

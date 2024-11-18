@@ -232,6 +232,13 @@ class Song
 							songJson.format = 'psych_v1_convert';
 							convert(songJson);
 						}
+					case 'psych_v1_convert':
+						if(!fmt.startsWith('psych_v1')) //Convert to Psych 1.0 format
+						{
+							trace('converting chart $nameForError with format $fmt to psych_v1 format...');
+							songJson.format = 'psych_v1';
+							convert(songJson);
+						}
 					case 'mixtape_v1':
 						if(!fmt.startsWith('mixtape_v1')) //Convert to Mixtape 1.0 format
 						{
