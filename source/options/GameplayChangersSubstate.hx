@@ -86,6 +86,14 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 
 		optionsArray.push(new GameplayOption('Loop Mode', 'loopMode', 'bool', false));
 		optionsArray.push(new GameplayOption('Loop Challenge Mode', 'loopModeC', 'bool', false));
+		var option:GameplayOption = new GameplayOption('Challenge Mode Mult.', 'loopPlayMult', 'float', 1.05);
+		option.scrollSpeed = 1;
+		option.minValue = 1.05;
+		option.maxValue = 2;
+		option.changeValue = 0.05;
+		option.displayFormat = '%vX';
+		option.decimals = 2;
+		optionsArray.push(option);
 	}
 
 	public function getOptionByName(name:String)

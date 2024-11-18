@@ -278,6 +278,7 @@ class PlayState extends MusicBeatState
 	public var opponentmode:Bool = ClientPrefs.getGameplaySetting('opponentplay', false);
 	public var loopMode:Bool = ClientPrefs.getGameplaySetting('loopMode', false);
 	public var loopModeChallenge:Bool = ClientPrefs.getGameplaySetting('loopModeC', false);
+	public var loopPlayMult:Float = ClientPrefs.getGameplaySetting('loopPlayMult', 1.05);
 
 	//Anticheat
 	var hadBotplayOn:Bool = false;
@@ -5065,35 +5066,35 @@ if (result < 0 || result > mania) {
 			if (health <= 0.0475)
 			{
 				scoreTxt.text = "DON'T MISS!";
-				scoreTxt.borderColor = Std.parseInt("0xFFFF0000");
+				scoreTxt.borderColor = FlxColor.fromRGB(255,0,0);
 				playerScoreTxt.text = "DON'T MISS!";
-				playerScoreTxt.borderColor = Std.parseInt("0xFFFF0000");
+				playerScoreTxt.borderColor = FlxColor.fromRGB(255,0,0);
 				if (AIPlayer.active)
 				{
 					opponentScoreTxt.text = "DON'T MISS!";
-					opponentScoreTxt.borderColor = Std.parseInt("0xFFFF0000");
+					opponentScoreTxt.borderColor = FlxColor.fromRGB(255,0,0);
 				}
 			}
 			else if (ratingName == '?')
 			{
-				scoreTxt.borderColor = Std.parseInt("0xFFFFE600");
+				scoreTxt.borderColor = FlxColor.fromInt(Std.parseInt("0xFFFFE600"));
 				scoreTxt.text = ClientPrefs.data.mixupMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' | NPS: ' + nps;
-				scoreTxt.borderColor = Std.parseInt("0xFFFFE600");
+				scoreTxt.borderColor = FlxColor.fromInt(Std.parseInt("0xFFFFE600"));
 				scoreTxt.text = 'Misses: ' + songMisses + ' | NPS: ' + nps; // peeps wanted no integer rating
 				if (AIPlayer.active)
 				{
-					opponentScoreTxt.borderColor = Std.parseInt("0xFFFFE600");
+					opponentScoreTxt.borderColor = FlxColor.fromInt(Std.parseInt("0xFFFFE600"));
 					opponentScoreTxt.text = aiText; // peeps wanted no integer rating
 				}
-				playerScoreTxt.color = Std.parseInt("0xFFFFE600");
+				playerScoreTxt.color = FlxColor.fromInt(Std.parseInt("0xFFFFE600"));
 				playerScoreTxt.text = '['+daNameB+']\nScore: ' + songScore + '\nRating: ' + ratingName + ' ('
 					+ Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC; // peeps wanted no integer rating
 			}
 			else
 			{
 				scoreTxt.borderColor = gf != null ? FlxColor.fromRGB(gf.healthColorArray[0], gf.healthColorArray[1], gf.healthColorArray[2]) : FlxColor.BLACK;
-				scoreTxt.text = ClientPrefs.data.mixupMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' ('
-					+ Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC + ' | NPS: ' + nps; // peeps wanted no integer rating
+				scoreTxt.text = ClientPrefs.data.mixupMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps + " | PlaybackRate: " + playbackRate : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' ('
+					+ Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC + ' | NPS: ' + nps + " | PlaybackRate: " + playbackRate; // peeps wanted no integer rating
 				if (AIPlayer.active)
 				{
 					opponentScoreTxt.borderColor = FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]);
@@ -6102,22 +6103,7 @@ if (result < 0 || result > mania) {
 
 		backend.Threader.runInThread(generateNotes(SONG, AIPlayMap), 0, "generateNotes");
 
-		if (!isStoryMode)
-		{
-			var daNote:Note = allNotes[0];
-			if (daNote != null && daNote.strumTime > 100)
-			{
-				needSkip = true;
-				skipTo = daNote.strumTime - 500;
-			}
-			else
-			{
-				needSkip = false;
-			}
-			
-		}
-
-		if (loopModeChallenge) playbackRate *= 1.05;
+		if (loopModeChallenge) playbackRate *= loopPlayMult;
 
 		/*
 		allNotes = curChart.copy();
