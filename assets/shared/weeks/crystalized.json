@@ -1,0 +1,28 @@
+{
+	"songs": [
+		[
+			"Crystalized",
+			"Z_icon",
+			[
+				135,
+				53,
+				172
+			]
+		]
+	],
+	"category": "bonus",
+	"hiddenUntilUnlocked": false,
+	"hideFreeplay": false,
+	"weekBackground": "",
+	"difficulties": "Hard",
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"storyName": "",
+	"weekName": "Crystalized",
+	"hideStoryMode": false,
+	"weekBefore": "tutorial",
+	"startUnlocked": true
+}

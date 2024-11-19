@@ -217,82 +217,113 @@ class RTXLight {
     }
 }
 
-class MotionBlurr extends FlxShader
+class MotionBlurShader extends FlxShader
 {
     @:glFragmentSource('
 
-#define PI 3.14159265359
-#define rot(a) mat2(cos(a + PI*0.5*vec4(0,1,3,0)))
+	#pragma header
 
-float hash13(vec3 p3) {
-    p3  = fract(p3 * .1031);
-    p3 += dot(p3, p3.yzx + 19.19);
-    return fract((p3.x + p3.y) * p3.z);
-}
+	#define round(a) floor(a + 0.5)
+	#define iResolution vec3(openfl_TextureSize, 0.)
+	#define iChannel0 bitmap
+	uniform float iTime;
+	uniform sampler2D iChannel1;
+	uniform sampler2D iChannel2;
+	uniform sampler2D iChannel3;
+	#define texture flixel_texture2D
 
-vec3 scene(vec2 fragCoord, float time) {
-    vec2 uv = fragCoord - iResolution.xy*0.5;
-    uv /= iResolution.y;
-    uv *= 3.0;
-    uv *= rot(time*10.0 + (sin(time*2.0)*0.5+0.5)*10.0);
-    uv = abs(uv);
-    float sd = max(uv.x-0.5, uv.y-1.5);
-    return vec3(smoothstep(0.0, 0.04, sd));
-}
+	// third argument fix
+	vec4 flixel_texture2D(sampler2D bitmap, vec2 coord, float bias) {
+		vec4 color = texture2D(bitmap, coord, bias);
+		if (!hasTransform)
+		{
+			return color;
+		}
+		if (color.a == 0.0)
+		{
+			return vec4(0.0, 0.0, 0.0, 0.0);
+		}
+		if (!hasColorTransform)
+		{
+			return color * openfl_Alphav;
+		}
+		color = vec4(color.rgb / color.a, color.a);
+		mat4 colorMultiplier = mat4(0);
+		colorMultiplier[0][0] = openfl_ColorMultiplierv.x;
+		colorMultiplier[1][1] = openfl_ColorMultiplierv.y;
+		colorMultiplier[2][2] = openfl_ColorMultiplierv.z;
+		colorMultiplier[3][3] = openfl_ColorMultiplierv.w;
+		color = clamp(openfl_ColorOffsetv + (color * colorMultiplier), 0.0, 1.0);
+		if (color.a > 0.0)
+		{
+			return vec4(color.rgb * color.a * openfl_Alphav, color.a * openfl_Alphav);
+		}
+		return vec4(0.0, 0.0, 0.0, 0.0);
+	}
 
-uniform bool uMotionBlur;
-uniform int uBlurAmount;
-uniform float uTime;
-uniform int uFrame;
+	// variables which is empty, they need just to avoid crashing shader
+	uniform float iTimeDelta;
+	uniform float iFrameRate;
+	uniform int iFrame;
+	#define iChannelTime float[4](iTime, 0., 0., 0.)
+	#define iChannelResolution vec3[4](iResolution, vec3(0.), vec3(0.), vec3(0.))
+	uniform vec4 iMouse;
+	uniform vec4 iDate;
 
-void mainImage(out vec4 fragColor, in vec2 fragCoord) {
-    vec3 result = vec3(0);
-    
-    bool motionBlur = uMotionBlur; // use uniform variable
-    int blurAmount = uBlurAmount; // use uniform variable
-    float time = uTime; // use uniform variable
-    int frame = uFrame; // use uniform variable
+	#define PI 3.14159265359
+	#define rot(a) mat2(cos(a + PI*0.5*vec4(0,1,3,0)))
 
-    if (motionBlur) {
-        for (int i = 0; i < blurAmount; i++) {
-            float rnd = hash13(vec3(fragCoord, frame*100+i));
-            float t = time + rnd / 60.0;
-            result += scene(fragCoord, t);
-        }
-        result /= float(blurAmount);
-    } else {
-        result = scene(fragCoord, time);
-    }
-    
-    fragColor.rgb = pow(result, vec3(1.0/2.2));
-    fragColor.a = 1.0;
-}
+	float hash13(vec3 p3) {
+		p3  = fract(p3 * .1031);
+		p3 += dot(p3, p3.yzx + 19.19);
+		return fract((p3.x + p3.y) * p3.z);
+	}
+
+	vec3 scene(vec2 fragCoord, float time) {
+		vec2 uv = fragCoord - iResolution.xy*0.5;
+		uv /= iResolution.y;
+		uv *= 3.0;
+		uv *= rot(time*10.0 + (sin(time*2.0)*0.5+0.5)*10.0);
+		uv = abs(uv);
+		float sd = max(uv.x-0.5, uv.y-1.5);
+		return vec3(smoothstep(0.0, 0.04, sd));
+	}
+
+	void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
+		vec3 result = vec3(0);
+		
+		bool motionBlur = true; // change this
+		if ( motionBlur ) {
+			#define BLUR 30
+			for (int i = 0 ; i < BLUR ; i++) {
+				float rnd = hash13(vec3(fragCoord, iFrame*100+i));
+				float time = iTime + rnd / 60.0;
+				result += scene(fragCoord, time);
+			}
+			result /= float(BLUR);
+		} else {
+			result = scene(fragCoord, iTime);
+		}
+		
+		fragColor.rgb = pow(result, vec3(1.0/2.2));
+		fragColor.a = 1.0;
+	}
+
+	void main() {
+		mainImage(gl_FragColor, openfl_TextureCoordv*openfl_TextureSize);
+	}
     ')
-    public function new()
-    {
-        super();
-        setDefaults();
-    }
+}
 
-    private function setDefaults():Void
-    {
-        setUniform('uMotionBlur', true);
-        setUniform('uBlurAmount', 30);
-        setUniform('uTime', 0.0);
-        setUniform('uFrame', 0);
-		setUniform('iResolution', [FlxG.width, FlxG.height]);
-    }
+class MotionBlur
+{
+	public var shader:MotionBlurShader = new MotionBlurShader();
 
-	public function setUniform(name:String, value:Dynamic):Void
+	public function new() {}
+
+	public function updateBlur(alpha:Float)
 	{
-		if (Reflect.hasField(this.data, name))
-		{
-			Reflect.field(this.data, name).value = value;
-		}
-		else
-		{
-			trace('Uniform ' + name + ' does not exist.');
-		}
+		shader.data.iTime.value = [alpha];
 	}
 }
 

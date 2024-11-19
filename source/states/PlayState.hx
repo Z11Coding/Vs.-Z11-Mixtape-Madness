@@ -104,7 +104,7 @@ typedef SpeedEvent =
 
 class PlayState extends MusicBeatState
 {
-	public var motionBlur:shaders.Shaders.MotionBlurr;
+	public var motionBlur:shaders.Shaders.MotionBlur;
 	public var modManager:ModManager;
 
 	public static var songCache:Map<SwagSong, Array<Note>> = [];
@@ -606,7 +606,7 @@ class PlayState extends MusicBeatState
 		if(nextReloadAll) Paths.clearUnusedMemory();
 		nextReloadAll = false;
 		MemoryUtil.clearMajor();
-		motionBlur = new shaders.Shaders.MotionBlurr();
+		//motionBlur = new shaders.Shaders.MotionBlur(); 	
 
 		if (!CacheMode)
 		{
@@ -1047,18 +1047,18 @@ class PlayState extends MusicBeatState
 		add(luaDebugGroup);
 		#end
 
-		// "GLOBAL" SCRIPTS
 		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+		// "SCRIPTS FOLDER" SCRIPTS
 		for (folder in Mods.directoriesWithFile(Paths.getSharedPath(), 'scripts/'))
 			for (file in FileSystem.readDirectory(folder))
 			{
 				#if LUA_ALLOWED
-				if (file.toLowerCase().endsWith('.lua'))
+				if(file.toLowerCase().endsWith('.lua'))
 					new FunkinLua(folder + file);
 				#end
 
 				#if HSCRIPT_ALLOWED
-				if (file.toLowerCase().endsWith('.hx'))
+				if(file.toLowerCase().endsWith('.hx'))
 					initHScript(folder + file);
 				#end
 			}
@@ -1142,6 +1142,8 @@ class PlayState extends MusicBeatState
 		{
 			bf2 = null;
 		}
+
+		//dad.shader = motionBlur.shader;
 
 		var camPos:FlxPoint = new FlxPoint(girlfriendCameraOffset[0], girlfriendCameraOffset[1]);
 		if (gf != null)
@@ -1417,23 +1419,27 @@ class PlayState extends MusicBeatState
 		if (hasMetadataFile)
 		{
 			songTxt.text = metadata.song.name;
-			artistTxt.text = 'Composed by: '+metadata.song.artist;
-			charterTxt.text = 'Charted by: '+metadata.song.charter;
-			modTxt.text = 'Song From: '+metadata.song.mod;
+			if (metadata.song.artist != null && metadata.song.artist.length > 0) artistTxt.text = 'Composed by: '+metadata.song.artist;
+			if (metadata.song.charter != null && metadata.song.charter.length > 0) charterTxt.text = 'Charted by: '+metadata.song.charter;
+			if (metadata.song.mod != null && metadata.song.mod.length > 0) modTxt.text = 'Song From: '+metadata.song.mod;
 		}
 
 		for (i in 0...Text.length)
 		{
-			introStageBar = new FlxSprite(daText[i].x, if (i == 2) daText[i].y else daText[i].y - 25).loadGraphic(Paths.image('invisabar'));
-			introStageBar.scale.x = 2;
-			introStageBar.scale.y = 3;
-			introStageBar.scrollFactor.set();
-			introStageBar.updateHitbox();
-			introStageBar.screenCenter(X);
-			introStageBar.ID = i;
-			introStageBar.scrollFactor.set(0, 0);
-			introStageStuff.insert(0, introStageBar);
-			introStageStuff.insert(1, introStageText);
+			if (Text[i] != null && Text[i].length > 0)
+			{
+				//Dont ask
+				introStageBar = new FlxSprite(daText[i].x, if (i == 2) daText[i].y else daText[i].y - 25).loadGraphic(Paths.image('invisabar'));
+				introStageBar.scale.x = 2;
+				introStageBar.scale.y = 3;
+				introStageBar.scrollFactor.set();
+				introStageBar.updateHitbox();
+				introStageBar.screenCenter(X);
+				introStageBar.ID = i;
+				introStageBar.scrollFactor.set(0, 0);
+				introStageStuff.insert(0, introStageBar);
+				introStageStuff.insert(1, introStageText);
+			}
 		}
 		introStageStuff.visible = false;
 		introStageStuff.cameras = [camCredit];
@@ -1492,12 +1498,12 @@ class PlayState extends MusicBeatState
 			for (file in FileSystem.readDirectory(folder))
 			{
 				#if LUA_ALLOWED
-				if (file.toLowerCase().endsWith('.lua'))
+				if(file.toLowerCase().endsWith('.lua'))
 					new FunkinLua(folder + file);
 				#end
 
 				#if HSCRIPT_ALLOWED
-				if (file.toLowerCase().endsWith('.hx'))
+				if(file.toLowerCase().endsWith('.hx'))
 					initHScript(folder + file);
 				#end
 			}
@@ -3990,7 +3996,7 @@ if (result < 0 || result > mania) {
 				if (((dad.vocalsFile == null || dad.vocalsFile.length < 1) && dad.vocalsFile != 'gf')
 					&& ((boyfriend.vocalsFile == null || boyfriend.vocalsFile.length < 1) && boyfriend.vocalsFile != 'gf'))
 				{
-					var gfVoc = Paths.voices(songData.song, (gf.vocalsFile == null || gf.vocalsFile.length < 1) ? 'GF' : gf.vocalsFile);
+					var gfVoc = Paths.voices(songData.song, (gf.vocalsFile == null || gf.vocalsFile.length < 1) ? 'gf' : gf.vocalsFile);
 					if (gfVoc != null)
 					{
 						gfVocals.loadEmbedded(gfVoc != null ? gfVoc : Paths.music('empty'));
@@ -4734,6 +4740,12 @@ if (result < 0 || result > mania) {
 	{
 		if (FlxG.keys.justPressed.NINE)
 			iconP1.swapOldIcon();
+
+		/*if (motionBlur != null)
+		{
+			motionBlur.updateBlur(elapsed);
+			//motionBlur.setFrame(Std.int(elapsed));
+		}*/
 
 		CppAPI.updateTitle();
 
