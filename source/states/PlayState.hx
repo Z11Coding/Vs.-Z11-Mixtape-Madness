@@ -5340,7 +5340,18 @@ if (result < 0 || result > mania) {
 
 		if ((loopMode || loopModeChallenge) && startedCountdown && !endingSong) {
 			if (FlxG.sound.music.length - Conductor.songPosition <= endingTimeLimit) {
-				if (AIScore > songScore) die();
+				songAboutToLoop = true;
+				if (AIScore > songScore && AIMode) 
+				{
+					if (FlxG.sound.music.time < 0 || Conductor.songPosition < 0)
+					{
+						FlxG.sound.music.time = 0;
+						resyncVocals();
+					}
+					loopCallback(0);
+					endingSong = false;
+					die();
+				}
 				else
 				{
 					if (FlxG.sound.music.time < 0 || Conductor.songPosition < 0)
@@ -6107,6 +6118,7 @@ if (result < 0 || result > mania) {
 		FlxG.switchState(new CharacterEditorState());
 	}
 
+	var songAboutToLoop:Bool = false;
 	public function loopCallback(startingPoint:Float = 0) // this took so much effort to get working I really hope people use this
 	{
 		KillNotes(); //kill any existing notes
@@ -6121,6 +6133,7 @@ if (result < 0 || result > mania) {
 
 		reGenerating = true;
 		endingSong = false;
+		songAboutToLoop = false;
 
 		var AIPlayMap = [];
 
@@ -9488,7 +9501,7 @@ if (result < 0 || result > mania) {
 				notes.sort(FlxSort.byY, ClientPrefs.downScroll ? FlxSort.ASCENDING : FlxSort.DESCENDING);
 		}*/
 
-		if (curBeat % 32 == 0 && RandomSpeedChange)
+		if (curBeat % 32 == 0 && RandomSpeedChange && !songAboutToLoop)
 		{
 			//goes up to 3x speed cuz screw you thats why
 			var randomShit = FlxMath.roundDecimal(FlxG.random.float(0.45, 3), 2);
