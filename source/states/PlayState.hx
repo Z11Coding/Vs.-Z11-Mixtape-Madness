@@ -1894,8 +1894,8 @@ class PlayState extends MusicBeatState
 			vocals.pitch = value;
 			opponentVocals.pitch = value;
 			gfVocals.pitch = value;
-			for (track in tracks)
-				track.pitch = value;
+		try {	for (track in tracks)
+				track.pitch = value; } catch (e:Dynamic) { }
 			FlxG.sound.music.pitch = value;
 
 			var ratio:Float = playbackRate / value; // funny word huh
@@ -2913,8 +2913,9 @@ class PlayState extends MusicBeatState
 		vocals.pause();
 		opponentVocals.pause();
 		gfVocals.pause();
-		for (track in tracks)
+	try {	for (track in tracks)
 			track.pause();
+	} catch (e:Dynamic) {	trace('Error pausing track: ' + e);	}
 
 		FlxG.sound.music.time = time - Conductor.offset;
 		#if FLX_PITCH FlxG.sound.music.pitch = playbackRate; #end
@@ -2944,7 +2945,7 @@ class PlayState extends MusicBeatState
 		}
 		else gfVocals.pause();
 
-		for (track in tracks)
+	try {	for (track in tracks)
 		{
 			if (Conductor.songPosition < track.length)
 			{
@@ -2954,7 +2955,7 @@ class PlayState extends MusicBeatState
 			}
 			else track.pause();
 		}
-		Conductor.songPosition = time;
+		Conductor.songPosition = time; } catch (e:Dynamic) {	trace('Error playing track: ' + e);	}
 	}
 
 	public function startNextDialogue()
@@ -2975,10 +2976,10 @@ class PlayState extends MusicBeatState
 	function startSong():Void
 	{
 		startingSong = false;
-
+	
 		previousFrameTime = FlxG.game.ticks;
 		lastReportedPlayheadPosition = 0;
-
+	
 		@:privateAccess
 		FlxG.sound.playMusic(inst._sound, 1, false);
 		#if FLX_PITCH FlxG.sound.music.pitch = playbackRate; #end
@@ -2986,21 +2987,29 @@ class PlayState extends MusicBeatState
 		vocals.play();
 		opponentVocals.play();
 		gfVocals.play();
-		for (track in tracks)
-			track.play();
-
+		try {
+			for (track in tracks)
+				track.play();
+		} catch (e:Dynamic) {
+			trace('Error playing track: ' + e);
+		}
+	
 		if (startOnTime > 0)
 		{
 			setSongTime(startOnTime - 500);
 		}
 		startOnTime = 0;
-
+	
 		FlxG.sound.music.pause();
 		vocals.pause();
 		opponentVocals.pause();
 		gfVocals.pause();
-		for (track in tracks)
-			track.pause();
+		try {
+			for (track in tracks)
+				track.pause();
+		} catch (e:Dynamic) {
+			trace('Error pausing track: ' + e);
+		}
 		Conductor.songPosition += savedTime;
 		trace("Saved Time:" + savedTime);
 		if (savedTime != 0)
@@ -3009,8 +3018,12 @@ class PlayState extends MusicBeatState
 			vocals.pause();
 			opponentVocals.pause();
 			gfVocals.pause();
-			for (track in tracks)
-				track.pause();
+			try {
+				for (track in tracks)
+					track.pause();
+			} catch (e:Dynamic) {
+				trace('Error pausing track: ' + e);
+			}
 			Conductor.songPosition += savedTime;
 			trace("Saved Time:");
 			trace(savedTime);
@@ -3020,7 +3033,7 @@ class PlayState extends MusicBeatState
 				{
 					daNote.active = false;
 					daNote.visible = false;
-
+	
 					daNote.kill();
 					notes.remove(daNote, true);
 					daNote.destroy();
@@ -3033,46 +3046,54 @@ class PlayState extends MusicBeatState
 				{
 					break;
 				}
-
+	
 				daNote.active = false;
 				daNote.visible = false;
-
+	
 				daNote.kill();
 				unspawnNotes.splice(unspawnNotes.indexOf(daNote), 1);
 				daNote.destroy();
 			}
-
+	
 			FlxG.sound.music.time = Conductor.songPosition;
 			FlxG.sound.music.play();
-
+	
 			vocals.time = Conductor.songPosition;
 			vocals.play();
 			opponentVocals.time = Conductor.songPosition;
 			opponentVocals.play();
 			gfVocals.time = Conductor.songPosition;
 			gfVocals.play();
-			for (track in tracks)
-			{
-				track.time = Conductor.songPosition;
-				track.play();
+			try {
+				for (track in tracks)
+				{
+					track.time = Conductor.songPosition;
+					track.play();
+				}
+			} catch (e:Dynamic) {
+				trace('Error playing track: ' + e);
 			}
 		}
-
+	
 		FlxG.sound.music.time = Conductor.songPosition;
 		FlxG.sound.music.play();
-
+	
 		vocals.time = Conductor.songPosition;
 		vocals.play();
 		opponentVocals.time = Conductor.songPosition;
 		opponentVocals.play();
 		gfVocals.time = Conductor.songPosition;
 		gfVocals.play();
-		for (track in tracks)
-		{
-			track.time = Conductor.songPosition;
-			track.play();
+		try {
+			for (track in tracks)
+			{
+				track.time = Conductor.songPosition;
+				track.play();
+			}
+		} catch (e:Dynamic) {
+			trace('Error playing track: ' + e);
 		}
-
+	
 		if (needSkip && !skipActive)
 		{
 			skipActive = true;
@@ -3092,7 +3113,7 @@ class PlayState extends MusicBeatState
 			if (skipText != null)
 				FlxTween.tween(skipText, {alpha: 0}, 0.2);
 		}
-
+	
 		if (paused)
 		{
 			// trace('Oopsie doopsie! Paused sound');
@@ -3100,10 +3121,14 @@ class PlayState extends MusicBeatState
 			vocals.pause();
 			opponentVocals.pause();
 			gfVocals.pause();
-			for (track in tracks)
-				track.pause();
+			try {
+				for (track in tracks)
+					track.pause();
+			} catch (e:Dynamic) {
+				trace('Error pausing track: ' + e);
+			}
 		}
-
+	
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
 		FlxTween.tween(timeBar, {alpha: 1}, 0.5, {ease: FlxEase.circOut});
@@ -4496,8 +4521,12 @@ if (result < 0 || result > mania) {
 				if (gfVocals != null) gfVocals.pause();
 				if (tracks != null)
 				{
-					for (track in tracks)
-						track.pause();
+					try {
+						for (track in tracks)
+							track.pause();
+					} catch (e:Dynamic) {
+						trace('Error pausing track: ' + e);
+					}
 				}
 			}
 			lostFocus = true;
@@ -9302,8 +9331,8 @@ if (result < 0 || result > mania) {
 
 		//Based JS-Engine code
 		FlxG.sound.music.pitch = vocals.pitch = opponentVocals.pitch = gfVocals.pitch = playbackRate;
-		for (track in tracks)
-			track.pitch = playbackRate;
+	try {	for (track in tracks)
+			track.pitch = playbackRate; } catch (e:Dynamic) { }
 
 		if(!(Conductor.songPosition > 20 && FlxG.sound.music.time < 20))
 		{
@@ -9414,6 +9443,8 @@ if (result < 0 || result > mania) {
 			}
 		}
 
+		try {
+
 		for (track in tracks)
 		{
 			if (track != null)
@@ -9427,6 +9458,8 @@ if (result < 0 || result > mania) {
 				}
 			}
 		}
+
+	} catch (e:Dynamic) { }
 
 		if (gfScared && curStep % 2 == 0)
 		{

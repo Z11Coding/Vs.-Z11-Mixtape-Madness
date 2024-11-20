@@ -175,288 +175,59 @@
 			},
 			{
 				"sectionBeats": 4,
-				"exSection": true,
+				"sectionNotes": [],
+				"typeOfSection": 0,
+				"gfSection": false,
 				"altAnim": false,
 				"mustHitSection": true,
-				"typeOfSection": 0,
-				"sectionNotes": [
-					[
-						19800,
-						1,
-						0
-					],
-					[
-						19950,
-						3,
-						0
-					],
-					[
-						20025,
-						3,
-						0
-					],
-					[
-						20100,
-						0,
-						0
-					],
-					[
-						20250,
-						2,
-						0
-					],
-					[
-						20325,
-						3,
-						0
-					],
-					[
-						20400,
-						1,
-						75
-					],
-					[
-						20550,
-						0,
-						0
-					],
-					[
-						20625,
-						3,
-						0
-					],
-					[
-						20700,
-						2,
-						0
-					],
-					[
-						20775,
-						0,
-						0
-					],
-					[
-						20850,
-						1,
-						0
-					],
-					[
-						20925,
-						2,
-						0
-					]
-				],
-				"gfSection": false,
-				"bpm": 200,
-				"changeBPM": false
+				"changeBPM": false,
+				"bpm": 200
 			},
 			{
 				"sectionBeats": 4,
-				"exSection": true,
+				"sectionNotes": [],
+				"typeOfSection": 0,
+				"gfSection": false,
 				"altAnim": false,
 				"mustHitSection": true,
-				"typeOfSection": 0,
-				"sectionNotes": [
-					[
-						21000,
-						1,
-						0
-					],
-					[
-						21075,
-						0,
-						0
-					],
-					[
-						21150,
-						1,
-						75
-					],
-					[
-						21300,
-						2,
-						0
-					],
-					[
-						21375,
-						0,
-						0
-					],
-					[
-						21450,
-						1,
-						0
-					],
-					[
-						21525,
-						3,
-						0
-					],
-					[
-						21600,
-						1,
-						75
-					],
-					[
-						21750,
-						2,
-						0
-					],
-					[
-						21900,
-						3,
-						0
-					],
-					[
-						22050,
-						1,
-						0
-					]
-				],
-				"gfSection": false,
-				"bpm": 200,
-				"changeBPM": false
+				"changeBPM": false,
+				"bpm": 200
 			},
 			{
 				"sectionBeats": 4,
-				"exSection": true,
+				"sectionNotes": [],
+				"typeOfSection": 0,
+				"gfSection": false,
 				"altAnim": false,
 				"mustHitSection": true,
-				"typeOfSection": 0,
-				"sectionNotes": [
-					[
-						22200,
-						0,
-						150
-					],
-					[
-						22500,
-						2,
-						0
-					],
-					[
-						22575,
-						3,
-						0
-					],
-					[
-						22650,
-						1,
-						75
-					],
-					[
-						22800,
-						2,
-						0
-					],
-					[
-						22875,
-						3,
-						0
-					],
-					[
-						22950,
-						1,
-						0
-					],
-					[
-						23025,
-						3,
-						0
-					],
-					[
-						23100,
-						1,
-						75
-					],
-					[
-						23250,
-						0,
-						0
-					]
-				],
-				"gfSection": false,
-				"bpm": 200,
-				"changeBPM": false
+				"changeBPM": false,
+				"bpm": 200
 			},
 			{
 				"sectionBeats": 4,
-				"exSection": true,
+				"sectionNotes": [],
+				"typeOfSection": 0,
+				"gfSection": false,
 				"altAnim": false,
 				"mustHitSection": true,
-				"typeOfSection": 0,
-				"sectionNotes": [
-					[
-						23400,
-						1,
-						0
-					],
-					[
-						23550,
-						0,
-						0
-					],
-					[
-						23700,
-						1,
-						0
-					],
-					[
-						23775,
-						2,
-						0
-					],
-					[
-						23850,
-						3,
-						0
-					],
-					[
-						24000,
-						2,
-						0
-					],
-					[
-						24150,
-						3,
-						0
-					],
-					[
-						24300,
-						0,
-						0
-					],
-					[
-						24450,
-						2,
-						0
-					]
-				],
-				"gfSection": false,
-				"bpm": 200,
-				"changeBPM": false
+				"changeBPM": false,
+				"bpm": 200
 			},
 			{
 				"sectionBeats": 4,
-				"exSection": true,
-				"altAnim": false,
-				"mustHitSection": true,
-				"typeOfSection": 0,
 				"sectionNotes": [
 					[
-						24600,
-						1,
-						1125
-					],
-					[
-						24600,
+						24675,
 						3,
 						0
 					]
 				],
+				"typeOfSection": 0,
 				"gfSection": false,
-				"bpm": 200,
-				"changeBPM": false
+				"altAnim": false,
+				"mustHitSection": true,
+				"changeBPM": false,
+				"bpm": 200
 			},
 			{
 				"sectionBeats": 4,
@@ -2184,8 +1955,7 @@
 		"gfVersion": null,
 		"events": [],
 		"stage": "skylights",
-		"needsVoices": true,
-		"newVoiceStyle": true,
+		"needsVoices": false,
 		"bpm": 200
 	}
 }

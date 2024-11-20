@@ -1761,7 +1761,7 @@ class ChartingStateOG extends MusicBeatChartingState
 				"Opponent Vocals", 
 				opponentVocals.loadEmbedded(file)
 			);
-			FlxG.sound.list.add(vocals);
+			FlxG.sound.list.add(opponentVocals);
 		}else{
 			opponentVocals = null;
 		}
@@ -1771,7 +1771,7 @@ class ChartingStateOG extends MusicBeatChartingState
 				"GF Vocals", 
 				gfVocals.loadEmbedded(file)
 			);
-			FlxG.sound.list.add(vocals);
+			FlxG.sound.list.add(gfVocals);
 		}else{
 			gfVocals = null;
 		}
