@@ -118,16 +118,16 @@ class PlayState extends MusicBeatState
 	public static var STRUM_X_MIDDLESCROLL = -278;
 
 	public static var ratingStuff:Array<Dynamic> = [
-		['You Suck!', 0.2], // From 0% to 19%
-		['Shit', 0.4], // From 20% to 39%
-		['Bad', 0.5], // From 40% to 49%
-		['Bruh', 0.6], // From 50% to 59%
-		['Meh', 0.69], // From 60% to 68%
-		['Nice', 0.7], // 69%
-		['Good', 0.8], // From 70% to 79%
-		['Great', 0.9], // From 80% to 89%
-		['Sick!', 1], // From 90% to 99%
-		['Perfect!!', 1] // The value on this one isn't used actually, since Perfect is always "1"
+		['Ur Bad Kid. Ur Bad.', 0.2], //From 0% to 19%
+		['Really Bad', 0.4], //From 20% to 39%
+		['Bad', 0.5], //From 40% to 49%
+		['Bruh Momment', 0.6], //From 50% to 59%
+		['Ok I Guess...', 0.69], //From 60% to 68%
+		['Nice', 0.7], //69%
+		['Good', 0.8], //From 70% to 79%
+		['Great', 0.9], //From 80% to 89%
+		['Sick!', 1], //From 90% to 99%
+		['Botplay Because There Is Literally\nNo Way Your Actually Doing This.', 1] //The value on this one isn't used actually, since Perfect is always "1"
 	];
 
 	// event variables
@@ -554,7 +554,8 @@ class PlayState extends MusicBeatState
 	var artistTxt:FlxText;
 	var charterTxt:FlxText;
 	var modTxt:FlxText;
-	
+
+	public var RandomSpeedChange:Bool = ClientPrefs.getGameplaySetting('randomspeedchange', false);
 
 	var backupGpu:Bool;
 	public static var nextReloadAll:Bool = false;
@@ -2739,6 +2740,12 @@ class PlayState extends MusicBeatState
 		if (!instakillOnMiss) tempScore = Language.getPhrase('score_text', 'Score: {1} | Misses: {2} | Rating: {3}', [songScore, songMisses, str]);
 		else tempScore = Language.getPhrase('score_text_instakill', 'Score: {1} | Rating: {2}', [songScore, str]);
 		scoreTxt.text = tempScore;
+		if (ratingName == '?')
+		{
+			scoreTxt.borderColor = FlxColor.fromInt(Std.parseInt("0xFFFFE600"));
+			if (AIPlayer.active) opponentScoreTxt.borderColor = FlxColor.fromInt(Std.parseInt("0xFFFFE600"));
+			playerScoreTxt.color = FlxColor.fromInt(Std.parseInt("0xFFFFE600"));
+		}
 
 		if (!miss && !cpuControlled)
 			doScoreBop();
@@ -5095,9 +5102,7 @@ if (result < 0 || result > mania) {
 			else if (ratingName == '?')
 			{
 				scoreTxt.borderColor = FlxColor.fromInt(Std.parseInt("0xFFFFE600"));
-				scoreTxt.text = ClientPrefs.data.mixupMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' | NPS: ' + nps;
-				scoreTxt.borderColor = FlxColor.fromInt(Std.parseInt("0xFFFFE600"));
-				scoreTxt.text = 'Misses: ' + songMisses + ' | NPS: ' + nps; // peeps wanted no integer rating
+				scoreTxt.text = ClientPrefs.data.mixupMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' | NPS: ' + nps + " | PlaybackRate: " + playbackRate;
 				if (AIPlayer.active)
 				{
 					opponentScoreTxt.borderColor = FlxColor.fromInt(Std.parseInt("0xFFFFE600"));
@@ -5109,7 +5114,7 @@ if (result < 0 || result > mania) {
 			}
 			else
 			{
-				scoreTxt.borderColor = gf != null ? FlxColor.fromRGB(gf.healthColorArray[0], gf.healthColorArray[1], gf.healthColorArray[2]) : FlxColor.BLACK;
+				scoreTxt.borderColor = gf != null && FlxColor.fromRGB(gf.healthColorArray[0], gf.healthColorArray[1], gf.healthColorArray[2]) != 0xFFFFFFFF ? FlxColor.fromRGB(gf.healthColorArray[0], gf.healthColorArray[1], gf.healthColorArray[2]) : FlxColor.BLACK;
 				scoreTxt.text = ClientPrefs.data.mixupMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps + " | PlaybackRate: " + playbackRate : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' ('
 					+ Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC + ' | NPS: ' + nps + " | PlaybackRate: " + playbackRate; // peeps wanted no integer rating
 				if (AIPlayer.active)
@@ -5335,12 +5340,16 @@ if (result < 0 || result > mania) {
 
 		if ((loopMode || loopModeChallenge) && startedCountdown && !endingSong) {
 			if (FlxG.sound.music.length - Conductor.songPosition <= endingTimeLimit) {
-				if (FlxG.sound.music.time < 0 || Conductor.songPosition < 0)
+				if (AIScore > songScore) die();
+				else
 				{
-					FlxG.sound.music.time = 0;
-					resyncVocals();
+					if (FlxG.sound.music.time < 0 || Conductor.songPosition < 0)
+					{
+						FlxG.sound.music.time = 0;
+						resyncVocals();
+					}
+					loopCallback(0);
 				}
-				loopCallback(0);
 			}
 		}
 
@@ -9421,6 +9430,41 @@ if (result < 0 || result > mania) {
 		callOnScripts('onStepHit');
 	}
 
+	public function lerpSongSpeed(num:Float, time:Float):Void
+	{
+		FlxTween.num(playbackRate, num, time, {onUpdate: function(tween:FlxTween){
+			var ting = FlxMath.lerp(playbackRate, num, tween.percent);
+			if (ting != 0) //divide by 0 is a verry bad
+				playbackRate = ting; //why cant i just tween a variable
+
+			//FlxG.sound.music.time = Conductor.songPosition;
+			resyncVocals();
+		}});
+
+		var staticLinesNum = FlxG.random.int(3, 5);
+		for (i in 0...staticLinesNum)
+		{
+			var startPos = FlxG.random.float(0, FlxG.height);
+			var endPos = FlxG.random.float(0, FlxG.height);
+
+			var line:FlxSprite = new FlxSprite().loadGraphic(Paths.image("effects/staticline"));
+			line.y = startPos;
+			line.updateHitbox();
+			line.cameras = [camHUD];
+			line.alpha = 0.3;
+	
+			line.screenCenter(X);
+			add(line);
+			FlxTween.tween(line, {y: endPos}, time, {
+				ease: FlxEase.circInOut,
+				onComplete: function(twn:FlxTween)
+				{
+					line.destroy();
+				}
+			});
+		}
+	}
+
 	var lightningStrikeBeat:Int = 0;
 	var lightningOffset:Int = 8;
 	var lastBeatHit:Int = -1;
@@ -9443,6 +9487,13 @@ if (result < 0 || result > mania) {
 			{
 				notes.sort(FlxSort.byY, ClientPrefs.downScroll ? FlxSort.ASCENDING : FlxSort.DESCENDING);
 		}*/
+
+		if (curBeat % 32 == 0 && RandomSpeedChange)
+		{
+			//goes up to 3x speed cuz screw you thats why
+			var randomShit = FlxMath.roundDecimal(FlxG.random.float(0.45, 3), 2);
+			lerpSongSpeed(randomShit, 1);
+		}
 
 		if (curBeat % 4 / gfSpeed == 0)
 			didLastBeat = false;

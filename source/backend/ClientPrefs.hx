@@ -132,13 +132,21 @@ import states.FirstCheckState;
 		// just fine. but I wont implement it because I don't know how you handle sustains and other stuff like that.
 		// oh yeah when you calculate the bps divide it by the songSpeed or rate because it wont scroll correctly when speeds exist.
 		'songspeed' => 1.0,
+		'randomspeedchange' => false,
 		'healthgain' => 1.0,
 		'healthloss' => 1.0,
+		'chartModifier' => 'Normal',
+		'convertMania' => 3,
 		'instakill' => false,
 		'practice' => false,
 		'botplay' => false,
+		'gfMode' => false,
 		'opponentplay' => false,
-		'gfMode' => false
+		'aiMode' => false,
+		'aiDifficulty' => 5,
+		'loopMode' => false,
+		'loopModeC' => false,
+		'loopPlayMult' => 1.05,
 	];
 	public var inputSystem:String = 'Native';
 	public var volUp:String = 'Volup';

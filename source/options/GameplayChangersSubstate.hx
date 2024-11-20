@@ -44,6 +44,8 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		option.displayFormat = '%vX';
 		option.decimals = 2;
 		optionsArray.push(option);
+
+		optionsArray.push(new GameplayOption('Random Playback Rate', 'randomspeedchange', 'bool', false));
 		#end
 
 		var option:GameplayOption = new GameplayOption('Health Gain Multiplier', 'healthgain', 'float', 1);
@@ -76,7 +78,7 @@ class GameplayChangersSubstate extends MusicBeatSubstate
 		optionsArray.push(new GameplayOption('GF Mode', 'gfMode', 'bool', false));
 		optionsArray.push(new GameplayOption('Opponent Mode', 'opponentplay', 'bool', false));
 		optionsArray.push(new GameplayOption('"AI" Opponent', 'aiMode', 'bool', false));
-		var option:GameplayOption = new GameplayOption('"AI" Difficulty', 'aiDifficulty', 'int', 1);
+		var option:GameplayOption = new GameplayOption('"AI" Difficulty', 'aiDifficulty', 'int', 5);
 		option.scrollSpeed = 1;
 		option.minValue = 0;
 		option.maxValue = 5;
