@@ -4065,6 +4065,7 @@ if (result < 0 || result > mania) {
 		{
 			for (trackName in SONG.extraTracks)
 			{
+				trace(trackName);
 				var newTrack = Paths.track(songData.song, trackName);
 				if (newTrack != null)
 				{
@@ -4073,8 +4074,8 @@ if (result < 0 || result > mania) {
 				}
 			}
 		}
-			// backend.Threader.runInThread(generateNotes(songData, AIPlayMap), 0, "generateNotes");
-			generateNotes(songData, AIPlayMap);
+		// backend.Threader.runInThread(generateNotes(songData, AIPlayMap), 0, "generateNotes");
+		generateNotes(songData, AIPlayMap);
 
 	}
 
