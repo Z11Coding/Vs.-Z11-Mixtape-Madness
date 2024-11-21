@@ -4,12 +4,11 @@ import flixel.FlxBasic;
 import objects.Character;
 import psychlua.LuaUtils;
 import psychlua.CustomSubstate;
+import backend.modchart.SubModifier;
 
 #if LUA_ALLOWED
 import psychlua.FunkinLua;
 #end
-
-import backend.modchart.SubModifier;
 
 #if HSCRIPT_ALLOWED
 import crowplexus.iris.Iris;
@@ -99,7 +98,7 @@ class HScript extends Iris
 		execute();
 	}
 
-	var varsToBring:Any = null;
+	var varsToBring(default, set):Any = null;
 	override function preset() {
 		super.preset();
 
@@ -267,7 +266,7 @@ class HScript extends Iris
 		{
 			if(funk == null) funk = parentLua;
 			
-			if(parentLua != null) funk.addLocalCallback(name, func);
+			if(funk != null) funk.addLocalCallback(name, func);
 			else FunkinLua.luaTrace('createCallback ($name): 3rd argument is null', false, false, FlxColor.RED);
 		});
 		#end
@@ -410,16 +409,6 @@ class HScript extends Iris
 		#else
 		set("VideoSprite", objects.VideoSprite);
 		#end
-
-		if(varsToBring != null) {
-			for (key in Reflect.fields(varsToBring)) {
-				key = key.trim();
-				var value = Reflect.field(varsToBring, key);
-				//trace('Key $key: $value');
-				set(key, Reflect.field(varsToBring, key));
-			}
-			varsToBring = null;
-		}
 	}
 
 	public function executeCode(?funcToRun:String = null, ?funcArgs:Array<Dynamic> = null):IrisCall {
@@ -526,12 +515,41 @@ class HScript extends Iris
 	}
 	#end
 
+	override public function set(name:String, value:Dynamic, allowOverride:Bool = false):Void {
+		// should always override by default
+		super.set(name, value, true);
+	}
+
+	/*override function irisPrint(v):Void
+	{
+		FunkinLua.luaTrace('ERROR (${this.origin}:${interp.posInfos().lineNumber}): ${v}');
+		trace('[${ruleSet.name}:${interp.posInfos().lineNumber}]: ${v}\n');
+	}*/
+
 	override public function destroy()
 	{
 		origin = null;
 		#if LUA_ALLOWED parentLua = null; #end
 
 		super.destroy();
+	}
+
+	function set_varsToBring(values:Any) {
+		if (varsToBring != null)
+			for (key in Reflect.fields(varsToBring))
+				if(exists(key.trim()))
+					interp.variables.remove(key.trim());
+
+		if (values != null)
+		{
+			for (key in Reflect.fields(values))
+			{
+				key = key.trim();
+				set(key, Reflect.field(values, key));
+			}
+		}
+
+		return varsToBring = values;
 	}
 }
 

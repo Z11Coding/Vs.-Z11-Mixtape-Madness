@@ -39,6 +39,7 @@ import flixel.addons.display.FlxRuntimeShader;
 import openfl.filters.ShaderFilter;
 #end
 #if sys
+import flash.media.Sound;
 import sys.FileSystem;
 import sys.io.File;
 #end
@@ -1453,7 +1454,7 @@ class PlayState extends MusicBeatState
 				// dadField.cameras = [camHUD];
 				// playfields.cameras = [camHUD];
 				// strumLineNotes.cameras = [camHUD];
-				// 	if (notes != null) notes.cameras = [camHUD];
+				if (notes != null) notes.cameras = [camHUD];
 				healthBar.cameras = [camHUD];
 				healthBar2.cameras = [camHUD];
 				iconP1.cameras = [camHUD];
@@ -1797,14 +1798,12 @@ class PlayState extends MusicBeatState
 
 	#if (!flash && sys)
 	public var runtimeShaders:Map<String, Array<String>> = new Map<String, Array<String>>();
-
 	public function createRuntimeShader(name:String):FlxRuntimeShader
 	{
-		if (!ClientPrefs.data.shaders)
-			return new FlxRuntimeShader();
+		if(!ClientPrefs.data.shaders) return new FlxRuntimeShader();
 
 		#if (!flash && MODS_ALLOWED && sys)
-		if (!runtimeShaders.exists(name) && !initLuaShader(name))
+		if(!runtimeShaders.exists(name) && !initLuaShader(name))
 		{
 			FlxG.log.warn('Shader $name is missing!');
 			return new FlxRuntimeShader();
@@ -1820,11 +1819,10 @@ class PlayState extends MusicBeatState
 
 	public function initLuaShader(name:String, ?glslVersion:Int = 120)
 	{
-		if (!ClientPrefs.data.shaders)
-			return false;
+		if(!ClientPrefs.data.shaders) return false;
 
 		#if (MODS_ALLOWED && !flash && sys)
-		if (runtimeShaders.exists(name))
+		if(runtimeShaders.exists(name))
 		{
 			FlxG.log.warn('Shader $name was already initialized!');
 			return true;
@@ -1835,34 +1833,32 @@ class PlayState extends MusicBeatState
 			var frag:String = folder + name + '.frag';
 			var vert:String = folder + name + '.vert';
 			var found:Bool = false;
-			if (FileSystem.exists(frag))
+			if(FileSystem.exists(frag))
 			{
 				frag = File.getContent(frag);
 				found = true;
 			}
-			else
-				frag = null;
+			else frag = null;
 
-			if (FileSystem.exists(vert))
+			if(FileSystem.exists(vert))
 			{
 				vert = File.getContent(vert);
 				found = true;
 			}
-			else
-				vert = null;
+			else vert = null;
 
-			if (found)
+			if(found)
 			{
 				runtimeShaders.set(name, [frag, vert]);
-				// trace('Found shader $name!');
+				//trace('Found shader $name!');
 				return true;
 			}
 		}
-		#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
-		addTextToDebug('Missing shader $name .frag AND .vert files!', FlxColor.RED);
-		#else
-		FlxG.log.warn('Missing shader $name .frag AND .vert files!');
-		#end
+			#if (LUA_ALLOWED || HSCRIPT_ALLOWED)
+			addTextToDebug('Missing shader $name .frag AND .vert files!', FlxColor.RED);
+			#else
+			FlxG.log.warn('Missing shader $name .frag AND .vert files!');
+			#end
 		#else
 		FlxG.log.warn('This platform doesn\'t support Runtime Shaders!');
 		#end
@@ -3672,6 +3668,7 @@ if (result < 0 || result > mania) {
 				swagNote.mustPress = gottaHitNote;
 				swagNote.sustainLength = songNotes[2];
 				swagNote.gfNote = section.gfSection;
+				swagNote.exNote = section.exSection;
 				//swagNote.animSuffix = section.altAnim ? '-alt' : '';
 				swagNote.noteType = type;
 				swagNote.noteIndex = noteIndex++;
@@ -4061,16 +4058,22 @@ if (result < 0 || result > mania) {
 		}
 		FlxG.sound.list.add(inst);
 
-		if (SONG.extraTracks != null)
+		if (SONG.extraTracks != null && SONG.extraTracks.length > 0)
 		{
 			for (trackName in SONG.extraTracks)
 			{
 				trace(trackName);
-				var newTrack = Paths.track(songData.song, trackName);
-				if (newTrack != null)
+				var file:Dynamic = Paths.track(songData.song, trackName);
+				if (Std.isOfType(file, Sound) || OpenFlAssets.exists(file))
 				{
-					tracks.push(newTrack);
-					FlxG.sound.list.add(newTrack);
+					var newTrack = new FlxSound();
+
+					if (newTrack != null)
+					{
+						newTrack.loadEmbedded(file);
+						tracks.push(newTrack);
+						FlxG.sound.list.add(newTrack);
+					}
 				}
 			}
 		}
@@ -7494,6 +7497,7 @@ if (result < 0 || result > mania) {
 			if (track != null && track.time <= FlxG.sound.music.length)
 				track.resume();
 	}
+
 	public function pauseVocals()
 	{
 		for (i in [vocals, opponentVocals, gfVocals])
@@ -7503,6 +7507,7 @@ if (result < 0 || result > mania) {
 			if (track != null && track.time <= FlxG.sound.music.length)
 				track.pause();
 	}
+
 	public function setVocalsTime(time:Float)
 	{
 		for (i in [vocals, opponentVocals, gfVocals])
@@ -9348,8 +9353,10 @@ if (result < 0 || result > mania) {
 			setVocalsTime(Conductor.songPosition);
 
 			FlxG.sound.music.play();
-			for (i in [vocals, opponentVocals])
+			for (i in [vocals, opponentVocals, gfVocals])
 				if (i != null && i.time <= i.length) i.play();
+			for (track in tracks)
+				if (track != null && track.time <= track.length) track.play();
 		}
 		else
 		{
@@ -9359,8 +9366,10 @@ if (result < 0 || result > mania) {
 				setVocalsTime(Conductor.songPosition);
 
 				FlxG.sound.music.play();
-				for (i in [vocals, opponentVocals])
+				for (i in [vocals, opponentVocals, gfVocals])
 					if (i != null && i.time <= i.length) i.play();
+				for (track in tracks)
+					if (track != null && track.time <= track.length) track.play();
 			}
 		}
 
