@@ -3716,6 +3716,7 @@ if (result < 0 || result > mania) {
 						var sustainNote:Note = new Note(daStrumTime + (Conductor.stepCrochet * susNote) + (Conductor.stepCrochet), daNoteData, oldNote, true);
 						sustainNote.mustPress = gottaHitNote;
 						sustainNote.gfNote = swagNote.gfNote;
+						sustainNote.exNote = swagNote.exNote;
 						sustainNote.animSuffix = swagNote.animSuffix;
 						sustainNote.noteType = type;
 						sustainNote.noteIndex = swagNote.noteIndex;
@@ -9302,6 +9303,8 @@ if (result < 0 || result > mania) {
 
 	override function destroy()
 	{
+		WindowUtils.resetTitle();
+		Window.reset();
 		#if LUA_ALLOWED
 		for (lua in luaArray)
 		{

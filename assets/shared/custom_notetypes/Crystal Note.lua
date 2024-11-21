@@ -19,6 +19,9 @@ function onCreate()
 	--setPropertyFromClass("openfl.Lib", "application.window.borderless",true)
 end
 function onCreatePost()
+    for i = 0, 8 do
+        initLuaShader(shaderList[i])
+    end
     setSpriteShader("dad", "Unstable")
     setSpriteShader("rain", 'starfield')
     setSpriteShader("iconP2", 'Unstable')
@@ -69,15 +72,16 @@ function onUpdatePost(elapsed)
 end
 
 function opponentNoteHit(a,b,c,d)
-    if getProperty("health") > 0.1 then
-        setProperty('health', getProperty("health") - 0.007)
-    end
     if c == 'Crystal Note' then
         active = true
         turnON = true
         runTimer('reset', 0.1)
         if getProperty("health") > 0.1 then
             setProperty('health', getProperty("health") - 0.08)
+        end
+    else
+        if getProperty("health") > 0.1 then
+            setProperty('health', getProperty("health") - 0.007)
         end
     end
 end
