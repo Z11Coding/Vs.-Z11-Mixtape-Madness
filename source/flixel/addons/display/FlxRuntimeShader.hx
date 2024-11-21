@@ -207,7 +207,7 @@ class FlxRuntimeShader extends FlxShader
 		}
 		else
 		{
-			trace('Loading fragment source from argument...');
+			//trace('Loading fragment source from argument...');
 			glFragmentSource = processFragmentSource(fragmentSource);
 		}
 

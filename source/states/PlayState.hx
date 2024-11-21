@@ -1145,6 +1145,7 @@ class PlayState extends MusicBeatState
 			bf2 = null;
 		}
 
+		//flixel.MotionBlurUtil.addMotionBlurToSprites(camGame, flixel.MotionBlur.MotionBlurQuality.HIGH);
 		//dad.shader = motionBlur.shader;
 
 		var camPos:FlxPoint = new FlxPoint(girlfriendCameraOffset[0], girlfriendCameraOffset[1]);

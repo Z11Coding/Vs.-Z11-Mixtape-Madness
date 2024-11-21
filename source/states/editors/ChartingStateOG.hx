@@ -3177,8 +3177,14 @@ class ChartingStateOG extends MusicBeatChartingState
 	var characterData:Dynamic = {
 		iconP1: null,
 		iconP2: null,
+		iconP3: null,
+		iconP4: null,
+		iconP5: null,
 		vocalsP1: null,
-		vocalsP2: null
+		vocalsP2: null,
+		vocalsP3: null,
+		vocalsP4: null,
+		vocalsP5: null
 	};
 
 	function updateJsonData():Void

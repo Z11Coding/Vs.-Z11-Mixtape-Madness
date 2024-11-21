@@ -61,6 +61,11 @@ local time = 0
 function onUpdatePost(elapsed)
     time = time + elapsed
     setShaderFloat("dad", "iTime", os.clock())
+    setShaderFloat("rain", "iTime", os.clock())
+    setShaderFloat("iconP2", "iTime", os.clock())
+    setShaderFloat("theAlley", "iTime", os.clock())
+    setShaderFloat("thegate", "iTime", os.clock())
+    setShaderFloat("healthBar.leftBar", "iTime", os.clock())
 end
 
 function opponentNoteHit(a,b,c,d)
