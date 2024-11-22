@@ -6115,9 +6115,9 @@ if (result < 0 || result > mania) {
 						case SINGLE:
 							iconP12.animation.curAnim.curFrame = 0;
 						case WINNING:
-							iconP12.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : (healthBar.percent < 20 ? 2 : 0));
+							iconP12.animation.curAnim.curFrame = (healthBar.percent > 80 ? 2 : (healthBar.percent < 20 ? 1 : 0));
 						default:
-							iconP12.animation.curAnim.curFrame = (healthBar.percent > 80 ? 1 : 0);
+							iconP12.animation.curAnim.curFrame = (healthBar.percent < 20 ? 1 : 0);
 					}
 				}
 			}
