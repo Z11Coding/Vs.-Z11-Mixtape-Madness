@@ -105,6 +105,7 @@ typedef SpeedEvent =
 
 class PlayState extends MusicBeatState
 {
+	private var specialOverlays:FlxTypedGroup<FlxSprite>;
 	public var motionBlur:shaders.Shaders.MotionBlur;
 	public var modManager:ModManager;
 
@@ -987,31 +988,37 @@ class PlayState extends MusicBeatState
 			case 'portal': new states.stages.Portal();
 		}
 
-		whiteBG = new FlxSprite(-480, -480).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.WHITE);
+		var zoomOut = 1 / defaultCamZoom;
+		var screenWidth = Std.int(FlxG.width * zoomOut * 2);
+		var screenHeight = Std.int(FlxG.height * zoomOut * 2);
+
+		whiteBG = new FlxSprite(-480, -480).makeGraphic(screenWidth, screenHeight, FlxColor.WHITE);
 		whiteBG.updateHitbox();
 		whiteBG.antialiasing = true;
 		whiteBG.scrollFactor.set(0, 0);
 		whiteBG.active = false;
-		// whiteBG.cameras;
 		whiteBG.alpha = 0.0;
 
-		blackOverlay = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
+		blackOverlay = new FlxSprite(0, 0).makeGraphic(screenWidth, screenHeight, FlxColor.BLACK);
 		blackOverlay.updateHitbox();
 		blackOverlay.screenCenter();
 		blackOverlay.antialiasing = true;
 		blackOverlay.scrollFactor.set(0, 0);
 		blackOverlay.active = false;
 		blackOverlay.alpha = 0;
-		blackOverlay.setGraphicSize(Std.int(blackOverlay.width * 10.5));
 
-		blackUnderlay = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
+		blackUnderlay = new FlxSprite(0, 0).makeGraphic(screenWidth, screenHeight, FlxColor.BLACK);
 		blackUnderlay.updateHitbox();
 		blackUnderlay.screenCenter();
 		blackUnderlay.antialiasing = true;
 		blackUnderlay.scrollFactor.set(0, 0);
 		blackUnderlay.active = false;
 		blackUnderlay.alpha = 0;
-		blackUnderlay.setGraphicSize(Std.int(blackUnderlay.width * 10.5));
+
+		specialOverlays = new FlxTypedGroup<FlxSprite>();
+		specialOverlays.add(whiteBG);
+		specialOverlays.add(blackOverlay);
+		specialOverlays.add(blackUnderlay);
 
 		if (isPixelStage)
 		{
@@ -2955,6 +2962,12 @@ class PlayState extends MusicBeatState
 			else track.pause();
 		}
 		Conductor.songPosition = time; } catch (e:Dynamic) {	trace('Error playing track: ' + e);	}
+		startCountdown();
+		// var AIPlayMap = [];
+
+		// if (AIPlayer.active)
+		// 	AIPlayMap = AIPlayer.GeneratePlayMap(SONG, AIPlayer.diff);
+		// generateNotes(SONG, AIPlayMap);
 	}
 
 	public function startNextDialogue()
@@ -4782,6 +4795,18 @@ if (result < 0 || result > mania) {
 	var didntPress:Bool = false;
 	override public function update(elapsed:Float)
 	{
+
+		specialOverlays.forEachAlive(function(sprite:FlxSprite) {
+			sprite.screenCenter();
+			if (sprite.alpha > 0){
+
+			var zoomOut = 1 / defaultCamZoom;
+			var screenWidth = Std.int(FlxG.width * zoomOut * 2);
+			var screenHeight = Std.int(FlxG.height * zoomOut * 2);
+
+			sprite.scale.set(screenWidth, screenHeight);
+			}
+		});
 		if (FlxG.keys.justPressed.NINE)
 			iconP1.swapOldIcon();
 
@@ -7161,7 +7186,7 @@ if (result < 0 || result > mania) {
 	{
 		if (gimmicksAllowed)
 		{
-			if (convertedvalue == 'black' || convertedvalue == 'Black')
+			if (convertedvalue.toLowerCase() == 'black')
 			{
 				FlxTween.tween(whiteBG, {alpha: 1}, 0.1);
 				FlxTween.tween(blackUnderlay, {alpha: 0}, 0.1);
@@ -7180,7 +7205,7 @@ if (result < 0 || result > mania) {
 				// gf.color = FlxColor.BLACK;
 				// dad.color = FlxColor.BLACK;
 			}
-			else if (convertedvalue == 'white' || convertedvalue == 'White')
+			else if (convertedvalue.toLowerCase() == 'white')
 			{
 				FlxTween.tween(blackUnderlay, {alpha: 1}, 0.1, {ease: FlxEase.sineInOut});
 				FlxTween.tween(whiteBG, {alpha: 0}, 0.1, {ease: FlxEase.sineInOut});

@@ -67,3 +67,51 @@ class Threader {
     // }
 }
 
+class ThreadQueue {
+    private var queue:Array<() -> Void>;
+    private var maxConcurrent:Int;
+    private var running:Int;
+    private var blockUntilFinished:Bool;
+
+    public function new(maxConcurrent:Int = 1, blockUntilFinished:Bool = false) {
+        this.queue = [];
+        this.maxConcurrent = maxConcurrent;
+        this.running = 0;
+        this.blockUntilFinished = blockUntilFinished;
+    }
+
+    public function addFunction(func:() -> Void):Void {
+        queue.push(func);
+        processQueue();
+    }
+
+    public function addFunctions(funcs:Array<() -> Void>):Void {
+        for (func in funcs) {
+            queue.push(func);
+        }
+        processQueue();
+    }
+
+    private function processQueue():Void {
+        while (running < maxConcurrent && queue.length > 0) {
+            var func = queue.shift();
+            running++;
+            sys.thread.Thread.create(function() {
+                func();
+                running--;
+                processQueue();
+            });
+        }
+
+        if (blockUntilFinished && queue.length == 0 && running == 0) {
+            // All functions are finished
+            trace("All functions are finished.");
+        }
+    }
+
+    public function waitUntilFinished():Void {
+        while (queue.length > 0 || running > 0) {
+            // Busy wait
+        }
+    }
+}
