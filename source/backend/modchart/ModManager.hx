@@ -74,7 +74,8 @@ class ModManager {
 			AccelModifier,
 			PerspectiveModifier,
 			ReceptorScrollModifier,
-			ZoomModifier
+			ZoomModifier,
+			FlaccidModifier
 		];
 		for (mod in quickRegs)
 			quickRegister(Type.createInstance(mod, [this]));

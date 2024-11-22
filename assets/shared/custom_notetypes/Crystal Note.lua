@@ -24,10 +24,13 @@ function onCreatePost()
     end
     setSpriteShader("dad", "Unstable")
     setSpriteShader("rain", 'starfield')
-    setSpriteShader("iconP2", 'Unstable')
+    setSpriteShader("iconP2", 'UnstableOther')
     setSpriteShader("theAlley", 'Unstable')
     setSpriteShader("thegate", 'Unstable')
     setSpriteShader("healthBar.leftBar", 'static')
+    for i = 0, getProperty("dadField.strumNotes.length") do
+        setSpriteShader('dadField.strumNotes['..i..']', 'UnstableOther')
+    end
 end
 local shadeRand = math.random(0, 7)
 local shadeRand2 = math.random(0, 3)
@@ -41,8 +44,8 @@ function onUpdate(elapsed)
                 setProperty('camGame.y', getRandomInt(-50, 50))
                 setProperty('camHUD.x', getRandomInt(-50, 50))
                 setProperty('camHUD.y', getRandomInt(-50, 50))
-                setPropertyFromClass('lime.app.Application','current.window.x', window_default[1] + getRandomInt(-10, 10))
-                setPropertyFromClass('lime.app.Application','current.window.y', window_default[2] + getRandomInt(-10, 10))
+                setPropertyFromClass('lime.app.Application','current.window.x', getPropertyFromClass('lime.app.Application','current.window.x') + getRandomInt(-10, 10))
+                setPropertyFromClass('lime.app.Application','current.window.y', getPropertyFromClass('lime.app.Application','current.window.y') + getRandomInt(-10, 10))
                 if getPropertyFromClass('backend.ClientPrefs', 'data.flashing') then
                     setSpriteShader("theAlley", shaderList[shadeRand])
                     setSpriteShader("thegate", shaderList[shadeRand])
@@ -50,11 +53,13 @@ function onUpdate(elapsed)
                     setSpriteShader("rain", shaderList[shadeRand])
                     setSpriteShader("iconP2", shaderList[shadeRand])
                     setSpriteShader("healthBar.leftBar", shaderList[shadeRand])
-                    for i = 0, getProperty("notes.length") do
-                        if not getPropertyFromGroup('notes', i, 'mustPress') then
-                            setSpriteShader('notes.members['..i..']', shaderList[shadeRand])
-                        end
+                    for i = 0, getProperty("dadField.strumNotes.length") do
+                        setSpriteShader('dadField.strumNotes['..i..']', shaderList[shadeRand])
                     end
+                end
+            else
+                for i = 0, getProperty("dadField.strumNotes.length") do
+                    setSpriteShader('dadField.strumNotes['..i..']', 'UnstableOther')
                 end                
             end
         end
@@ -69,6 +74,14 @@ function onUpdatePost(elapsed)
     setShaderFloat("theAlley", "iTime", os.clock())
     setShaderFloat("thegate", "iTime", os.clock())
     setShaderFloat("healthBar.leftBar", "iTime", os.clock())
+    for i = 0, getProperty("dadField.strumNotes.length") do
+        setShaderFloat('dadField.strumNotes['..i..']', "iTime", os.clock())
+    end
+    for i = 0, getProperty("notes.length") do
+        if not getPropertyFromGroup('notes', i, 'mustPress') then
+            setShaderFloat('notes.members['..i..']', "iTime", os.clock())
+        end
+    end
 end
 
 function opponentNoteHit(a,b,c,d)
@@ -89,18 +102,19 @@ end
 function onTimerCompleted(tag)
     if tag == 'reset' then
         active = false
-        setPropertyFromClass("openfl.Lib", "application.window.x",window_default[1])
-        setPropertyFromClass("openfl.Lib", "application.window.y",window_default[2])
         setProperty('camGame.x', 0)
         setProperty('camGame.y', 0)
         setProperty('camHUD.x', 0)
         setProperty('camHUD.y', 0)
         setSpriteShader("dad", "Unstable")
         setSpriteShader("rain", 'starfield')
-        setSpriteShader("iconP2", 'Unstable')
+        setSpriteShader("iconP2", 'UnstableOther')
         setSpriteShader("theAlley", 'Unstable')
         setSpriteShader("thegate", 'Unstable')
         setSpriteShader("healthBar.leftBar", 'static')
+        for i = 0, getProperty("dadField.strumNotes.length") do
+            setSpriteShader('dadField.strumNotes['..i..']', 'UnstableOther')
+        end
     end
 end
 

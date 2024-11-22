@@ -3195,6 +3195,7 @@ class ChartingStateOG extends MusicBeatChartingState
 			Reflect.setField(characterData, 'iconP$i', !characterFailed ? data.healthicon : 'face');
 			Reflect.setField(characterData, 'vocalsP$i', data.vocals_file != null ? data.vocals_file : '');
 		}
+		trace(characterData);
 	}
 	
 	function updateHeads():Void

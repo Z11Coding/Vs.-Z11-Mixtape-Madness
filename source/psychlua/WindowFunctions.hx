@@ -85,7 +85,7 @@ class WindowFunctions
 		});
 
 		Lua_helper.add_callback(lua, "sendNotification", function(title:String = "", desc:String = "") {
-			WindowUtils.suffix = title;
+			CppAPI.sendWindowsNotification(title, desc);
 		});
 	}
 }
