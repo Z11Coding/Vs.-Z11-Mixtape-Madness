@@ -173,6 +173,7 @@ class PlayState extends MusicBeatState
 	public var noteKillOffset:Float = 350;
 
 	public var playbackRate(default, set):Float = 1;
+	public var currentRate:Float = 1;
 
 	public var boyfriendGroup:FlxSpriteGroup;
 	public var boyfriendGroup2:FlxSpriteGroup;
@@ -1556,6 +1557,7 @@ class PlayState extends MusicBeatState
 		#end
 
 		callOnScripts('onCreatePost');
+		currentRate = playbackRate;
 
 		add(playfields);
 		add(notefields);
@@ -6204,7 +6206,11 @@ if (result < 0 || result > mania) {
 
 		backend.Threader.runInThread(generateNotes(SONG, AIPlayMap), 0, "generateNotes");
 
-		if (loopModeChallenge) playbackRate *= loopPlayMult;
+		if (loopModeChallenge) 
+		{
+			playbackRate *= loopPlayMult;
+			currentRate *= loopPlayMult;
+		}
 
 		/*
 		allNotes = curChart.copy();
@@ -9520,9 +9526,9 @@ if (result < 0 || result > mania) {
 	public function lerpSongSpeed(num:Float, time:Float):Void
 	{
 		FlxTween.num(playbackRate, num, time, {onUpdate: function(tween:FlxTween){
-			var ting = FlxMath.lerp(playbackRate, num, tween.percent);
-			if (ting != 0) //divide by 0 is a verry bad
-				playbackRate = ting; //why cant i just tween a variable
+			//var ting = FlxMath.lerp(playbackRate, num, tween.percent);
+			if (num != 0) //divide by 0 is a verry bad
+				playbackRate = num * currentRate; //why cant i just tween a variable
 
 			//FlxG.sound.music.time = Conductor.songPosition;
 			resyncVocals();

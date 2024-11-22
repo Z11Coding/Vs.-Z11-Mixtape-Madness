@@ -31,6 +31,10 @@ class WindowFunctions
 			CppAPI.restoreWindows();
 		});
 
+		Lua_helper.add_callback(lua, "setTransparency", function(color:Int, ?winName:String) {
+			CppAPI.setTransparency(winName, color);
+		});
+
 		Lua_helper.add_callback(lua, "resetTransparency", function() {
 			CppAPI.reset();
 		});

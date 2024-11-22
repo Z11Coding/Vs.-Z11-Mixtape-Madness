@@ -786,8 +786,7 @@ class FreeplayState extends MusicBeatState
 							if (!alreadyClicked)
 							{
 								MusicBeatState.reopen = false; //Fix a sticker bug
-								LoadingState.prepareToSong();
-								LoadingState.loadAndSwitchState(new PlayState());
+								TransitionState.transitionState(PlayState, {transitionType: "instant"});
 							}
 							else TransitionState.transitionState(PlayState, {transitionType: "stickers"});
 						}
