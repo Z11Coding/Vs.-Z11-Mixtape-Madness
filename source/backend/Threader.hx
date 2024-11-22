@@ -80,6 +80,26 @@ class ThreadQueue {
         this.blockUntilFinished = blockUntilFinished;
     }
 
+    public static function doInQueue(func:() -> Void, maxConcurrent:Int = 1, blockUntilFinished:Bool = false):ThreadQueue {
+        var tq = new ThreadQueue(maxConcurrent, blockUntilFinished);
+        tq.addFunction(func);
+        return tq;
+    }
+
+    public static function tempQueue(funcs:Array<() -> Void>, maxConcurrent:Int = 1, blockUntilFinished:Bool = false):ThreadQueue {
+        var tq = new ThreadQueue(maxConcurrent, blockUntilFinished);
+        tq.addFunctions(funcs);
+        return tq;
+    }
+
+    public static function quickQueue(funcs:Array<() -> Void>, maxConcurrent:Int = 1, blockUntilFinished:Bool = false):ThreadQueue {
+        var tq = new ThreadQueue(maxConcurrent, blockUntilFinished);
+        tq.addFunctions(funcs);
+        tq.waitUntilFinished();
+        tq = null;
+        return tq;
+    }
+
     public function addFunction(func:() -> Void):Void {
         queue.push(func);
         processQueue();
