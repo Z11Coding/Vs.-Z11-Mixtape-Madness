@@ -7282,8 +7282,7 @@ if (result < 0 || result > mania) {
 
 	function daAnswer(ans:String)
 	{
-		if (ans == 'true' || ans == 'True' || ans == 'TRUE')
-		{
+		if (ans.toLowerCase() == 'true')	{
 			forceChange(true);
 		}
 		else
@@ -7294,7 +7293,7 @@ if (result < 0 || result > mania) {
 
 	function daAnswer2(ans:String)
 	{
-		if (ans == 'true' || ans == 'True' || ans == 'TRUE')
+		if (ans.toLowerCase() == 'true')
 		{
 			fly = true;
 		}
