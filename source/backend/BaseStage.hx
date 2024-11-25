@@ -43,6 +43,8 @@ class BaseStage extends FlxBasic
 	public var gfGroup(get, never):FlxSpriteGroup;
 
 	public var unspawnNotes(get, never):Array<Note>;
+	public var allNotes(get, never):Array<Note>;
+	public var currentChart(get, never):Array<Note>;
 	
 	public var camGame(get, never):FlxCamera;
 	public var camHUD(get, never):FlxCamera;
@@ -105,7 +107,9 @@ class BaseStage extends FlxBasic
 	
 	public function addBehindGF(obj:FlxBasic) return insert(members.indexOf(game.gfGroup), obj);
 	public function addBehindBF(obj:FlxBasic) return insert(members.indexOf(game.boyfriendGroup), obj);
+	public function addBehindBF2(obj:FlxBasic) return insert(members.indexOf(game.boyfriendGroup2), obj);
 	public function addBehindDad(obj:FlxBasic) return insert(members.indexOf(game.dadGroup), obj);
+	public function addBehindDad2(obj:FlxBasic) return insert(members.indexOf(game.dadGroup2), obj);
 	public function setDefaultGF(name:String) //Fix for the Chart Editor on Base Game stages
 	{
 		var gfVersion:String = PlayState.SONG.gfVersion;
@@ -158,16 +162,30 @@ class BaseStage extends FlxBasic
 	inline private function get_onPlayState() return (Std.isOfType(FlxG.state, states.PlayState));
 
 	inline private function get_boyfriend():Character return game.boyfriend;
+	inline private function get_bf2():Character return game.bf2;
 	inline private function get_dad():Character return game.dad;
+	inline private function get_dad2():Character return game.dad2;
 	inline private function get_gf():Character return game.gf;
 
 	inline private function get_boyfriendGroup():FlxSpriteGroup return game.boyfriendGroup;
+	inline private function get_boyfriendGroup2():FlxSpriteGroup return game.boyfriendGroup2;
 	inline private function get_dadGroup():FlxSpriteGroup return game.dadGroup;
+	inline private function get_dadGroup2():FlxSpriteGroup return game.dadGroup2;
 	inline private function get_gfGroup():FlxSpriteGroup return game.gfGroup;
 
 	inline private function get_unspawnNotes():Array<Note>
 	{
 		return cast game.unspawnNotes;
+	}
+
+	inline private function get_allNotes():Array<Note>
+	{
+		return cast game.allNotes;
+	}
+
+	inline private function get_currentChart():Array<Note>
+	{
+		return cast game.curChart;
 	}
 	
 	inline private function get_camGame():FlxCamera return game.camGame;
