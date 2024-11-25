@@ -684,7 +684,7 @@ class MainMenuState extends MusicBeatState
 							ohno.stop();
 							FreeplayState.allowedSongs.push('frenzy');
 							Achievements.unlock('secretsunveiled');
-							MusicBeatState.playSong(['fangirl-frenzy'], false, 2, 'TransitionState', 'stickers');
+							MusicBeatState.playSong(['fangirl-frenzy'], true, 2, 'TransitionState', 'stickers');
 						}
 						else
 						{

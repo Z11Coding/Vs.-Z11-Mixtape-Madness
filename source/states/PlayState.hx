@@ -615,7 +615,7 @@ class PlayState extends MusicBeatState
 
 		if (!CacheMode)
 		{
-			if (SONG.song == 'Fangirl Frenzy' && !seenCutscene)
+			if (SONG.song == 'Fangirl Frenzy' && !seenCutscene && isStoryMode)
 			{
 				trace('Loaded Fangirl Frenzy Cutscene!');
 				startCallback = fanfrenOpenPrep;	
@@ -9532,14 +9532,12 @@ if (result < 0 || result > mania) {
 
 	public function lerpSongSpeed(num:Float, time:Float):Void
 	{
-		FlxTween.num(playbackRate, num, time, {onUpdate: function(tween:FlxTween){
-			//var ting = FlxMath.lerp(playbackRate, num, tween.percent);
-			if (num != 0) //divide by 0 is a verry bad
-				playbackRate = num * currentRate; //why cant i just tween a variable
-
-			//FlxG.sound.music.time = Conductor.songPosition;
+		FlxTween.num(playbackRate, num, time, {ease: FlxEase.sineInOut}, 
+		function(value:Float)
+		{
+			playbackRate = value * currentRate;
 			resyncVocals();
-		}});
+		});
 
 		var staticLinesNum = FlxG.random.int(3, 5);
 		for (i in 0...staticLinesNum)
@@ -9591,7 +9589,7 @@ if (result < 0 || result > mania) {
 		if (curBeat % 32 == 0 && RandomSpeedChange && !songAboutToLoop)
 		{
 			//goes up to 3x speed cuz screw you thats why
-			var randomShit = FlxMath.roundDecimal(FlxG.random.float(0.45, 3), 2);
+			var randomShit = FlxMath.roundDecimal(FlxG.random.float(0.45, 2), 2);
 			lerpSongSpeed(randomShit, 1);
 		}
 

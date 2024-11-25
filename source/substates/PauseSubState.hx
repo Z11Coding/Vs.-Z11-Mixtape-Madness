@@ -68,6 +68,7 @@ class PauseSubState extends MusicBeatSubstate
 			if(pauseSong != null) pauseMusic.loadEmbedded(Paths.music(pauseSong), true, true);
 		}
 		pauseMusic.volume = 0;
+		pauseMusic.pitch = PlayState.instance.playbackRate;
 		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
 
 		FlxG.sound.list.add(pauseMusic);
