@@ -147,6 +147,7 @@ import states.FirstCheckState;
 		'loopMode' => false,
 		'loopModeC' => false,
 		'loopPlayMult' => 1.05,
+		'bothMode' => false,
 	];
 	public var inputSystem:String = 'Native';
 	public var volUp:String = 'Volup';

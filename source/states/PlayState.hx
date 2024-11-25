@@ -283,6 +283,7 @@ class PlayState extends MusicBeatState
 	public var loopMode:Bool = ClientPrefs.getGameplaySetting('loopMode', false);
 	public var loopModeChallenge:Bool = ClientPrefs.getGameplaySetting('loopModeC', false);
 	public var loopPlayMult:Float = ClientPrefs.getGameplaySetting('loopPlayMult', 1.05);
+	public var bothMode:Bool = ClientPrefs.getGameplaySetting('bothMode', false);
 
 	//Anticheat
 	var hadBotplayOn:Bool = false;
@@ -737,14 +738,15 @@ class PlayState extends MusicBeatState
 		cpuControlled = ClientPrefs.getGameplaySetting('botplay', false);
 		chartModifier = CacheMode ? "Normal" : (ClientPrefs.getGameplaySetting('chartModifier', 'Normal') ?? "Normal");
 		trace("Chart Modifier: " + chartModifier);
-		playAsGF = ClientPrefs.getGameplaySetting('gfMode', false); // dont do it to yourself its not worth it
-		AIMode = ClientPrefs.data.mixupMode;
+		bothMode = ClientPrefs.getGameplaySetting('bothMode', false);
+		opponentmode = ClientPrefs.getGameplaySetting('opponentplay', false) && !bothMode;
+		playAsGF = ClientPrefs.getGameplaySetting('gfMode', false) && !bothMode && !opponentmode; // dont do it to yourself its not worth it
+		AIMode = ClientPrefs.data.mixupMode && !bothMode;
 		AIDifficulty = ClientPrefs.data.aiDifficulty;
-		opponentmode = ClientPrefs.getGameplaySetting('opponentplay', false);
 		gimmicksAllowed = ClientPrefs.data.gimmicksAllowed;
 		guitarHeroSustains = ClientPrefs.data.guitarHeroSustains;
 
-		AIPlayer.active = AIMode;
+		AIPlayer.active = AIMode && !bothMode;
 		switch (AIDifficulty)
 		{
 			case 'Baby Mode':
@@ -1335,7 +1337,7 @@ class PlayState extends MusicBeatState
 		scoreTxt.setFormat(Paths.font("FridayNightFunkin.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, gf != null ? FlxColor.fromRGB(gf.healthColorArray[0], gf.healthColorArray[1], gf.healthColorArray[2]) : FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		scoreTxt.borderSize = 1.25;
-		scoreTxt.visible = !ClientPrefs.data.mixupMode && (!cpuControlled || playAsGF && !cpuControlled);
+		scoreTxt.visible = !ClientPrefs.data.mixupMode && !bothMode && (!cpuControlled || playAsGF && !cpuControlled);
 		add(scoreTxt);
 
 		playerScoreTxt = new FlxText(0, 0, FlxG.width, "", 20);
@@ -1343,7 +1345,7 @@ class PlayState extends MusicBeatState
 		playerScoreTxt.scrollFactor.set();
 		playerScoreTxt.borderSize = 1.25;
 		playerScoreTxt.screenCenter(Y);
-		playerScoreTxt.visible = ClientPrefs.data.mixupMode && (!cpuControlled || playAsGF && !cpuControlled);
+		playerScoreTxt.visible = ClientPrefs.data.mixupMode && !bothMode && (!cpuControlled || playAsGF && !cpuControlled);
 		add(playerScoreTxt);
 
 		opponentScoreTxt = new FlxText(0, 0, FlxG.width, "", 20);
@@ -1351,7 +1353,7 @@ class PlayState extends MusicBeatState
 		opponentScoreTxt.scrollFactor.set();
 		opponentScoreTxt.borderSize = 1.25;
 		opponentScoreTxt.screenCenter(Y);
-		opponentScoreTxt.visible = ClientPrefs.data.mixupMode && (!cpuControlled || playAsGF && !cpuControlled);
+		opponentScoreTxt.visible = ClientPrefs.data.mixupMode && !bothMode && (!cpuControlled || playAsGF && !cpuControlled);
 		add(opponentScoreTxt);
 
 		botplayTxt = new FlxText(400, timeBar.y + 155, FlxG.width - 800, Language.getPhrase("Botplay").toUpperCase(), 32);
@@ -1652,13 +1654,13 @@ class PlayState extends MusicBeatState
 		for (n => ch in boyfriendMap2)
 			playerField.characters.push(ch);
 
-		playerField.isPlayer = !opponentmode && !playAsGF;
+		playerField.isPlayer = !opponentmode && !playAsGF || bothMode;
 		playerField.autoPlayed = opponentmode || cpuControlled || playAsGF;
 		playerField.noteHitCallback = opponentmode ? opponentNoteHit : goodNoteHit;
 
 		dadField = new PlayField(modManager);
-		dadField.isPlayer = opponentmode && !playAsGF;
-		dadField.autoPlayed = !opponentmode || (opponentmode && cpuControlled) || playAsGF;
+		dadField.isPlayer = opponentmode && !playAsGF || bothMode;
+		dadField.autoPlayed = (!opponentmode || (opponentmode && cpuControlled) || playAsGF) || bothMode && cpuControlled;
 		dadField.AIPlayer = AIMode;
 		dadField.modNumber = 1;
 		dadField.characters = [];
@@ -5166,7 +5168,7 @@ if (result < 0 || result > mania) {
 			else if (ratingName == '?')
 			{
 				scoreTxt.borderColor = FlxColor.fromInt(Std.parseInt("0xFFFFE600"));
-				scoreTxt.text = ClientPrefs.data.mixupMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' | NPS: ' + nps + " | PlaybackRate: " + playbackRate;
+				scoreTxt.text = ClientPrefs.data.mixupMode && !bothMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' | NPS: ' + nps + " | PlaybackRate: " + playbackRate;
 				if (AIPlayer.active)
 				{
 					opponentScoreTxt.borderColor = FlxColor.fromInt(Std.parseInt("0xFFFFE600"));
@@ -5179,7 +5181,7 @@ if (result < 0 || result > mania) {
 			else
 			{
 				scoreTxt.borderColor = gf != null && FlxColor.fromRGB(gf.healthColorArray[0], gf.healthColorArray[1], gf.healthColorArray[2]) != 0xFFFFFFFF ? FlxColor.fromRGB(gf.healthColorArray[0], gf.healthColorArray[1], gf.healthColorArray[2]) : FlxColor.BLACK;
-				scoreTxt.text = ClientPrefs.data.mixupMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps + " | PlaybackRate: " + playbackRate : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' ('
+				scoreTxt.text = ClientPrefs.data.mixupMode && !bothMode ? 'Misses: ' + songMisses + ' | NPS: ' + nps + " | PlaybackRate: " + playbackRate : 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName + ' ('
 					+ Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC + ' | NPS: ' + nps + " | PlaybackRate: " + playbackRate; // peeps wanted no integer rating
 				if (AIPlayer.active)
 				{
@@ -8537,11 +8539,32 @@ if (result < 0 || result > mania) {
 				}
 			}
 		}
+		
 		if (!daNote.isSustainNote) // i missed this sound
 			FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
-		combo = 0;
+		
+		if (field == playerField)
+		{			
+			combo = 0;
+			bfkilledcheck = true;
+			health -= daNote.missHealth * healthLoss;
+			if (instakillOnMiss)
+			{
+				vocals.volume = 0;
+				opponentVocals.volume = 0;
+				gfVocals.volume = 0;
+				for (track in tracks)
+					track.volume = 0;
+				doDeathCheck(true);
+				bfkilledcheck = true;
+			}
 
-		bfkilledcheck = true;
+			// For testing purposes
+			// trace(daNote.missHealth);
+			songMisses++;
+			if (!practiceMode && !playAsGF)
+				songScore -= 10;
+		}
 
 		#if sys
 		ArtemisIntegration.noteMiss (daNote.noteData, daNote.noteType);
@@ -8549,35 +8572,20 @@ if (result < 0 || result > mania) {
 		ArtemisIntegration.breakCombo ();
 		#end
 
-		health -= daNote.missHealth * healthLoss;
-		if (instakillOnMiss)
-		{
-			vocals.volume = 0;
-			opponentVocals.volume = 0;
-			gfVocals.volume = 0;
-			for (track in tracks)
-				track.volume = 0;
-			doDeathCheck(true);
-			bfkilledcheck = true;
-		}
-
-		// For testing purposes
-		// trace(daNote.missHealth);
-		songMisses++;
 		vocals.volume = 0;
-		if (!practiceMode && !playAsGF)
-			songScore -= 10;
 
 		totalPlayed++;
 		RecalculateRating();
 
 		var char:Character = boyfriend;
-		if (opponentmode)
+		if (opponentmode || field == dadField)
 			char = dad;
 		if (daNote.gfNote)
 			char = gf;
-		if (daNote.exNote)
+		if (daNote.exNote && field == playerField)
 			char = bf2;
+		if (daNote.exNote && field == dadField)
+			char = dad2;
 
 		if (char != null && char.hasMissAnimations)
 		{
@@ -8585,7 +8593,7 @@ if (result < 0 || result > mania) {
 			char.playAnim(animToPlay, true);
 		}
 
-		if (combo > 10 && gf != null && gf.animOffsets.exists('sad'))
+		if (field == playerField && combo > 10 && gf != null && gf.animOffsets.exists('sad'))
 		{
 			gf.playAnim('sad');
 		}
