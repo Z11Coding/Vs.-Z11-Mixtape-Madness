@@ -32,10 +32,14 @@ class BaseStage extends FlxBasic
 	public var members(get, never):Array<FlxBasic>;
 
 	public var boyfriend(get, never):Character;
+	public var bf2(get, never):Character;
 	public var dad(get, never):Character;
+	public var dad2(get, never):Character;
 	public var gf(get, never):Character;
 	public var boyfriendGroup(get, never):FlxSpriteGroup;
+	public var boyfriendGroup2(get, never):FlxSpriteGroup;
 	public var dadGroup(get, never):FlxSpriteGroup;
+	public var dadGroup2:FlxSpriteGroup;
 	public var gfGroup(get, never):FlxSpriteGroup;
 
 	public var unspawnNotes(get, never):Array<Note>;

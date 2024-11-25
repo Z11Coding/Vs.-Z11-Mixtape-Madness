@@ -44,9 +44,6 @@
 	<set name="BUILD_DIR" value="export/release" unless="debug" />
 	<set name="BUILD_DIR" value="export/32bit" if="32bits" />
 
-	<classpath name="source" />
-	 <assets path="alsoft.ini" />
-
 	<!-- ______________________ MIXTAPE ENGINE CUSTOMIZATION ______________________ -->
 	
 	<define name="MODS_ALLOWED" if="desktop" />
@@ -118,7 +115,14 @@
 		<assets path='example_mods' rename='mods' embed='false'/>
 	</section>
 	<assets path='art/readme.txt' rename='do NOT readme.txt' />
+	<assets path='list.txt' rename='modsList.txt' />
 	<define name="TOUCH_HERE_TO_PLAY" if="web" />
+
+	<!-- OpenAL config -->
+	<section if="desktop">
+		<assets path="alsoft.txt" rename="plugins/alsoft.ini" type="text" if="windows"/>
+		<assets path="alsoft.txt" rename="plugins/alsoft.conf" type="text" unless="windows"/>
+	</section>
 
 	<!-- _______________________________ Libraries ______________________________ -->
 
