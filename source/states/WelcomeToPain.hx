@@ -13,6 +13,7 @@ import openfl.filters.BitmapFilter;
 import openfl.utils.Assets as OpenFlAssets;
 import lime.app.Application;
 import flixel.util.FlxSave;
+import flixel.FlxState;
 #if windows
 import Sys;
 import sys.FileSystem;
@@ -26,8 +27,12 @@ class WelcomeToPain extends MusicBeatState
 	var ch = 2 / 1000;
 	public static var itsme:Bool = true;
 	public var save:FlxSave = new FlxSave();
-	public function new() 
+	private var originalState:FlxState;
+	public function new(originalState:FlxState = null) 
 	{
+		if (originalState == null)
+			originalState = new states.TitleState();
+		this.originalState = originalState;
 		super();
 	}
 	
@@ -86,7 +91,7 @@ class WelcomeToPain extends MusicBeatState
 			{
 				Application.current.window.alert("Null Object Reference");
 				ClientPrefs.data.gotit = true;
-				FlxG.switchState(new states.CacheState());
+				FlxG.switchState(originalState);
 				psychDialogue = null;
 			}
 			psychDialogue.nextDialogueThing = startNextDialogue;
@@ -97,7 +102,7 @@ class WelcomeToPain extends MusicBeatState
 		else
 		{
 			FlxG.log.warn('Your dialogue file is badly formatted!');
-			FlxG.switchState(new states.CacheState());
+			FlxG.switchState(originalState);
 		}
 	}
 	function startNextDialogue()

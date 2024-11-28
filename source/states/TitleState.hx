@@ -317,7 +317,7 @@ class TitleState extends MusicBeatState
 		
 		// Call transitionState with MainMenuState as the target state and random options
 		trace("Transitioning to MainMenuState with random transition: " + options);
-		TransitionState.transitionState(MainMenuState, options);
+		TransitionState.transitionState(MainMenuState, options, null, true);
 		trace("Transition complete");
 	}
 

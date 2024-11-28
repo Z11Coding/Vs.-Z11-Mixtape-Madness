@@ -15,9 +15,31 @@ import openfl.Lib;
 class TransitionState {
     public static var stickers:FlxTypedGroup<StickerSprite>;
     public static var currenttransition:Dynamic;
+    public static var isTransitioning:Bool = false;
+    // public static var states:Dynamic = {
+    //     WelcomeToPain: states.WelcomeToPain,
+    // };
+    public static var timers:Dynamic = {
+        transition: new FlxTimer(),
+    };
+    public static var requiredTransition:Dynamic;
 
     static function switchState(targetState:Class<FlxState>, ?onComplete:Dynamic, ?stateArgs:Array<Dynamic> = null):Void {
-        FlxG.switchState(Type.createInstance(targetState, stateArgs != null ? stateArgs : []));
+        isTransitioning = false;
+        timers.transition.start(5, function(timer:FlxTimer) {
+            if (currenttransition != null) {
+                trace("Transition timer expired. Resetting current transition.");
+                currenttransition = null;
+            }
+            if (requiredTransition != null) {
+                trace("Waiting transition is needed...");
+                var newTransitoon = requiredTransition;
+                requiredTransition = null;
+                transitionState(newTransitoon.targetState, newTransitoon.options, newTransitoon.args, true);
+                
+                
+            }
+        }, 1);
         if (onComplete != null && Reflect.isFunction(onComplete)) {
             onComplete();
         }
@@ -25,13 +47,33 @@ class TransitionState {
             postSwitchTransition(currenttransition.options);
         }
         if (!Reflect.isFunction(onComplete) && onComplete != null) {
-            //trace("onComplete is not a function: " + onComplete);
+            trace("onComplete is not a function: " + onComplete);
         }
-        //trace("Switched to state: " + Type.getClassName(targetState));
+        trace("Switched to state: " + Type.getClassName(targetState));
         currenttransition = null;
+        var chanceToPain:Map<String, Float> = new Map<String, Float>();
+        chanceToPain.set('WelcomeToPain', 15);
+        chanceToPain.set('Nothing', 100 - chanceToPain.get('WelcomeToPain'));
+        var chance:Dynamic = ChanceSelector.selectFromMap(chanceToPain);
+        if (chance == 'WelcomeToPain')
+        {
+            var tempHold:FlxState = Type.createInstance(targetState, stateArgs != null ? stateArgs : []);
+            TransitionState.transitionState(states.WelcomeToPain, {duration: 1, transitionType: 'fallRandom'}, [tempHold]);
+        }
+        trace("Switch complete.");
+        FlxG.switchState(Type.createInstance(targetState, stateArgs != null ? stateArgs : []));
     }
 
-    public static function transitionState(targetState:Class<FlxState>, options:Dynamic = null, ?args:Array<Dynamic>):Void {
+    public static function transitionState(targetState:Class<FlxState>, options:Dynamic = null, ?args:Array<Dynamic>, ?required:Bool = false):Void {
+        if (required) {
+        requiredTransition = { targetState: targetState, options: options, args: args };
+    }
+    
+        // if (isTransitioning) {
+        //     trace("Transition already in progress. Ignoring new transition request.");
+        //     return;
+        // }
+        isTransitioning = true;
         //trace("Transitioning to state: " + Type.getClassName(targetState));
         //trace("Options: " + options);
         currenttransition = { targetState: targetState, options: options, args: args };
@@ -169,7 +211,7 @@ class TransitionState {
                 switchState(targetState, onComplete, args);
                 meltEffect(screenCopy, options);
             case "instant":
-                FlxG.switchState(Type.createInstance(targetState, null));
+                switchState(targetState, onComplete, args);
             case 'transparent fade':
                 FlxTween.num(1, 0, 2, {ease: FlxEase.sineInOut, onComplete: 
                 function(twn:FlxTween)
@@ -314,3 +356,24 @@ class TransitionState {
         
     }
 }
+
+// class TransitionChecker extends FlxObject {
+//     public var targetState:Class<FlxState>;
+//     public var options:Dynamic;
+//     public var args:Array<Dynamic>;
+//     public var required:Bool;
+
+//     public function new(targetState:Class<FlxState>, options:Dynamic, ?args:Array<Dynamic>, ?required:Bool = false) {
+//         super();
+//         this.targetState = targetState;
+//         this.options = options;
+//         this.args = args;
+//         this.required = required;
+//     }
+
+//     public function update(elapsed:Float):Void {
+//         if (FlxG.keys.justPressed("SPACE")) {
+//             TransitionState.transitionState(targetState, options, args, required);
+//         }
+//     }
+// }

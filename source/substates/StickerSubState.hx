@@ -266,6 +266,7 @@ class StickerSubState extends MusicBeatSubstate
               MusicBeatState.reopen = true;
               //trace("reopen: " + MusicBeatState.reopen);
               //FlxG.state.openSubState(emptyStickers);
+              TransitionState.currenttransition = null;
               return targetState(this);
             });
           }

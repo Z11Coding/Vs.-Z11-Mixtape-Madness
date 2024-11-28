@@ -591,7 +591,7 @@ class MainMenuState extends MusicBeatState
 			{
 				selectedSomethin = true;
 				FlxG.sound.play(Paths.sound('cancelMenu'));
-				TransitionState.transitionState(TitleState, null, []);
+				TransitionState.transitionState(TitleState, null, [], true);
 				// Main Menu Back Animations
 				FlxTween.tween(FlxG.camera, {zoom: 5}, 0.8, {ease: FlxEase.expoIn});
 				FlxTween.tween(bg, {angle: 45}, 0.8, {ease: FlxEase.expoIn});
@@ -834,7 +834,7 @@ class MainMenuState extends MusicBeatState
 		switch (daChoice)
 		{
 			case 'freeplay':
-				TransitionState.transitionState(states.CategoryState, {transitionType: "stickers"});
+				TransitionState.transitionState(states.CategoryState, {transitionType: "stickers"},[], true);
 			case 'socials':
 				MusicBeatState.switchState(new SocialsState());
 			#if MODS_ALLOWED
@@ -842,7 +842,7 @@ class MainMenuState extends MusicBeatState
 				MusicBeatState.switchState(new ModsMenuState());
 			#end
 			case 'achievements':
-				TransitionState.transitionState(AchievementsMenuState, {transitionType: "fallRandom"});
+				TransitionState.transitionState(AchievementsMenuState, {transitionType: "fallRandom"}, [], true);
 			case 'credits':
 				MusicBeatState.switchState(new CreditsState());
 			case 'options':
