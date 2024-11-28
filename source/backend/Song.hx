@@ -247,7 +247,7 @@ class Song
 							onLoadJsonMixtape(songJson);
 						}
 					default:
-						trace('converting chart $nameForError with format $fmt to mixtape_v1 format...');
+						trace('converting chart $nameForError with format $fmt to mixtape_v1_convert format...');
 						songJson.format = 'mixtape_v1';
 						onLoadJsonMixtape(songJson);
 						

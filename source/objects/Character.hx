@@ -113,9 +113,14 @@ class Character extends FlxSprite
 		if (PlayState.instance != null)
 		{
 			switch(Paths.formatToSongPath(Song.loadedSongName))
-			{
+			{	
 				case 'fangirl-frenzy':
-					if (curCharacter == "Zenetta") trace("Load FF"); loadMappedAnimsFF(); //This way it only loads it once
+					if (curCharacter == "Zenetta" && !animationsLoaded)
+					{
+						trace("Load FF");
+						loadMappedAnimsFF();
+						animationsLoaded = true; // This way it only loads it once
+					}
 			}
 		}
 	}
@@ -327,11 +332,8 @@ class Character extends FlxSprite
 								if (canHitNote) playAnim(animToPlay, true);
 								animationNotes.shift();
 							}
-							if(isAnimationFinished()) 
-							{
-								holdTimer = 0;
-								dance();
-							}
+							if (isAnimationFinished())
+								playAnim(getAnimationName(), false, false, animation.curAnim.frames.length - 3);
 						case "Zenetta":
 							if(animationNotes.length > 0 && Conductor.songPosition > animationNotes[0][0])
 							{
@@ -346,11 +348,8 @@ class Character extends FlxSprite
 								if (canHitNote) playAnim(animToPlay, true);
 								animationNotes.shift();
 							}
-							if(isAnimationFinished())
-							{
-								holdTimer = 0;
-								dance();
-							}
+							if (isAnimationFinished())
+								playAnim(getAnimationName(), false, false, animation.curAnim.frames.length - 3);
 					}
 			}
 		}

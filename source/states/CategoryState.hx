@@ -28,6 +28,8 @@ class CategoryState extends MusicBeatState
 	override function create()
 	{
 		MemoryUtil.clearMajor();
+		menuItems.remove("");
+		menuItems.remove(" ");
 		if (FlxG.save.data.enableCodes) menuItems.insert(99, 'Codes');
 		FlxTransitionableState.skipNextTransOut = false;
 
