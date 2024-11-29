@@ -73,7 +73,7 @@ class Character extends FlxSprite
 
 	public var positionArray:Array<Float> = [0, 0];
 	public var cameraPosition:Array<Float> = [0, 0];
-	public var healthColorArray:Array<Int> = [255, 0, 0];
+	public var healthColorArray:Array<Int> = [0, 0, 0];
 
 	public var missingCharacter:Bool = false;
 	public var missingText:FlxText;
@@ -89,13 +89,11 @@ class Character extends FlxSprite
 
 	//Used by playfield
 	public var controlled:Bool = false;
-
+	public static var animationsLoaded:Bool = false;
 	public function new(x:Float, y:Float, ?character:String = 'bf', ?isPlayer:Bool = false)
 	{
 		super(x, y);
-
 		animation = new PsychAnimationController(this);
-
 		animOffsets = new Map<String, Array<Dynamic>>();
 		this.isPlayer = isPlayer;
 		changeCharacter(character);
@@ -319,37 +317,27 @@ class Character extends FlxSprite
 					switch (curCharacter)
 					{
 						case 'Z11-true-player':
-							if(animationNotes.length > 0 && Conductor.songPosition > animationNotes[0][0])
+							if (animationNotes.length > 0 && Conductor.songPosition > animationNotes[0][0])
 							{
 								var noteData:Int = 1;
-								var canHitNote = false;
-								if(animationNotes[0][1] > (Note.ammo[PlayState.mania] - 1)) 
-								{
+								if (animationNotes[0][1] > (Note.ammo[PlayState.mania] - 1))
 									noteData = Std.int(animationNotes[0][1] % Note.ammo[PlayState.mania]);
-								}
 								var animToPlay:String = 'sing'+Note.keysShit.get(PlayState.mania).get('anims')[Std.int(Math.abs(noteData))];
-								//animToPlay += animationNotes[0].animSuffix;
-								if (canHitNote) playAnim(animToPlay, true);
+								playAnim(animToPlay, true);
 								animationNotes.shift();
 							}
-							if (isAnimationFinished())
-								playAnim(getAnimationName(), false, false, animation.curAnim.frames.length - 3);
+							if (isAnimationFinished()) playAnim(getAnimationName(), false, false, animation.curAnim.frames.length - 3);
 						case "Zenetta":
-							if(animationNotes.length > 0 && Conductor.songPosition > animationNotes[0][0])
+							if (animationNotes.length > 0 && Conductor.songPosition > animationNotes[0][0])
 							{
 								var noteData:Int = 1;
-								var canHitNote = false;
 								if (animationNotes[0][1] < (Note.ammo[PlayState.mania]))
-								{ 
 									noteData = Std.int(animationNotes[0][1] % Note.ammo[PlayState.mania]);
-								}
 								var animToPlay:String = 'sing'+Note.keysShit.get(PlayState.mania).get('anims')[Std.int(Math.abs(noteData))];
-								//animToPlay += animationNotes[0].animSuffix;
-								if (canHitNote) playAnim(animToPlay, true);
+								playAnim(animToPlay, true);
 								animationNotes.shift();
 							}
-							if (isAnimationFinished())
-								playAnim(getAnimationName(), false, false, animation.curAnim.frames.length - 3);
+							if (isAnimationFinished()) playAnim(getAnimationName(), false, false, animation.curAnim.frames.length - 3);
 					}
 			}
 		}
@@ -528,7 +516,7 @@ class Character extends FlxSprite
 
 	function loadMappedAnimsFF():Void
 	{
-		trace("Load FF"); 
+		trace("Loaded FF"); 
 		try
 		{
 			var songData:SwagSong = Song.getChart('fangirl-frenzy-other', Paths.formatToSongPath(Song.loadedSongName));
@@ -538,7 +526,7 @@ class Character extends FlxSprite
 						animationNotes.push(songNotes);
 			animationNotes.sort(sortAnims);
 		}
-		catch(e:Dynamic) {trace("Failed To Load FF!"); }
+		catch(e:Dynamic) {trace("Failed To Load FF!");}
 	}
 
 	function loadMappedAnims():Void

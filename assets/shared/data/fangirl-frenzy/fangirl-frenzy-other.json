@@ -7986,7 +7986,7 @@
 		"song": "Fangirl Frenzy",
 		"stage": "manifest",
 		"needsVoices": true,
-		"format": "mixtape_v1_convert",
+		"format": "mixtape_v1",
 		"bpm": 200,
 		"speed": 2.5
 	}

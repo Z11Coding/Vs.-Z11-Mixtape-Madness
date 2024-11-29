@@ -95,15 +95,14 @@ class Song
 				}
 			}
 		}
+		
 		if (songJson.mania == null)
 		{
 			songJson.mania = Note.defaultMania;
-			//trace("Song mania value is NULL, set to " + Note.defaultMania);
 		}
 		if (songJson.startMania == null)
 		{
 			songJson.startMania = Note.defaultMania;
-			//trace("Song mania value is NULL, set to " + Note.defaultMania);
 		}
 	}
 
@@ -248,9 +247,8 @@ class Song
 						}
 					default:
 						trace('converting chart $nameForError with format $fmt to mixtape_v1_convert format...');
-						songJson.format = 'mixtape_v1';
+						songJson.format = 'mixtape_v1_convert';
 						onLoadJsonMixtape(songJson);
-						
 				}
 			}
 		} catch (error:Dynamic) {
