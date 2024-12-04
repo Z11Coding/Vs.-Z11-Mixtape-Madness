@@ -21,6 +21,8 @@ class Threader {
     public static var threadQueue:ThreadQueue;
     public static var specialThreads:Array<BakedThread> = [];
     public static var quietThreads:Array<QuietThread> = [];
+    private static var generatedThreads:Array<QuietThread> = [];
+    public static var usedthreads:Bool = false;
 
     public static macro function runInQueue(expr:Expr, ?maxConcurrent:Int = 1, ?blockUntilFinished:Bool = false):Expr {
         return macro {
@@ -30,9 +32,33 @@ class Threader {
         };
     }
     public static macro function runInThread(expr:Expr, ?sleepDuration:Float = 0, ?name:String = ""):Expr {
+        if (!usedthreads) {
+            trace("Initializing Threader...");
+            Context.onAfterGenerate(function() {
+            trace("All threads are generated: " + generatedThreads);
+            // remove threads from array that have finished
+            for (thread in generatedThreads) {
+                if (generatedThreads.indexOf(thread) == -1) {
+                quietThreads.remove(thread);
+                trace("Finished generation of " + thread);
+                }
+            }
+            });
+        }
+        usedthreads = !usedthreads ? true : usedthreads;
         var sleepExpr = Context.makeExpr(sleepDuration, Context.currentPos());
         var nameExpr = Context.makeExpr(name != "" && name != null ? name : "Thread_" + Std.random(1000000) + "_" + (stringRandomizer(8)), Context.currentPos());
         var generatedName:String = ExprTools.toString(nameExpr);
+        if (generatedThreads.indexOf(generatedName) != -1) {
+            #if noDupeThreads
+            Context.error("Thread name " + generatedName + " already exists.", nameExpr.pos);
+            #else
+            trace("Thread name " + generatedName + " already exists.");
+            nameExpr = Context.makeExpr("Thread_" + Std.random(1000000) + "_" + (stringRandomizer(8)) + " ("+generatedName+")", Context.currentPos());
+            generatedName = ExprTools.toString(nameExpr);
+            #end
+        }
+        generatedThreads.push(generatedName);
         trace("Preparing a threaded section of code:" + expr + " with sleep duration: " + sleepDuration + " and name: " + generatedName);
         var threadExpr = macro {
             #if sys
@@ -209,8 +235,40 @@ class ThreadChecker {
         if (hasWaitForThreads) {
             Context.error("You can't create an infinite waiting thread." + (thread != null ? " (" + thread + ")" : ""), expr.pos);
         }
+        // var hasWaitForThreadWithName = containsWaitForThreadWithName(expr, thread);
+        // if (hasWaitForThreadWithName) {
+        //     Context.error("You can't create a thread that waits for itself." + (thread != null ? " (" + thread + ")" : ""), expr.pos);
+        // }
         return expr;
     }
+
+    // private static function containsWaitForThreadWithName(expr:Expr, threadName:String):Bool {
+    //     switch (expr.expr) {
+    //         case ECall(e, params):
+    //             switch (e.expr) {
+    //                 case EField(_, "waitForThread"):
+    //                     if (params.length > 0 && ExprTools.toString(params[0]) == threadName) {
+    //                         return true;
+    //                     }
+    //                 default:
+    //                     // Check the function being called
+    //                     var funcName = ExprTools.toString(e);
+    //                     var funcExpr = Context.getLocalMethod(funcName);
+    //                     if (funcExpr != null && containsWaitForThreadWithName(funcExpr, threadName)) {
+    //                         return true;
+    //                     }
+    //             }
+    //         case EBlock(exprs):
+    //             for (e in exprs) {
+    //                 if (containsWaitForThreadWithName(e, threadName)) {
+    //                     return true;
+    //                 }
+    //             }
+    //             return false;
+    //         default:
+    //             return false;
+    //     }
+    // }
 
     private static function containsWaitForThreads(expr:Expr):Bool {
         switch (expr.expr) {

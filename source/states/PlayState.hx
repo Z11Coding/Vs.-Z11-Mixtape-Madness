@@ -2328,6 +2328,7 @@ class PlayState extends MusicBeatState
 
 	public function startCountdown()
 	{
+		// backend.Threader.waitForThread("generateNotes");
 		if (startedCountdown)
 		{
 			callOnScripts('onStartCountdown');
