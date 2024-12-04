@@ -25,7 +25,6 @@ class TransitionState {
     public static var requiredTransition:Dynamic;
 
     static function switchState(targetState:Class<FlxState>, ?onComplete:Dynamic, ?stateArgs:Array<Dynamic> = null):Void {
-        isTransitioning = false;
         timers.transition.start(5, function(timer:FlxTimer) {
             if (currenttransition != null) {
                 trace("Transition timer expired. Resetting current transition.");
@@ -69,11 +68,10 @@ class TransitionState {
         requiredTransition = { targetState: targetState, options: options, args: args };
     }
     
-        // if (isTransitioning) {
-        //     trace("Transition already in progress. Ignoring new transition request.");
-        //     return;
-        // }
-        isTransitioning = true;
+        if (currenttransition != null) {
+            trace("Transition already in progress. Ignoring new transition request.");
+            return;
+        }
         //trace("Transitioning to state: " + Type.getClassName(targetState));
         //trace("Options: " + options);
         currenttransition = { targetState: targetState, options: options, args: args };

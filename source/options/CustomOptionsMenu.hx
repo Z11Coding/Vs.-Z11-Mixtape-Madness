@@ -1,8 +1,11 @@
 package options;
 
-public static var GlobalOptionsMenuArray:Array<CustomOptionsMenu> = [];
+
 
 class CustomOptionsMenu extends BaseOptionsMenu {
+
+    public static var GlobalOptionsMenuArray:Array<CustomOptionsMenu> = [];
+    
 	public function new() {
 		super();
 	}

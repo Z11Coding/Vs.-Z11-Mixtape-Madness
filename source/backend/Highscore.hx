@@ -1,5 +1,22 @@
 package backend;
 
+typedef HighscoreSet = {
+	weekScores:Map<String, Int>,
+	songScores:Map<String, Int>,
+	songRating:Map<String, Float>,
+	songMisses:Map<String, Int>,
+	songRanks:Map<String, Int>,
+	songDeaths:Map<String, Int>,
+	weekScoresOpp:Map<String, Int>,
+	songScoresOpp:Map<String, Int>,
+	songRatingOpp:Map<String, Float>,
+	songMissesOpp:Map<String, Int>,
+	songRanksOpp:Map<String, Int>,
+	songDeathsOpp:Map<String, Int>,
+	modifiers:Map<String, Dynamic>,
+	isOppMode:Bool
+};
+
 class Highscore
 {
 	public static var weekScores:Map<String, Int> = new Map();
