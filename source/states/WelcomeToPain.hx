@@ -29,7 +29,8 @@ class WelcomeToPain extends MusicBeatState
 	public static var itsme:Bool = true;
 	public var save:FlxSave = new FlxSave();
 	private var originalState:FlxState;
-	public function new(originalState:FlxState = null) 
+	private var originalStateArgs:Array<Dynamic>;
+	public function new(originalState:FlxState = null, ?args:Array<Dynamic>) 
 	{
 		if (originalState == null)
 			originalState = new states.TitleState();
@@ -38,7 +39,7 @@ class WelcomeToPain extends MusicBeatState
 	}
 	
 	override public function create():Void 
-	{   CppAPI.setWindowOppacity(1);
+	{   CppAPI.setWindowOpacity(1);
 		camMESSAGE = initPsychCamera();
 		super.create();
 		camMESSAGE.setFilters(camfilters);
