@@ -348,7 +348,7 @@ class Main extends Sprite
 
 	public static var pressedOnce:Bool = false;
 
-	public static inline function handleStateBasedClosing()
+	public static function handleStateBasedClosing()
 	{
 		if (!pressedOnce || WindowUtils.__triedClosing)
 		{
@@ -358,6 +358,11 @@ class Main extends Sprite
 				case "ChartingStateOG":
 					// new Prompt("Are you sure you want to exit? Your progress will not be saved.", function (result:Bool) {
 
+				case 'WelcomeToPain':
+					pressedOnce = false;
+					WindowUtils.__triedClosing = false;
+					WindowUtils.preventClosing = true;
+					return;
 				default:
 					// Default behavior: close the window
 					FlxG.autoPause = false;
@@ -369,6 +374,7 @@ class Main extends Sprite
 			Main.closeGame();
 		}
 		WindowUtils.__triedClosing = false;
+		WindowUtils.preventClosing = true;
 	}
 
 	// Code was entirely made by sqirra-rng for their fnf engine named "Izzy Engine", big props to them!!!
@@ -462,7 +468,7 @@ class Main extends Sprite
 					"Fatal Error");
 				trace("Unable to recover...");
 				// var assetWaitState:AssetWaitState = new AssetWaitState(MusicBeatState); // Provide the initial state
-				Main.closeGame();
+				FlxG.switchState(new ExitState());
 
 			case "CacheState":
 				Application.current.window.alert("Major Error occurred while caching data.\nSkipping Cache Operation.", "Fatal Error");
@@ -533,6 +539,15 @@ class Main extends Sprite
 				default:
 					dummy();
 			}
+		}
+		TransitionState.currenttransition = null;
+		if (TransitionState.isTransitioning)
+		{
+			TransitionState.isTransitioning = false;
+		}
+		if (TransitionState.requiredTransition != null)
+		{
+			TransitionState.transitionState(TransitionState.requiredTransition.targetState, TransitionState.requiredTransition.args, true);
 		}
 	}
 	#end

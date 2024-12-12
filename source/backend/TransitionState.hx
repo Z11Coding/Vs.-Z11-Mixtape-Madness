@@ -1,5 +1,6 @@
 package backend;
 
+import states.WelcomeToPain;
 import backend.window.CppAPI;
 import flixel.FlxState;
 import flixel.tweens.FlxTween;
@@ -25,6 +26,7 @@ class TransitionState {
     public static var requiredTransition:Dynamic;
 
     static function switchState(targetState:Class<FlxState>, ?onComplete:Dynamic, ?stateArgs:Array<Dynamic> = null):Void {
+        
         timers.transition.start(5, function(timer:FlxTimer) {
             if (currenttransition != null) {
                 trace("Transition timer expired. Resetting current transition.");
@@ -56,17 +58,38 @@ class TransitionState {
         var chance:Dynamic = ChanceSelector.selectFromMap(chanceToPain);
         if (chance == 'WelcomeToPain')
         {
-            var tempHold:FlxState = Type.createInstance(targetState, stateArgs != null ? stateArgs : []);
-            TransitionState.transitionState(states.WelcomeToPain, {duration: 1, transitionType: 'fallRandom'}, [tempHold]);
+            var tempHold:Class<FlxState> = WelcomeToPain;
+            targetState = tempHold;
         }
         trace("Switch complete.");
+        isTransitioning = false;
+        if (targetState == null) {
+            trace("Target state is null. Cancelling switch.");
+            targetState = Type.getClass(FlxG.state);
+        }
         FlxG.switchState(Type.createInstance(targetState, stateArgs != null ? stateArgs : []));
     }
 
     public static function transitionState(targetState:Class<FlxState>, options:Dynamic = null, ?args:Array<Dynamic>, ?required:Bool = false):Void {
+        isTransitioning = true;
         if (required) {
-        requiredTransition = { targetState: targetState, options: options, args: args };
+        requiredTransition = { targetState: targetState, options: options, args: args, required: true };
     }
+
+        if (targetState == null) {
+            trace("Target state is null. Ignoring transition request.");
+            return;
+        }
+
+        if (targetState == Type.getClass(FlxG.state)) {
+            trace("Target state is the same as current state. Ignoring transition request.");
+            return;
+        }
+
+        if (targetState == ExitState) {
+            trace("Preparing to exit game...");
+            requiredTransition = { targetState: targetState, options: options, args: args, required: true };
+        }
     
         if (currenttransition != null) {
             trace("Transition already in progress. Ignoring new transition request.");

@@ -1,5 +1,6 @@
 package states;
 
+import backend.window.CppAPI;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.addons.ui.FlxUIText;
@@ -37,7 +38,7 @@ class WelcomeToPain extends MusicBeatState
 	}
 	
 	override public function create():Void 
-	{
+	{   CppAPI.setWindowOppacity(1);
 		camMESSAGE = initPsychCamera();
 		super.create();
 		camMESSAGE.setFilters(camfilters);

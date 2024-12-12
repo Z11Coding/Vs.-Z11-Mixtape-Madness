@@ -46,7 +46,26 @@ class MusicBeatState extends FlxState
 			//trace('reopened stickers');
 		}
 		TransitionState.currenttransition = null;
+		transitionCheck = TransitionState.requiredTransition;
+		if (TransitionState.requiredTransition != null)
+		{
+			TransitionState.transitionState(TransitionState.requiredTransition.state, TransitionState.requiredTransition.options, TransitionState.requiredTransition.args, TransitionState.requiredTransition.required);
+			TransitionState.requiredTransition = null;
+			new FlxTimer().start(1, function(e) {
+				if (TransitionState.currenttransition == null && !TransitionState.isTransitioning)
+				{
+					var tr = transitionCheck;
+					trace('transition failed');
+					TransitionState.transitionState(tr.targetState, tr.options, tr.args, tr.required);
+				}
+				{
+
+				}
+			});
+		}
 	}
+
+	public static var transitionCheck:Dynamic = null;
 
 	public static var emptyStickers:StickerSubState = null;
 	public static var reopen:Bool = false;
@@ -64,6 +83,10 @@ class MusicBeatState extends FlxState
 	public static var timePassedOnState:Float = 0;
 	override function update(elapsed:Float)
 	{
+		if (TransitionState.currenttransition != null && !TransitionState.isTransitioning)
+		{
+			TransitionState.currenttransition = null;
+		}
 		EventFunc.updateAll();
 		if (Main.audioDisconnected && getState() == PlayState.instance)
 		{

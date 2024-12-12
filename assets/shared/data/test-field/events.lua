@@ -6,6 +6,11 @@ local doStrumAngleAnim = false
 
 function onCreatePost()
 
+
+	precacheImage('characters/Z11Talking1')
+	precacheImage('characters/Z11Talking2')
+	
+	
     startTime = getPropertyFromClass("states.PlayState", "startOnTime")
 
     addHaxeLibrary("shaders.ColorSwap")
@@ -13,8 +18,10 @@ function onCreatePost()
     if startTime > 0 then
         setProperty("camZooming", true)
     end
-
+	
+	if startTime <= 0 then
     setProperty("defaultCamZoom", 0.00001)
+	end
 
     makeLuaSprite('dark', nil, 0, 0);
     makeGraphic('dark', screenWidth, screenHeight, '000000')

@@ -10,6 +10,11 @@ import sys.FileSystem;
 
 import backend.Section;
 
+#if macro
+import haxe.macro.Context;
+import haxe.macro.Expr;
+#end
+
 typedef SwagSong =
 {
 	var song:String;
@@ -44,6 +49,80 @@ typedef SwagSong =
 
 	@:optional var extraTracks:Array<String>;
 }
+
+
+class SecretSong extends Song
+{
+	public static var embeddedSongs:Array<SwagSong>;
+
+	public function new(song:String, notes:Array<SwagSection>, events:Array<Dynamic>, bpm:Float, secretMessage:String)
+	{
+
+	}
+
+
+}
+
+#if macro
+class SongEmbedder {
+	public static function registerSong(songPath:String) {
+		var songJson:String = sys.io.File.getContent(songPath);
+		var song:SwagSong;
+		try {
+			song = Json.parse(songJson);
+		} catch (e:Dynamic) {
+			Context.error("Invalid JSON format for song: " + songPath, Context.currentPos());
+		}
+
+		if (song == null || song.song == null || song.notes == null || song.bpm == null) {
+			Context.error("Invalid song data in JSON: " + songPath, Context.currentPos());
+		}
+
+		// Embed the song JSON into the executable
+		var embeddedSong = Context.makeExpr({
+			song: song.song,
+			notes: song.notes,
+			events: song.events,
+			bpm: song.bpm,
+			needsVoices: song.needsVoices,
+			newVoiceStyle: song.newVoiceStyle,
+			speed: song.speed,
+			offset: song.offset,
+			player1: song.player1,
+			player2: song.player2,
+			player4: song.player4,
+			player5: song.player5,
+			gfVersion: song.gfVersion,
+			stage: song.stage,
+			format: song.format,
+			mania: song.mania,
+			startMania: song.startMania,
+			gameOverChar: song.gameOverChar,
+			gameOverSound: song.gameOverSound,
+			gameOverLoop: song.gameOverLoop,
+			gameOverEnd: song.gameOverEnd,
+			disableNoteRGB: song.disableNoteRGB,
+			arrowSkin: song.arrowSkin,
+			splashSkin: song.splashSkin,
+			extraTracks: song.extraTracks
+		}, Context.currentPos());
+
+		Context.defineType({
+			pack: ["backend"],
+			name: song.song + "Embedded",
+			kind: TClassDecl,
+			pos: Context.currentPos(),
+			fields: [
+				{
+					name: "embeddedSong",
+					pos: Context.currentPos(),
+					kind: FVar({ type: Context.getType("backend.SwagSong"), expr: embeddedSong })
+				}
+			]
+		});
+	}
+}
+#end
 
 class Song
 {
