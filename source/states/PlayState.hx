@@ -1,6 +1,7 @@
 package states;
 
 import backend.Achievements;
+import yutautil.MemoryHelper;
 import backend.Highscore;
 import backend.StageData;
 import backend.WeekData;
@@ -9385,6 +9386,10 @@ if (result < 0 || result > mania) {
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
 		FlxG.animationTimeScale = 1;
 		#if FLX_PITCH FlxG.sound.music.pitch = 1; #end
+		var clearfuck:yutautil.MemoryHelper = new MemoryHelper();
+		clearfuck.clearClassObject(Type.getClass(this));
+		for (stuff in instance)    // Clear all variables
+            clearfuck.clearObject(stuff);
 		instance = null;
 		super.destroy();
 	}
