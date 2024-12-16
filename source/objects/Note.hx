@@ -48,7 +48,8 @@ typedef PreloadedChartNote = {
 	noteDensity:Float,
 	ignoreNote:Bool,
 	blockHit:Bool,
-	lowPriority:Bool
+	lowPriority:Bool,
+	?extraData:Map<String, Dynamic>
 }
 
 class Note extends NoteObject

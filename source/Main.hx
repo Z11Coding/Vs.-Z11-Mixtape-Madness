@@ -45,6 +45,9 @@ import backend.ALSoftConfig; // Just to make sure DCE doesn't remove this, since
 	#define GAMEMODE_AUTO
 ')
 #end
+
+typedef Test ={key:String, value:Int};
+
 class Main extends Sprite
 {
 	var game = {
