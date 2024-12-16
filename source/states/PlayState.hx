@@ -299,7 +299,7 @@ class PlayState extends MusicBeatState
 		for (playfield in playfields.members)
 		{
 			if (playfield.isPlayer)
-				playfield.autoPlayed = cpuControlled;
+				playfield.autoPlayed = cpuControlled || ClientPrefs.getGameplaySetting('showcase', false);
 		}
 
 		return value;
