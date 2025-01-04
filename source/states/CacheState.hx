@@ -334,8 +334,16 @@ class CacheState extends MusicBeatState
 				if(loadingBar != null){
 					FlxTween.tween(loadingBar, {alpha: 0}, 0.3);
 				}
+				if (ClientPrefs.data.saveCache) {
 				menuBG.updateHitbox();
 				FlxG.sound.music.fadeOut(1, 0);
+				loadingWhat.text = "Saving cache...";
+				loadingWhat.screenCenter(XY);
+				loadingWhatMini.text = "Saving cache...";
+				loadingWhatMini.screenCenter(X);
+
+				ImageCache.saveCache();
+				}
 			}
 
 			if(!cacheStart){

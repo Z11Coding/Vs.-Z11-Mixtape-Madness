@@ -1668,7 +1668,7 @@ class PlayState extends MusicBeatState
 
 		dadField = new PlayField(modManager);
 		dadField.isPlayer = opponentmode && !playAsGF || bothMode;
-		dadField.autoPlayed = (!opponentmode || (opponentmode && cpuControlled) || playAsGF) || bothMode && cpuControlled;
+		dadField.autoPlayed = (!opponentmode || (opponentmode && cpuControlled) || playAsGF) || (bothMode && cpuControlled);
 		dadField.AIPlayer = AIMode;
 		dadField.modNumber = 1;
 		dadField.characters = [];
@@ -4868,7 +4868,7 @@ if (result < 0 || result > mania) {
 		for (playfield in playfields.members)
 		{
 			if (playfield.isPlayer)
-				playfield.autoPlayed = cpuControlled;
+				playfield.autoPlayed = cpuControlled || ClientPrefs.getGameplaySetting('showcase', false);
 		}
 
 		if (dad.color == 0xFF003BB9 && (dad.animation.curAnim.name == 'idle' || dad.animation.curAnim.name.startsWith('dance'))) 
@@ -9389,7 +9389,11 @@ if (result < 0 || result > mania) {
 		var clearfuck:yutautil.MemoryHelper = new MemoryHelper();
 		clearfuck.clearClassObject(Type.getClass(this));
 		for (stuff in instance)    // Clear all variables
-            clearfuck.clearObject(stuff);
+			try {
+				clearfuck.clearObject(stuff);
+			} catch (e:Dynamic) {
+				trace('Error clearing object: ' + e);
+			}
 		instance = null;
 		super.destroy();
 	}

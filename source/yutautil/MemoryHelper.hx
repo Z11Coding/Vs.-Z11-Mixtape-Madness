@@ -13,22 +13,22 @@ class MemoryHelper {
     public inline function clearClassObject(state:Class<Dynamic>):Void {
         trace('Starting clearClassObject for state: ' + Type.getClassName(state));
         for (field in Type.getInstanceFields(state)) {
-            trace('Processing field: ' + field);
+            // trace('Processing field: ' + field);
             var value = Reflect.getProperty(state, field);
             if (Std.is(value, Dynamic)) {
-                trace('Field ' + field + ' is Dynamic');
+                // trace('Field ' + field + ' is Dynamic');
                 if (Reflect.hasField(value, "destroy")) {
-                    trace('Field ' + field + ' has destroy method, destroying...');
+                    // trace('Field ' + field + ' has destroy method, destroying...');
                     FlxDestroyUtil.destroy(value);
                 } else {
-                    trace('Field ' + field + ' does not have destroy method');
+                    // trace('Field ' + field + ' does not have destroy method');
                 }
             } else {
-                trace('Field ' + field + ' is not Dynamic');
+                // trace('Field ' + field + ' is not Dynamic');
             }
             Reflect.setField(state, field, null);
-            trace('Field ' + field + ' set to null');
-            trace("Field " + field + " is " + Reflect.field(state, field));
+            // trace('Field ' + field + ' set to null');
+            // trace("Field " + field + " is " + Reflect.field(state, field));
         }
         trace('Finished clearClassObject for state: ' + Type.getClassName(state));
     }
